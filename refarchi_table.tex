@@ -1,0 +1,31 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+% \usepackage{graphicx}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|l|c|}
+\hline
+Name                     & CPAC                      & DPAC          & Topology      & VNE & VNM & Monitoring & Security & Resource Isolation \\ \hline
+FlowVisor                & \multirow{6}{*}{Openflow} & Proxyfication & Not arbitrary & No  & No  & Management & No       & CPU/BW             \\ \cline{1-1} \cline{3-9} 
+ADVisor                  &                           & Mapping       & Arbitrary     & No  & No  & Management & No       & CPU/BW             \\ \cline{1-1} \cline{3-9} 
+VeRTIGO                  &                           & Mapping       & Arbitrary     & Yes & Yes & Management & No       & CPU/BW             \\ \cline{1-1} \cline{3-9} 
+Enhanced FV              &                           & Proxyfication & Not Arbitrary & No  & No  & Management & No       & CPU/BW             \\ \cline{1-1} \cline{3-9} 
+Slices Isolator          &                           & Proxyfication & Not Arbitrary & No  & No  & Management & No       & CPU/BW/Int/Mem     \\ \cline{1-1} \cline{3-9} 
+Double FV                &                           & Mapping       & Arbitrary     & Yes & No  & Management & No       & CPU/BW/Int/Mem     \\ \hline
+Compositional Hypervisor & Openflow                  & Openflow      & Not Arbitrary & Yes & No  & Management & No       &                    \\ \hline
+CoVisor                  & Openflow                  & Mapping       & Arbitrary     & Yes & Yes & Management & Yes      &                    \\ \hline
+FlowN                    & API                       & Mapping       & Arbitrary     & Yes & Yes & Management & No       & BW                 \\ \hline
+Network Hypervisor       & API                       & API           & Arbitrary     & Yes & No  & Management & No       &                    \\ \hline
+AutoSlice                & Openflow                  & Mapping       & Arbitrary     & Yes & Yes & Management & No       & BW                 \\ \hline
+NVP                      & Openflow                  & Mapping       & Full Mesh     & No  & Yes & Management & Yes      &                    \\ \hline
+OpenVirteX               & Openflow                  & Mapping       & Arbitrary     & Yes & No  & Management & No       &                    \\ \hline
+SR-PVX                   & POF                       & Mapping       & Arbitrary     & Yes & No  & Management & No       & BW                 \\ \hline
+WhiteVisor               & White box                 & Mapping       & Arbitrary     & Yes & No  & Management & No       &                    \\ \hline
+ONVisor                  & API                       & Mapping       & Arbitrary     & Yes & No  & Management & Yes      &                    \\ \hline
+LiteVisor                & Openflow                  & Mapping       & Arbitrary     & Yes & Yes & Management & No       &                    \\ \hline
+\end{tabular}%
+}
+\caption{Comparison of the network hypervisors with the reference architecture}
+\label{tab:comparison-refarchi}
+\end{table}

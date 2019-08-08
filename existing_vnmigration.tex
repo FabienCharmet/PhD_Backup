@@ -1,0 +1,105 @@
+In this section we reference the different virtual network migration solutions.
+
+\paragraph{VROOM}
+Virtual ROuters On the Move (VROOM)~\cite{VROOM-Wang2008} is an early work about how the migration of virtual routers should be implemented on top of the physical infrastructure. 
+VROOM outlines that most of the network state changes are caused by planned maintenance.
+Moreover, power consumption is also a primary concern because efficient migration can save up to hundreds of millions of dollars.
+In this regard, VROOM present an network virtualization and migration techniques aiming at minimizing these costs and maintenance duration.
+VROOM is composed of 3 building blocks: router virtualization, data and control plane separation, and dynamic interface binding.
+Router virtualization is already implemented in some commercial routers, and VROOM presents an hardware and software implementation using either software or hardware solutions.
+Data and control plane separation is achieved by using different virtualization environments (VE) in a virtualization infrastructure, namely OpenVZ~\cite{openvz}.
+The data plane is implemented using OpenVZ first VE (VE0) in which the software implementation of the physical router will use a Linux kernel while the hardware implementation uses a NetFPGA circuit.
+The control plane (\ie virtual routers) is also implemented using OpenVZ but using separate VEs (VE1, VE2, ...).
+Each virtual router is stored in a VE, in which a kernel and routing protocol are implemented using a software suite.
+The dynamic binding of physical and virtual interface is divided into two main functions.
+The first one implements the mapping of the virtual router with the corresponding FIB inside the physical router.
+The second is the mapping of the FIB of the physical router with a corresponding physical interface.
+
+\paragraph{Virtual Network Embedding and path migration}
+Yu~\etal proposed in~\cite{VNE-Yu2008} a VNE model designed to support the splitting of a virtual link over several physical links, as well as dynamic virtual network reconfiguration.
+The whole work is intended to improve resource allocation and maximize the acceptance rate 
+Path splitting takes a virtual link with a required amount of bandwidth that cannot be embedded on the physical infrastructure, and divides it into several smaller links that can be accepted by the infrastructure.
+Path migration extends the usability of path splitting by allowing to recalculate the embedding of existing virtual networks and freeing extra resources otherwise not available using solely path splitting.
+Authors provide an extensive evaluation of their mapping and migration algorithms using a simulator~\cite{vnesimulator}.
+
+Both~\cite{VROOM-Wang2008} and~\cite{VNE-Yu2008} have been published on the same year as the publication of OpenFlow, that would lead Software Defined Networking toward a solution accepted by both academia and industry.
+Despite the fact they are not based on SDN, they lay grounds for plenty of work we will now describe.
+
+We divide the existing VN migration solution into three categories: whether the solution is designed to improve the performance of the infrastructure, whether if was implemented on a specific virtualization platform of finally if it tackles a specific security problem.
+
+\subsubsection{Improving the performance of the infrastructure}
+Ye~\etal propose in~\cite{Ye2017a} a resource utilization model in which they aim to maximize the resource allocation on switches while looking to determine controllers that can be shut down due to underutilization and migrate switches.
+Authors solve the resource allocation problem using optimization under constraints techniques. 
+The switch migration problem is described as NP-hard and is approximated using a Log-sum-exp approximation.
+This approximation determines the allocation of network switches on controllers that will maximize their utilization. 
+From this distribution, authors construct a Markov chain that represent the different distributions strategies and where transitioning from a state to another corresponds to migrating a switch from a controller to another controller.
+
+In~\cite{Wang2017d}, Want \etal study a similar problem to~\cite{Ye2017a}, but are more focused on the migration and its efficiency. 
+The problem divides into three parts: detecting the overload of the controller due to an excessive amount of OF requests, the modeling of the migration's performance and finally, the migration strategy accounts for the profit of migrating each switch as well as the cost of the migration operations.
+The overload detection is correlating two type of information to determine overloaded controllers.
+The first one is the actual amount of requests received by controllers, while the second is the ratio of load between each pair of controller.
+This ratio is then bound to a threshold above witch a migration will be trigger to alleviate one controller and affect its load to the other.
+Modeling the efficiency of the migration consider both the load variation of the controllers as well as the overhead of messages exchanged to implement the migration.  
+Finally, the migration strategy is in charge of determining which switch should be elected as candidate for the migration and where it should be migrated.
+
+Lo~\etal introduce in~\cite{vnm-lo2013} the design of a virtual network migration process.
+The cost of the migration is based on two metrics, the completion time of the migration as well as the bandwidth consumption.
+Based on the original embedding and the new destination substrate, the goal is to determine the ordering of node migration that will minimize the cost of the migration.
+For each step in the migration, the time taken to migrate a node is divided into two parts. The first one represents the time taken to prepare the migration and the second one is the time taken to actually transmit the different information to the destination substrate.
+The cost of a migration step is the product of the time it takes to migrate the information and the impact the migration incurs on the bandwidth.
+Virtual nodes' status is based on whether the node has been migrated, if it will be at this step of the migration or if it will be later.
+Similarly, virtual links divided into three categories, depending on 
+Three different virtual network migration algorithms are presented, differentiated by the fact that nodes may be either migrated one node at a time or multiple nodes may be migrated together.
+The first algorithm is a greedy iteration over the individual costs of migrating each nodes.
+The second algorithm is designed to minimize the migration time. Since migrated nodes are constrained not to be a neighbour of any other node, the algorithm determines the biggest set of independent nodes.
+Then, the algorithm leverages the fact that several nodes can be migrated simultaneously to reduce the total migration time.
+The third algorithm is a combination of the first two, where a trade of between migration time and migration cost is researched. The algorithm computes the different sets of independent nodes, and instead of choosing the largest one, Again, this algorithm uses the simultaneous node migration to choose the set with the smallest cost.
+
+Robust virtual network migration is studied in~\cite{Ko2017c}. Authors outline that traditional migration suffers from down times proportional to the size of the migrated virtual networks, while protection mechanisms cannot be adapted to support the dynamic changes in the network.
+Three requirements are defined while considering drawbacks of existing migration techniques. 
+First, the tenant's controller should never be involved in the migration.
+Then the migration process should account for the network traffic status inside the physical infrastructure.
+Finally, the migration process should minimize the number of interactions between the network hypervisor and the physical infrastructure.
+Protection and restoration techniques are described to account for these requirements.
+Protection consists in deploying inside the physical nodes calculated backup paths, prior to any incident.
+This way, in case of a failure the traffic can immediately routed through the alternative path. 
+This method implies that the hypervisor must maintain regularly updated backup paths in each node, incurring computational overhead, bandwidth consumption as well as limitations on the physical resources of the switch.
+Restoration is the case where all the backup paths are stored inside the network hypervisor memory and only deployed in case of a real life failure.
+This method is based on the assumption that failure will only rarely happen thus being resource effective by not generating messages between the infrastructure and the hypervisor.
+The network hypervisor determines backup path that will minimize the the amount of messages sent to the infrastructure.
+To do so, the backup path must use the same links as the original while only differing at the failure point.
+Updates of backup paths are performed regularly while a monitoring device collects statistic on available resources to determine if the current backup paths can still be used.
+The migration solution is implemented using OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}, where the path calculator and storage mechanisms will be adapted to fit the new requirements. Then new components related to the prioritization of backup paths, updating existing paths and monitoring the physical network are implemented and integrated to the hypervisor.
+
+Improving the revenue generated with network virtualization is done through migration.
+In ~\cite{fragment-Liu2018}, the purpose of VN migration is to optimize the acceptance ratio of new virtual network requests as well as the revenue to cost ratio.
+While traditional VNE algorithms only rely on the individual capacities of nodes and links, but they do not consider node with the bandwidth of adjacent virtual links.
+To this end, the notion of fragment degree for a virtual node is introduced and is defined as a weighted combination of the CPU consumption ratio of the virtual node on its embedding node and the bandwidth consumption ratio of adjacent virtual links on the physical substrate.
+The fragment degree of each virtual node is then associated with the embedding cost of existing virtual networks into a multi-objective integer linear programming. This problem being NP-hard, authors make it computationally tractable with a novel algorithm: Fragment-aware Virtual network Reconfiguration (FA-VNR).
+This algorithm first define a migration trigger. Maximizing revenue over time pushed for a periodical migration of VNs.
+Then, it determines which set of physical nodes must be reconfigured by computing a dynamic threshold of ``fragmentation" in the infrastructure.
+Similarly, the algorithm determines a set of virtual nodes to migrate based on their economical performance.
+Once the destination substrate has been chosen, virtual nodes will be migrated and each virtual link connected to them will be redeployed using a shortest path algorithm.
+
+\subsubsection{Hardware specific virtual network migration}
+
+\paragraph{PlanetLab} PlanetLab~\cite{planetlab} (PL) is a virtualization infrastructure used to provide slices of network resources for research experiments. Lo~\etal state in~\cite{Lo2014} that VN migration is a field where practical implementation and evaluation remain to be explored. They proposed a migration scheme and implemented it in PL. This process should be designed to be automated, fast and minimize the service disruption time. While the migration process is automated, there is no detection component to automatically trigger the migration. Due to technical limitations of PL it is impossible to migrate a VN from a substrate to another. An alternative is proposed by partitioning the resources within a slice thus defining new virtual networks inside a PL slice. Virtual routers are instantiated for each virtual node required by the topology, and use an API to install forwarding rules in the kernel space of the physical node. 
+The migration process consists in cloning the network state of virtual nodes (\ie FIB) and then  redirect tenant's VMs traffic through the newly created virtual network.
+While the duplication of networking state does not cause any packet loss from the tenant's point of view, setting up the redirection is most likely to create service disruption.
+Two different approaches are taken and evaluated. The first one consists in preparing the scheduling for the host redirection and then sequentially send commands to the gateways federing the hosts, namely remote scheduling.
+One of the drawbacks of this method is the lag existing between the migration instruction being sent by the controller and the instruction actually being run at the gateway.
+The second option relies on determining the migration ordering and then scheduling the migration in the gateway using the UNIX command \textit{at}. Tha \textit{at} command makes sure that the migration is performed on time by synchronizing the gateway via the NTP protocol. Here, the potential lag to execute the migration is based on the time in takes for NTP to trigger \textit{at} and on the load of the gateways' CPU.
+Both approaches makes it hard to have a full control over the migration's timing.
+Authors conclude with three recommendations for the PL infrastructure and in general for network hypervisors.
+First, enabling gateway task scheduling with a magnitude order of ms. As is, \textit{at} scheduling uses seconds for tasks triggers while path latencies of remote scheduling is a few hundreds of ms.
+Then, allowing the migration scheduler to prioritize scheduled tasks as result shows that execution time depends on the CPU load as well.
+Finally, implement asymmetric packet routing inside the infrastructure.
+Because of the routing mode used in PL, each link in the gateway must have the same physical source and destination, thus preventing an asymmetric migration of the FIB to be effective. 
+
+The GENI platform~\cite{GENI-Berman2014} is a network infrastructure based on SDN and used to provide isolated environments for researchers to run experiments.
+Zhao~\etal propose in~\cite{Zhao2017} a VN migration scheme. Similarly to PlanetLab, GENI has not been designed to support the migration of VNs over different physical substrate. Implementing the VNs inside a GENI slice can be done by allocating all required resources from all tenants. This solution comes with drawbacks however: no clear isolation between VNs, lack of flexibility in case there is a need for a topology change and finally, in case of a failure of a VN or an host, the whole topology must be rebuilt.
+Another approach consists in 
+
+\subsubsection{Virtual network migration for security and transparency}
+\cite{Liu2015a,coconut-ghorbani2017,toward-Ghorbani2014,Chowdhary2016}
+

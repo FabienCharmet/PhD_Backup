@@ -1,0 +1,164 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
+\usepackage{lipsum} %This package just generates Lorem Ipsum filler text. 
+\usepackage{fullpage} % changes the margin
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{cleveref}
+\usepackage{url}
+\usepackage{algpseudocode}
+\usepackage[ruled,noend]{algorithm2e}
+\usepackage{listings}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{xspace}
+\usepackage{parskip}
+\usepackage{refcount}
+\usepackage{paralist}
+\usepackage{authblk}
+\usepackage{etoolbox}
+\usepackage{listings}
+\usepackage{lipsum}
+%\usepackage{fancyhdr}% http://ctan.org/pkg/fancyhdr
+\usepackage{verbatim}% http://ctan.org/pkg/verbatim
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{slashbox}
+\usepackage{caption}
+\usepackage{cite}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepgfplotslibrary{patchplots}
+% Extra depth for titles
+\usepackage{titlesec}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{3}
+
+
+
+
+\newcommand{\boxedtext}[1]{\fbox{\scriptsize\bfseries\textsf{#1}}}
+\newcommand{\myremark}[2]{
+   \textcolor{blue}{\boxedtext{#1}
+      {\small$\blacktriangleright$\emph{\textsl{#2}}$\blacktriangleleft$}
+}}
+\newcommand{\DELETE}[2]{
+   \textcolor{red}{
+         {\small$\blacktriangleright$\st{#2}$\blacktriangleleft$}
+    }
+}
+\newcommand\GB[1]{\myremark{GB}{#1}}
+\newcommand\CK[1]{\myremark{CK}{#1}}
+\newcommand\FC[1]{\myremark{FC}{#1}}
+\newcommand\RW[1]{\myremark{RW}{#1}}
+
+\newcommand{\etc}{etc.\xspace}
+\newcommand{\ie}{i.e.,\xspace}
+\newcommand{\etal}{et al.\xspace}
+\newcommand{\eg}{e.g.,\xspace}
+
+
+\title{\LARGE \bf Preservation of security properties during the migration of virtual networks in a SDN environment}
+
+\author{Fabien Charmet}
+
+
+\begin{document}
+%Header-Make sure you update this information!!!!
+\noindent
+
+
+
+\maketitle
+\tableofcontents
+\thispagestyle{empty}
+% \pagestyle{empty}
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introduction}
+
+\section{Glossary}
+
+\input{glossary.tex}
+
+\section{State of the Art}
+We know for a fact that there is not much work done on the security of VN migration.
+In order to prove the usefulness of my work, I start with a SotA of VM migration, and the related security issues.
+THe aim is to show that there are vulnerabilities and attacks existing with VMs that are inherently relevant with VN migration.
+Then the topic of SDN virtualization, listing existing hypervisor. (Stating there was no usable tool ?)
+Then we go for the security of VN migration. Since there is not much about the security of the process in itself, it will most likely be about secure VNE etc.
+We have now provided enough content to justify why the problem we work on is worth it.
+Now I will introduce the topics/tools/techniques I used to answer it.
+
+We start from the formal models. The very first work I did was to determine whether there was an adequate existing model, if it could be extended to fit my purposes. 
+The second part of the work was to do the monitoring of network events, in order to connect these to the formal model. This part is partly covered in the SDN section of SotA.
+The last part was the verification of the security properties using the network trace and the theorem prover.
+
+The Game Theory section should outline the properties I wanted to use for my game. This should also lead to an obvious lack of ``advanced" models solving solutions. Obviously, there are also a lot of dead ends in GT that lead to going on using MDP instead. I don't know if this should be here.
+
+Then we have the RA problem, with the different methodologies. This should look like the work we've done for NCA 2019 but with a better organisation, as suggested by Christophe. I've added attack graphs because I have some documents in Mendeley I want to go through and see their relevance. This section might disappear.
+
+
+\subsection{Network virtualization using SDN}
+
+\input{existing_nhv.tex}
+
+\input{nhv_refarchi.tex}
+
+\input{summary_refarchi.tex}
+
+\input{refarchi_table.tex}
+
+\subsection{Migration of virtual networks with SDN}
+
+\input{existing_vnmigration.tex}
+
+\subsection{Security of VN migration}
+
+\subsubsection{Security of VNE}
+\cite{Wang2015,safevne-bays2012,Boutigny2018,Bays2014}
+\subsubsection{Security of migration process}
+
+
+\subsection{Formal Models}
+\cite{M2D2-Morin2002,AICPub2006:2015,HLPSL-Chevalier2004,Marsalek2018,ISO/IEC270012013,abstraction-reitblatt2012,validation-naylor1967,M4D4-Morin2008,CSP-Schneider1996}
+
+
+
+
+
+\subsection{Resource Allocation}
+\subsubsection{Linear Programming}
+\cite{Stott1979,ofdma-awad2008,monitoring-nash1977,lpmedical-kwak1997,wirelessvirt-moubayed2015,transportation-wey2007,Ye2017a,book-LP,Papagianni2013}
+\subsubsection{Attack Graphs}
+\cite{Kanaoka2009,mitigateAPT-johnson2013}
+\subsubsection{Game Theory}
+\cite{MuraliKodialam2004,Huang2018,Chen2009,interdep-ismail2017,Kantzavelou2010,Nguyen2009,Zhu2009,Roy2010,Sallhammar2007,Kiennert2018}
+\subsubsection{MDP}
+\cite{Chades2014,Bokani2015,Anupama2014,bellman1957,Wang2013}
+
+
+\section{Model}
+\subsection{Security Properties}
+\subsection{Link with SDN}
+\subsection{Monitoring Tools}
+\subsection{SNARK}
+\subsection{Experimental Results}
+
+\section{Resource Allocation}
+\subsection{Game Theory}
+\subsection{MDP}
+\subsection{Experimental Results}
+
+\input{conclusion.tex}
+
+
+\bibliography{references}{}
+\bibliographystyle{ieeetr}
+
+\end{document}
