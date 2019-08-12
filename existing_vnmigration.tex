@@ -2,6 +2,8 @@
 In this section we reference the different virtual network migration solutions.
 We start by presenting solutions published on the same year as OpenFlow and that have been used as a reference work in a majority of SDN-based migration solution.
 
+\subsubsection{Preliminary work}
+
 \paragraph{VROOM}
 Virtual ROuters On the Move (VROOM)~\cite{VROOM-Wang2008} is an early work about how the migration of virtual routers should be implemented on top of the physical infrastructure. 
 VROOM outlines that most of the network state changes are caused by planned maintenance.
@@ -50,7 +52,7 @@ Based on the original embedding and the new destination substrate, the goal is t
 For each step in the migration, the time taken to migrate a node is divided into two parts. The first one represents the time taken to prepare the migration and the second one is the time taken to actually transmit the different information to the destination substrate.
 The cost of a migration step is the product of the time it takes to migrate the information and the impact the migration incurs on the bandwidth.
 Virtual nodes' status is based on whether the node has been migrated, if it will be at this step of the migration or if it will be later.
-Similarly, virtual links divided into three categories, depending on 
+Similarly, virtual links divided into three categories, whether the nodes composing the links have been migrated, will be migrated or will not be migrated.
 Three different virtual network migration algorithms are presented, differentiated by the fact that nodes may be either migrated one node at a time or multiple nodes may be migrated together.
 The first algorithm is a greedy iteration over the individual costs of migrating each nodes.
 The second algorithm is designed to minimize the migration time. Since migrated nodes are constrained not to be a neighbour of any other node, the algorithm determines the biggest set of independent nodes.
@@ -136,13 +138,40 @@ To ensure the version isolation of different flows, the system identifies the se
 The generation of the dependence graphs is done by categorizing flows into two classes and using a greedy algorithm to determine how to minimize the amount of packet caching that should be done at the controller.
 From the graph is determined the ordering of the migration sequences. Each sequence is composed of several configuration modification, and these modifications are also ordered to minimize the migration time. 
 
-\paragraph{Moving Target Defense} Dynamically changing the location of sensitive targets is a classic technique called Moving Target Defense. Such changes prevent an attacker from accurately knowing the attack surface of the system he is attacking because the configuration regularly changes. Chowdhary~\etal use MTD techniques as part of a Detect-Analyze-Counter (DAC) cycle inside a SDN-based Cloud infrastructure. 
-The security system is composed of four modules: a detection module, a vulnerability analyzer, a counter-measure deployment component and a policy conflict resoultion.
-The detection module is in charge of gathering information about the vulnerabilities in the 
+\paragraph{Moving Target Defense} Dynamically changing the location of sensitive targets is a classic technique called Moving Target Defense. Such changes prevent an attacker from accurately knowing the attack surface of the system he is attacking because the configuration regularly changes. Chowdhary~\etal use MTD techniques as part of a Detect-Analyze-Counter cycle inside a SDN-based Cloud infrastructure. 
+The security system is composed of four modules: a detection module, a vulnerability analyzer, a counter-measure creation and deployment component and a policy conflict resolution.
+The detection module is in charge of gathering information about the vulnerabilities in the infrastructure.
+Then, the analyzer will use these information to dynamically generate an attack graph representing the capacities of the attacker. 
+A counter-measure will then be generated to mitigate the potential attacks and propose it to the conflict resolution module that will determine if the newly created counter-measure is not going to have harmful side effects. Once the counter-measure is accepted it is deployed in the infrastructure and the detection module is notified of the new configuration. This cycle approach creates a dynamic detection/mitigation environment.
+The aspect of attack detection is left out in this paper, as it is already a widely explored topic.
+A well known drawback of attack graphs is the difficult scalability when the number of states grows.
+This problem makes the graph generation computationally intractable. Partitioning the attack graphs into smaller regions based on each tenant using the infrastructure simplifies the generation.
+These sub-attack graphs are then simply merged together for the counter measure to be generated.
+The counter-measure component determines which VM should be migrated based on a security score based on the CVSS Base Score.
+Once the target VM is chosen, new flow rules are computed to realize the migration. 
+The conflict resolution inspects the flow rules that should be deployed and extract the actions of each rule and verify that they do not overlap with other existing flow rules. If a conflict arises, this module will try to find alternative rules. In the event where this would not be possible, the proposed counter-measure is rejected and a new one is searched.
 
+\paragraph{Seamless migration}
+In the previous works, minimizing the service disruption caused by the migration has always been a major concern in the design of the solution. However, while the efficiency of the solution was evaluated with various experiments, there was no formal approach describing the transparency of the migration and to ensure that no disruption of service will be experienced by a tenant.
+The topic of seamless migration is brought up in~\cite{toward-Ghorbani2014} where Ghorbani~\etal take a closer look at network virtualization using SDN techniques.
+Precisely, the focus is put on the one-to-many mapping, also known as the `Big Switch" abstraction.
+Distributing a single virtual resource over several physical one may not preserve the per-flow correctness.
+Similarly to the version isolation presented in~\cite{Liu2015a}, flow correctness ensures that one packet is always processed by one specific version of a network configuration.
+However, this definition does not ensure that the ordering of packets as seen by the tenant's applications and controllers is a good representation of how the packets were originally sent and ordered by the end point.
+A new definition of correctness is proposed to make sure that the ordering of packets is preserved from end to end.
+Following this introduction of end-to-end correctness, a solution for a seamless migration of VNs and VMs is done in LIME~\cite{Lime-Ghorbani2014}.
+The first contribution of this paper is a formal model for network virtualization migration, and it defines a transparency property related to the physical observation of the migration.
+The second is an implementation of virtual network migration process that is proven to respect the transparency property previously defined.
+It is important to note that transparency does not exclude packet loss but it is aimed to be extremely reduced.
+The migration of the virtual network resources relies on switch cloning.
+LIME will instantiate several copies of each virtual node and orchestrate the migration so the tenant's traffic is still forwarded during the migration.
+In opposition to the requirement made in~\cite{Ko2017c}, LIME will notify the tenant application in case of a physical failure of a link.
+Ghorbani~\etal then use the formal model to extend the transparency property to the one-to-many mapping problem of~\cite{toward-Ghorbani2014}.
+Since the idea is to propose a ``Big Switch" abstraction while behind the scene the virtual resource is being replicated across several physical node, the point is to make sure that all nodes located on the edge of the Big Switch are preserving the ordering of the packets even when the configuration is updated.
+The observation correctness introduced in LIME is enhanced with the concept of weak causality where an event has weak causal dependency with another if the first event has triggered the other under certain conditions.
+Thus, the observable ordering of events will matter only if those events are correlated.
 
-
-
-
-\cite{coconut-ghorbani2017,toward-Ghorbani2014,Chowdhary2016}
-
+\subsubsection{Summary}
+The study of VN migration remains a topic of interest has it has been studied but often with the same objective: creating a migration process that will improve the performance of the infrastructure. 
+The migration process has not been studied under the security perspective.
+This leaves space for defining the security of the migration process, its properties and how can they be observed and verified.
