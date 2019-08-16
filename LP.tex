@@ -1,0 +1,42 @@
+\newtcolorbox{myquote}{colback=block-gray,boxrule=0pt,boxsep=0pt,breakable}
+\definecolor{block-gray}{gray}{0.95}
+Linear Programming (LP) is a for mathematical optimization used to determine the best outcome in a mathematical model described by a linear objective function@ey and constrained under linear inequalities.
+\\A LP problem is defined as follows:
+
+\begin{myquote}
+\begin{equation*}
+    \begin{aligned}
+    \min \sum\limits_{i=1}^n c_{i}x_i\\
+    \sum_{\substack{1 \leqslant i \leqslant n \\  1 \leqslant j \leqslant n}} a_{ij}x_j \geqslant b_i
+    \end{aligned}
+\end{equation*}
+
+$\sum\limits_{i=1}^n c_{i}x_i$ is called the objective function\\
+$c_i$ are the cost coefficients\\
+$x_i$ are the decision variables\\
+$a_{ij}$ are the technological costs\\
+$b_i$ are the available budgets.
+\end{myquote}
+
+
+Linear Programming is particularly fit to solve Resource Allocation problems since LP determines the optimal way to spend limited resources.
+An important aspect of models using LP is the amount of parameters that are considered to refine the problem. 
+Kwak \etal~\cite{lpmedical-kwak1997} model the resource allocation problem in a health care organization and take into account several criteria such as, physician and nurse allocation, payroll optimization and constrain the human recruitment to respect particular ratios.
+
+We consider now the work done for network technologies and security. 
+Network communications have always been subject to resource constraints since there can be an overwhelming number of users on the same physical equipment. 
+The physical constraints of wired/wireless communications may affect the proper behavior of the system as well.
+In~\cite{wirelessvirt-moubayed2015}, the authors study resource sharing in cellular communications and the underlying noise and interference problems when devices communicate together.
+However, the resource sharing problem they present is non linear and a division of this complex problem into two simpler ones is proposed and solved using LP.
+The first subproblem is a RA problem to allocate cellular resources to each users while the second subproblem is to determine which set of allocated resources should be shared between devices.
+Authors outline that simplifications were made on the type of ongoing traffic and that more should be expressed to improve the realism of the model.
+Similarly, in~\cite{ofdma-awad2008}, Awad~\etal determine the optimal resource sharing in two-hop communications relay networks, where users will communicate cooperatively with a base station and relay stations to alleviate the load on the base station. Their results show that LP can achieve a near optimal resource sharing with a low computation complexity.
+Optimizing the deployment of security resources has always been of critical importance, especially in vital infrastructures.
+Early work related to defense is presented in~\cite{monitoring-nash1977}, in which the authors use LP to determine the capacities of a set of sensors to track their target. More precisely, the authors determine the maximum detection range each sensor should have in order to ensure the proper tracking of each threat. 
+Reducing the chances of an attacker being successful on a large scale is studied in~\cite{Almohri2016}. The problem is divided into two parts: estimating the chances of success for the attacker and optimizing the security to reduce the chances of a successful attack.
+Attack graphs are used as input to represent the different choices an attacker can make to conduct his attack. Each path in the attack graph has a certain chance of being chosen to realize the attack. These chances are originally determined using standard vulnerability assessment techniques.
+This attack graph is used to determine the most vulnerable targets in the network.
+LP is then used to determine the optimal deployment of security resources, while considering the different potential targets.
+Providing a safe embedding for virtual networks is studied in~\cite{Chowdhury2016d,safevne-bays2012,Boutigny2018} as they model the security properties of the resources they are allocating. Similarly to previous works, LP helps determining the optimal partitioning for network resources while ensuring the required security level is always met.
+The focus is put on survivable VNE~\cite{Chowdhury2016d}, while in~\cite{safevne-bays2012} aims at ensuring security resources requirements. This approach is extended to a multi-provider approach in~\cite{Boutigny2018}.
+More details on LP, its uses and related algorithms can be found in~\cite{book-LP}.

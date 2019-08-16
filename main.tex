@@ -11,6 +11,7 @@
 \usepackage{listings}
 \usepackage{lastpage}
 \usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{xspace}
@@ -24,7 +25,6 @@
 %\usepackage{fancyhdr}% http://ctan.org/pkg/fancyhdr
 \usepackage{verbatim}% http://ctan.org/pkg/verbatim
 \usepackage{multirow}
-\usepackage[table,xcdraw]{xcolor}
 \usepackage{slashbox}
 \usepackage{caption}
 \usepackage{cite}
@@ -125,17 +125,21 @@ Then we have the RA problem, with the different methodologies. This should look 
 
 \input{existing_formalmodels.tex}
 
-
-
 \subsection{Resource Allocation}
+The resource allocation (RA) problem consists in determine the optimal way to spend limited resources in order to achieve maximum profit while respecting a set of constraints.
+In this section we consider three different techniques used to solve the RA problem, under certain circumstances. 
+
 \subsubsection{Linear Programming}
-\cite{Stott1979,ofdma-awad2008,monitoring-nash1977,lpmedical-kwak1997,wirelessvirt-moubayed2015,transportation-wey2007,Ye2017a,book-LP,Papagianni2013}
+
+\input{LP.tex}
 
 % \subsubsection{Attack Graphs}
 % \cite{Kanaoka2009,mitigateAPT-johnson2013}
 
 \subsubsection{Game Theory}
-\cite{MuraliKodialam2004,Huang2018,Chen2009,interdep-ismail2017,Kantzavelou2010,Nguyen2009,Zhu2009,Roy2010,Sallhammar2007,Kiennert2018}
+
+\input{GT.tex}
+
 \subsubsection{MDP}
 \cite{Chades2014,Bokani2015,Anupama2014,bellman1957,Wang2013}
 
