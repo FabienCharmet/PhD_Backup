@@ -7,7 +7,7 @@
 \usepackage{cleveref}
 \usepackage{url}
 \usepackage{algpseudocode}
-\usepackage[ruled,noend]{algorithm2e}
+\usepackage[]{algorithm2e}
 \usepackage{listings}
 \usepackage{lastpage}
 \usepackage{fancyhdr}
@@ -37,7 +37,7 @@
 \setcounter{tocdepth}{3}
 
 
-
+\DeclareMathOperator*{\argmax}{arg\,max}
 
 \newcommand{\boxedtext}[1]{\fbox{\scriptsize\bfseries\textsf{#1}}}
 \newcommand{\myremark}[2]{
@@ -141,8 +141,7 @@ In this section we consider three different techniques used to solve the RA prob
 \input{GT.tex}
 
 \subsubsection{MDP}
-\cite{Chades2014,Bokani2015,Anupama2014,bellman1957,Wang2013}
-
+\input{MDP.tex}
 
 \section{Model}
 \subsection{Security Properties}
