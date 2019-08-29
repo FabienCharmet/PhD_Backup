@@ -1,0 +1,101 @@
+We describe here the predicates used to represent the physical network and how virtual networks are embedded on it.
+
+For an eased reading for the rest of this section, we define some variable names used later on:
+
+\begin{lstlisting}[backgroundcolor = \color{lightgray}]
+vnet is the unique identifier of a virtual network.
+pnode_name is the unique identifier of a physical node.
+plink_name is the unique identifier of a physical link.
+vnode_name is the unique identifier of a virtual node.
+vlink_name is the unique identifier of a virtual link.
+ti is the unique identifier of a time interval.
+\end{lstlisting}
+
+\paragraph{Physical network modeling}
+
+
+The physical network is composed of nodes and links. We define two temporal predicates:
+
+\begin{lstlisting}[backgroundcolor = \color{lightgray}]
+physical_node(node_name,ti)
+physical_link(plink_name,node_name1,node_name2,ti)
+\end{lstlisting}
+
+These predicates represent the existence of each element and failures or attacks will limit this existence.
+
+For instance, if node1 is attacked at $t_1$ and only becomes available again at $t_2$ until the next failure/attack at $t_3$ then we obtain the following predicates:
+
+\begin{lstlisting}[backgroundcolor = \color{lightgray}]
+physical_node(node1,[0,t_1])
+physical_node(node1,[t_2,t_3])
+\end{lstlisting}
+
+$t_3$ could be seen as $+\infty$ if no other incident occurs on node1.
+
+\paragraph{Virtual network modeling}
+We extend the previous predicates with information related to the tenant of the virtual network and it is embedded on top of a set of physical resources.
+
+
+\begin{lstlisting}[backgroundcolor = \color{lightgray}]
+virtual_network(vnet_name,ti)
+virtual_node(vnode_name,vnet_name,ti)
+virtual_link(vlink_name,vnode_name1,vnode_name2,vnet_name,ti)
+\end{lstlisting}
+
+\paragraph{Embedding modeling}
+Each virtual element, node or link, is embedded on a set of physical resources.
+Therefore, there can be one or more predicates used to describe the embedding of a virtual element.
+
+\begin{lstlisting}[backgroundcolor = \color{lightgray}]
+node_embedding(vnode_name,pnode_name,ti)
+node_embedding(vnode_name,plink_name,ti)
+link_embedding(vlink_name,pnode_name,ti)
+link_embedding(vlink_name,plink_name,ti)
+\end{lstlisting}
+
+\paragraph{Example for modeling physical and virtual networks}
+
+We consider the use case of Fig.~\ref{fig:VNE-example-model}.
+There is no failure in the system nor any attack, therefore, we consider the time interval ti to represent the duration of the predicates.
+
+\input{figures/vne_example_model.tex}
+
+The current infrastructure gives the following output:
+
+\begin{lstlisting}[backgroundcolor = \color{lightgray}]
+virtual_network(vSDN1,ti)
+virtual_network(vSDN2,ti)
+virtual_node(V1,vSDN1,ti)
+virtual_node(V2,vSDN1,ti)
+virtual_node(V3,vSDN1,ti)
+virtual_node(V4,vSDN2,ti)
+virtual_node(V5,vSDN2,ti)
+virtual_node(V6,vSDN2,ti)
+virtual_link(vlink1,V1,V2,vSDN1,ti)
+virtual_link(vlink2,V1,V3,vSDN1,ti)
+virtual_link(vlink3,V4,V5,vSDN2,ti)
+virtual_link(vlink4,V5,V6,vSDN2,ti)
+physical_node(P1,ti)
+physical_node(P2,ti)
+physical_node(P3,ti)
+physical_node(P4,ti)
+physical_node(P5,ti)
+physical_node(P6,ti)
+physical_link(plink1,P1,P2,ti)
+physical_link(plink2,P1,P3,ti)
+physical_link(plink3,P2,P4,ti)
+physical_link(plink4,P3,P4,ti)
+physical_link(plink5,P4,P5,ti)
+physical_link(plink6,P4,P6,ti)
+node_embedding(V1,P1,ti)
+node_embedding(V4,P1,ti)
+node_embedding(V2,P2,ti)
+node_embedding(V3,P3,ti)
+node_embedding(V5,P4,ti)
+node_embedding(V6,P5,ti)
+link_embedding(vlink1,plink1,ti)
+link_embedding(vlink2,plink2,ti)
+link_embedding(vlink3,plink1,ti)
+link_embedding(vlink3,plink4,ti)
+link_embedding(vlink4,plink5,ti)
+\end{lstlisting}

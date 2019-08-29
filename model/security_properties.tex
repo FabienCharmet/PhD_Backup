@@ -1,0 +1,330 @@
+\label{sec:security_prop}
+In this section, we define the different security properties we want to preserve in the environment during the migration.
+We propose several security properties: confidentiality, integrity, availability, authenticity and co-residency.
+After providing a formal definition of the security property, we refine it into several properties related to the operation of SDN networks and virtualization.
+
+\subsubsection{Confidentiality}
+\label{sec:prop-conf}
+Confidentiality is a characteristic that applies to information.
+To protect and preserve the confidentiality of information means to ensure that it is not made available or disclosed to unauthorized entities~\cite{ISO/IEC270012013}.
+Therefore, in network security, the confidentiality of a message traveling in the network is defined by the ability of a user to read data forwarded by an element of the network.
+Formally we can define a predicate $confidentiality(D)$ as follows:
+
+\begin{myformula}
+$ confidentiality(D) \Leftrightarrow \forall U,t~reads(U,D,t) \Rightarrow is\_authorized(U,D,t)$
+\end{myformula}
+
+\begin{itemize}
+\item $reads(U,D,t)$ is true if user $U$ reads data $D$ at time $t$.
+\item $is\_authorized(U,D,t)$ is true if user $U$ has the right to read data $D$ at time $t$.
+%\item $\overline{reads(U,D,t)}$ is the negation of $reads(U,D,t)$
+\end{itemize}
+Simply put, if at every time no user reads $D$ or every user reading $D$ is authorized to do so, then the confidentiality of $D$ is preserved.
+This predicate doesn't account for potential cryptography used on the data.
+Ciphered data and plain data are treated as the same regarding their confidentiality, only the consequences differ and this is not the scope of this model.
+From this definition, we can describe several properties directly affecting the physical and virtual topology.
+
+
+% Give names instead of numbers 1, 2?
+% node versus network element.  are they the same?
+
+\textbf{Property 1:} A network element respects the confidentiality of the data it is carrying if and only if the user accessing the network element and the data is authorized to do so.
+%\RW{is the table helpful?  the formula seems clearer to me. rw}\FC{Cleaned}
+\newline \textbf{Formal definition:} Let $N$ be a network element, $U$ a user (malicious or not), $D$ the data carried by the network, and $t$ the time.
+
+
+\begin{myformula}
+$confidentiality(N) \Leftrightarrow \forall D,U,t~
+confidentiality(D) \wedge is\_carrying(N,D,t) \wedge (accessing(N,U,t) \Rightarrow is\_authorized(N,U,t))$
+\end{myformula}
+
+
+% are both conditions necessary?  can one have either without the other? rw
+% the formula does not restrict D to be data of the network.
+\begin{itemize}
+\item $accessing(N,U,t)$ is true if user $U$ accesses network element $N$ at time $t$.
+\item $is\_authorized(N,U,t)$ is true if the user $U$ has the right to access network element $N$ at time $t$.
+\item $is\_carrying(N,D,t)$ is true if node $N$ is carrying data $D$ at time $t$.
+\end{itemize}
+
+
+\textbf{Property 2:} A path preserves confidentiality from end to end if all of its network elements preserve their own confidentiality.
+\newline \textbf{Formal definition:} Let $P$ be the path taken by the traffic, $L_N$ be the list of nodes composing $P$.
+% and $L_{s}$ be the list of the links between each node of $P$.
+\begin{myformula}
+$confidentiality(P) \Leftrightarrow \noindent  \bigwedge\limits_{n \in L_N}confidentiality(n)$
+\end{myformula}
+%\RW{the formula does not mention U.}
+%%%%
+%\RW{\wedge \bigwedge\limits_{l \in %L_{s}}confidentiality(l)$ omitted as we discussed
+
+
+%\FC{Better introduce SDN, since it's the only property mentioning it so far}
+\textbf{Property 3:} A node's configuration remains confidential during a migration if the employed communication channel respects the confidentiality of the communication.
+\newline \textbf{Formal definition:} Let $N$ be a node, $conf$ be the configuration to be pushed, $C$ be a SDN controller.
+\newline
+%\RW{ i proposed a replacement but i still have questions about it:  $confidentiality(conf,N) \Leftrightarrow \exists C,P~ confidentiality(C) \wedge confidentiality(P) \wedge confidentiality(N) \wedge is\_controller\_of(C,N)$}
+%\RW{needs quantifiers for C U P N.  also, the formula does not constrain these to have anything to do with conf it seems that to define a confidentiality-preserving migration requires mentioning time.  the network is confidential after the migration if it was confidential before.  }
+
+\begin{myformula}
+$confidentiality(conf,N) \Leftrightarrow~\forall C,P 
+~is\_controller\_of(C,N) \wedge is\_path(C,P,N) \wedge  conf\_of\_node(conf,N) \Rightarrow
+~confidentiality(C) \wedge confidentiality(P) \wedge  confidentiality(N)
+$
+\end{myformula}
+
+
+Here \begin{itemize}
+\item $is\_controller\_of(C,N)$ is true if SDN controller $C$ controls node $N$.  
+\item $is\_path(C,P,N)$ is true if path $P$ is the path between $C$ and $N$..
+\item $conf\_of\_node(conf, N)$ is true if node $N$ is running configuration $conf$.
+\end{itemize}
+
+\subsubsection{Integrity}
+\label{sec:prop-int}
+ To preserve the integrity of information means to protect the accuracy and completeness of the information and the methods that are used to process and manage it~\cite{ISO/IEC270012013}.
+Therefore, accuracy and completeness of information can only be evaluated by using its temporal values.
+%\RW{unclear--why "therefore";  what are the temporal values of a piece of information? is that the result of eval at a given time?}\FC{Yes, the integrity of information means that it remains constant through time, unless processed, obviously}
+
+We define two predicates, $d\_integrity(D,ti)$ and $p\_integrity(P,D,N,ti)$, which represent the status of the integrity of the data $D$ itself and the process $P$ used to handle $D$, respectively, over a time interval $ti$. 
+
+Therefore, if a data has not been legitimately processed, its integrity holds if it hasn't been modified in any other way.
+\begin{myformula}
+$d\_integrity(D,ti) \Leftrightarrow \forall t_1,t_2\in ti ~ \overline{processed(D, ti)} \Rightarrow 
+~eval(D,t_1)=eval(D,t_2)]$ 
+\end{myformula}
+%\RW{I changed the formatting for clarity}
+
+\begin{itemize}
+\item $processed(D, ti)$ holds true if $D$ has been legitimately processed during time interval $ti$.
+\item $eval(D,t)$ returns the value of $D$ at time $t$
+%\RW{Does this mean that it is not defined if D has been legitimately processed?  Or it is true if D has been processed? or it does not hold if D has been processed?}\FC{It is still true if D has been legally processed}
+
+\end{itemize}
+
+\begin{myformula}
+$p\_integrity(P, ti) \Leftrightarrow \forall t_1,t_2 \in ti~ \overline{modified(P, ti)}\Rightarrow 
+~eval(P,t_1)=eval(P,t_2) $
+\end{myformula}
+
+\begin{itemize}
+\item $modified(P,ti)$ holds true if process $P$ has been modified legitimately during time interval ti
+\item $eval(P,t)$ returns the process $P$ at time $t$
+\end{itemize}
+%\RW{you use P for paths and processes. and p for a function. what is the output of data? is it the value (eval?)}\FC{I don't understand}\GB{beware: you've been using $P$ for two distinct notions. I think that what RW means it that $p$ evaluates the realization of process $P$ over data $D$. In that sense you could, replace $p$ by the keyword $eval$}
+
+
+\textbf{Property 1:} The integrity of a network element is preserved if the data it carries and the process used to process it have their integrity preserved. 
+%\RW{which process?} \FC{The node's way of functioning}\GB{the sentence is not clear. What does it mean to be ``integrity compliant''?}
+\newline
+\textbf{Formal definition:} Let $N$ be a network element, $D$ some data and $P$ a function modeling the process used by to handle data.
+
+\begin{myformula}
+$integrity(N) \Leftrightarrow \forall D,ti,\exists P~p\_integrity(P,ti) \wedge d\_integrity(D,ti) \wedge process\_of(N,P,ti)$
+\end{myformula}
+
+%\RW{quantifiers for P, D. relationship to N.  maybe should have a time interval argument?}
+\begin{itemize}
+% \item This implies that $D$ has not been modified before being processed by $P$. 
+% \RW{are you saying that the definition implies that D has not been modified?  or that it assumes D has not been modified. and why do we care what happens to D before its processing by P?}
+% \FC{The definition implies there has only been lawful processing}
+% \GB{several times you have been using legally, legitimately or lawfully. How do you ascertain this characteristic?}
+% \FC{}
+% \item This implies that $P(D)$ has not been modified after.
+\item $process\_of(P,N,ti)$ affects process $P$ to node $N$ during time interval ti.
+\end{itemize}
+
+
+
+\textbf{Property 2:} A path preserves integrity from end to end if all of its network elements preserve their own integrity.
+\newline \textbf{Formal definition:} Let $P$ be a path in the network and $L_N$ be the list of nodes composing $P$.
+% , $L_{s}$ the list of the links between each node of $P$. 
+%\RW{I assume we can ignore links?} \FC{Yes}
+\newline
+
+\begin{myformula}
+$integrity(P) \Leftrightarrow \bigwedge\limits_{n \in L_N}integrity(n) $
+\end{myformula}
+%\wedge \bigwedge\limits_{l \in L_{s}}integrity(l)
+
+
+\subsubsection{Availability}
+\label{sec:prop-avail}
+An asset is available if it is accessible and usable when
+needed by an authorized entity~\cite{ISO/IEC270012013}.
+
+We can define the predicate $availability(A)$ which represents the availability of asset $A$.
+\newline
+Let $A$ be an asset, $U$ a user and $ti$ a time interval.
+\newline
+%\RW{why would availability be discussed without specifying a time?  it seems unlikely that an asset is always useable.}
+%\FC{In the same way we consider confidentiality and integrity, as long availability is preserved we don't need time, but we need to pinpoint the time intervals related to the violation if needed.}
+
+\begin{myformula}
+$availability(A) \Leftrightarrow \forall ti~is\_accessible(A,U,ti) \wedge is\_usable(A,U,ti) \Rightarrow is\_authorized(U,A,ti)$
+\end{myformula}
+
+% \RW{why would an asset not be available, if it is useable and the user is authorized?  is it because an authorized path does not exist?}
+% \FC{I've added authorization}
+\begin{itemize}
+\item $is\_accessible(A,U,t)$ is true if user $U$ can contact asset $A$ at time $t$.
+\item $is\_usable(A,U,t)$ is true if user $U$ can use asset $A$ at time $t$.
+\item $is\_authorized(U,A,ti)$ is true if user $U$ is allowed to access asset $A$.
+\end{itemize}
+
+\textbf{Property 1:} A network node $N$ is available if it can be reached and it can process incoming packets.
+\newline
+\textbf{Formal definition:} Let $N$ be a network node, $F$ be the function of $N$, $P$ be a list of packets, and $t$ be a point in time.
+
+\begin{myformula}
+$availability(N) \Leftrightarrow \forall t,U~ is\_accessible(N,U,t) \wedge can\_process(N,t) \Rightarrow is\_authorized(U,A,ti)$
+\end{myformula}
+
+\begin{itemize}
+\item $can\_process(N,t)$ is true if $N$ forwards packets normally
+\end{itemize} 
+
+
+%\RW{is a link available iff both its end nodes are available?}
+%\FC{No, the link can also be physically congested, if there is too much data sent through the link}
+% \textbf{Property 2:} A network link $L$ is available if it can carry incoming packets.
+
+% \textbf{Formal definition:} Let $L$ be a network link and $t$ be a point in time.
+% \begin{myformula}
+% $availability(L) \Leftrightarrow \forall t, \overline{is\_congested(L,t)}$
+% \end{myformula}
+
+% \begin{itemize}
+% \item $is\_congested(L,t)$ is true when the remaining bandwidth is under a certain threshold at instant $t$.
+% \end{itemize}
+
+
+\textbf{Property 2:} A path is available from end to end if all of its network elements preserve their own availability.
+\newline \textbf{Formal definition:} Let $P$ be the path taken by the traffic, $L_N$ be the list of nodes composing $P$, $L_L$ the list of the links between each node of $P$, and $t$ a point in time. 
+
+\begin{myformula}
+$availability(P)\Leftrightarrow \forall t, \bigwedge\limits_{n \in L_N}availability(n,t) \wedge \bigwedge\limits_{l \in L_L}availability(l,t)$
+\end{myformula}
+% \RW{can we omit discussing the links, or an the nodes be available when the link between them is not?}
+% \FC{A node can be considered unaccessible if all the links attached to him are not available }
+
+
+\subsubsection{Authenticity}
+\label{sec:prop-auth}
+Authenticity is a property or characteristic of an entity.
+An entity is authentic if it is what it claims to be~\cite{ISO/IEC270012013}.
+
+Let $E$ be an entity, $R$ a role for $E$ and $V$ the verification authority.
+The authenticity of an entity $E$ can be defined as follow:
+
+\begin{myformula}
+$ authenticity(E) \Leftrightarrow \forall t, claim\_role(E,t) \oplus has\_role(E,V,t)$
+\end{myformula}
+\begin{itemize}
+\item claim\_role(E,t) returns the role R of E at time t
+\item has\_role(E,V,t) the role R of E is returned by V at time t
+\end{itemize}
+% \RW{why is authenticity defined without a time argument but claim\-role does have a time argument?}
+% \FC{Similarly to confidentiality, authenticity is a binary property that cannot be restored}\GB{what do you mean by ``cannot be restored''?}
+% \FC{For authenticity, once the user lied about who he is and we found out, you cannot say "I will still allow you to user our network."}
+
+\textbf{Property 1:} The authenticity of a migration request is verified if the topology migrated belongs to the requesting user, and the user is authentic.
+\newline
+\textbf{Formal definition: } Let $U$ be a user, $V$ a virtual topology, $r$ the migration request and $N$ the network hypervisor.
+
+\begin{myformula}
+$ authenticity(r,U) \Leftrightarrow \exists U,~authenticity(U) \wedge belongs\_to(r.V,U)$
+\end{myformula}
+%\RW{there is no quantifier for V and it is not a parameter.}
+%\FC{V is a parameter inside request r²}
+\begin{itemize}
+\item $authenticity(U)$ is true if $U$ is a tenant known by $N$
+\item $r.V$ is the topology concerned by request $r$
+\item $belongs\_to(r.V,U)$ is true if the topology $V$ belongs to user $U$
+\end{itemize}
+%\RW{does it matter what r is in this definition?}
+%\FC{r is just the request, it's not under the scope for examination}
+
+
+\subsubsection{Co-Residency}
+\label{sec:prop-cores}
+Two virtual topologies are co-residing together if they are embedded on a subset of the same physical resources at the same time.
+We define co-residency with the following predicates:
+Let $V_1$ and $V_2$ be two virtual topologies belonging to different users, $P_1$ and $P_2$ two sets of physical resources and let $ti$ be a time interval.
+\begin{myformula}
+$coresidency(V_1,V_2,ti) \Leftrightarrow \exists t_1,t_2\subseteq~ti,P_1,P_2$ $is\_embedding(P_1,V_1,t_1) \wedge is\_embedding(P_2,V_2,t_2) \wedge P_1 \cap P_2 \neq \{\emptyset\} \wedge t_1 \cap t_2  \neq \emptyset$
+\end{myformula}
+Co-residency is a property slightly different than the others because it is not directly related to security.
+However, as shown in the state of the art, co-residency is an important metric for the success of an attack.
+Therefore, monitoring it becomes interesting in order to thwart attacks based on it.
+%\RW{no quantifier for $P_1, P_2, V_1, V_2$}
+%\RW{You give definitions but you don't use them to prove anything. they are not being used for anything so far.}
+%\FC{What we want with co-residency is to reduce it. The less there is, the better.}
+
+
+% \section{EXTENDING THE MODEL}
+% \label{sec:extending-model}
+% In section~\ref{sec:security_prop} we describe the different properties we want to observe and preserve inside the infrastructure.
+% We present a potential mapping between the predicates we need to develop and the physical processes (or traces etc.) they correspond to in order to evaluate them.
+% We are working in a SDN environment environment, so the mapping will be done according to this context
+
+% \subsubsection{Confidentiality}
+% The confidentiality section introduces the following predicates:
+% \begin{itemize}
+% \item reads(U,D)
+% \newline
+% On a network equipment, this predicate is true if there is a network sniffer.
+% \RW{if \textit{what} embeds a sniffer;  mention D and U.}
+% \item is\_authorized(D,U)
+% \newline
+% This predicate is true if U is the final destination of data D (e.g. destination IP)
+% D can be inspected to verify the destination IP field.
+% \item is\_authorized(N,U)
+% \RW{note that in SNARK if predicates have different arguments they must have different names.}
+% \newline
+% This predicate is true if N belongs to U's topology (for a virtual switch) or U owns the infrastructure.
+% This is verified using a database for instance.
+% \item access(N,U)
+% \newline
+% This predicate is true if U logs in N using CLI for instance.
+% The logs of N can be exploited for this purpose.\RW{not sure what this means}
+% \end{itemize}
+
+% \subsubsection{Integrity}
+% The integrity section introduces the following predicates:
+% \begin{itemize}
+% \item p(P,D,E,t)
+% \newline
+% In a SDN environment, the function p is the application of flow rule P to flow D by switch E.
+% We can monitor the evolution of flow rules and detect if unexpected changes have been made.
+% \RW{are flow rules normally changes as part of migration?}
+% \item eval(D)
+% \\
+% This is done by reading the value of D. For instance, we can inspect the payload of an IP packet.
+% \end{itemize}
+
+% \subsubsection{Availability}
+% The availability section introduces the following predicates:
+% \begin{itemize}
+% \item is\_accessible(N,t)
+% \\ This predicate can be evaluated when sending an ECHO request to the node.
+
+% \item can\_process(N,t)
+% \\ OpenFlow provides some statistics and hardware primitives can show the amount of CPU power used
+% \\ Confirmed for Alcatel, OVS, 
+% \item is\_congested(L,t)
+% \\ The congestion of a link can be calculated by using OpenFlow statistics.
+% \end{itemize}
+% \RW{this seems to suggest that you are doing real-time validation rather than a priori verification.}
+% \subsubsection{Authenticity}
+% The authenticity section introduces the following predicates:
+% \begin{itemize}
+% \item claim\_role(E)
+% \item has\_role(E,V)
+% \\
+% Those two predicates are verified by the network hypervisor upon receiving a migration requests
+% \item belongs\_to(r.V,U)
+% \\
+% The network hypervisor keeps a mapping between virtual topologies and their owner, hence it is trivial to verify this predicate.
+% \end{itemize}\RW{it sounds as if you are talking about run-time validation, not a priori verification.}
+  

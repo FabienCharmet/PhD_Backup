@@ -7,7 +7,7 @@
 \usepackage{cleveref}
 \usepackage{url}
 \usepackage{algpseudocode}
-\usepackage[]{algorithm2e}
+\usepackage[ruled,noend]{algorithm2e}
 \usepackage{listings}
 \usepackage{lastpage}
 \usepackage{fancyhdr}
@@ -30,12 +30,13 @@
 \usepackage{cite}
 \usepackage{tikz}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.15} 
 \usepgfplotslibrary{patchplots}
 % Extra depth for titles
 \usepackage{titlesec}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{3}
-
+% \addtolength{\textwidth}{-1in}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 
@@ -68,14 +69,10 @@
 \begin{document}
 %Header-Make sure you update this information!!!!
 \noindent
-
-
-
 \maketitle
 \tableofcontents
 \thispagestyle{empty}
 % \pagestyle{empty}
-
 \begin{abstract}
 
 \end{abstract}
@@ -86,7 +83,9 @@
 
 \input{glossary.tex}
 
+\newpage
 \section{State of the Art}
+\FC{This introduction is not meant to stay, it's just a rough explanation of the plan}
 We know for a fact that there is not much work done on the security of VN migration.
 In order to prove the usefulness of my work, I start with a SotA of VM migration, and the related security issues.
 THe aim is to show that there are vulnerabilities and attacks existing with VMs that are inherently relevant with VN migration.
@@ -106,48 +105,61 @@ Then we have the RA problem, with the different methodologies. This should look 
 
 \subsection{Network virtualization using SDN}
 
-\input{existing_nhv.tex}
+\input{sota-netvirt-sdn/existing_nhv.tex}
 
-\input{nhv_refarchi.tex}
+\input{sota-netvirt-sdn/nhv_refarchi.tex}
 
-\input{summary_refarchi.tex}
+\input{sota-netvirt-sdn/summary_refarchi.tex}
 
-\input{refarchi_table.tex}
+\input{sota-netvirt-sdn/refarchi_table.tex}
 
-\input{existing_vnmigration.tex}
+\input{sota-netvirt-sdn/existing_vnmigration.tex}
 
 \subsection{Security of VM migration}
 
-\input{attacking_vmmigration.tex}
-
+\input{sota-VM/attacking_vmmigration.tex}
 
 \subsection{Formal Models for network security}
 
-\input{existing_formalmodels.tex}
+\input{sota-FM/existing_formalmodels.tex}
 
 \subsection{Resource Allocation}
 The resource allocation (RA) problem consists in determine the optimal way to spend limited resources in order to achieve maximum profit while respecting a set of constraints.
 In this section we consider three different techniques used to solve the RA problem, under certain circumstances. 
 
-\subsubsection{Linear Programming}
 
-\input{LP.tex}
-
-% \subsubsection{Attack Graphs}
-% \cite{Kanaoka2009,mitigateAPT-johnson2013}
-
-\subsubsection{Game Theory}
-
-\input{GT.tex}
-
-\subsubsection{MDP}
-\input{MDP.tex}
+\input{sota-RA/LP.tex}
+\input{sota-RA/GT.tex}
+\input{sota-RA/MDP.tex}
 
 \section{Model}
-\subsection{Security Properties}
-\subsection{Link with SDN}
+\subsection{Motivation}
+\input{model/motivation.tex}
+
+\subsection{Assumptions and simplifications}
+No distinctions between physical and remote access
+Physical links are safe
+no Path splitting (2 end points, several links)
+
+\subsection{Modeling physical and virtual networks}
+\input{model/model_networks.tex}
+
+\subsection{Modeling the migration of Virtual Networks}
+\input{model/model_migration.tex}
+
+\subsection{Security properties applied to Virtual Network migration}
+\input{model/security_properties.tex}
+
+\subsection{Attacks against Migration}
+\input{model/attack_model.tex}
+
+
 \subsection{Monitoring Tools}
+
+\input{model/monitoring_tools.tex}
+
 \subsection{SNARK}
+\input{model/snark.tex}
 \subsection{Experimental Results}
 
 \section{Resource Allocation}

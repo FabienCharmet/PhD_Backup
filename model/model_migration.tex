@@ -1,0 +1,156 @@
+\label{sec:migration}
+In a SDN environment, the migration of a virtual network is performed by redistributing the different flow rules from a SN to another.
+%\GB{The way it is written below makes it hard to follow. You should state right now that SDN switches are abstracted by virtual nodes}
+%\FC{I don't understand your point}
+Precisely, each physical SDN switch hosts a set of flow rules for each VN it is embedding.
+Flow rules define how to forward incoming packets to a specific port based on a set of attributes.
+Therefore a virtual node is an entity represented by its collection of flow rules.
+Moreover, each virtual node is a fraction of the flow table of the SDN switch it is hosted by.
+%\GB{I do not completely agree with the definition of virtual links since the links could be unidirectional, and hence require a single flow rule on a single switch/node}
+%\FC{I am not sure unidirectional should be considered, since it doesn't seem commonly exploited and Cisco has developped a protocol/feature to prevent it.}
+A virtual link is set of pairs of unidirectional flow rules connecting two nodes
+%\GB{Not convinced either here as you want all tenant flows circulating on this link, so you need to aggregate the match part of the flow rules, and therefore you do not have a single pair of flow rules, but many. What interests you are the facing output ports.}.
+%\FC{I still don't understand}
+Finally, we can see a VN as a set of flow rules distributed among several physical SDN switches.
+To keep it simple in this paper, we consider that a virtual switch is mapped with one and only one physical switch, and that a virtual link is mapped with one and only one physical link.
+%\GB{You should remove the sentence just below. Especially because you are going to introduce the algorithms, so you do not care to introduce security properties right now.}
+%Based on the second property defined in Section~\ref{sec:sec_prop}, the confidentiality of a virtual node or link is the confidentiality of the underlying physical node or link.
+We describe two migration algorithms in the following subsections.
+These algorithms use four different primitives in order to migrate the topology: deploy$\_$link, delete$\_$link, duplicate$\_$node, and clear$\_$node. 
+We explain what each primitive does, SDN-wise:
+
+\begin{itemize}
+\item Deploy$\_$link(node1,node2): This function will deploy flow rules on both physical nodes to allow the communication.
+\item Delete$\_$link(node1,node2): This function will remove from the physical nodes the flow rules deployed previously.
+\item Duplicate$\_$node(node,topology): A virtual node is created by deploying several virtual links (i.e. flow rules). Therefore the duplication of a node comes from the migration of virtual links using deploy$\_$link.  
+%\GB{duplicate$\_$node is really confusing. SDN switch seems to be a physical switch and not a virtual switch, right? The algorithms are usually manipulating virtual networks, why is that this primitive does not affect the SDN?}
+%\FC{It's hard to summarize that, but I tried to do it in the text. Basically, deploying a virtual network is simply affecting different flow rules. The virtual node has no existence in itself, you can see the virtual node of a VN as the set of flow rules on a switch that belongs to a certain user. Therefore duplicate$\_$ does nothing in itself as it is the consequence of the calls made to deploy$\_$link.}
+%\GB{I forgot that it is a virtual SDN topology. Please be ignore my comment but try to be precise in your writing so as not to have reviewers raise such questions}
+\item Clear$\_$node(node): Similar to delete$\_$link but clear all the virtual links of a user instead of only one.
+\end{itemize}
+
+\subsubsection{Move based Migration}
+\label{sec:move-algo}
+
+An intuitive migration algorithm is described in~\cite{Lime-Ghorbani2014}. 
+This algorithm aims at migrating the resources all at once, as depicted in Algorithm~\ref{algo:move_migration_algo}.
+%\GB{the primitives used in this Algo are not exactly the ones described above}.
+%\FC{I'll detail them better}
+However, during the migration phase (depicted in Figure~\ref{fig:time-points}), the VNs are not operational.
+We propose our version of the algorithm where during the migration phase, both VNs (old and new) will coexist.
+An underlying aspect of the cohabitation of the old and new VNs is the necessity to redirect new incoming flows through the newly migrated VN.
+This is handled by setting specific priorities for the flow rules corresponding to the VN.
+\begin{algorithm}
+\textbf{Input: }$topology$ as the virtual network\\
+\textbf{Output: } $new\_topology$ as the migrated topology
+%\GB{you should declare it as an empty topology with nodes and links, and assign the values of the old topology to these nodes and links}
+\begin{algorithmic}[1]
+\State $nodes \gets List\_of\_nodes(topology)$
+%\State $new\_nodes \gets \{\emptyset\}$
+\State $Duplicate\_nodes(nodes,new\_topology)$
+\State $Deploy\_links(topology,new\_topology)$
+\State $Delete\_links(topology)$
+\State $Clear\_nodes(nodes)$
+\caption{Move based migration algorithm}
+\label{algo:move_migration_algo}
+\end{algorithmic}
+\end{algorithm}
+%\GB{if you want link the below functions with the primitives described previously, why don't you describe them in more details both migration-wise and SDN-wise? Also could you elaborate more on these functions, in particular you are not mentioning their parameters.}
+%\FC{I wrote something that should suit your needs I believe}
+\begin{itemize}
+\item $List\_of\_nodes(topology)$ extracts the nodes from the topology.
+\item $Duplicate\_nodes(nodes)$ instantiates copies of the nodes passed as parameters. Done by calling duplicate$\_$node for each node in nodes.
+\item $Deploy\_links(topology)$ sets up links between the different nodes in new$\_$topology, according to the input topology.
+It is done by calling deploy$\_$link for each link in topology.
+\item $Delete\_links(topology)$ calls delete$\_$link for each link in topology.
+\item $Clear\_node(nodes)$ will clear the resources allocated to all the nodes in topology.
+\end{itemize}
+%\GB{Alg.~\ref{algo:move_migration_algo} should output another topology. Actually, the embedding of the network on the substrate network, including compute hosts, should be modified as to reallocate both compute, storage and network resources. Therefore, input and output may actually be virtual network embeddings, and not topologies.}\FC{What we consider here is only the topology.}
+
+\subsubsection{Iterative Migration}
+Another algorithm we propose to implement is the one described in~\cite{vnm-lo2013}.
+This algorithm iteratively moves nodes one after another, while dynamically creating links for the migrated nodes and deleting the old ones.
+The migration progress is depicted in Algorithm~\ref{algo:migration_algo}:
+%\GB{you should not be writing the algorithm in text. What is important is that you comment your algorithms on some specific lines of choices, things that you want to highlight}
+%Create two arrays, one to hold nodes left to be migrated, one to hold the nodes that have been migrated (Lines 1 and 2).
+Create a token to remember if this is the first iteration of the algorithm (Line 3).
+%While there are nodes to be migrated, do the following (Lines 5 to 14):
+%Select a node in the remaining nodes.
+%Duplicate it toward a new node.
+%Set up links between this new node and the remaining ones, according to the provided topology.
+If this is not the first iteration, there might be links to be established between the newly migrated node and the nodes that have already been migrated. (Line 9)
+There may also be links between migrated nodes and the old node.
+If so, they are deleted. (Line 10)
+Note that for simplicity of presentation, these conditional tests are hidden in $deploy\_links$.
+Increase the iteration token.
+%Finally, add the old node to the array of migrated nodes and free the resources it was previously using. (Lines 13-14)
+%\GB{I would suggest to comment Alg.~\ref{algo:migration_algo} instead of providing an itemize environment}
+%\FC{I tried the comment command from algorithmicx package, result is not good at all. If you have a good way to do so please let me know}
+%\GB{usually it is done by labeling and referring to independent lines in the algorithm environment. The result is usually a text with lines mentioned so that the reviewer can just read the algorithm along your commentary. But you should enable numbering in the algorithm environment first.}
+% \begin{enumerate}
+% \item Select a node.
+% \item Instantiate a copy of it.
+% \item Deploy links between the new node and the remaining nodes. 
+% \item Deploy links between the new node and the migrated nodes.
+% \item Remove links between old node and migrated ones.
+% \item Clear the initial node, leaving the new one active.
+% \item Repeat.
+% \end{enumerate}
+
+% \begin{algorithm}
+% \textbf{Input: }$topology$ as the virtual network\\
+% \textbf{Output: } $new\_topology$ as the migrated virtual network
+% \State $remaining\_nodes \gets list\_of\_nodes(topology)$
+% \State $migrated\_nodes \gets \emptyset$
+% \State $iter \gets 1$
+% \While {$remaining\_nodes \neq \emptyset$}
+% \State $n \gets Select\_node(remaining\_nodes)$
+% \State $new\_n \gets Duplicate\_node(n)$
+% \State $Deploy\_links(new\_n,remaining\_nodes,topology)$
+% \If{$iter>1$}
+% \State $Deploy\_links(new\_n,migrated\_nodes,topology)$
+% \State $Deleted\_links(n,migrated\_nodes,topology)$
+% \EndIf
+% \State $iter \gets iter + 1$
+% \State $Add\_node(n,migrated\_nodes)$
+% \State $Clear\_node(n)$
+% \EndWhile
+% \caption{Iterative migration algorithm}
+% \label{algo:migration_algo}
+% \end{algorithm}
+
+\begin{algorithm}[]
+\SetKwInOut{Input}{$topology$ as the virtual network}
+\SetKwInOut{Output}{$new\_topology$ as the migrated virtual network}
+ $remaining\_nodes \gets list\_of\_nodes(topology)$\\
+ $migrated\_nodes \gets \emptyset$\\
+ $iter \gets 1$\\
+\While {$remaining\_nodes \neq \emptyset$}{
+ $n \gets Select\_node(remaining\_nodes)$\\
+ $new\_n \gets Duplicate\_node(n)$\\
+ $Deploy\_links(new\_n,remaining\_nodes,topology)$\\
+\uIf{$iter>1$}{
+ $Deploy\_links(new\_n,migrated\_nodes,topology)$\\
+ $Deleted\_links(n,migrated\_nodes,topology)$
+ }
+ $iter \gets iter + 1$\\
+ $Add\_node(n,migrated\_nodes)$\\
+ $Clear\_node(n)$\\
+ }
+\caption{Iterative migration algorithm}
+\label{algo:migration_algo}
+\end{algorithm}
+
+
+The following list details the functions used for the migration
+%\GB{again, you are not providing an elaborate explanation with respect to the parameters.}.
+%\FC{Done}
+\begin{itemize}
+\item $Select\_node$ selects the next node to be migrated.
+%, which can be implemented according to optimization criteria for instance\GB{I did not get what is meant here, especially with this story of optimization criteria. Where does it come from?}.
+\item $Duplicate\_node(node)$ will create a copy of a node at another position.
+\item $Deploy\_links(new\_n,migrated\_nodes,topology)$ calls $deploy\_link$ between new$\_$n and each node in migrated$\_$nodes according to topology
+\item $Delete\_links(n,migrated\_nodes,topology)$ calls $delete\_link$ between n and each node in migrated$\_$nodes according to topology
+\item $Add\_node(n,migrated\_nodes)$ will add a node n to array migrated$\_$nodes.
+\item $Clear\_node(n)$ will clear the resources allocated to a node.
+\end{itemize}
