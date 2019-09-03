@@ -94,11 +94,11 @@ The migration process consists in cloning the network state of virtual nodes (\i
 While the duplication of networking state does not cause any packet loss from the tenant's point of view, setting up the redirection is most likely to create service disruption.
 Two different approaches are taken and evaluated. The first one consists in preparing the scheduling for the host redirection and then sequentially send commands to the gateways federing the hosts, namely remote scheduling.
 One of the drawbacks of this method is the lag existing between the migration instruction being sent by the controller and the instruction actually being run at the gateway.
-The second option relies on determining the migration ordering and then scheduling the migration in the gateway using the UNIX command \textit{at}. Tha \textit{at} command makes sure that the migration is performed on time by synchronizing the gateway via the NTP protocol. Here, the potential lag to execute the migration is based on the time in takes for NTP to trigger \textit{at} and on the load of the gateways' CPU.
+The second option relies on determining the migration ordering and then scheduling the migration in the gateway using the UNIX command \textit{at}. The \textit{at} command makes sure that the migration is performed on time by synchronizing the gateway via the NTP protocol. Here, the potential lag to execute the migration is based on the time in takes for NTP to trigger \textit{at} and on the load of the gateways' CPU.
 Both approaches makes it hard to have a full control over the migration's timing.
 Authors conclude with three recommendations for the PL infrastructure and in general for network hypervisors.
-First, enabling gateway task scheduling with a magnitude order of ms. As is, \textit{at} scheduling uses seconds for tasks triggers while path latencies of remote scheduling is a few hundreds of ms.
-Then, allowing the migration scheduler to prioritize scheduled tasks as result shows that execution time depends on the CPU load as well.
+First, enabling gateway task scheduling with a magnitude order of ms. As is, \textit{at} scheduling uses seconds for tasks triggers while path latency of remote scheduling is a few hundreds of ms.
+Then, allowing the migration scheduler to prioritize migration commands to reduce the delay induced in the actual start of the command.
 Finally, implement asymmetric packet routing inside the infrastructure.
 Because of the routing mode used in PL, each link in the gateway must have the same physical source and destination, thus preventing an asymmetric migration of the FIB to be effective. 
 

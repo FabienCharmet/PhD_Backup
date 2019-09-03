@@ -1,4 +1,18 @@
 The related work highlights numerous issues and challenges related to the use of SDN for the virtualization of network resources.
 First of all, this research domain has been quite extensively studied, and has provided numerous solutions, each tackling one or more challenges related to SDN, performance, scalability \etc.
 Similarly, but on smaller scale, the migration of virtual networks has also been an important research topic as the availability of a virtual network is crucial as it is for a Virtual Machine.
-However, and this is the gap between VM migration and VN migration stands, the security study of the latter remains to be done.
+However, and this is the gap between VM migration and VN migration stands, the security study of the latter remains to be done while the security of live VM migration has been extensively studied.
+Starting from this observation, there are two main directions to be taken: either choose to take the security from a practical point of view, and design and implement a set of security solutions for the different challenges faced or consider a higher level approach that will use more formal tools to provide answers. 
+
+The first approach would leverage on the existing migration solutions to support the implementations, and the results would be closely related to the reality of a virtualization infrastructure. However, this approach would also quite limit the scope of the security property implemented by each solution, and it would not be straightforward to extend the solution to other virtual network migration tools.
+
+The second approach would not immediately consider the underlying technical specificities of the infrastructure and instead would describe the system studied, the security properties that would be encompassed in the scope of the work and use formal models to provide the high level view expected from a theoretical approach.
+
+The theoretical approach is more appealing because the benefits of providing an extensible solution that can be instantiated under different contexts and with different virtualization solutions are more profitable compared to a specific implementation of a security problem under a narrowed scope.
+
+In this section we present a formal model to describe security properties from a high level point of view and these properties are then instantiated under the specific use case of the migration of virtual SDN networks. We propose definitions for the following properties: confidentiality, integrity, availability, authenticity and co-residency, which is a property specifically related to virtualization. 
+Then we describe how these properties are related to the reality of a virtualization infrastructure, and how they can be captured in essence for further analysis. The formal verification of the security is analog to the work done by a Security Information and Event Management (SIEM) solution, where information will first be collected inside the infrastructure and then transmitted for further analysis.
+Finally, we present how the verification of the security is performed, using the SNARK~\cite{snark-Stickel2000} model checker, and we illustrate the work with a use case.Finally, we present how the verification of the security is performed, using the SNARK~\cite{snark-Stickel2000} model checker, and we illustrate the work with a use case.
+
+
+

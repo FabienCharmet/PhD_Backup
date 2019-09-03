@@ -1,0 +1,48 @@
+\begin{figure}[h]
+\begin{tikzpicture}
+\begin{axis}[
+  xlabel={Detection probability},
+  ylabel={Average reward of the node },
+  y label style={at={(0.06,0.5)}},
+  xtick={0.5,0.6,0.7,0.8,0.9,1.0},
+  legend style={at={(0.5,1.2)},cells={align=right}, anchor=north,legend columns=3},
+  cycle list name=black white,
+  grid style=dashed,
+]
+
+\addplot+[]
+    coordinates {
+(0.5,57.0711574474)(0.6,37.0782125822)(0.7,43.9471043804)(0.8,39.2446371458)(0.9,44.8363801675)
+};
+
+\addplot+[]
+    coordinates {
+(0.5,29.4097815394)(0.6,19.8278112984)(0.7,4.26428571429)(0.8,34.0706693208)(0.9,9.49928571429)
+};
+
+\addplot+[]
+    coordinates {
+(0.5,68.6596096998)(0.6,69.339332514)(0.7,84.7438538657)(0.8,99.0264041517)(0.9,85.5894326243)
+};
+
+\addplot+[]
+    coordinates {
+(0.5,75.6609039908)(0.6,50.1243516403)(0.7,56.5923700845)(0.8,57.1874277411)(0.9,35.9649500717)
+};
+
+\addplot+[]
+    coordinates {
+(0.5,20.7573450249)(0.6,15.5267400966)(0.7,5.25375523139)(0.8,15.8992854434)(0.9,10.6415647894)
+};
+
+\addplot+[]
+    coordinates {
+(0.5,114.89762846)(0.6,92.0949728442)(0.7,78.0795310037)(0.8,99.102629324)(0.9,74.1266846482)
+};
+
+\legend{Node 1, Node 2, Node 3, Node 4, Node 5, Node 6}
+\end{axis}
+\end{tikzpicture}
+\caption{Nodes impact - Scenario b)}
+\label{fig:nodeimp_multiple}
+\end{figure}

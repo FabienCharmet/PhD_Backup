@@ -7,7 +7,7 @@
 \usepackage{cleveref}
 \usepackage{url}
 \usepackage{algpseudocode}
-\usepackage[ruled,noend]{algorithm2e}
+\usepackage[ruled,noend,linesnumbered]{algorithm2e}
 \usepackage{listings}
 \usepackage{lastpage}
 \usepackage{fancyhdr}
@@ -36,6 +36,8 @@
 \usepackage{titlesec}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{3}
+
+%  MARGIN
 % \addtolength{\textwidth}{-1in}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -67,18 +69,24 @@
 
 
 \begin{document}
+
+
 %Header-Make sure you update this information!!!!
 \noindent
 \maketitle
+
+\begin{abstract}
+Abstract
+\end{abstract}
+
 \tableofcontents
 \thispagestyle{empty}
 % \pagestyle{empty}
-\begin{abstract}
 
-\end{abstract}
 
 \section{Introduction}
-
+\input{introduction.tex}
+ 
 \section{Glossary}
 
 \input{glossary.tex}
@@ -132,14 +140,13 @@ In this section we consider three different techniques used to solve the RA prob
 \input{sota-RA/GT.tex}
 \input{sota-RA/MDP.tex}
 
+\newpage
 \section{Model}
 \subsection{Motivation}
 \input{model/motivation.tex}
 
 \subsection{Assumptions and simplifications}
-No distinctions between physical and remote access
-Physical links are safe
-no Path splitting (2 end points, several links)
+\input{model/assumptions.tex}
 
 \subsection{Modeling physical and virtual networks}
 \input{model/model_networks.tex}
@@ -162,9 +169,11 @@ no Path splitting (2 end points, several links)
 \input{model/snark.tex}
 \subsection{Experimental Results}
 
+\newpage
 \section{Resource Allocation}
 \subsection{Game Theory}
 \subsection{MDP}
+\input{RA/MDP.tex}
 \subsection{Experimental Results}
 
 \input{conclusion.tex}
