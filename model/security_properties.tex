@@ -176,6 +176,25 @@ $path\_integrity(P) \Leftrightarrow \bigwedge\limits_{n \in L_N}integrity(n) $
 $vpath\_integrity(P) \Leftrightarrow \bigwedge\limits_{n \in L_N}vnode\_integrity(n) \wedge \bigwedge\limits_{l \in L_L}vlink\_integrity(l) $
 \end{myformula}
 
+\textbf{Property 3:} A node's configuration maintains its integrity during a migration if it is not altered during the installation from the hypervisor to the node.
+\newline \textbf{Formal definition:} Let $N$ be a node, $conf$ be the configuration to be pushed, $C$ be a SDN controller.
+\newline
+%\RW{ i proposed a replacement but i still have questions about it:  $confidentiality(conf,N) \Leftrightarrow \exists C,P~ confidentiality(C) \wedge confidentiality(P) \wedge confidentiality(N) \wedge is\_controller\_of(C,N)$}
+%\RW{needs quantifiers for C U P N.  also, the formula does not constrain these to have anything to do with conf it seems that to define a confidentiality-preserving migration requires mentioning time.  the network is confidential after the migration if it was confidential before.  }
+
+\begin{myformula}
+$config\_integrity(conf,N) \Leftrightarrow~\forall ti,\exists~C,P 
+~is\_controller\_of(C,N) \wedge is\_path(C,P,N) \wedge  conf\_of\_node(conf,N) \Rightarrow
+~d\_integrity(conf,ti)
+$
+\end{myformula}
+
+
+\begin{itemize}
+\item $is\_controller\_of(C,N)$ is true if SDN controller $C$ controls node $N$.  
+\item $is\_path(C,P,N)$ is true if path $P$ is the path between $C$ and $N$..
+\item $conf\_of\_node(conf, N)$ is true if node $N$ is running configuration $conf$.
+\end{itemize}
 
 \subsubsection{Availability}
 \label{sec:prop-avail}
@@ -268,7 +287,7 @@ $ authenticity(E) \Leftrightarrow \forall t, claim\_role(E,t) \wedge has\_role(E
 \textbf{Formal definition: } Let $U$ be a user, $V$ a virtual topology, $r$ the migration request and $N$ the network hypervisor.
 
 \begin{myformula}
-$request\_authenticity(r,U) \Leftrightarrow \exists U,~authenticity(U) \wedge belongs\_to(r_V,U)$
+$migration\_authenticity(r,U) \Leftrightarrow \exists U,~authenticity(U) \wedge belongs\_to(r_V,U)$
 \end{myformula}
 %\RW{there is no quantifier for V and it is not a parameter.}
 %\FC{V is a parameter inside request r²}
@@ -325,6 +344,8 @@ This is a typical use of Access Control.
 \newline
 This predicate is true if U logs in N using a CLI or use remote access to interact with N.
 The logs of N can be exploited to verify the accesses made.
+It is important to note that installing flow rules on a node is not considered an access in the meaning of this predicate.
+
 \item $is\_carrying(N,D,t)$ can be verified by checking the flow rules composing the path taken by $D$.
 \end{itemize}
 
