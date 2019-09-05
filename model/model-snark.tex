@@ -3,7 +3,7 @@
 In section~\ref{sec:prop-conf}, we have formally described different properties related to the confidentiality in a network environment.
 In this section we intend to present a first-order theorem prover that will be used to detect confidentiality violation.
 We use SRI's open-source first-order reasoner SNARK~\cite{snark-Stickel2000}.
-\subsubsection{SNARK Features}
+\subsubsection{SNARK: A first order temporal logic theorem prover}
 SNARK is fully automatic and uses machine-oriented inference rules, such as \textit{resolution} for general-purpose reasoning and \textit{paramodulation} and \textit{rewriting} for reasoning about equality.
 It has special facilities
 %\GB{is listing all features supported by SNARK relevant in the paper?} 
@@ -24,23 +24,24 @@ Weights can be assigned to symbols, which causes SNARK to focus attention on “
 Also, an ordering is applied to symbols, which causes SNARK to focus on particular parts of a sentence. 
 Typically, symbols will be replaced by other symbols that are smaller in the ordering. 
 Since first-order theorem proving is undecidable and the search can go on forever, we give SNARK a time limit on proving a given theorem. 
-This is set empirically \-—-- for the examples in this section, most of the theorems were proved in less than a second. The use cases took no more than 30 seconds.
+This is set empirically \-—-- for the examples considered here, most of the theorems were proven in less than a second. The use cases took no more than 30 seconds.
 SNARK will automatically search for a series of proofs of a given conjecture, each yielding a different answer.
 In general, there may be an infinitely many answers to a query, but we rely on the time limit mechanism to cut off the search.
 
 %\GB{most of the contents before describe how SNARK works in rather technical terms. Although interesting, it may be out of the scope of the paper to explain in such details how SNARK works. It should be summarized to highlight what are tehe most important features of SNARK formalizing and solving our migration problem. To that end, the illupstrative example below is what is expected from this paper}
 
-\subsubsection{Example: Finding violations with SNARK}
+\subsubsection{Proving a simple violation with SNARK}
 \label{sec:find-violation}
-The operation and formalism of SNARK will be illustrated in the context of a specific example.
-We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a virtual topology.  
+The operation and formalism of SNARK will be illustrated in the context of a simple example.
+We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a virtual topology.
+This example makes a simple assumption regarding the possibility of reading a data in the network. If the data is carried by a node during a certain time interval, then it can be read via the nodes connected to it, directly or via a path of nodes, during a subset of this time interval.
+This assumption alleviate the unnecessary burden of modeling the actual routing performed by network nodes and will instead focus on the configuration installed in the nodes.
 Rather than presenting the axioms of the theory in advance, we will introduce them as they are required in the proof.
 
-To find violations, we propose the \textit{data path violation conjecture}
+To find violations, we propose the \textit{data confidentiality violation conjecture}
 \begin{verbatim}
-(exists (?u.user ?d.data ?p.path 
-         ?t.t-int)
-  (data-path-violation 
+(exists (?u.user ?d.data ?p.path ?t.t-int)
+  (data-confidentiality-violation 
      ?u.user ?d.data ?p.path 
      ?t.t-int))
      :answer
@@ -48,10 +49,10 @@ To find violations, we propose the \textit{data path violation conjecture}
            ?t.t-int)
 \end{verbatim}
 
-In other words, we are establishing the existence of  a user, some data, a path of nodes, and a time interval that exhibits a violation of confidentiality.  Once we find entities that exhibit the violation, they will comprise the answer term that SNARK will extract from the proof:  
+In other words, we are establishing the existence of  a user, some data, a path of nodes, and a time interval that exhibits a violation of confidentiality. 
+Once we find entities that exhibit the violation, they will comprise the answer term that SNARK will extract from the proof:  
   \begin{verbatim}
-     (ans ?u.user ?d.data ?p.path 
-          ?t.t-int)
+     (ans ?u.user ?d.data ?p.path ?t.t-int)
   \end{verbatim}
 
 Note that SNARK adopts a LISP-like notation for expressions; thus, we write \verb'(P A B)' rather than \verb'P(A, B)'. 
@@ -62,7 +63,7 @@ Other variables are of sort \verb'user', \verb'data', and \verb'path'.
 As the proof is under way, these variables will become instantiated with concrete terms of compatible sorts, \eg \verb'?u.user' with \verb'user-1'. 
 These instantiations will be reflected in the corresponding answer term.
 
-A data path violation is defined in part by the following axiom:   
+A data confidentiality violation is defined in part by the following axiom:   
 \begin{verbatim}                                             
 (implied-by
   (data-path-violation 
@@ -81,7 +82,7 @@ A data path violation is defined in part by the following axiom:
     (non-empty ?t.t-int)))
 \end{verbatim}
 
-In other words, a path violation can occur for a piece of data via a path of nodes during a time interval \verb'?t' if
+In other words, the confidentiality violation can occur for a piece of data via a path of nodes during a time interval \verb'?t' if
 %\GB{if all these conditions should hold together, I suggest to use the paraenum environment instead}
 \begin{itemize}
 \item the user can read the data via the path during a time interval \verb'?r',
@@ -90,13 +91,9 @@ In other words, a path violation can occur for a piece of data via a path of nod
 \item the time interval \verb'?t' is not empty.
 \end{itemize}
 
-Here  \verb't-pt' is the sort of time points, and  
-\begin{verbatim}
-   (time-i ?t1.t-pt ?t2.t-pt)
-\end{verbatim} 
-is the time interval between the two time points \verb'?t1.t-pt' and \verb'?t2.t-pt'. If a user can read some data during one time interval and is not authorized to read that data during another time interval, a confidentiality violation can occur during the intersection of those two intervals, provided that the intersection is not empty.
+Here  \verb't-pt' is the sort of time points, and \verb'(time-i ?t1.t-pt ?t2.t-pt)' is the time interval between the two time points \verb'?t1.t-pt' and \verb'?t2.t-pt'. If a user can read some data during one time interval and is not authorized to read that data during another time interval, a confidentiality violation can occur during the intersection of those two intervals, provided that the intersection is not empty.
 
-Applying the resolution rule to the negated conjecture and the definition of a data path violation, and then simplifying, yields the following \textit{current proof step}, which is added to the set of consequences:
+Applying the resolution rule to the negated conjecture and the definition of a data confidentiality violation, and then simplifying, yields the following \textit{current proof step}, which is added to the set of consequences:
 
 \begin{verbatim}
    (or 
@@ -114,11 +111,7 @@ Applying the resolution rule to the negated conjecture and the definition of a d
             (time-i ?t1.t-pt ?t2.t-pt)))
     (not-before ?t1.t-pt ?t2.t-pt))
 \end{verbatim}
-with associated answer term
-\begin{verbatim}
-       (ans ?u.user ?d.data ?p.path
-            ?t.t-int)
-\end{verbatim}
+with associated answer term \verb' (ans ?u.user ?d.data ?p.path ?t.t-int)'.
 This may be regarded as the negation of a goal to be established; conditions in the sentence are implicitly negated.
 Thus, we are looking for a user who can read the data via a path of nodes but who is not authorized to do so.
 
@@ -133,10 +126,7 @@ This has been accomplished by rewriting the term according to an axiom of the th
           (max-time ?r1.t-pt ?s1.t-pt)
           (min-time ?r2.t-pt ?s2.t-pt)))
 \end{verbatim}
-We establish that the intersection is nonempty by showing that its endpoints are in temporal order, \ie the negation of
-\begin{verbatim}
-   (not-before ?t1.t-pt ?t2.t-pt).
-\end{verbatim}
+We establish that the intersection is not empty by showing that its endpoints are in temporal order, \ie the negation of \verb' (not-before ?t1.t-pt ?t2.t-pt)'.
 
 The relation \verb'reads-via-path' is defined in part by the axiom
 
@@ -162,12 +152,7 @@ The relation \verb'reads-via-path' is defined in part by the axiom
            (time-i ?u1.t-pt ?u2.t-pt))))))
 \end{verbatim}
 
-The relation 
-\begin{verbatim}
-   (path-link ?n1.node ?n2.node ?p.path 
-              ?t.t-int) 
-\end{verbatim}
-is defined by axioms that are omitted here. 
+The relation \verb'(path-link ?n1.node ?n2.node ?p.path ?t.t-int)' is defined by axioms that are omitted here.
 The relation holds if, at time interval \verb'?t.t-int', there is a connected path \verb'?p.path' linking nodes \verb'?n1' and \verb'?n2'. 
 The axiom says that a user can read a piece of data via a path at a time interval \verb'?t.t-int' if
 %\GB{if all these conditions should hold, I suggest to use the paraenum environment}
@@ -183,7 +168,7 @@ We are given axioms that assert that \verb'node-a' is linked to \verb'node-b', a
 
 Using these axioms in the proof causes the variable in the proof step, including the answer term, to be instantiated.  
 For instance, when we use the fact that \verb'user-2' reads \verb'data-1' at \verb'node-c', the variable \verb'?u.user' is replaced by \verb'user-2', the variable \verb'?d.data' is replaced by \verb'data-1', and the variable \verb'?n2.node' is replaced by \verb'node-2'.  
-The time interval \verb'?t-int' is taken to be \verb'(time-i time-b time-c)', the intersection of all the time intervals involved. The fact that this interval is non-empty is given; in general such inferences invoke SNARK's temporal reasoning facility. We do not display the entire proof here. 
+The time interval \verb'?t-int' is taken to be \verb'(time-i time-b time-c)', the intersection of all the time intervals involved. The fact that this interval is non-empty is given; in general such inferences invoke SNARK's temporal reasoning facility. 
 
 When the proof is complete, the answer-extraction mechanism extracts the answer
 \begin{verbatim} 
@@ -200,9 +185,8 @@ It is also possible to use SNARK to establish that confidentiality is maintained
 For instance, if we pose the \textit{confidentiality list conjecture}
 \begin{verbatim}
  (and
-  (confidentiality-l (list data-1 data-2) 
-                     ?t.time-i)    
+  (confidentiality-l (list data-1 data-2) ?t.time-i)    
   (non-empty ?t.time-i))
 \end{verbatim}
 with answer term \verb'(ans ?t.time-i)', we are asking to find a time interval 
-\verb'?t.time-i' during which the confidentiality of \verb'data-1' and \verb'data-2' is maintained in the network in question. >
+\verb'?t.time-i' during which the confidentiality of \verb'data-1' and \verb'data-2' is maintained in the network.

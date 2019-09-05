@@ -6,6 +6,7 @@
 \usepackage{amssymb}  % assumes amsmath package installed
 \usepackage{cleveref}
 \usepackage{url}
+\usepackage[toc,page]{appendix}
 \usepackage{algpseudocode}
 \usepackage[ruled,noend,linesnumbered]{algorithm2e}
 \usepackage{listings}
@@ -142,33 +143,36 @@ In this section we consider three different techniques used to solve the RA prob
 \input{sota-RA/MDP.tex}
 
 \newpage
-\section{Model}
+\section{Formal modeling of the migration process and its security}
 \subsection{Motivation}
-\input{model/motivation.tex}
+\input{model/model-motivation.tex}
+
+\subsection{Methodology}
+\input{model/model-methodology.tex}
 
 \subsection{Assumptions and simplifications}
-\input{model/assumptions.tex}
+\input{model/model-assumptions.tex}
 
 \subsection{Modeling physical and virtual networks}
-\input{model/model_networks.tex}
+\input{model/model-networks.tex}
 
 \subsection{Modeling the migration of Virtual Networks}
-\input{model/model_migration.tex}
+\input{model/model-migration.tex}
 
 \subsection{Security properties applied to Virtual Network migration}
-\input{model/security_properties.tex}
+\input{model/model-security-properties.tex}
 
 \subsection{Attack model against the migration}
-\input{model/attack_model.tex}
+\input{model/model-attack-model.tex}
 
+\subsection{Problem verification using a theorem prover}
+\input{model/model-snark.tex}
 
-\subsection{Monitoring Tools}
+\subsection{Detection of security violation}
+\input{model/model-usecase.tex}
 
-\input{model/monitoring_tools.tex}
-
-\subsection{SNARK}
-\input{model/snark.tex}
-\subsection{Experimental Results}
+\subsection{Conclusion}
+\input{model/model-conclusion.tex}
 
 \newpage
 \section{Resource Allocation}
@@ -179,8 +183,14 @@ In this section we consider three different techniques used to solve the RA prob
 
 \input{conclusion.tex}
 
-
+\newpage
 \bibliography{references}{}
 \bibliographystyle{ieeetr}
+
+\newpage
+\begin{appendices}
+\input{appendixes/snark-code.tex}
+\end{appendices}
+
 
 \end{document}

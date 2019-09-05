@@ -1,0 +1,23 @@
+The related work highlights numerous issues and challenges related to the use of SDN for the virtualization of network resources.
+First of all, this research domain has been quite extensively studied, and has provided numerous solutions, each tackling one or more challenges related to SDN, performance, scalability \etc.
+Similarly, but on smaller scale, the migration of virtual networks has also been an important research topic as the availability of a virtual network is as crucial as the availability of a Virtual Machine.
+However, and this is where the gap between VM migration and VN migration lies, the security of the former has been extensively studied while the latter remains to be done.
+
+Starting from this observation, we envision two possible directions to be taken: either choose to take the security from a practical point of view to  design and implement a set of security solutions for the different challenges faced or consider a higher level approach that will use formal tools to provide answers to the different issues. 
+
+The first approach would leverage on the existing migration solutions to support the conception and evaluation of security components, and the results would be closely tied to the reality of a specific virtualization infrastructure. However, this approach would also quite limit the scope of the security property implemented by each solution, as it would not be straightforward to extend the solution to other virtual network migration solutions.
+
+
+The second approach would not immediately consider the underlying technical specificities of the virtualization infrastructure and instead would describe the system studied, the security properties that would be encompassed in the scope of the work and use formal methods to provide the high level view expected from a theoretical approach.
+
+With regards to the reasons we just expressed, the theoretical approach is more appealing because the benefits of providing an extensible solution that can be instantiated under different contexts and with different virtualization solutions are more profitable compared to a specific implementation of a security problem for a narrowed scope.
+
+For this thesis, we chose to take the theoretical approach and build a formal model that will cover several aspects: the SDN paradigm, virtualization using SDN hypervisors, the migration process of virtual networks and the security considerations related to the previous aspect.
+
+The different models presented in the state of the art are based on traditional networks.
+One important challenge is to consider the specificities of the SDN paradigm in the design of the formal model.
+The security approach of existing models are either too high level (ACL based languages~\cite{orbac,mulval-Ou2013}) or very technical (CVE based security description like M2D2~\cite{M2D2-Morin2002}).
+We need an intermediate positioning where the formal approach can be articulated with the particularities of the SDN paradigm.
+
+We propose to study the security of the migration process from a formal perspective.
+The scope of this work is to provide a formal proof of the security during the migration, which can be later used to reconstruct the serie of events that lead to the security breach. We exclude a real-time computation of the proof with regard to this requirement.

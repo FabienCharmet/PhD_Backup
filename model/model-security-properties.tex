@@ -263,41 +263,41 @@ $path\_availability(P)\Leftrightarrow \forall t, \bigwedge\limits_{n \in L_N}ava
 $vpath\_availability(P)\Leftrightarrow \bigwedge\limits_{n \in L_N}vnode\_availability(n) \wedge \bigwedge\limits_{l \in L_L}vlink\_availability(l)$
 \end{myformula}
 
-\subsubsection{Authenticity}
-\label{sec:prop-auth}
-Authenticity is a property or characteristic of an entity.
-An entity is authentic if it is what it claims to be~\cite{ISO/IEC270012013}.
+% \subsubsection{Authenticity}
+% \label{sec:prop-auth}
+% Authenticity is a property or characteristic of an entity.
+% An entity is authentic if it is what it claims to be~\cite{ISO/IEC270012013}.
 
-Let $E$ be an entity, $R$ a role for $E$ and $V$ the verification authority.
-The authenticity of an entity $E$ can be defined as follow:
+% Let $E$ be an entity, $R$ a role for $E$ and $V$ the verification authority.
+% The authenticity of an entity $E$ can be defined as follow:
 
-\begin{myformula}
-$ authenticity(E) \Leftrightarrow \forall t, claim\_role(E,t) \wedge has\_role(E,V,t)$
-\end{myformula}
-\begin{itemize}
-\item claim\_role(E,t) returns the role R of E at time t
-\item has\_role(E,V,t) the role R of E is returned by V at time t
-\end{itemize}
-% \RW{why is authenticity defined without a time argument but claim\-role does have a time argument?}
-% \FC{Similarly to confidentiality, authenticity is a binary property that cannot be restored}\GB{what do you mean by ``cannot be restored''?}
-% \FC{For authenticity, once the user lied about who he is and we found out, you cannot say "I will still allow you to user our network."}
+% \begin{myformula}
+% $ authenticity(E) \Leftrightarrow \forall t, claim\_role(E,t) \wedge has\_role(E,V,t)$
+% \end{myformula}
+% \begin{itemize}
+% \item claim\_role(E,t) returns the role R of E at time t
+% \item has\_role(E,V,t) the role R of E is returned by V at time t
+% \end{itemize}
+% % \RW{why is authenticity defined without a time argument but claim\-role does have a time argument?}
+% % \FC{Similarly to confidentiality, authenticity is a binary property that cannot be restored}\GB{what do you mean by ``cannot be restored''?}
+% % \FC{For authenticity, once the user lied about who he is and we found out, you cannot say "I will still allow you to user our network."}
 
-\textbf{Property 1:} The authenticity of a migration request is verified if the topology migrated belongs to the requesting user, and the user is authentic.
-\newline
-\textbf{Formal definition: } Let $U$ be a user, $V$ a virtual topology, $r$ the migration request and $N$ the network hypervisor.
+% \textbf{Property 1:} The authenticity of a migration request is verified if the topology migrated belongs to the requesting user, and the user is authentic.
+% \newline
+% \textbf{Formal definition: } Let $U$ be a user, $V$ a virtual topology, $r$ the migration request and $N$ the network hypervisor.
 
-\begin{myformula}
-$migration\_authenticity(r,U) \Leftrightarrow \exists U,~authenticity(U) \wedge belongs\_to(r_V,U)$
-\end{myformula}
-%\RW{there is no quantifier for V and it is not a parameter.}
-%\FC{V is a parameter inside request r²}
-\begin{itemize}
-\item $authenticity(U)$ is true if $U$ is a tenant known by $N$
-\item $r_V$ is the topology concerned by request $r$
-\item $belongs\_to(r_V,U)$ is true if the topology $V$ belongs to user $U$
-\end{itemize}
-%\RW{does it matter what r is in this definition?}
-%\FC{r is just the request, it's not under the scope for examination}
+% \begin{myformula}
+% $migration\_authenticity(r,U) \Leftrightarrow \exists U,~authenticity(U) \wedge belongs\_to(r_V,U)$
+% \end{myformula}
+% %\RW{there is no quantifier for V and it is not a parameter.}
+% %\FC{V is a parameter inside request r²}
+% \begin{itemize}
+% \item $authenticity(U)$ is true if $U$ is a tenant known by $N$
+% \item $r_V$ is the topology concerned by request $r$
+% \item $belongs\_to(r_V,U)$ is true if the topology $V$ belongs to user $U$
+% \end{itemize}
+% %\RW{does it matter what r is in this definition?}
+% %\FC{r is just the request, it's not under the scope for examination}
 
 
 \subsubsection{Co-Residency}
@@ -390,19 +390,19 @@ The availability section introduces the following predicates:
 \item \FC{Should I reintroduce is\_node\_authorized ?}
 \end{itemize}
 
-\paragraph{Authenticity}
-The authenticity section introduces the following predicates:
-\begin{itemize}
+% \paragraph{Authenticity}
+% The authenticity section introduces the following predicates:
+% \begin{itemize}
 
-\item claim\_role(E)
-\item has\_role(E,V)
-\\
-Those two predicates are verified by the network hypervisor upon receiving a migration requests.
-The DPAC will provide an interface to identify tenants to let them interact with the hypervisor.
-\item belongs\_to($r_V$,U)
-\\
-The network hypervisor keeps a mapping between virtual topologies and their owner, hence it is trivial to verify this predicate.
-\end{itemize}
+% \item claim\_role(E)
+% \item has\_role(E,V)
+% \\
+% Those two predicates are verified by the network hypervisor upon receiving a migration requests.
+% The DPAC will provide an interface to identify tenants to let them interact with the hypervisor.
+% \item belongs\_to($r_V$,U)
+% \\
+% The network hypervisor keeps a mapping between virtual topologies and their owner, hence it is trivial to verify this predicate.
+% \end{itemize}
  
  
 \paragraph{Co-Residency}

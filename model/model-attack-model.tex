@@ -1,3 +1,5 @@
+\input{figures/virtualization-attack-surface.tex}
+
 %\GB{I suggest: ``Attacks against Migration'' as a title}
 \label{sec:attacker-model}
 The migration of a VN creates virtual nodes and virtual links between them.
@@ -5,9 +7,6 @@ Thus, based on  the migration functions we introduced in Section~\ref{sec:migrat
 %\GB{terms?}
 %\FC{The syntax is the combination of terms}
 : Attacker - Action - Target.
-
-
-\input{figures/virtualization-attack-surface.tex}
 
 \subsubsection{Attacker}
 We consider the different locations from where an attacker could attack the migration of the VN. 
@@ -46,7 +45,7 @@ Management data is regularly exchanged between the hypervisor and the switch to 
 
 
 \subsubsection{Attacks}
-\label{sec:attacks}
+\label{sec:model-attacks}
 %\GB{please in this section and the following, specify which attack is directed against which algorithm}
 In the previous sections, we have defined the different attackers, as well as the malevolent actions and possible targets in the virtualization infrastructure. 
 Table~\ref{tab:attack-model} summarizes these information.
@@ -85,24 +84,20 @@ Outsider   & Information modification/destruction & Configuration data \\ \hline
 \end{table}
 
 \paragraph{Denial of Service}\textbf{\\}
-In this scenario, the attacker is a collocated user that is gaining access to another user's confidential traffic. 
+In this scenario, the attacker is a located inside the physical infrastructure, and will launch Denial of Service attacks to render one or several nodes unavailable.
+This attack becomes necessary for the attacks we describe later on since triggering the migration is compulsory.
+
 \subparagraph{Hypotheses:}\textbf{\\}
-\textbf{Collocated attacker:} The attacker owns a virtual network in the infrastructure.\\
-\textbf{Migration trigger:} The attacker can trigger the migration of the victim's VN.\\
-\textbf{Embedding knowledge:} The attacker has approximate knowledge of the new substrate network.\\
-\textbf{Writing rights:} The attacker can install specific flow rules inside a node.
+\textbf{Provider side attacker/Insider attacker:} The attacker is located either inside the physical infrastructure or is a malicious user of the virtualization service.\\
+\textbf{Traffic generation:} The attacker can generate enough traffic to cause a service disruption.
 
 \subparagraph{Attack methodology:}\textbf{\\}
-In order to gain access to confidential data, the attacker generates instability in the infrastructure. Typically, generating lots of requests between nodes and users will create enough disruption to force the migration.
-Then, he will use its knowledge of the embedding of the virtual network to target specific nodes.
-Deploying probes in the network or attacking on a large scale the infrastructure could lead the virtualization layer to a particular deployment. Co-residency-based attacks and vulnerabilities are exploited in several cases~\cite{malicious-atya2017,nomad-Moon2015b,getoffmucloud-Ristenpart2009,stalling-atya2017}.
-Finally, the attacker will compromise the confidential data by redirecting it from the victim's VN toward a malicious end host belonging to him.
-Such attacks relies on deploying specific flow rules on a set of physical nodes that will copy the confidential traffic and route it towards the attacker.
-In~\cite{Costa2015,Sphinx-Dhawan2015}, different methods are described to achieve this attack. 
+The attacker will generate massive amounts of traffic to generate congestion effects inside the network. The attacker may be located inside the physical network, or he may be the owner of a Virtual Network. The second option is easier to achieve but the attacker will be confronted to the resource isolation enforced by the hypervisor (\ie FlowVisor bandwidth isolation mechanism)
+
 
 \subparagraph{Impacts}\textbf{\\}
 This attack impacts the following security properties:\\
-The \textbf{availability} of specific nodes in the infrastructure has been impacted to force the migration.
+The \textbf{availability} of nodes in the infrastructure has been impacted because of the DoS attack.
 \begin{itemize}
     \item $node\_availability(N)$
     \item $vnode\_availability(n)$
@@ -110,20 +105,6 @@ The \textbf{availability} of specific nodes in the infrastructure has been impac
     \item $path\_availability(P)$
     \item $vpath\_availability(P)$
 \end{itemize}
-The \textbf{confidentiality} of the data that has been extracted by the attacker.\\
-\begin{itemize}
-    \item $confidentiality(D)$
-\end{itemize}
-The confidentiality of the nodes is not impacted because the attacker did not access the node by installing flow rules on them, with respect to the definition provided in the previous section.\\
-The \textbf{integrity} of the different nodes that have been used to forward the data to the attacker.
-    \begin{itemize}
-    \item $node\_integrity(N)$
-    \item $vnode\_integrity(n)$
-    \item $vlink\_integrity(l)$
-\end{itemize}
-The \textbf{co-residency} of both victim and attacker VNs has been increased for the attacker to successfully disrupt the operations of nodes and trigger the migration.
-
-
 
 \paragraph{Information disclosure}\textbf{\\}
 In this scenario, the attacker is a collocated user that is gaining access to another user's confidential traffic. 
@@ -151,7 +132,7 @@ The \textbf{availability} of specific nodes in the infrastructure has been impac
     \item $path\_availability(P)$
     \item $vpath\_availability(P)$
 \end{itemize}
-The \textbf{confidentiality} of the data that has been extracted by the attacker.\\
+The \textbf{confidentiality} of the data that has been extracted by the attacker.
 \begin{itemize}
     \item $confidentiality(D)$
 \end{itemize}
@@ -172,14 +153,12 @@ We now consider a malicious user intending to exploit the migration process to m
 \textbf{Provider side attacker:} The attacker sits between the node and the hypervisor.\\
 \textbf{Man-in-the-middle:} The attacker can modify the configuration information sent by the hypervisor in a specific node.\\
 \textbf{Migration trigger:} The attacker can trigger the migration of the victim's VN.\\
-\textbf{Embedding knowledge:} The attacker has approximate knowledge of the new substrate network.\\
+\textbf{Embedding knowledge:} The attacker has approximate knowledge of the new substrate network.
 
 \subparagraph{Attack methodology:}\textbf{\\}
 First of all, the attacker gains access to a networking equipment between the target node and the hypervisor. Similarly to the previous attack, this is done by exploiting vulnerabilities in the physical equipments.
 Then, he will trigger the migration of a specific physical node, that will be redeployed on the node targeted by the Man-in-the-middle attack.
 Once the hypervisor sends the different flow rules, the attacker will modify them to fit his extraction scheme.
-
-
 
 \subparagraph{Impacts:}\textbf{\\}
 This attack impacts the following security properties:\\
@@ -191,11 +170,11 @@ The \textbf{availability} of the attacked node has been impacted to trigger the 
     \item $path\_availability(P)$
     \item $vpath\_availability(P)$
 \end{itemize}
-The \textbf{confidentiality} of the configuration data that has been modified by the attacker.\\
+The \textbf{confidentiality} of the configuration data that has been modified by the attacker.
 \begin{itemize}
     \item $config\_confidentiality(conf)$
 \end{itemize}
-The confidentiality of the nodes is not impacted for the same reasons described in the previous attack.
+The confidentiality of the nodes is not impacted for the same reasons described in the previous attack.\\
 The \textbf{integrity} of the node and its configuration has been compromised
     \begin{itemize}
     \item $node\_integrity(N)$

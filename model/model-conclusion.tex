@@ -1,0 +1,10 @@
+In this chapter we have presented a formal model describing a virtualization infrastructure, the embedding of virtual resources on top of a physical substrate, the evolution of such embedding during the migration of a virtual network and a set of security properties. These properties were addressed by considering them in a very general way, and then refining them more precisely into a SDN context. We have proposed to evaluate the formal model with real life use cases, considering attacks existing on SDN infrastructures, and using a simulator to generate the execution trace. Finally, we used the theorem prover SNARK to generate a formal proof regarding the security properties during the migration.
+
+Our analysis of the state of the art has outlined a lack of consideration for the security study of the migration process of a virtual network.
+One logical explanation is that the migration process is rarely implemented in a network hypervisor, especially because this process corresponds to operational needs and that there is only a limited number of commercial solutions for SDN.
+Our results demonstrate the possibility of formally proving the preservation or the violation of the security properties, based on the analysis of an execution trace.
+
+The use of a formal approach to verify real life problems inevitable raises a question about the coherence between the model and its reality.
+In our case, we prove that we can detection security violations, but this comes with the underlying hypotheses that we can detect and characterize every relevant network event and that the trace generated from the migration is done from "God's point of view". However, we are left with the challenge to alleviate the hypothesis that the security tool is omnipotent and will never miss any event that would pertain to the proof. As it is, this assumption is too strong for a realistic use of the tool.
+
+In the next chapter, we propose to tackle this issue by proposing a resource allocation model that will optimize the coverage of the security monitoring inside the infrastructure, using reinforcement learning techniques.
