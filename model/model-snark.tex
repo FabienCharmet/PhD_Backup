@@ -1,8 +1,9 @@
 \label{sec:proof-detects-violation}
 %Part of this effort is devoted to using automatic reasoning to establish that a network enforces confidentiality properties or to detect that such properties can be violated.
 In section~\ref{sec:prop-conf}, we have formally described different properties related to the confidentiality in a network environment.
-In this section we intend to present a first-order theorem prover that will be used to detect confidentiality violation.
+In this section we  present a first-order theorem prover that will be used to detect the violation of the security properties.
 We use SRI's open-source first-order reasoner SNARK~\cite{snark-Stickel2000}.
+
 \subsubsection{SNARK: A first order temporal logic theorem prover}
 SNARK is fully automatic and uses machine-oriented inference rules, such as \textit{resolution} for general-purpose reasoning and \textit{paramodulation} and \textit{rewriting} for reasoning about equality.
 It has special facilities
@@ -45,8 +46,7 @@ To find violations, we propose the \textit{data confidentiality violation conjec
      ?u.user ?d.data ?p.path 
      ?t.t-int))
      :answer
-     '(ans ?u.user ?d.data ?p.path 
-           ?t.t-int)
+     '(ans ?u.user ?d.data ?p.path ?t.t-int)
 \end{verbatim}
 
 In other words, we are establishing the existence of  a user, some data, a path of nodes, and a time interval that exhibits a violation of confidentiality. 
@@ -181,12 +181,23 @@ The offending path is \verb'(path node-a node-b node-c)'.
 This is possible because \verb'data-1' is at \verb'node-a' during the larger time interval 
 \verb'(time-i time-a time-c)'.
 
-It is also possible to use SNARK to establish that confidentiality is maintained in a particular network.  
-For instance, if we pose the \textit{confidentiality list conjecture}
-\begin{verbatim}
- (and
-  (confidentiality-l (list data-1 data-2) ?t.time-i)    
-  (non-empty ?t.time-i))
-\end{verbatim}
-with answer term \verb'(ans ?t.time-i)', we are asking to find a time interval 
-\verb'?t.time-i' during which the confidentiality of \verb'data-1' and \verb'data-2' is maintained in the network.
+% It is also possible to use SNARK to establish that confidentiality is maintained in a particular virtual network.  
+% For instance, if we pose the \textit{confidentiality list conjecture}
+% \begin{verbatim}
+%  (and
+%   (confidentiality-l (list data-1 data-2) ?t.time-i)    
+%   (non-empty ?t.time-i))
+% \end{verbatim}
+% with answer term \verb'(ans ?t.time-i)', we are asking to find a time interval 
+% \verb'?t.time-i' during which the confidentiality of \verb'data-1' and \verb'data-2' is maintained in the network.
+% We define the \verb'confidentiality-l' conjecture with:
+% \begin{verbatim}
+%       (assert
+%   '(iff
+%      (confidentiality-l (cons ?d.data ?p.path) ?t.time-interval)
+%      (and
+%       (data-confidentiality ?d.data ?t.time-interval)
+%       (confidentiality-l ?p.path ?t.time-interval)))
+%   :sequential :uninherited
+%   :name 'confidentialiy-for-non-empty-list)
+% \end{verbatim}

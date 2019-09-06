@@ -3,15 +3,18 @@ We describe here the predicates used to represent the physical network and how v
 For an eased reading for the rest of this section, we define some variable names used later on:
 
 \begin{lstlisting}[backgroundcolor = \color{lightgray}]
+hname is the unique identifier of a network hypervisor.
 vnet is the unique identifier of a virtual network.
 pnode_name is the unique identifier of a physical node.
 plink_name is the unique identifier of a physical link.
+ppath_name is the unique identifier of a physical path.
 vnode_name is the unique identifier of a virtual node.
 vlink_name is the unique identifier of a virtual link.
+vpath_name is the unique identifier of a virtual path.
 ti is the unique identifier of a time interval.
 \end{lstlisting}
 
-\paragraph{Physical network modeling}
+\subsubsection{Physical network modeling}
 
 
 The physical network is composed of nodes and links. We define two temporal predicates:
@@ -19,11 +22,12 @@ The physical network is composed of nodes and links. We define two temporal pred
 \begin{lstlisting}[backgroundcolor = \color{lightgray}]
 physical_node(node_name,ti)
 physical_link(plink_name,node_name1,node_name2,ti)
+physical_path(ppath_name,node_name1,node_name2,ti)
 \end{lstlisting}
 
-These predicates represent the existence of each element and failures or attacks will limit this existence.
+These predicates represent the existence of each element and the duration for the validity of the predicate.
 
-For instance, if node1 is attacked at $t_1$ and only becomes available again at $t_2$ until the next failure/attack at $t_3$ then we obtain the following predicates:
+For instance, if node1 has a failure at $t_1$ and only comes back available again at $t_2$ until the next failure/attack at $t_3$ happens then we obtain the following predicates:
 
 \begin{lstlisting}[backgroundcolor = \color{lightgray}]
 physical_node(node1,[0,t_1])
@@ -32,17 +36,36 @@ physical_node(node1,[t_2,t_3])
 
 $t_3$ could be seen as $+\infty$ if no other incident occurs on node1.
 
-\paragraph{Virtual network modeling}
-We extend the previous predicates with information related to the tenant of the virtual network and it is embedded on top of a set of physical resources.
+
+\subsubsection{Network Hypervisor modeling}
+The network hypervisor is connected to the different physical nodes, and administrates them, installs flow rules \etc.
+
+\begin{lstlisting}[backgroundcolor = \color{lightgray}]
+hypervisor(hname,ti)
+hypervisor_of(hname,pnode,ppath,ti)
+\end{lstlisting}
+
+The predicate hypervisor\_of affects an hypervisor to a physical node, and affect a path between them.
+A physical path where the source and destinations nodes are identical implies a direct hop from the hypervisor to the node.
+
+The network hypervisor established a communication with the nodes in the infrastructure.
+This communication is carried by a physical path, the "Hypervisor - Switch link`` as depicted in Figure~\ref{fig:VNE-example-model}.
+In this figure the hypervisor is directly connected to all the nodes of the infrastructure.
+
+
+
+\subsubsection{Virtual network modeling}
+We extend the previous predicates with information related to the tenant of the virtual network and how it is embedded on top of a set of physical resources.
 
 
 \begin{lstlisting}[backgroundcolor = \color{lightgray}]
 virtual_network(vnet_name,ti)
 virtual_node(vnode_name,vnet_name,ti)
 virtual_link(vlink_name,vnode_name1,vnode_name2,vnet_name,ti)
+virtual_path(vpath_name,vnode_name1,vnode_name2,ti)
 \end{lstlisting}
 
-\paragraph{Embedding modeling}
+\subsubsection{Embedding modeling}
 Each virtual element, node or link, is embedded on a set of physical resources.
 Therefore, there can be one or more predicates used to describe the embedding of a virtual element.
 
@@ -53,14 +76,14 @@ link_embedding(vlink_name,pnode_name,ti)
 link_embedding(vlink_name,plink_name,ti)
 \end{lstlisting}
 
-\paragraph{Example for modeling physical and virtual networks}
+\subsubsection{Example for modeling physical and virtual networks}
 
 We consider the use case of Fig.~\ref{fig:VNE-example-model}.
 There is no failure in the system nor any attack, therefore, we consider the time interval ti to represent the duration of the predicates.
 
 \input{figures/vne_example_model.tex}
 
-The current infrastructure gives the following output:
+The current infrastructure gives the following formal declaration:
 
 \begin{lstlisting}[backgroundcolor = \color{lightgray}]
 virtual_network(vSDN1,ti)
@@ -87,6 +110,19 @@ physical_link(plink3,P2,P4,ti)
 physical_link(plink4,P3,P4,ti)
 physical_link(plink5,P4,P5,ti)
 physical_link(plink6,P4,P6,ti)
+physical_path(ppath1,P1,P1,ti)
+physical_path(ppath2,P2,P2,ti)
+physical_path(ppath3,P3,P3,ti)
+physical_path(ppath4,P4,P4,ti)
+physical_path(ppath5,P5,P5,ti)
+physical_path(ppath6,P6,P6,ti)
+hypervisor(hyp1,ti)
+hypervisor_of(hyp1,P1,ppath1,ti)
+hypervisor_of(hyp1,P2,ppath2,ti)
+hypervisor_of(hyp1,P3,ppath3,ti)
+hypervisor_of(hyp1,P4,ppath4,ti)
+hypervisor_of(hyp1,P5,ppath5,ti)
+hypervisor_of(hyp1,P6,ppath6,ti)
 node_embedding(V1,P1,ti)
 node_embedding(V4,P1,ti)
 node_embedding(V2,P2,ti)

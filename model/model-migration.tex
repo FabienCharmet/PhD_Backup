@@ -4,12 +4,12 @@ In the event of a migration, for maintenance purposes or because of an attack, t
 Determining how the flow rules should be deployed and which physical nodes should be selected is called Virtual Network Embedding, and there already are various solutions doing so~\cite{Zangiabady2017e, Papagianni2013, Chowdhury2016d, Wang2015}.
 We leave the VNE problem out of the scope of this thesis.
 We also limit our study of migration process to the networking aspect of it, meaning that we are not considering the internal specificities of the hypervisors and how mappings between virtual and physical nodes are handled during the migration.
-We study the flow rules that will be installed in the SDN nodes by the hypervisor because of the migration.
+We study the flow rules that will be installed in the SDN nodes by the hypervisor because of the migration, and how the migration can be exploited for unlawful purposes.
 
 \input{figures/onetomany_mapping.tex}
-
+\subsubsection{Modeling the migration process}
 We have presented in Section~\ref{sec:reference_archi} a reference architecture for the network hypervisor.
-From the SDN point of view, a virtual link is a collection of flow rules deployed on one ore more physical node, to carry the traffic of a specific tenant.
+From the SDN point of view, a virtual link is a collection of flow rules deployed on one ore more physical nodes, to carry the traffic of a specific tenant.
 Similarly, a virtual node is the end point of several flow rules.
 Therefore, a virtual node can be seen a collection of flow rules describing the end point of several virtual links, SDN-wise.
 
@@ -18,17 +18,18 @@ Figure~\ref{fig:1tomany} (from VeRTIGO~\cite{VeRTIGO-Corin2012a}) depicts the on
 
 We describe two migration algorithms in the following subsections, a naive implementation and an more elaborate one.
 These algorithms use different functions in order to migrate the topology: create\_link, delete\_link, create\_node, delete\_node and embedding. 
+Each function will be associated to predicates representing the state of the virtual networks during the migration.
 We explain what each function does, SDN-wise:
 
 \begin{itemize}
-\item Create\_link($vlink\_name,path$): This function will deploy flow rules related to $vlink\_name$ on the different nodes composing $path$. Returns the identifier of the migrated link.
+\item Create\_link($vlink\_name,path$): This function will deploy flow rules related to $vlink\_name$ on the different nodes composing $path$. It generates $virtual\_link$ and $link\_embedding$ predicates, and returns the identifier of the migrated link.
 \item Delete\_link($vlink\_name$): This function will remove the flow rules pertaining to $vlink\_name$ from the physical nodes embedding it.
-\item Create\_node($vnode\_name,path$): This function will deploy flow rules related to $vnode\_name$ on the different nodes composing $path$. Returns the identifier of the migrated node.
+\item Create\_node($vnode\_name,path$): This function will deploy flow rules related to $vnode\_name$ on the different nodes composing $path$. It generates $virtual\_node$ and $node\_embedding$ predicates, and returns the identifier of the migrated node.
 \item Delete\_node($vnode\_name$): This function will remove the flow rules related to  $vnode\_name$ on the physical nodes embedding it.
 \item embedding($vlink\_name|vnode\_name$) returns the physical substrate allocated by the VNE component for either $vlink\_name$ or $vnode\_name$.
 \end{itemize}
 
-\subsubsection{Move based Migration}
+\subsubsection{Move based migration algorithm}
 \label{sec:move-algo}
 
 An intuitive migration algorithm is described in~\cite{Lime-Ghorbani2014}. 
@@ -69,15 +70,16 @@ delete\_link($link$)
 \end{algorithm}
 
 
-\subsubsection{Iterative Migration}
+\subsubsection{Iterative migration algorithm}
 Another algorithm we consider is described in~\cite{vnm-lo2013}.
 This algorithm iteratively moves nodes one after another, while dynamically creating links for the migrated nodes and deleting the old ones.
-The migration progress is depicted in Algorithm~\ref{algo:iterative_algo}:
+The migration progress is depicted in Algorithm~\ref{algo:iterative_algo}.
 % Create two arrays, one to hold nodes left to be migrated, one to hold the nodes that have been migrated (lines 2-3).
-Create a token to remember if this is the first iteration of the algorithm (Line 5).
+
+First, initialize a counter to remember the number of iterations of the algorithm (Line 5).
 % While there are nodes to be migrated, do the following (Lines 5 to 28):
-Select a node among the remaining nodes (line 7), we refer to it as the old node, create the new node (line 9) and create the virtual links between the new node and the nodes that have not been migrated (lines 11-14).
-If this is not the first iteration of the algorithm, there might be links to be established between the new node and the nodes that have already been migrated. (lines 15-20).
+Select a node among the remaining nodes (line 7), we refer to it as the old node. Instantiate the new node (line 9) and create the virtual links between the new node and the nodes that have not been migrated (lines 11-14).
+If this is not the first iteration of the algorithm, there might be virtual links that must be deployed between the new node and the nodes that have already been migrated. (lines 15-20).
 There may also be links between migrated nodes and the old node.
 If so, they are deleted. (lines 21-24)
 
@@ -133,7 +135,7 @@ The following list details the functions used for the migration
 %\GB{again, you are not providing an elaborate explanation with respect to the parameters.}.
 %\FC{Done}
 \begin{itemize}
-\item $Select\_node$ selects the next node to be migrated.
+\item Select\_node selects the next node to be migrated.
 \item exist\_link($node1,node2,topology$) returns True if there is a virtual link between $node1$ and $node2$ in $topology$.
 \item link($node1,node2,topology$) returns the identifier of the virtual link connecting $node1$ and $node2$ in $topology$.
 \end{itemize}

@@ -1,7 +1,7 @@
 \label{sec:model-usecase}
 In this section we describe, with our model, the information disclosure and migration alteration attacks detailed in Section~\ref{sec:model-attacks}.
-We evaluate the detection of violation for each attack, using the migration algorithms presented in Section~\ref{sec:migration}.
-We describe a virtual topology and prove the initial setup is respecting the security properties previously defined.
+We prove the feasibility of detecting security violations with each attack, using the migration algorithms presented in Section~\ref{sec:migration}.
+We describe a virtual topology and verify that the initial setup is respecting the security properties previously defined.
 We limit the description of the different axioms used by SNARK for simplicity of reading.
 The full implementation of the use case in SNARK is described in Appendix~\ref{appendix:snark-code}.
 
@@ -26,7 +26,7 @@ We define the first two basic time points time-0 and time-1 to respectively repr
 
 \subsubsection{Initial Situation}
 In this section, we consider the network topology prior to any migration.
-We solely have the axioms related to the virtual topology, the corresponding user, and some tokens to represent the data carried across the network.
+We solely have the axioms related to the virtual topology, the corresponding users, and the data carried across the network.
 We formulate our question to SNARK and verify that the confidentiality is already established prior to the migration (question and answer in Listing~\ref{lst:init-conf-q} and~\ref{lst:init-conf-a}, respectively).
 
 \lstset{numbers=left,numberstyle=\tiny,numbersep=5pt,language=Lisp,
@@ -92,17 +92,17 @@ Answer (ANS (ANS DATA-1 (MAKE-INTERVAL TIME-0 TIME-1))))
 \end{lstlisting}
 
 
-\subsubsection{Information Disclosure}
+\subsubsection{Information Disclosure attack}
 %\GB{are both attacks directed against both migration algorithms}
 %\FC{No, but I forgot to mention that we assign an attack per algorithm}
-This attack considers two users, one legitimate (L) and one attacker (A).
+This attack considers two users, one legitimate and one attacker.
 The attacker is a collocated user.
-During the initial phase, only L is active.
 In this scenario, the iterative migration algorithm will be used.
+During the initial phase, only the legitimate user is active.
 The migration process starts and nodes and links are being migrated, one after another.
-At some point during the migration, A will start his attack to gain access to the data carried through the VN.
-This results into the generation of two predicates, one about A reading the data, and the other about A not being authorized to do so. 
-When the migration process ends, the data has been disclosed.
+At some point during the migration, the attacker will start his attack to gain access to the data carried through the VN.
+This results into the generation of two predicates, one about the attacker reading the data, and the other about him not being authorized to do so. 
+When the migration process ends, the data has been compromised.
 In SNARK, the data has been named data-1 and the migration ends at time point time-9.
 We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf-q}.
 
@@ -139,16 +139,16 @@ We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf
  (NOT (SETLINK ?W.NODE NODE-A (MAKE-INTERVAL ?Z.TIME-POINT ?V.TIME-POINT)))
  ($$TIME-PP-NOT-BEFORE TIME-9 (MIN-TIME TIME-1 ?X.TIME-POINT)) ($$TIME-PP-NOT-BEFORE TIME-4 TIME-9)
  (NOT (= (MAKE-INTERVAL TIME-4 TIME-9) (MAKE-INTERVAL TIME-0 TIME-9))) ($$TIME-PP-NOT-BEFORE TIME-4 TIME-9)
- (DATA-ISAUTHORIZED USER-2 DATA-1 (MAKE-INTERVAL TIME-4 TIME-9)))
+ (DATA-ISAUTHORIZED ATTACKER DATA-1 (MAKE-INTERVAL TIME-4 TIME-9)))
    (RESOLVE 1938 18)
    Answer (ANS (ANS DATA-1 (MAKE-INTERVAL TIME-4 TIME-9)))) 
 \end{lstlisting}
 We can see that SNARK confirms the data confidentiality violation at line 12 from Listing~\ref{lst:not-data-conf-a}.
 Since the attack started during the migration (i.e after time point time-1), SNARK detects the beginning of the confidentiality violation at time point time-4.
-Line 10 highlights that user-2 (\ie the attacker) does not have the authorization to read the data.
+Line 10 highlights that the attacker does not have the authorization to read the data.
 %\GB{could you point out directly which line you are referring to by labeling and referring to independent lines in the listing?}
 
-\subsubsection{Migration alteration}
+\subsubsection{Migration alteration attack}
 Exploiting the physical nodes leverages other aspects of the security the infrastructure.
 The initial situation is similar to the previous scenario but we use the move-based migration algorithm instead.
 The attacker is located in the network infrastructure.
