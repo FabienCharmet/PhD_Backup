@@ -38,6 +38,7 @@
 \usepackage{titlesec}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{3}
+\usepackage[nottoc,numbib]{tocbibind}
 
 %  MARGIN
 % \addtolength{\textwidth}{-1in}
@@ -74,7 +75,7 @@
 
 
 %Header-Make sure you update this information!!!!
-\noindent
+% \noindent
 \maketitle
 
 \begin{abstract}
@@ -82,10 +83,12 @@ Abstract
 \end{abstract}
 
 \tableofcontents
+\listoffigures
+ \listoftables
 \thispagestyle{empty}
 % \pagestyle{empty}
 
-
+\newpage
 \section{Introduction}
 \input{introduction.tex}
  
@@ -176,15 +179,21 @@ In this section we consider three different techniques used to solve the RA prob
 \input{model/model-conclusion.tex}
 
 \newpage
-\section{Resource Allocation}
+\section{Optimizing resource allocation}
 \subsection{Motivation}
 \input{RA/RA-motivation.tex}
 
-\subsection{Game Theory}
-\subsection{MDP}
-% \input{RA/MDP.tex}
-\subsection{Experimental Results}
 
+
+\newpage
+\subsection{Game Theory}
+\input{RA/GT.tex}
+
+\newpage
+\subsection{MDP}
+\input{RA/MDP.tex}
+
+\newpage
 \input{conclusion.tex}
 
 \newpage
@@ -194,6 +203,8 @@ In this section we consider three different techniques used to solve the RA prob
 \newpage
 \begin{appendices}
 \input{appendixes/snark-code.tex}
+\newpage
+\input{appendixes/notations.tex}
 \end{appendices}
 
 

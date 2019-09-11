@@ -1,0 +1,20 @@
+\begin{algorithm}[ht]
+  \DontPrintSemicolon
+  \Begin{
+  \SetKwFunction{FGenerate}{Generate}
+  \SetKwProg{Fn}{Function}{:}{}
+% %   \tcc{Defining the structure of a transition and a reward}
+%   $\text{transition}$ = $<\text{src state}, \text{dst state},\text{action}, \text{proba}>$\;
+% %   \tcc{Defining the structure of a reward}
+%   $\text{reward}$ = $<\text{src state}, \text{dst state},\text{action}, \text{value}>$\;
+  \Fn{\FGenerate{$b_f$, $b_c$, $Mi$, $Mo$, $At$}}{
+        check if there are nodes to migrate\;
+        check if recursion ends\;
+        recursive call on monitoring actions\;
+        recursive call on unmonitoring actions\;
+      }
+Generate($c^0_f,c^0_c,\emptyset,\emptyset,\emptyset$)\;
+      }
+\caption{Generating the MDP} 
+\label{algo:global}
+\end{algorithm}

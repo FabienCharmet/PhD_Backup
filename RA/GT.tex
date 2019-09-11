@@ -1,0 +1,115 @@
+We propose to solve the resource allocation problem previously described using the formalism of game theory.
+We consider a two player games, where one player will be the attacker and will compromise the infrastructure to gain access to confidential data. The other player will be the the infrastructure owner and will be referred to as ''the defender`` for the rest of this section.
+We will present the requirements and assumptions made, the players, their strategies and the different types of games considered.
+
+\subsubsection{Requirements}
+We formulate the following requirements regarding the formalization of the game:\\
+\textbf{Solution form: } The solution of the game is a list of nodes that will monitor the infrastructure.\\
+\textbf{End of game: } The game ends when the attack is completed.\\
+\textbf{Constrained budgets: } Both players have limited capacities to either attack or defend the infrastructure.
+This implies that the whole infrastructure cannot be attacker or defended.\\
+\textbf{Rewards incentives: } Both players have incentives to attack or defend the infrastructure instead of doing nothing.\\
+
+\subsubsection{Assumptions}
+We have made several assumptions about the scope of the game:\\
+\textbf{Migration: } The migration has already started when the game starts.\\
+\textbf{Rewards incentives: } Both players have incentives to participate in the game.\\
+\textbf{Complete information: } The game is considered to be of complete information.\\
+\textbf{Location: } The attacker has compromised one node in the infrastructure.\\
+\textbf{Attacker's resources: } The attacker owns virtual machines in the infrastructure.\\
+\textbf{Attacker's capacities: } The attacker can scan or attack any node in the infrastructure.\\
+\textbf{Attacker's victim knowledge: } The attacker can identify the flow rules belonging to his victim.\\
+\textbf{Attacker's infrastructure knowledge: } The attacker has the view of the whole physical infrastructure.\\
+\textbf{Attacker's embedding knowledge: } The attacker does not know the new embedding for his victim's virtual network.
+    
+\subsubsection{Defender}
+\textbf{Goal: } The defender will protect his infrastructure by either deploying monitoring or decoy on nodes. A decoy node contains flow rules that will mislead the attacker into believing the node is part of the embedding.
+
+\paragraph{Strategies}\textbf{\\}
+The defender can choose among three different strategies:\\ \\
+\textbf{Installing a decoy: } The defender installs flow rules in a node that will hold information related to the victim but the node will in fact not be used to embed the virtual network.
+\begin{itemize}
+    \item Cost: $C_{decoy}$
+    \item Reward: $R_{decoy}$ if the node is attacked, none otherwise.
+\end{itemize}
+
+
+\textbf{Monitoring a node: } The defender deploys monitoring on the node to contribute to the detection
+\begin{itemize}
+    \item Cost: $C_{monit}$
+    \item Reward: $R_{monit}$ if the node is attacked, none otherwise.
+\end{itemize}
+
+\textbf{Doing nothing}
+\begin{itemize}
+    \item Cost: None
+    \item Reward: None
+\end{itemize}
+
+We consider $C_{decoy}< C_{monit}$ and $R_{decoy}< R_{monit}$.
+
+\subsubsection{Attacker}
+\textbf{Goal: } The attacker will compromise the migration to gain access to his victim's sensitive data.
+The attack is done by installing flow rules in specific nodes that will allow him to duplicate the victim's traffic towards one of his virtual machines, as depicted in Fig.~\ref{fig:data-exfiltration-attack}. The attack is considered complete when the full unauthorized path has been established.
+
+\paragraph{Strategies}\textbf{\\}
+The attacker can choose among three different strategies:\\ \\
+\textbf{Scanning a node: } The attacker can request the list of  flow rules installed in a node. This allows him to discover the embedding location of his victim.
+\begin{itemize}
+    \item Cost: $C_{scan}$
+    \item Reward: $R_{scan}$ if the node is used for the embedding, either as a decoy or for the real embedding, none otherwise.
+\end{itemize}
+
+
+\textbf{Attacking a node: } The attacker will install in a node specific rules to construct the path between his VM and the victim's virtual network.
+\begin{itemize}
+    \item Cost: $C_{attack}$
+    \item Reward: $R_{attack}$ if the node is used for the embedding, none otherwise. 
+\end{itemize}
+
+\textbf{Doing nothing}
+\begin{itemize}
+    \item Cost: None
+    \item Reward: None
+\end{itemize}
+
+We consider $C_{scan}< C_{attack}$ and $R_{scan}< R_{attack}$.
+
+\subsubsection{Expected results from the games}
+No matter the type of game considered, we designed the game with the following idea in mind "Can we minimize the burden of monitoring by using alternative strategies like decoys or Moving Target Defense" ?
+The solution of the game is supposed to show whether or not the defender can benefit from these techniques, and in a similar way, how much of scanning the attacker should do prior to attacking the infrastructure.
+
+These answers would help us to define a time window during which the infrastructure is most particularly vulnerable because of the information collected by the attacker, and optimize the defender's optimal strategy.
+
+\subsubsection{Games considered to solve the RA problem}
+We have considered several games for this problem, and we will present their limitations and impact.
+
+\textbf{Static games:} Based on the work of Ismail~\etal~\cite{Chen2009,interdep-ismail2017}, static games are played on each node of the infrastructure, only once. The immediate limitation of this game is the impossibility to use scans and decoys as the attacker is supposed to leverage the information collected to improve his next attack. This leaves us with a model where the attacker either attacks a node or not, and similarly the defender does the same.
+
+The second limitation of static game is the impossibility to represent the migration process as a succession of steps, where the system would become more and more valuable to attack because the number of nodes holding valuable information would increase as the migration goes on.
+
+The work of Ismail~\etal takes the Game Theory formalism far in the modeling, and focuses on several aspects of an infrastructure running on a legacy network. The opportunity here is to add the representation of SDN and the decoupling of the control plane and the data plane in the model.
+
+The limitations we noted earlier plus the fact that adding SDN to the formalism of static games was not a significant contribution to the scientific community convinced us that static games were not a fruitful lead to investigate.
+
+\textbf{Repeated games: } These games are static games played several times.
+Since the game must remain unchanged at every play, the limitations encountered earlier still apply here, and make this game not worth considering.
+
+\textbf{Sequential games: } These games represent players taking turns to choose their action. This aspect makes it more interesting to consider than static games, because the migration process can be represented along the choices made by players. In this situation, the complete information aspect of the game can still be maintained, but the idea of using decoy in the infrastructure requires for an imperfect information game. Indeed, the location of decoys must be withheld from the attacker to be effective.
+
+The main limitation encountered here is that the choice of all players must be revealed after every player has chosen his strategy. Therefore, it is impossible to accumulate rounds without revealing the defender's actions to the attacker. This makes the use of decoys worthless and limit us again to a simple attack/defend/do nothing scheme, similarly to static games.
+
+\textbf{Stochastic games:} Modeling the evolution of a system based on the choices made by players is an interesting formalism for our problem. We can consider the evolution of the infrastructure as the migration process goes on, as well as the progress of the attacker to exfiltrate the data. The strategies we have described for both players have their own costs and rewards, 
+
+These costs are different for the attacker and the defender, thus making the game a non zero-sum stochastic game. Non zero sum stochastic games with imperfect information turn out to be widely complex to solve, and to the best of our knowledge there is no algorithm that can be used as a support for the resolution in a reasonable time. The technical limitations we are faced with makes it impossible for us to consider such a complex model to be exploited in this thesis.
+
+
+\subsubsection{Discussion}
+We have reviewed several types of games in this section, where each model has its own share of limitations regarding our problem. Another aspect that we have not detailed before is the acceptable granularity of actions for the players. Indeed, the vast majority of work we have presented in the state of the art limit the players to a binary choice: attacking/defending or do nothing. This reduced number of choices leaves us with the interrogation of whether we are allowed to define precise strategies for a security game, or if each strategy must be significantly different from every other.
+Finally, depending on the type of game chosen, the realism of the modeling is also heavily impact because of the assumptions made during the game as well as the values for the different costs and rewards.
+In the state of the art, the values chosen in the utility functions rarely are evaluated using a real life methodology, especially on the attacker side where the literature is very scarce. This leave with us with the question: "Is the game we have formulated coherent and realistic with current real life use cases ?". 
+
+We conclude this section with the affirmation that Game Theory presents little interest for our study, but we note that Markov Decision Processes, derived from stochastic games make a better candidate as we will explain in the next section.
+
+\input{figures/exfiltration.tex}
+

@@ -1,0 +1,197 @@
+\label{sec:model}
+In this section, we describe our MDP model to address the problem of optimal defense resource allocation for virtual network migration.
+
+\paragraph{States}
+\label{sec:stateset}
+The states in the MDP represent the evolution of the system, the progress of the migration, the remaining budgets as well as the compromised nodes in the infrastructure.
+The defender has two different budgets: $b_f$, the financial budget for setting and maintaining monitoring, and $b_c$ the global computational power available for the monitoring.
+Precisely, $b_c$ corresponds to the overall performance impact caused by the monitoring. % the defender is willing to perform.
+%  on the network virtualization service
+ This represents the amount of resources that can be spent to perform monitoring instead of operational tasks.
+
+% \GB{is $b_c = 0$ a halt condition?}\FC{No, monitoring actions are just not available, and choosing them only cost budget with no reward}.
+
+%GB redundancy detected, so I commented out the following lines
+We describe the state of the system as the following tuple: $s=<b_f,b_c,Mi,Mo,At>$:
+\begin{itemize}
+    \item $n$: The number of nodes in the infrastructure.
+    \item $\textbf{N} = \{1,..,n\}$ is the set of nodes in the infrastructure.
+    \item $Mi^s \subset \textbf{N} $ is the set of currently migrated nodes for state $s\in S$.
+    \item $Mo^s \subset \textbf{N}$ is the set of currently monitored nodes for state $s\in S$.
+    \item $At^s \subset \textbf{N}$ is the set of compromised nodes for state $s \in S$.
+    \item $b_f^s$ is the remaining financial budget of state $s$.
+    \item $b_c^s$ is the remaining computational power of state $s$.
+\end{itemize}
+
+An absorbing state is a state where all actions transition back to itself.
+
+\paragraph{Actions}
+\label{sec:actionset}
+The defender can either add monitoring on a particular node in the infrastructure, remove this monitoring, or choose to do nothing.
+The option of doing nothing prevents counter-productive options like forcing undesired actions (\eg unjustified unmonitoring).
+We note $m_j$ the action of setting up monitoring on node $j$. Similarly, we note $u_j$ the action of removing monitoring on node $j$.
+Finally we note $d$ the action of doing nothing.
+%\\With $n$ being the number of nodes in the infrastructure 
+\\We define $A = \{m_1,..,m_n,u_1,..,u_n,d\}$ as the set of actions available at each state.
+% \GB{you really need to defined this term. What does it involve?}
+% \FC{What do you think about that ?}
+
+% \FC{The last node added to the path should be the node belonging to $\mathbb{Z}$ because otherwise exfiltrating data without the full path will raise a lot of unexpected $packet-in$ . This may not be an issue though}
+% We also assume he may construct the full path by connecting nodes one after another instead of randomly constructing the chain. 
+
+\paragraph{Probabilistic target determination}
+\label{sec:target_proba}
+We consider the path taken by the attack as a set of nodes.
+% We name $L$ the set of paths inside the infrastructure. 
+We define $L_j$ the path leading the attacker to node $j$.
+We note $\textbf{Z}$ the set of non compromised nodes that are currently embedding the migrated virtual network (\ie $\textbf{Z} = Mi^s \cap \overline{At^s})$.
+Similarly, we note $\textbf{T}$ the set of non compromised nodes that are directly connected to a compromised node and are not part of $\textbf{Z}$, \ie they are potential candidates for the path between attacker and victim. Alg.~\ref{algo:target} is computed at each state as the sets $\textbf{T}$ and $\textbf{Z}$ are changing.
+% This implies that compromising a node in $\mathbb{T}$
+% \FC{Add algorithm for function q to determine targets}
+\begin{algorithm}
+ \SetKwInOut{Input}{Input}
+ \SetKwInOut{Output}{Output}
+ \Input{\textbf{Z}, \textbf{T}, current state $s$, \textit{n} nodes}
+ \Output{\textit{n} probabilities to attack each of \textit{n} nodes}
+ initialization\;
+ \ForEach{node $j$ in \{$1,..,n$\}}{
+  \uIf{$j \in \textbf{Z}$ and $Mi^s \cap At^s = \{\emptyset \}$}{
+   $q(j) = \alpha  \frac{3}{3|\textbf{Z}| + |\textbf{T}|}$
+   }
+  \uElseIf{$j \in \textbf{T}$} {
+   $q(j) = \alpha  \frac{1}{3|\textbf{Z}| + |\textbf{T}|}$
+  }
+  \Else{
+  $q(j)=0$
+  }
+ }
+ \caption{Probabilistic target determination}
+ \label{algo:target}
+\end{algorithm}
+
+
+We note the probability of a specific node being attacked as the combination of the probability for an attack to be launched (\ie $\alpha$) and the probability of the node being chosen among all the nodes in $\textbf{T}$ and $\textbf{Z}$. We also use a coefficient (here 3) to give more weight to the nodes in $\textbf{Z}$, referring to the assumption made in~\ref{sec:attacking}.
+Once a substrate node has been compromised, the attacker will finalize the exfiltration set-up by completing the path between his VM and the victim's network.
+
+
+\paragraph{Transitions}
+We describe the coherence of the MDP states with the following transition constraints:
+
+\begin{enumerate}
+    \item If there is no $b_f$ budget left, a state cannot transition to another state (absorbing state)
+    \label{cond:c1}
+    \item Choosing an action without the required $b_c$ budget will only cost $b_f$ budget with no reward
+    \label{cond:c2}
+    \item As long as there are nodes to be migrated, each transition will include the migration of one node.
+    \label{cond:c3}
+    \item A state can only transition to states that preserve the coherence of parameters (budgets, etc.)
+    \label{cond:c4}
+    \item If there is an action too expensive for $b_f$ it will consume the remaining $b_f$ without any reward
+    \label{cond:c5}
+    \item Choosing an action twice (\ie monitoring a node already monitored) only consumes $b_f$ with no reward
+    \label{cond:c6}
+    % \FC{This is like doing nothing, maybe it shouldn't transition to another state and just transition back to current state with no reward}
+    % \GB{does double monitoring make sense?}
+    % \FC{No, it's just a formalism constraint}
+ \end{enumerate}
+
+Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the financial value of the node, its computing capacities and its function inside the virtualization infrastructure. 
+%We note $\{V_1,..,V_n\}, \forall i~V_i \in \mathbb{R}$ as the set of said values, one for each node. 
+Considering that the monitoring cost for each node is not uniform, we note $k_{f}$ and $k_{c}$ the atomic monitoring costs respectively associated to budgets $b_f$ and $b_c$.
+Then we define the monitoring costs $c_f^j$ and $c_c^j$ for node $j$ as follows:
+
+\begin{equation}
+\forall j \in \textbf{N}, c_f^j = k_{f}  V_j,~ c_c^j = k_{c}  V_j\\ 
+\end{equation}
+% \GB{are these atomic costs constant? If so, it means that the monitoring costs $c_f^j$ and $c_c^j$ are related as they both rely on $V_j$. Does it make sense to have two distinct costs anymore?}.
+% \FC{Yes because we consid= maxer a depleting resource and a non depleting one. Those budgets are of different nature}
+% Budget $b_f$ is impacted at each transition, where the cost of each monitoring node will be deducted.
+% Budget $b_c$ is impacted only at the set up or removal of monitoring.
+When in state $s$ and after choosing an action $a \in A$, the system can transition to $|\textbf{Z}|+|\textbf{T}| + 1 $ states, whether an attack happened on one of the nodes or no attack was launched.
+We define $S' \subset S$ the set of states to which the state $s$ can transition to with a non null probability.
+We note $s'_{a,j} \in S'$ the state depending on which action $a$ has been chosen and which node will be attacked (index $j$), and if no attack was launched we note $s'_a \in S'$. To ease the reading we simplify $s'_{a,j}$ and $s'_a$ to $s'$ for the rest of this paper.
+We define the state modifications once action $a \in A$ has been chosen.
+% \GB{I assume $S' \in S$, amirite?}.
+% We define $s'_{j} \in S'$ as the state where node $j$ has been attacked and $s'_0$ as the state where no attack happened.
+% \GB{what about these below impact computations? how come a state equals a substraction of a cost from another state...}
+% \FC{I rewrote the definition of an attribute $s.b_c$ is the $b_c$ budget related to s, see section~\ref{sec:stateset}}
+\\
+\subparagraph*{\textbf{State modifications for action $m_i$}}
+when choosing action $m_i$ at state $s$, we compute the budget impact and set changes for state $s', \forall j \in \textbf{N}$. 
+
+\begin{equation}
+  s \longrightarrow s' =\begin{cases}
+    b_f^{s'} = b_f^s - c_f^i\\
+    b_c^{s'} = b_c^s - c_c^i\\
+    Mo^{s'} = Mo^s \cup \{i\}\\
+    At^{s'} = At^s \cup \{j\} \text{~~if there is an attack}
+  \end{cases}
+\end{equation}
+
+\subparagraph*{\textbf{State modifications for action $u_i$}}
+when choosing action $u_i$ at state $s$, we compute the budget impact and set changes for state $s', \forall j \in \textbf{N}$. 
+\begin{equation}
+  s \longrightarrow s' =\begin{cases}
+    b_f^{s'} = b_f^s - c_f^i\\
+    b_c^{s'} = b_c^s + c_c^ i\\
+    Mo^{s'} = Mo^s \backslash\{i\}\\
+    At^{s'} = At^s \cup \{j\}\text{~~if there is an attack}
+  \end{cases}
+\end{equation}
+% \FC{$ Mo(s) \backslash \{n\}$ means removing n from Mo(s)}
+
+\subparagraph*{\textbf{State modifications for action $d$}}
+when choosing action $d$ at state $s$, we compute the budget impact and set changes for state $s', \forall j \in \textbf{N}$. 
+\begin{equation}
+  s \longrightarrow s' =\begin{cases}
+    b_f^{s'} = b_f^s - c_d\\
+    At^{s'} = At^s \cup \{j\}\text{~~if there is an attack}
+  \end{cases}
+\end{equation}
+
+
+% We note $\alpha$ the probability of an attack occurring, $q(j)$ the probability of node $j$ being the target of the attack.
+% We have defined $q(j)$ with Algorithm~\ref{algo:target}.
+We define the transition probability with $\alpha$ and $q(j)$ presented in Section~\ref{sec:target_proba}.
+% When in state $s$, the system can transition to N+1 different states, whether an attack had not happened or, which one of the N nodes has been attacked.
+% We define $S', s' \in S'$ the set of states to which the state $s$ can transition to.
+% We define $s'_{j}$ as the state where node $j$ has been attacked and $s'_0$ as the state where no attack happened.
+
+% Therefore, $s$ will transition with probability $1-\alpha$ when there is no attack or will transition with probability $q(j)$ when attacking node j:
+
+% \begin{itemize}
+%     \item $\forall a \in A, P(s,s',a)=1-\alpha$ 
+%     \\when there is no attack
+    
+%     \item $\forall j \in \textbf{N}, \forall a \in A$ , $P(s,s',a)= q(j)$ 
+%     \\when attacking node $j$.
+% \end{itemize}
+\begin{equation}
+    P(s,s',a) = \begin{cases}
+        1-\alpha \text{ if there is no attack}\\
+        q(j)\text{ if node $j$ is attacked}
+    \end{cases}
+\end{equation}
+\paragraph{Rewards}
+
+The value of the reward for transitioning takes into accounts three criteria: the intrinsic value of the nodes, the overall progress of the attacker, and the probability of detecting an attack. The probability of an attack occurring is already accounted for in the transitions.
+% The reward represents is impacted whether there was an attack, and if it has been detected.
+% In addition to that, an attack only targets one node.
+% In the previous sections, we have made assumptions on the path that will be used to attack a node.
+% \FC{See suggestions}
+If no attack was launched, the reward is based on the value of all the nodes in the infrastructure. 
+If an attack was launched, there are two cases: whether the attacker has reached his ultimate goal or not.
+If he has, we deduct the value of all the compromised nodes. If he has not, we only deduce the value of the attacked node.
+% \GB{please use equation environments and refrain from using inline equations.}
+%  note $(1-p)^{|L_j \cap Mo|}$ the probability of zero nodes detecting the attack on node j. 
+\\We note $\Pi(j)=1 - (1-p)^{|L_j \cap Mo|}$ as the probability of at least one node detecting the attack on node $j$.
+\\
+Therefore, we define the following reward functions: %, with $s' \in S'$ as in Section~\ref{sec:actionset} :
+\\
+\begin{equation}
+  R(s,a) =\begin{cases}
+    \sum\limits_{i\in \textbf{N}} V_i \text{, if no attack}\\
+    \sum\limits_{i\in \textbf{N}}^n V_i - \sum\limits_{k \in At^s} \overline{\Pi(k)}V_k \text{, if finalized attack }\\
+    \sum\limits_{i\in \textbf{N}} V_i - \overline{\Pi(j)}V_j \text{, if partial attack}\\
+  \end{cases}
+\end{equation}
