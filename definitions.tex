@@ -8,7 +8,7 @@ Traditional networks are complex and difficult to operate~\cite{complexnetworks}
 To overcome these aspects, a new networking paradigm has been proposed, namely Software Defined Networking (SDN).
 The SDN paradigm consists in decoupling the control plane and the data plane.
 The control plane is in charge of deciding how the network traffic should be processed upon entering the SDN infrastructure.
-This task is performed by a centralized component called ''SDN controller`` and lies between end users and the physical infrastructure (see Figure~\ref{fig:SDN-archi}. Instead of considering network traffic as a sequence of packets, SDN aggregate packets into flows that are described by a match pattern (filter) and every packet belonging to the flow will be processed identically. 
+This task is performed by a centralized component called ''SDN controller`` and lies between end users and the physical infrastructure (see Figure~\ref{fig:SDN-archi}. Instead of considering network traffic as a sequence of packets, SDN aggregate packets into flows that are described by a match pattern (filter) and every packet belonging to the flow will be processed identically. Figure~\ref{fig:matching-fields} summarizes the different header fields a flow can be matched against.
 
 \input{figures/SDN_archi.tex}
 
@@ -20,6 +20,12 @@ Usually, SDN controllers implement a REST API for these interactions~\cite{onos-
 OpenFlow~\cite{Openflow-McKeown2008} is considered the standard implementation of the SDN paradigm, with numerous vendors including it in their products.
 OpenFlow provides an interface to communicate with switches and to install specific configurations using a match-action formalism.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.7]{figures/openflow-matchfields.png}
+    \caption{OpenFlow matching fields~\cite{openflow-matchfields}}
+    \label{fig:matching-fields}
+\end{figure}
 
 \subsection{Network Virtualization using SDN}
 For decades now hypervisors have enabled the sharing of physical resources among several virtual machines.
@@ -31,7 +37,9 @@ VLANs, MPLS and VRF only provided limited virtualization for the network resourc
 The network hypervisor abstracts the view of the physical infrastructure into virtual networks to the end users (also referred to as tenants) as depicted by Figure~\ref{fig:SDN-hypervisor}.
 The hypervisor is in charge to provide isolation between tenants, preventing them to interact with other tenants' virtual networks.
 
-
+Two main information are used by tenants of the virtualization infrastructure, the address space and the flowspace.\\
+\textbf{The address space} is the set of IP addresses that a tenant can assign to the hosts in his virtual network.\\
+\textbf{The flowspace} is the set of header parameters the tenant can use when deploying flow rules (see Figure~\ref{fig:matching-fields}). The hypervisor may restrict the use of certain headers because the virtualization already uses them as internal identifiers.
 
 
 
