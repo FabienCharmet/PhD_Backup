@@ -1,5 +1,5 @@
-We now
-
+We have considered the formalism of Game Theory as a method to solve the resource allocation problem, but the lack of flexibility and the complexity of determining the optimal solution made it not applicable for our problem. Derived from Game Theory come Markov Decision Processes (MDP).
+MDP is a formalism used to represent an agent and the actions he can choose to impact a system. The purpose of this model is to find the best action to choose depending on the state of the system (\ie the optimal policy). Because a practical solution to the RA problem is a set of node to support the monitoring of the infrastructure, we will develop a statistical analysis of the optimal policy and convert the dynamic answer of a MDP into a static \textit{a priori} deployment.
 
 \subsubsection{Requirements}
 \input{RA/RA-MDP/MDP-Requirements.tex}
@@ -12,7 +12,7 @@ We now
 \subsubsection{Assumptions}
 \input{RA/RA-MDP/MDP-assumption.tex}
 
-\subsubsection{Markov Decision Process}
+\subsubsection{Modeling the RA problem with a MDP}
 \input{RA/RA-MDP/MDP-MDP.tex}
 
 \subsubsection{Generating the states of the MDP}
@@ -21,7 +21,8 @@ We now
 \subsubsection{Use Cases}
 \input{RA/RA-MDP/MDP-usecase.tex}
 
-\subsubsection{Sensitivity study of the model}
+\subsubsection{Determining the optimal monitoring nodes}
+\input{RA/RA-MDP/MDP-optimal-monitoring.tex}
 
 \subsubsection{Discussion}
 \input{RA/RA-MDP/MDP-discussion.tex}

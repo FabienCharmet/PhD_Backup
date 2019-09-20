@@ -1,20 +1,156 @@
-\begin{algorithm}[ht]
+We describe in Algorithms~\ref{algo:genstate1},~\ref{algo:genstate2} and~\ref{algo:genstate3} how we generated the exhaustive set of states.
+We used a reccursive function that will loop first generate all possible attacks when choosing action $d$ (lines 8-18). A second loop will iterate over available nodes and each time will check if the remaining $b_f$ and $b_c$ budgets allow the action to be performed(lines 20, 35, 57 and 67). Available actions will be performed normally, while for others the remaining $b_f$ budget will be consumed and the current state will transition to an absorbing state.
+
+\begin{algorithm}[htbp]
   \DontPrintSemicolon
+  \LinesNumbered
+% This is to hide end and get the last vertical line straight
+\SetKwBlock{Begin}{Begin}{}
+\SetAlgoLined
   \Begin{
   \SetKwFunction{FGenerate}{Generate}
   \SetKwProg{Fn}{Function}{:}{}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \Output{$S$ as the set of states, $P$ as the transition matrix}
 % %   \tcc{Defining the structure of a transition and a reward}
 %   $\text{transition}$ = $<\text{src state}, \text{dst state},\text{action}, \text{proba}>$\;
 % %   \tcc{Defining the structure of a reward}
 %   $\text{reward}$ = $<\text{src state}, \text{dst state},\text{action}, \text{value}>$\;
-  \Fn{\FGenerate{$b_f$, $b_c$, $Mi$, $Mo$, $At$}}{
-        check if there are nodes to migrate\;
-        check if recursion ends\;
-        recursive call on monitoring actions\;
-        recursive call on unmonitoring actions\;
+  \Fn{\FGenerate{$b_f$, $b_c$, $Mi$, $Mo$, $At$, $lastAttack$}}{
+    $s \gets State(b_f,b_c,Mi,Mo,At)$\;
+    $S \gets S \cup s$\;
+    \uIf{nodes\_to\_migrate $\neq \emptyset$}{$Mi \gets Mi \cup NextNodeToMigrate()$}
+    \uIf{$b_f < \min\limits_i c_f^i$}{exit()}
       }
-Generate($c^0_f,c^0_c,\emptyset,\emptyset,\emptyset$)\;
+      \tcc{Looping for the do nothing action}
+      \ForEach{$j$ in \{$0,..,n$\}}{
+      \uIf{$j>0$}{$At' \gets At \cup j$}
+       \uElse{$At' \gets At$}
+      $s' \gets State(b_f - c^0_f,b_c,Mi,Mo,At')$\;
+      \uIf{$i==0$}{$P(s,do\_nothing,s') \gets 1-\alpha$}
+      \uElse{$P(s,do\_nothing,s') \gets \Pi(j)$}
+      Generate($b_f-c_f^0,b_c,Mi,Mo,At',j)$
       }
-\caption{Generating the MDP} 
-\label{algo:global}
+      \tcc{Looping over monitor and unmonitor acctions}
+      \ForEach{$i$ in \{$1,..,n$\}}{
+      \tcc{If there is no budget for this action}
+      \uIf{$b_f < c_f^i$}{
+      \ForEach{$j$ in \{$0,..,n$\}}{
+      \uIf{$j>0$}{$At' \gets At \cup j$}
+       \uElse{$At' \gets At$}
+      $s' \gets State(b_f - c^d,b_c,Mi,Mo,At')$\;
+       \uIf{$i==0$}{
+       $P(s,m_i,s') \gets 1-\alpha$\;
+       $P(s,u_i,s') \gets 1-\alpha$\;
+       }
+      \uElse{$P(s,m_i,s') \gets \Pi(j)$\;
+      $P(s,u_i,s') \gets \Pi(j)$\;}
+      }
+      Generate($0,b_c,Mi,Mo,At',j$)\;
+      }
+    }
+    }
+    \caption{Generating the MDP (1/3)} 
+    \label{algo:genstate1}
+    \end{algorithm}
+    
+    
+% \SetNlSty{texttt}{(}{)}
+\begin{algorithm}[htbp]
+  \LinesNumbered
+\setcounter{AlgoLine}{33}
+% This is to restore vline mode if you did not take the package as \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+  \SetAlgoVlined
+%This is to hide Begin keyword
+\SetKwBlock{Begin}{}{end}
+
+\Begin{
+      \tcc{If there is enough budget to monitor}
+      \uIf{$b_f > c^i_f$ and $b_c > c^i_c$}{
+        \tcc{Is the node already monitored ?}
+        \uIf{$i \in Mi$}{
+        \ForEach{$j$ in \{$0,..,n$\}}{
+            \uIf{$j>0$}{$At' \gets At \cup j$}
+       \uElse{$At' \gets At$}
+            $s' \gets State(b_f - c^i_f,b_c,Mi,Mo,At')$\;
+            \uIf{$j==0$}{$P(s,m_i,s') \gets 1-\alpha$}
+            \uElse{$P(s,m_i,s') \gets \Pi(j)$}
+            Generate($b_f-c_f^i,b_c,Mi,Mo,At',j$)\;
+        }
+        }
+        \uElse{
+        $Mo' \gets Mo \cup i$
+                \ForEach{$j$ in \{$0,..,n$\}}{
+            \uIf{$j>0$}{$At' \gets At \cup j$}
+       \uElse{$At' \gets At$}
+            $s' \gets State(b_f - c^i_f,b_c - c^i_c,Mi,Mo',At')$\;
+            $P(s,m_i,s') \gets \Pi(j)$\;
+            Generate($b_f-c_f^i,b_c- c^i_c,Mi,Mo',At',j$)\;
+        }
+
+        }
+      }
+      \tcc{If there is not enough computational budget to monitor}
+      \uIf{$b_f > c^i_f$ and $b_c < c^i_c$}{
+        \ForEach{$j$ in \{$0,..,n$\}}{
+            \uIf{$j>0$}{$At' \gets At \cup j$}
+       \uElse{$At' \gets At$}
+            $s' \gets State(b_f - c^i_f,b_c,Mi,Mo,At')$\;
+            $P(s,m_i,s') \gets \Pi(j)$\;
+            Generate($b_f-c_f^i,b_c- c^i_c,Mi,Mo,At',j$)\;
+        }
+      }
+      }
+      
+      
+\caption{Generating the MDP (2/3)} 
+\label{algo:genstate2}
 \end{algorithm}
+
+% \SetNlSty{texttt}{(}{)}
+\begin{algorithm}[htbp]
+  \LinesNumbered
+\setcounter{AlgoLine}{65}
+% This is to restore vline mode if you did not take the package as \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+  \SetAlgoVlined
+%This is to hide Begin keyword
+\SetKwBlock{Begin}{}{end}
+
+\Begin{
+
+      \tcc{If there is enough budget to unmonitor}
+       \uIf{$b_f > c^i_f$}{
+       \uIf{$i \in Mo$}{
+       $Mo' \gets Mo \ i$
+       \ForEach{$j$ in \{$0,..,n$\}}{
+       \uIf{$j>0$}{$At' \gets At \cup j$}
+       \uElse{$At' \gets At$}
+       $s' \gets State(b_f - c^i_f,b_c,Mi,Mo',At')$\;
+        \uIf{$j==0$}{$P(s,u_i,s') \gets 1-\alpha$}
+        \uElse{$P(s,u_i,s') \gets \Pi(j)$}
+        }
+        Generate($b_f-c_f^i,b_c+ c^i_c,Mi,Mo',At',j$)\;
+        }
+        \uElse{
+        \tcc{Is the node not monitored ?}
+        \ForEach{$j$ in \{$0,..,n$\}}{
+       $At' \gets At \cup j$\;
+       $s' \gets State(b_f - c^i_f,b_c,Mi,Mo,At')$\;
+       \uIf{$j==0$}{$P(s,u_i,s') \gets 1-\alpha$}
+        \uElse{$P(s,u_i,s') \gets \Pi(j)$}
+        }
+        Generate($b_f-c_f^i,b_c,Mi,Mo,At',j$)\;   
+        }
+       }
+      
+      }
+      
+
+Generate($c^0_f,c^0_c,\emptyset,\emptyset,\emptyset,0$)\;
+      
+\caption{Generating the MDP (3/3)} 
+\label{algo:genstate3}
+\end{algorithm}
+
+

@@ -13,8 +13,9 @@ We suppose that both virtual network and physical infrastructures are static (\i
 
 The deployment of the monitoring on the nodes impacts the defender financially and the infrastructure's performance. Based on the work of Ismail \etal~\cite{interdep-ismail2017}, we consider the monitoring cost  proportional to the intrinsic value of the nodes, (\eg CPU time on a powerful machine is more expensive compared to a smaller one). 
 % The performance impact is considered uniform on all the nodes. 
-Each node on the path of an attack has the same probability to detect it, \eg there is no node more efficient than another. 
 
+We consider the monitoring imperfect with a certain attack detection probability.
+Each node on the path of an attack has the same probability to detect it, \eg there is no node more efficient than another. 
 
 \textbf{Targeting nodes}
 \label{sec:attacking}
@@ -23,7 +24,7 @@ Each node on the path of an attack has the same probability to detect it, \eg th
 
 During the migration, the attacker may target nodes to construct the path that will support the exfiltration of the information.
 We make the assumption that substrate nodes are more likely to be attacked since at least one must be part of the path leading to the exfiltration point.
-The attacker's strategy for choosing which nodes he attacks is based on the information gathering he performs while attacking. The details of such activity is considered out of the scope of this paper.
+The attacker's strategy for choosing which nodes he attacks is based on the information gathering he performs while attacking. The details of such activity is considered out of the scope of this thesis.
 Similar work on cloud environments for virtual machines colocation has been proposed in~\cite{getoffmucloud-Ristenpart2009, incentivemtd-Zhang2012}.
 % \GB{not sure of this term being used in the literature. What about co-location or even co-residency?} 
 % \FC{Correct spelling seems to be collocation but literature says colocation, let's go}

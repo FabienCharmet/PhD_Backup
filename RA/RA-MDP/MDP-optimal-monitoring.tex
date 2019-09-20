@@ -1,0 +1,28 @@
+When solving a problem using an MDP, the solution is a dynamic proposition to choose actions as the system evolves.
+However, from a technical aspect, the defender needs to have the nodes already monitoring the infrastructure before starting the migration process.
+It becomes necessary to translate the dynamic answer of the MDP into a static \textit{a priori} deployment.
+After determining the individual importance of each node, we propose to determine the optimal set of monitoring nodes.
+
+The main difference is that each node was evaluated based on all the possible budget combinations, whereas what is defined here is a particular answer for a specific budget.
+For each budget, the maximum reward is $\frac{b_f}{c_a} \sum\limits_{i \in \textbf{N}}V_i $ which corresponds to the corner case where the attacker never launched an attack, and we can evaluate the efficiency of the   monitoring nodes thanks to the associated reward.
+Even if a particular monitoring set achieves close to the maximum reward, it is also because the set is tailored to a subset of all possible attacks.
+We propose to determine the optimal monitoring state for each budget by weighting the reward they achieve with their occupation of the total solution space.
+
+We note $S_{\text{abs}}$ the set of absorbing states, $S^{\text{Mo}}_{\text{abs}}$ the set of absorbing states with a common  monitoring set $Mo$, $\rho(Mo)$ the percentage of presence of set $Mo$ in the solution space and $R(Mo)$ the reward of monitoring set $Mo$.
+% \begin{equation}
+%     R(Mo) = \sum\limits_{s \in S_{Mo}^{abs}}\rho(Mo^s)R(Mo^s)
+% \end{equation}
+Then we propose to choose the optimal monitoring set $Mo^*$ with:
+\begin{equation}
+    Mo^* = \argmax\limits_{\text{Mo} \in S_{\text{abs}}} \left \{\sum\limits_{s \in S^{\text{Mo}}_{\text{abs}}}\rho(Mo^s)R(Mo^s) \right \}
+\end{equation}
+
+We present the results for scenario a) in Table~\ref{tab:mdp-usecase-optiset}0.
+We observe that nodes 4 and 6 are always chosen in the monitoring, which corresponds to Fig.~\ref{fig:nodeimp_single}.
+Node 1 also often appears as a good candidate for a fourth node if it is not already chosen third.
+With $p=0.7$ we observe that third and fourth nodes do not coincidate between (30,30) and (40,40) budgets.
+This suggests that the combining two nodes increases their individual performance.
+(Node 1 is surrounded by node 2 and 3 in the topology).
+% This is explained because other budgets impact the individual importance of each node.
+
+\input{figures/RA-optiset.tex}
