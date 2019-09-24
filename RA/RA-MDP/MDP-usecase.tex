@@ -7,6 +7,9 @@ We have extracted the monitoring set of each absorbing state, and evaluated the 
 We define the reward of a monitoring set as the weighted mean of the reward of each corresponding absorbing state.
 The weighted mean uses the stationary distribution of the Markov Chain corresponding to the optimal policy.
 The results are shown in Fig.~\ref{fig:mdp-result-topo1} for scenario a) and b), in Fig.~\ref{fig:mdp-result-fullmesh} for scenarios c) and d) and in Fig.~\ref{fig:mdp-result-topo2} for scenario e) and f).
+Details about the source node for attacks again the migration is summarized in Table~\ref{tab:mdp-attack-source}.
+
+\input{figures/mdp-attack-source.tex}
 
 \textbf{Scenario a) and b)\\}
 Based on the paths taken by attacks and the ordering of the migration, we can categorize the nodes into three categories: source, intermediate and border nodes.
@@ -33,8 +36,8 @@ In these scenarios, the topology considered is fullmeshed, which means that each
 The first observation we make is that whether there is one or several attackers, the importance of nodes between each other remains constant. This reinforce our conclusion that the routing of attack has a real impact on the detection performance of each node.
 The second observation we make is that the most important nodes are the main source of attacks as well as the first node being migrated. While the first node is an obvious choice for attack detection, the second shows another aspect of the model which is target selection. Indeed, since node 1 is always migrated first, it is therefore the main target at the first transition of the MDP.
 
-Finally, we have examined the different optimal policies for these scenarios, and observed that some corner cases with counter intuitive results have appeared. The only notable result is in scenario c) for $p=0.5,  (b_f,b_c) = (40,40)$ where the optimal monitoring set is 1,3 which could have two extra nodes ensuring the monitoring. However, it is worth noting that for $(b_f,b_c)=(30,30)$ the optimal set does not include node 2. We assume that at a low detection rate determining an efficient monitoring set is not as straight forward.
-Overall, the fact that for each attack only the origin of the attack and the target node may contribute to the detection has generated a diverse solution state. Indeed, depending on which node would be targeted a specific solution set is determined and the fullmesh aspect of the topology makes it hard for those solution sets to overlap efficiently.
+Finally, we have examined the different optimal policies for these scenarios, and observed that some corner cases have appeared.
+Overall, the fact that for each attack only the origin of the attack and the target node may contribute to the detection has generated a diverse solution state. Indeed, depending on which node would be targeted there is a unique solution set to detect the attack and the fullmesh aspect of the topology makes it hard for those solution sets to overlap and give a better coverage.
 
 \textbf{Scenarios e) and f) \\}
 
@@ -42,7 +45,11 @@ Using the same categorization of scenarios a) and b), we consider node 6 as a so
 
 In scenario e), the importance of each node depicted in Fig.~\ref{fig:mdp-result-topo2} reflect their role. Nodes 1,3,4 and 5 don't have much impact in the solution set, as they are not on the path of most of attacks. The attack source is still considered important to monitor and node 2 which acts as a "bridge``between the two halves of the topology sees a lot of attacks going through it.
 
-Scenario f) highlights similar results. There are now two attack sources, nodes 1 and 6. Moreover, the geographical distribution of migrated nodes in the infrastructure
+Scenario f) highlights similar results. There are now two attack sources, nodes 1 and 6. Moreover, the geographical distribution of migrated nodes gives more importance to node 2 that becomes even more present on the path attacks, as shown in Table~\ref{tab:mdp-attack-source}. This scenario is also the only one in which the main source of attacks is not consistently the most important node for the monitoring.
+
+Optimal policies also have some corner cases with counter intuitive optimal monitoring nodes but those remain marginal considering the solution space. 
+
+
 
 \input{figures/mdp-usecase-results-topo1.tex}
 \input{figures/mdp-usecase-results-topofullmesh.tex}

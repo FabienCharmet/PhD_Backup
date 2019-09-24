@@ -1,1 +1,11 @@
-no one to many mapping considered in this mdp
+During the evaluation of our model, we have produced several results that shed light on several aspects of our modeling choices.
+
+First of all, the use of budgets as part of the MDP state is a root cause for the complexity in generating the MDP states. Indeed, these budgets act as a sort of "identifiers`` that make the number of states grow exponentially compared to the available budgets.
+
+The second aspect is the use of the financial budget to describe the duration of the migration. The attacker keeps compromising nodes while there can be transitions toward another state. This makes the financial budget behave more like the time period defined to study the migration and its security. This also questions the meaning of the performance impact budget. It appears that the available computational power defines the solution space, the number of different monitoring sets that can exist \etc. 
+It can be interesting to explore different budget formats to improve the model.
+
+In the literature the rewards concept does not always account for both current and next state, and sometimes one of the two states is ignored, because the transition probability account for it. We used the MDPToolbox~\cite{Chades2014} to determine the optimal policy  of the MDP, and it considers the reward using the current state only and not the one the system will transition to. We postulate that this simplification does not impact the model very much because the system will always transition toward an absorbing state.
+The matter can be worth investigating in case of major changes in the model.
+
+The use cases we proposed did not distinguish virtual networks between one-to-one mapping and one to many-to-many mapping. While arbitrary topologies are an important feature of a virtualization service, in our case we can easily alleviate this issue because physical nodes embedding one single node are part of the virtual topology and thus part of the migration, whether they are made visible to the end user or not.

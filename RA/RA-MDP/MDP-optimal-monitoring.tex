@@ -17,12 +17,24 @@ Then we propose to choose the optimal monitoring set $Mo^*$ with:
     Mo^* = \argmax\limits_{\text{Mo} \in S_{\text{abs}}} \left \{\sum\limits_{s \in S^{\text{Mo}}_{\text{abs}}}\rho(Mo^s)R(Mo^s) \right \}
 \end{equation}
 
-We present the results for scenario a) in Table~\ref{tab:mdp-usecase-optiset}0.
-We observe that nodes 4 and 6 are always chosen in the monitoring, which corresponds to Fig.~\ref{fig:nodeimp_single}.
+We present the results for in Table~\ref{tab:mdp-usecase-optiset}.
+
+
+\textbf{Scenarios a) and b)\\}
+We note that nodes 4 and 6 are always chosen in the monitoring.
 Node 1 also often appears as a good candidate for a fourth node if it is not already chosen third.
 With $p=0.7$ we observe that third and fourth nodes do not coincidate between (30,30) and (40,40) budgets.
 This suggests that the combining two nodes increases their individual performance.
 (Node 1 is surrounded by node 2 and 3 in the topology).
 % This is explained because other budgets impact the individual importance of each node.
+
+\textbf{Scenarios c) and d)\\}
+One notable result is in scenario c) for $p=0.5,  (b_f,b_c) = (40,40)$ where the optimal monitoring set is 1,3 which could have two extra nodes ensuring the monitoring. However, it is worth noting that for $(b_f,b_c)=(30,30)$ the optimal set does not include node 2. The explanation comes from the fact that it takes less time to establish the path between the victim's network. The reward is based on the nodes of the attack path when the attack is completed. Therefore attacking extra nodes does not change the path and does not impact the reward. We conclude that the low detection probability coupled to a fullmesh topology may not be the ideal conditions to improve the security of the migration process.
+
+
+\textbf{Scenarios e) and f)}\\
+There is one  notable result, in scenario e) for $p=0.7,  (b_f,b_c) = (40,40)$ where the optimal monitoring set is 2,6 which could also have two extra nodes supporting the monitoring. In opposition to the counter-intuitive result of scenario c), we are here considering a higher detection percentage. Moreover, the nodes considered in this solution set are the nodes that see most of the attacks, one being the source of all attacks, and the other is part of the migrated virtual network and is communicating with almost all the other nodes in the infrastructure. The analysis of the optimal policy of this use case shows that part of the counter intuitive result is caused by removing either node 3 or 4 from the monitoring, which is understandable because it would not contribute to the detection of the remaining attacks. Removing monitoring here is equivalent to the action of doing nothing, with the unintended and unexpected upside of reducing the performance impact.
+The other part of the counter intuitive result is due to removing node 6, the source of attacks from the monitoring. It is worth noting that this particular case represents a negligible portion of the solution space, and most of the counter intuitive result is due to the previous explanation. Considering that node 6 is removed at a point where the consequences of attacks will be minimal, we assume that removing the monitoring at this point was deemed equivalent to the do nothing action.
+
 
 \input{figures/RA-optiset.tex}

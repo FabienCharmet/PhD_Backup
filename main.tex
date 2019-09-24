@@ -37,7 +37,7 @@
 \usepgfplotslibrary{patchplots}
 % Extra depth for titles
 \usepackage{titlesec}
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{3}
 \usepackage[nottoc,numbib]{tocbibind}
 
@@ -103,25 +103,33 @@ Abstract
 
 \newpage
 \section{State of the Art}
-\FC{This introduction is not meant to stay, it's just a rough explanation of the plan}
-We know for a fact that there is not much work done on the security of VN migration.
-In order to prove the usefulness of my work, I start with a SotA of VM migration, and the related security issues.
-THe aim is to show that there are vulnerabilities and attacks existing with VMs that are inherently relevant with VN migration.
-Then the topic of SDN virtualization, listing existing hypervisor. (Stating there was no usable tool ?)
-Then we go for the security of VN migration. Since there is not much about the security of the process in itself, it will most likely be about secure VNE etc.
-We have now provided enough content to justify why the problem we work on is worth it.
-Now I will introduce the topics/tools/techniques I used to answer it.
+% \FC{This introduction is not meant to stay, it's just a rough explanation of the plan}
+% We know for a fact that there is not much work done on the security of VN migration.
+% In order to prove the usefulness of my work, I start with a SotA of VM migration, and the related security issues.
+% THe aim is to show that there are vulnerabilities and attacks existing with VMs that are inherently relevant with VN migration.
+% Then the topic of SDN virtualization, listing existing hypervisor. (Stating there was no usable tool ?)
+% Then we go for the security of VN migration. Since there is not much about the security of the process in itself, it will most likely be about secure VNE etc.
+% We have now provided enough content to justify why the problem we work on is worth it.
+% Now I will introduce the topics/tools/techniques I used to answer it.
 
-We start from the formal models. The very first work I did was to determine whether there was an adequate existing model, if it could be extended to fit my purposes. 
-The second part of the work was to do the monitoring of network events, in order to connect these to the formal model. This part is partly covered in the SDN section of SotA.
-The last part was the verification of the security properties using the network trace and the theorem prover.
+% We start from the formal models. The very first work I did was to determine whether there was an adequate existing model, if it could be extended to fit my purposes. 
+% The second part of the work was to do the monitoring of network events, in order to connect these to the formal model. This part is partly covered in the SDN section of SotA.
+% The last part was the verification of the security properties using the network trace and the theorem prover.
 
-The Game Theory section should outline the properties I wanted to use for my game. This should also lead to an obvious lack of ``advanced" models solving solutions. Obviously, there are also a lot of dead ends in GT that lead to going on using MDP instead. I don't know if this should be here.
+% The Game Theory section should outline the properties I wanted to use for my game. This should also lead to an obvious lack of ``advanced" models solving solutions. Obviously, there are also a lot of dead ends in GT that lead to going on using MDP instead. I don't know if this should be here.
 
-Then we have the RA problem, with the different methodologies. This should look like the work we've done for NCA 2019 but with a better organisation, as suggested by Christophe. I've added attack graphs because I have some documents in Mendeley I want to go through and see their relevance. This section might disappear.
-
+% Then we have the RA problem, with the different methodologies. This should look like the work we've done for NCA 2019 but with a better organisation, as suggested by Christophe. I've added attack graphs because I have some documents in Mendeley I want to go through and see their relevance. This section might disappear.
+In this section, we provide a literature review of the different topics studied in this thesis.
+First of all, we examine the existing network hypervisors, and detail them under the scope of network migration with regard to the type of abstraction they provide.
+Then we will specifically address the topic of virtual network migration, and the purpose of the different solutions.
+The last topic considered here is related to the resource allocation problem and we will present 
+security problems encompassed in it.
 
 \subsection{Network virtualization using SDN}
+
+Network virtualization has leveraged the use of SDN to provide a flexible abstraction layer to service providers. In this section, we first propose classification criteria for network hypervisors and then evaluate existing hypervisors against this classification. We will propose a reference architecture for network hypervisors implementing a secure network migration feature, based on existing solutions.
+
+\input{sota/sota-netvirt-sdn/introduction.tex}
 
 \input{sota/sota-netvirt-sdn/existing_nhv.tex}
 
@@ -198,7 +206,7 @@ In this section we consider three different techniques used to solve the RA prob
 \input{RA/GT.tex}
 
 \newpage
-\subsection{MDP}
+\subsection{Markov Decision Process}
 \input{RA/MDP.tex}
 
 \newpage
