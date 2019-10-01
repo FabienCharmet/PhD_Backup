@@ -53,7 +53,7 @@ API based hypervisors are using specific API to manage virtual networks and to a
 \paragraph{Network Hypervisor}
 The Network Hypervisor~\cite{NetworkHypervisor-Huang2013} aims at providing a unified virtualization over multi-domains SDN infrastructures. 
 % Authors present a vision of the future of SDN network and how infrastructure providers, services resellers and users would work to provide a seamless virtualization service that would alleviate the maintenance operations burden from the tenants.
-The ultimate goal of the Network Hypervisor is to enable HyperNets~\cite{HyperNet-Huang2013a}. HyperNets are envisioned as a sort of final form for SDN services. A user may request a virtual network to serve specific needs (\eg Video Streaming) and connect specific clients together.
+The ultimate goal of the Network Hypervisor is to enable HyperNets~\cite{HyperNet-Huang2013a}. HyperNets are envisioned as a sort of final form for network: services. A user may request a virtual network to serve specific needs (\eg Video Streaming) and connect specific clients together.
 The HyperNet should be able to automatically determine what are the physical resources that should be allocated in terms of positioning, computational power etc. In addition to this, HyperNets should provide routing procedures specifically design for the requested service (\ie prioritize video traffic over less relevant traffic).
 In order to provide the support of said HyperNets, the Network Hypervisor provides API functions. These functions includes network discovery so they can allocate suitable physical resources close the HyperNet users as well as design a suitable topology to interconnect all participants.
 Moreover, they implement a dynamic join/leave feature, where users will be allowed to connect to a SDN virtual network without being directly connected to one. The use of IP tunneling solves such connectivity issues.
@@ -114,7 +114,7 @@ Then, the second FlowVisor  (FlowVisor 2) instance will connect NOX with the ten
 \end{figure}
 
 \paragraph{OpenVirteX}
-OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014} (OVX) is a network hypervisor based on the same design as FlowVisor~\cite{FlowVisor-Sherwood2009}. OVX serves as a proxy between the tenants' controllers and the underlying physical infrastructure. OVX provides both full virtual topology abstraction and full address space abstraction. 
+OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014} (OVX) is a network hypervisor based on the same design as FlowVisor~\cite{FlowVisor-Sherwood2009}, \ie OVX serves as a proxy between the tenants' controllers and the underlying physical infrastructure. OVX provides both full virtual topology abstraction and full address space abstraction. 
 
 When a tenant requests a virtual network, he describes the different resources, nodes and links he needs.
 Then OVX will determine the adequate physical substrate to embed the virtual network.
@@ -135,19 +135,21 @@ In SR-PVX authors outline the physical limitations encountered by physical switc
 
 
 \paragraph{WhiteVisor}
-WhiteVisor~\cite{whitevisor-Yu2019} is designed to support SDN-based virtualization on white box switches.
+WhiteVisor~\cite{whitevisor-Yu2019} is designed to support SDN-based virtualization on white box switches (\ie bare metal equipments).
 White box switches are networking elements that do not natively embark any operating system and simply provide network forwarding functions that will be used by the operating system.  
-The main challenge of using these switches id that they provide a specific set of instructions and flowtables depending to process packets. Moreover, L2 and L3 routing is not performed on the same flowtables and associated pipelines.
+The main challenge of using these switches is that they provide a specific set of instructions and flow tables to process packets. 
+Moreover, L2 and L3 routing is not performed on the same flow tables and associated pipelines.
 WhiteVisor is based on two main components, a virtual to physical pipeline converter as well as a storage component.
-The pipeline converter translates a virtual pipeline by decomposing it and installing in the different flowtables of the white box switch. WhiteVisor implements both Layer 2 and Layer 3 routing and details the different mechanisms associated to each routing scheme. Authors also highlights technical constraints of white box switching related to the ordering of flow processing and header matching. The storage component is used to keep a mapping of the physical and virtual pipelines and notifies tenants when a pipeline is removed. 
+A pipleline is a sequence of processing functions used for a specific flow.
+The pipeline converter translates a virtual pipeline by taking each processing function, translating the virtual identifiers into physical ones and generating the corresponding flow rules. These rules are then installed in the different flow tables of the white box switch. WhiteVisor implements both Layer 2 and Layer 3 routing and details the different mechanisms associated to each routing scheme. Authors also highlights technical constraints of white box switching related to the ordering of flow processing and header matching. The storage component is used to keep a mapping of the physical and virtual pipelines and notifies tenants when a pipeline is removed. 
 
 
 \paragraph{ONVisor}
 ONVisor~\cite{ONVisor-Han2018} is a network hypervisor based on the ONOS~\cite{onos-Berde2014a} controller.
 It has been designed along three main ideas, a distributed hypervisor to provide flexibility and scalability, an abstraction of the heterogeneous hardware implementation and finally VN federation to allow different virtual networks of a same tenant to interact together.
-ONVisor implements network virtualization by extending how ONOS interacts with the physical infrastructure.
-ONVisor implements two new components, the \textit{Virtual Provider} and the \textit{Virtual Manager}.
-The \textit{Virtual Manager} provides tenants with service interfaces, similarly ONOS does. Tenants will be able to interact with their VN through this component.
+ONVisor implements network virtualization by extending ONOS's southbound interface.
+Precisely, ONVisor implements two new components, the \textit{Virtual Provider} and the \textit{Virtual Manager}.
+The \textit{Virtual Manager} provides tenants with service interfaces, similarly to the northbound interface implemented by ONOS. Tenants will be able to interact with their VN through this component.
 The \textit{Virtual Provider} will in turn receive the commands sent from the \textit{Virtual Manager} and translate them so they can be deployed in the physical infrastructure. This component will also receive networking events and changes coming from the network and will translate them and forward them to the tenants' applications.
 
 \subsubsection{Mapping based hypervisors supporting the migration}
@@ -201,6 +203,7 @@ Each CPX is in charge of accessing corresponding physical switches and translati
 AutoSlice instantiate virtual networks over several SDN domain and each CPX deploys the corresponding OF rules in their infrastructure.
 Each CPX is in charge of migrating virtual resources within their own domain.
 AutoSlice overcomes the physical limitations of Openflow switches by delegating part of OF rules storage to Auxiliary Software Datapaths (ASD).
+A datapath is a logical representation of a physical switch and it exposes control over its forwarding capacities.
 These ASD are software switches running on ommodity servers and therefore have the sufficient resources to store all the possible OF rules.
 AutoSlice uses a statistical distribution law to determine that low volume flows will generate most of the OF rules and store them in ASD. In opposition, the biggest volume flows use a minimum of OF rules and deploy them inside the physical switches.
 In~\cite{AutoSlice2-Bozakov2014} authors go into more details about several design requirements they have expressed. They extend the notion of isolation between tenants by introducing a set of identifiers to prevent overlapping OF rules installed by different tenants.
@@ -210,25 +213,28 @@ Authors also propose virtual network migration techniques based on information d
 There is no evaluation provided in both~\cite{AutoSlice-Bozakov2012} and~\cite{AutoSlice2-Bozakov2014}.
 
 \paragraph{NVP}
-The Network Virtualization Platform~\cite{NVP-Koponen2014} (NVP) proposes a network hypervisor for multi-tenants datacenters. Instead of focusing on virtualizing the physical network of the data center, NVP provides a virtual network on top of OpenvSwitches~\cite{openvswitch} deployed in each VMWare Hypervisor. Those virtual switches are then interconnected using tunnels for end-to-end communication. The physical network is simply used as traditional networking and is assumed to possess standard capacities.
+The Network Virtualization Platform~\cite{NVP-Koponen2014} (NVP) proposes a network hypervisor for multi-tenant datacenters. Instead of focusing on virtualizing the physical network of the data center, NVP provides a virtual network on top of OpenvSwitches~\cite{openvswitch} deployed in each VMWare Hypervisor. Those virtual switches are then interconnected using tunnels for end-to-end communication. 
+The physical network is simply used to support these tunnels and is assumed to possess standard capacities.
 The paper makes several contributions: the implementation of the logical networks based on OpenvSwitch (OVS), the creation of a Domain Specific Language (DSL) to declare the connectivity between hypervisors, switches etc. and tackle scalability and availability issues encountered by NVP.
 
-The logical networks proposed to a tenant in NVP consist in creating a virtual slice inside each OVS which in global sets a logical pipeline between the different VMs pertaining to the tenant.
-Each VM hypervisor hosting VMs belonging to a specific tenant will instantiate a \textit{logical datapath} inside its own OVS. 
-Then, for each pair of logical datapaths that have been created NVP will create a tunnel between them.
+The logical networks proposed to a tenant in NVP consist in creating a fully meshed virtual network between every compute node running the tenant's VMs.
+The creation of the virtual network is as follows:
+Each VM hypervisor hosting VMs belonging to a tenant will instantiate a \textit{logical datapath} inside its own OVS. 
+Then, for each pair of logical datapaths that have been created, NVP will create a tunnel between them.
 Each time an incoming packet goes through an ingress port of the hypervisor the packet will be redirected to the correct logical datapath then transmitted to the logical datapath corresponding to the destination VM.
-The tenant can configure these datapaths with regard to switching, routing and security matters, similarly to traditional networking elements.
+The tenant can configure these datapaths with regard to switching, routing and security matters, similarly to legacy networking elements.
 The isolation between tenants is ensured by affecting unique identifiers to each logical datapath, preventing unauthorized access to the tenant's traffic.
 NVP implements failover mechanisms of physical networking elements as well as controllers by running backup nodes with similar function that will be used in case of a failure.
 
-NVP introduces \textit{nlog}, the DSL proposed in NVP is used tackle the computational challenge of keeping up with the evolution of the forwarding state inside the logical datapaths. Changes in the forwarding state include entries and departures of tenants inside the infrastructure, migration of the different VMs, reconfiguration of logical datapaths by the tenants. \textit{nlog} presents an logical abstraction that decouples the concrete forwarding state and rules from the logic described by NVP. Note that \textit{nlog} is not used by tenants but by NVP when instantiating logical datapaths for tenants.
+NVP introduces \textit{nlog}, a DSL proposed to tackle the computational challenge of keeping up with the evolution of the forwarding state inside the logical datapaths. Changes in the forwarding state include entries and departures of tenants inside the infrastructure, migration of the different VMs, reconfiguration of logical datapaths by the tenants. \textit{nlog} presents an logical abstraction that decouples the concrete forwarding state and rules from the logic described by NVP. Note that \textit{nlog} is not used by tenants but by NVP when instantiating logical datapaths for tenants.
 Tenants are provided an API to interact with NVP.
 Using \textit{nlog} to describe the state of the logical abstractions enables an incremental computing of the forwarding state that is resource efficient compared to a naive implementation where any change requires the full recomputation of the forwarding state.
 
 Scalability inside NVP is ensured by distributing computation over several logical controllers and physical controllers. Logical controllers compute the flow and tunnels corresponding to datapaths. Physical controllers are in charge of the communication with the different service nodes, gateways and hypervisors.
-Sharding mechanisms are responsible for the availability of the different nodes inside the infrastructure. A sharding coordinator will monitor the signals sent by the different nodes and will promote a node to the master role if the current master fails.
+NVP enforces VN migration in case of a failover of either the physical or logical layer using a sharding mechanism similar to the one used in cluster nodes~\cite{sharding}. 
+A sharding coordinator will monitor the signals sent by the different nodes and will promote a node to the master role if the current master fails.
 
-The evaluation of NVP focuses on two things, the time and resources required to setup NVP in different scenarios and the available throughput based on which tunneling mechanism is used by NVP. Theses results are then followed by a serie of reflexions based on the experience gained after the implementation of NVP and how design challenges have been tackled.
+% The evaluation of NVP focuses on two things, the time and resources required to setup NVP in different scenarios and the available throughput based on which tunneling mechanism is used by NVP. Theses results are then followed by a serie of reflexions based on the experience gained after the implementation of NVP and how design challenges have been tackled.
 
 \begin{figure}
     \centering

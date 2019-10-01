@@ -1,4 +1,4 @@
-\subsubsection{Reference architecture}
+\subsubsection{Reference architecture of a network hypervisor}
 \label{sec:reference_archi}
 %\GB{a good start is the paper from Casado et al., published at PRESTO'10, where the idea of a network hypervisor is introduced. A quick introduction of network virtualization in general, and how SDN stands in this landscape, would be helpful. Please refer to the following website: \url{http://packetpushers.net/sdn-network-virtualization-hypervisors/}. I suggest to even go as far as to mention the state of the art of network virtualization: from VLANs and VPNs, to network slicing, to network hypervisors}
 A reference architecture is the theoretical design of an element that will include all necessary components. 
@@ -7,15 +7,23 @@ A network hypervisor should support the following operations:
 \begin{itemize}
     \item Providing an abstraction of the physical infrastructure to tenants
     \item Providing an interface for tenants to interact with their virtual network
-    \item Ensuring isolation between tenants to prevent unwanted interactions 
+    \item Ensuring isolation between tenants to prevent undesired interactions 
     \item Enabling automated virtual network migration in case of attacks or failures
     \item Ensuring security of the hypervisor and the virtual networks
 \end{itemize}
 
+Casado~\etal propose a first formalization of a general purpose network hypervisor in~\cite{Netvirt_Definition-Casado2010}. They decouple the virtual network view from the physical infrastructure, and the network hypervisor enforces the mapping between the logical and physical planes.
+
+Authors illustrate the processing of incoming traffic by simultaneously representing it in the logical plane and in the physical plane.
+The logical plane will perform a lookup to determine the next logical node to forward the traffic to and then such decision will then be transmitted to the physical plane where another lookup will be performed to determine what is the physical equivalent of the logical forwarding decision.
+
+The analysis of the different works presented in the previous section, this double lookup approach has not been considered to be a suitable solution for the virtual to physical mapping. The majority of existing hypervisors will either slice the physical network thus maintaining no mapping between tenants and the infrastructure, or will maintain a mapping but it will be only used to translate flow rules from the virtual header space to the physical one. Their implementation of a network hypervisor prototype does not seem to include regular loopbacks but only maintain a mapping similarly to all the other related solutions.
+
+We propose the following reference architecture to highlight the important features that should be available for a secure network migration, and also to outline some shortcomings in existing solutions.
 
 \input{figures/nvh-archi.tex}
   
-Figure~\ref{fig:reference-archi-nh} presents the the reference architecture of a network hypervisor.
+Figure~\ref{fig:reference-archi-nh} presents the the reference architecture of a network hypervisor supporting a secure virtual network migration.
 On a top-down perspective, there are three different levels in the reference architecture.
 The tenant level, where end-users can deploy their own applications, SDN controllers, etc.
 The hypervisor level, including all the components required to achieve network virtualization and present the tenant with an abstract view.
