@@ -1,0 +1,29 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|}
+\hline
+Name                     & Abstraction & Migration & Summary                                                                                                                      \\ \hline
+FlowVisor                & Slicing     & No        & Coexistence of experimental and production networks                                                                          \\ \hline
+Enhanced FV              & Slicing     & No        & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor\\ minimum bandwidth guaranteed\end{tabular}                                   \\ \hline
+Slices Isolator          & Slicing     & No        & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor\\ Node and link resources isolation\end{tabular}                              \\ \hline
+Compositional Hypervisor & API         & No        & Unifying heterogeneous SDN applications                                                                                      \\ \hline
+Network Hypervisor       & API         & No        & Implementing service oriented VNs: HyperNets                                                                                 \\ \hline
+ADVisor                  & Mapping     & No        & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor with resoure mapping\\ Flowspace sharing among tenants\end{tabular}           \\ \hline
+Double FV                & Mapping     & No        & Multi-domain virtualization                                                                                                  \\ \hline
+WhiteVisor               & Mapping     & No        & SDN Virtualization over WhiteBox switches                                                                                    \\ \hline
+ONVisor                  & Mapping     & No        & ONOS based hypervisor                                                                                                        \\ \hline
+OpenVirteX               & Mapping     & No        & Arbitrary topology, full flowspace allocation                                                                                \\ \hline
+SR-PVX                   & Mapping     & No        & Protocol Oblivious Forwarding for Source Routing                                                                             \\ \hline
+VeRTIGO                  & Mapping     & Yes       & \begin{tabular}[c]{@{}c@{}}Extending ADVisor\\ 1-to-many mapping vs Big Switch Abstraction\end{tabular}                      \\ \hline
+CoVisor                  & Mapping     & Yes       & \begin{tabular}[c]{@{}c@{}}Extending Compositional Hypervisor\\ Flexible visibility and performance improvement\end{tabular} \\ \hline
+FlowN                    & Mapping     & Yes       & Container based application virtualization                                                                                   \\ \hline
+AutoSlice                & Mapping     & Yes       & Distributed hypervisor for scalability                                                                                       \\ \hline
+NVP                      & Mapping     & Yes       & Full mesh network virtualization between compute nodes                                                                       \\ \hline
+LiteVisor                & Mapping     & Yes       & Flow aggregation and VN migration for VM migration                                                                           \\ \hline
+\end{tabular}%
+}
+\caption{Summary of existing hypervisors}
+\label{tab:existing-nhv}
+\end{table}

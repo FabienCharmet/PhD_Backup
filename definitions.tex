@@ -30,12 +30,24 @@ OpenFlow provides an southbound interface to communicate with switches and to in
 \subsection{Network Virtualization using SDN}
 \label{def:netvirt}
 
-For decades now hypervisors have enabled the sharing of physical resources among several virtual machines.
+For decades hypervisors have enabled the sharing of physical resources among several virtual machines.
 Multiple users can run their own operating system simultaneously over a single physical machine.
 VLANs, MPLS and VRF only provided limited virtualization for the network resource. The emergence of SDN and its flexibility for the design of network application has been leveraged to give network a reliable virtualization solution.
 
-The network hypervisor abstracts the view of the physical infrastructure into virtual networks to the end users (also referred to as tenants) as depicted by Figure~\ref{fig:SDN-hypervisor}.
-The hypervisor is in charge to provide isolation between tenants, preventing them to interact with other tenants' virtual networks.
+Figure~\ref{fig:virt-archi} illustrate the differences between a classic SDN environment and a virtualization infrastructure. In part (a), different applications will be deployed on the SDN controller and will impact the whole physical network.
+In part (b), the network hypervisor abstracts the view of the physical infrastructure into virtual networks to the end users (also referred to as tenants).
+Each tenant will be able to deploy its applications on his own virtual network, that will in turn only impact the physical resources associated to it.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.9]{figures/virt-archi.png}
+    \caption{SDN infrastructure (a) vs. Virtualization infrastructure (b) from VeRTIGO~\cite{VeRTIGO-Corin2012a}}
+    \label{fig:virt-archi}
+\end{figure}
+
+
+The process of mapping a virtual network with its underlying resources is referred to as the Virtual Network Embedding, and is illustrated in Figure~\ref{fig:VNE}.
+The hypervisor is in charge to provide isolation between tenants, preventing them to interact with other tenants' virtual networks. Isolation covers either the resources allocated to tenants, such as bandwidth, switch CPU or flow tables memory, but it also includes the topology itself so a tenant cannot manipulate traffic that does not belong to him.
 
 Two main information are used by tenants of the virtualization infrastructure, the address space and the flowspace.\\
 \textbf{The address space} is the set of IP addresses that a tenant can assign to the hosts in his virtual network.\\
@@ -45,8 +57,7 @@ Presenting a virtual network to the tenant can be done in two different ways, ei
 \textbf{A slice} is the set of resources allocated to a virtual network.
 Slicing the physical infrastructure consists in presenting the tenant with only a smaller part of the infrastructure while hiding the rest of the network equipments.
 The hypervisor gives tenants a direct access to the network nodes composing the slice, and the flow rules installed by the tenant will be rewritten to match the flow space he has been allocated.\\
+The term slice is also found in the literrature to describe the subdivision of a single physical resource. For instance, a slice can be a subdivision of a physical node corresponding to a specific tenant.\\
 \textbf{Mapping} the virtual network with the physical infrastructure is an approach differing from network slicing by presenting an arbitrary network to the tenant while maintaining a mapping between the virtual elements used by the tenant and the physical resources they correspond to.
 
-\input{figures/SDN_hypervisor.tex} 
-
-
+\input{figures/vne.tex}

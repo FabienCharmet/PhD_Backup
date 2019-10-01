@@ -1,24 +1,38 @@
 \subsubsection{Slicing based hypervisors}
 \label{sec:existing-nhv}
-In this section we describe the existing hypervisors and their ability to implement Virtual Network Migration.
+In this section we describe the hypervisors using the slicing technique to abstract the physical infrastructure into a virtual network.
 
 \paragraph{FlowVisor}
 
 FlowVisor~\cite{FlowVisor-Sherwood2009} is the first SDN hypervisor implemented.
-FlowVisor creates Virtual Networks by slicing the physical infrastructure, and providing each tenant with a set of physical resources.
+FlowVisor creates Virtual Networks by slicing the physical infrastructure, and providing each tenant with a set of physical resources (\ie a slice).
 
-Virtual networks are defined as a set of links between physical SDN switches.
-These links will only match the traffic belonging to the tenant.
-FlowVisor introduce them as flowspace and each flowspace maps a tenant with a physical node and a specific match-action criteria for the traffic.
-For a tenant, the collection of these flowspaces is called a slice and represent their virtual network. 
+Once a tenant has been assigned a slice of physical resources, he will define the flowspace 
+corresponding to its traffic.
+The flowspace correspond to the set of flow rules that will be used as filters for the tenant's traffic.
+Finally, the virtual network presented to the tenant is the set of physical nodes that will match the incoming traffic defined by the flowspace allocated to the tenant.
 The tenant will then connect their SDN controller to the slice, enabling them to interact with their virtual network.
 
-FlowVisor enforces isolation between tenants by acting as a proxy between them and the physical infrastructure.
-FlowVisor abstracts the physical architecture by showing each tenants only the resources that have been allocated to them.
-When an OpenFlow message is sent from a physical node to the controller, FlowVisor will intercept the message and forward it only to the tenants with a Virtual Network using this node in their substrate.
-Similarly, when a tenant wants to deploy an OpenFlow rule (OF rule) on a physical node, FlowVisor will intercept it and rewrite match and actions fields so the rule only affects the virtual network and not all the incoming traffic.
+% Virtual networks are defined as a set of links between physical SDN switches.
+% These links will only match the traffic belonging to the tenant.
+% FlowVisor introduce them as flowspace and each flowspace maps a tenant with a physical node and a specific match-action criteria for the traffic.
+% For a tenant, the collection of these flowspaces is called a slice and represent their virtual network. 
 
-Flowvisor enforces isolation of bandwidth, topology, switch CPU, flowspace, flow entries tables and the southbound interface communications. Authors have evaluated the performance of resource isolation in~\cite{FlowVisor-Sherwood2009}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.6]{figures/flowvisor-process.png}
+    \caption{Message processing in Flowvisor~\cite{FlowVisor-Sherwood2009}}
+    \label{fig:flowvisor-process}
+\end{figure}
+
+FlowVisor enforces isolation between tenants by acting as a proxy between them and the physical infrastructure, as depicted in Figure~\ref{fig:flowvisor-process}.
+FlowVisor abstracts the physical architecture by showing each tenants only the resources that have been allocated to them.
+When a tenant wants to deploy an OpenFlow rule (OF rule) on a physical node (1), FlowVisor will intercept it, check the resources allocated to the slice (2) and rewrite match and actions fields so the rule only affects the virtual network and not all the incoming traffic (3).
+Similarly, When an OpenFlow message is sent from a physical node to the controller, FlowVisor will intercept the message and forward it only to the tenants whose slice's policy matches the message (4).
+
+Flowvisor provides mechanisms to enforce resource isolation for bandwidth, topology, switch CPU, flowspace, flow entries tables and the southbound interface communications. 
+Isolating these resources will prevent a tenant to exceed the amount of resources he has been allocated or prevent a malicious attacker to modify the traffic of another user without authorization.
 However, FlowVisor lacks major components related to virtualization, such as arbitrary topologies and virtual network migration.
 These aspects have been tackled in several hypervisors based on FlowVisor.
 
@@ -28,7 +42,8 @@ The flowspace used in this solution is based on 3 bits of the VLAN PCP field whi
 Enhanced FlowVisor is based on the NOX controller and uses HP ProCurve switches using the Guaranteed Minimum Bandwidth feature.
 
 \paragraph{Slices Isolator}
-Slices Isolator~\cite{SlicesIsolator-El-Azzab2011} is an hypervisor providing resource isolation between slices. A slice is defined as a subdivision of a physical switch, to which flows will be affected. Slices Isolator provides isolation for interfaces, flow processing and memory. Interface isolation consists in either providing a dedicated network interface to a slice or to aggregate incoming traffic to one interface and then distributing the control to the different tenants. Processing isolation defines which flows will be processed using the same rules. Each flow is splitted into two subflows, one is discarded and the other is processed. This helps reducing the size of processing tables but if a bad rule is added it can compromise the expected behavior of the system. Therefore, processing isolation works by determining if the addition of the new rule does not conflict with the previous rules. The new rule is valid if either the new flow does not intersect with any of the existing flows or if it does, it is part of the discarded section of the flow. Finally, memory isolation is implemented with queuing algorithms for the traffic, ensuring a slice does not overload its allocated resources. 
+Slices Isolator~\cite{SlicesIsolator-El-Azzab2011} is an hypervisor providing resource isolation between slices. A slice is defined as a subdivision of a physical switch, to which flows will be affected. Slices Isolator provides isolation for interfaces, flow processing and memory. Interface isolation consists in either providing a dedicated network interface to a slice or to aggregate incoming traffic to one interface and then distributing the control to the different tenants. Processing isolation defines which flows will be processed using the same rules. Each flow is splitted into two subflows, one is discarded and the other is processed. This helps reducing the size of processing tables but if a poorly designed rule is added it can compromise the expected behavior of the system. Therefore, processing isolation works by determining if the addition of the new rule does not conflict with the previous rules. Determining potential conflicts between existing rules and the next rule to be added works as follows: if the filters used by the new flow rule does not overlap with existing filters, then there is no conflict.
+If there is overlap, there is a conflict if and only if the overlap between the new flow rule and the existing one is not on the discard subflow but on the processed subflow.Finally, memory isolation is implemented with queuing algorithms for the traffic, ensuring a slice does not overload its allocated resources. 
 
 \textbf{Conclusion:} Overall, network hypervisors using slicing have not been designed to support the migration feature but are oriented toward providing resource isolation between slices. Because the set of network slices is limited by the physical infrastructure, it will not always be possible to find another slice that will match the original topology of the virtual network.
 
@@ -36,7 +51,8 @@ Slices Isolator~\cite{SlicesIsolator-El-Azzab2011} is an hypervisor providing re
 API based hypervisors are using specific API to manage virtual networks and to allow tenants to interact with them.
 
 \paragraph{Network Hypervisor}
-The Network Hypervisor~\cite{NetworkHypervisor-Huang2013} aims at providing a unified virtualization over multi-domains SDN infrastructures. Authors present a vision of the future of SDN network and how infrastructure providers, services resellers and users would work to provide a seamless virtualization service that would alleviate the maintenance operations burden from the tenants.
+The Network Hypervisor~\cite{NetworkHypervisor-Huang2013} aims at providing a unified virtualization over multi-domains SDN infrastructures. 
+% Authors present a vision of the future of SDN network and how infrastructure providers, services resellers and users would work to provide a seamless virtualization service that would alleviate the maintenance operations burden from the tenants.
 The ultimate goal of the Network Hypervisor is to enable HyperNets~\cite{HyperNet-Huang2013a}. HyperNets are envisioned as a sort of final form for SDN services. A user may request a virtual network to serve specific needs (\eg Video Streaming) and connect specific clients together.
 The HyperNet should be able to automatically determine what are the physical resources that should be allocated in terms of positioning, computational power etc. In addition to this, HyperNets should provide routing procedures specifically design for the requested service (\ie prioritize video traffic over less relevant traffic).
 In order to provide the support of said HyperNets, the Network Hypervisor provides API functions. These functions includes network discovery so they can allocate suitable physical resources close the HyperNet users as well as design a suitable topology to interconnect all participants.
@@ -47,9 +63,20 @@ This hypervisor has been implemented to work on top of the ProtoGENI~\cite{proto
 \paragraph{Compositional Hypervisor}
 The aim of Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} is to provide an homogeneous layer between SDN controllers and tenants application.
 Each application is designed to work with a specific SDN controller and is based on a specific programming language. Therefore, it is next to impossible for a tenant to concurrently run different applications from different environments because they will conflict with each other. Compositional Hypervisor sits between the physical infrastructure and the SDN applications used by tenants.
-The OF rules sent by an application define a policy that the tenant will then be able to combine with other policies using a provided arithmetic.
-This arithmetic allows to have policies being enforced either in parallel or sequentially. This composition simplifies the OF rules deployed in each switch by providing a unique list of prioritized OF rules. When one of the policies is update, the hypervisor will recompute the updated policy depending on whether a rule has been added/removed/modified.
-From an architectural point of view, users are not presented with their own virtual network that they will be able to modify at will, but instead the manipulation of the physicak infrastructure is abstracted to implement an efficient OF rules deployment abd ti allow the coexistence of heterougeneous solution.
+Each application generates a set of flow rules, which is referred to as a policy.
+Upon receiving each generated policy, the tenant is then able to combine them together using a specific arithmetic.
+This arithmetic allows to have policies being enforced either in parallel or sequentially. 
+In Figure~\ref{fig:compositional-hyp}, a load balancing application co exist with a routing and a monitoring application. The arithmetic shows that the load balancing rules should process the traffic first, and then the routing and monitoring applications will see their flow rules combined into a unique treatment.
+This composition simplifies the OF rules deployed in each switch by providing a unique list of prioritized OF rules. When one of the policies is update, the hypervisor will recompute the updated policy depending on whether a rule has been added/removed/modified.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.7]{figures/compositional-structure.png}
+    \caption{Flow rules arithmetic from Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014}}
+    \label{fig:compositional-hyp}
+\end{figure}
+
+From an architectural point of view, users are not presented with their own virtual network that they will be able to modify at will, but instead the manipulation of the physicak infrastructure is abstracted to implement an efficient OF rules deployment abd ti allow the coexistence of heterogeneous solution.
 
 
 \subsubsection{Mapping based hypervisors without migration}
@@ -60,17 +87,31 @@ ADVisor~\cite{ADVisor-Salvadori2012} is based on FlowVisor and tackles two desig
 The first contribution is the implementation of arbitrary virtual topologies.
 Instead of slicing physical resources and presenting them to the tenants, 
 The virtualization completely decouples the abstract view of the virtual network from the physical resources supporting it.
-A virtual link between two virtual nodes might in fact be composed of several physical links. The role of ADVisor will be to hide these intermediate nodes from the tenant.
+A virtual link between two virtual nodes might in fact be composed of several physical links. The role of ADVisor is to hide these intermediate nodes from the tenant.
 
 The second contribution of ADVisor consists in the sharing of the flowspace proposed by FlowVisor.
-Originally, the definition of a flowspace would restrict the manipulation of a certain type of traffic (\eg port 80, 10.0.0.0/24 block) to only one tenant.
+Originally, the definition of a flowspace would restrict the manipulation of a certain type of traffic (\eg port 80, source MAC address) to only one tenant.
 Giving access of one flowspace to two different tenants would break the isolation and allow one to control and alter the traffic of the other.
+The same limitations come regarding the address space available to tenants.
+ADVisor alleviate this limitation by defining a set of identifiers that will be allocated to each tenant. These identifiers are referred to as "flowspace`` but they do not exactly hold the same meaning as defined by FlowVisor~\cite{FlowVisor-Sherwood2009}. Indeed, each tenant has access to the whole flowspace (\ie the whole header fields) except for the few bits reserved by ADVisor to store the necessary identifiers.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.6]{figures/double_fv.png}
+    \caption{Architecture of Double FlowVisor}
+    \label{fig:double-fv}
+\end{figure}
 
 \paragraph{Double FlowVisor}
-Double FlowVisor~\cite{DoubleFV-Yin2013} combines two instances of FlowVisor to virtualize a multi-domain network and provide a unified view of the virtual network. The first instance of FlowVisor is used to hide the heterogeneity of the different network domains. These domains are connected together and are abstracted and a NOX controller~\cite{nox-gude2008} is connected to FlowVisor.
-Then, the second FlowVisor instance will connect NOX with the tenants' applications. This instance maintains the embedding between virtual resources and the physical substrate, and translates commands sent by the tenant into commands deployed in the physical infrastructure. In addition to that, the second FlowVisor instance is in charge to tag each flow with an APP-ID related to the tenant.
+Double FlowVisor~\cite{DoubleFV-Yin2013} combines two instances of FlowVisor to virtualize a multi-domain network and provide a unified view of the virtual network, as presented in Figure~\ref{fig:double-fv}. The first instance of FlowVisor (FlowVisor 1) is used to hide the heterogeneity of the different network domains. These domains are connected together and are abstracted and a NOX controller~\cite{nox-gude2008} is connected to FlowVisor.
+Then, the second FlowVisor  (FlowVisor 2) instance will connect NOX with the tenants' applications. This instance maintains the embedding between virtual resources and the physical substrate, and translates commands sent by the tenant into commands deployed in the physical infrastructure. In addition to that, the second FlowVisor instance is in charge to tag each flow with an identifier related to the tenant.
 
-
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.7]{figures/openvirtex.png}
+    \caption{Identifier translation at edge switches in OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}}
+    \label{fig:openvirtex}
+\end{figure}
 
 \paragraph{OpenVirteX}
 OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014} (OVX) is a network hypervisor based on the same design as FlowVisor~\cite{FlowVisor-Sherwood2009}. OVX serves as a proxy between the tenants' controllers and the underlying physical infrastructure. OVX provides both full virtual topology abstraction and full address space abstraction. 
@@ -80,11 +121,11 @@ Then OVX will determine the adequate physical substrate to embed the virtual net
 The virtual/physical resources mapping is stored by OVX and is used to present the virtual topology to the controller.
 While FlowVisor will hide messages to unintended recipients, OVX intercept LLDP packets used for topology discovery. Everytime a LLDP message arrives at a virtual switch, OVX uses the mapping to determine the virtual node at the other end of the virtual link. A LLDP response is forged by OVX with matching information and forwards it to the corresponding tenant's controller.
 
-OVX enables tenants to use the full address space by assigning an identifier to each tenant and then combining it with a unique identifier for each host. When traffic goes through an edge switch of the network, the switch is in charge of translating the MAC/IP headers back into the flowspace used by the VM.
+OVX enables tenants to use the full address space by assigning an identifier to each tenant and then combining it with a unique identifier for each host. Figure~\ref{fig:openvirtex} depicts the two cases where the identifier translation is performed. In the first case, when the tenant Network Operating System wants to deploy flow rules, he will specify his own virtual identifiers. OpenVirteX will intercept the flow rules, translate the virtual IP addresses into the corresponding physical ones. The second case is when traffic goes through an edge switch of the network, the switch is in charge of translating the IP headers back into the flowspace used by the VM.
 
 \paragraph{SR-PVX}
 SR-PVX~\cite{PVX-Li2017} is the first network hypervisor supporting Protocol Oblivious Forwarding~\cite{pof-song2013} (POF). POF is an extension of the concept set up by OpenFlow~\cite{Openflow-McKeown2008}, where developers may implement new protocols without the constraints of the OpenFlow protocol.
-SR-PVX provides two main features, the improved programmability of the POF paradigm and an reduced resource consumption to implement network virtualization.
+SR-PVX provides two main features, the improved programmability of the POF paradigm and a reduced resource consumption to implement network virtualization.
 
 The programmability proposed by POF is to replace protocol specific headers by a set of \textit{\{offset,length\}} tuples. This way, developers will be able to specify their own data structures to be processed by the switch. This allows to use Source Routing (SR) where routing instructions are encapsulated inside the packet to transmit across the network.
 SR-PVX decouples the virtual topologies from the underlying physical infrastructures.
@@ -114,7 +155,7 @@ The hypervisors presented in this section abstract the physical resources behind
 
 \paragraph{VeRTIGO}
 VeRTIGO~\cite{VeRTIGO-Corin2012a} is an extension of the work done with ADVisor and offers two different types of virtual networks.
-Either the tenant will have the full control over the virtual network (including traffic engineering techniques etc.) or he will be presented with a single node and leaves the handling of network operations to the service provider.
+Either the tenant will have the full control over the virtual network (including traffic engineering techniques etc.) or he will be presented with a single node and leave the handling of network operations to the service provider.
 This abstract view is often called ``Big Switch Abstraction".
 It provides networking to a tenant who is not interested in handling network operations himself.
 
@@ -123,13 +164,13 @@ VeRTIGO implements virtual network migration using a component called VT Planner
 \paragraph{CoVisor}
 CoVisor~\cite{CoVisor-Jin2015} extends Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} by making two significant contributions.
 The first one is a novel policy combination algorithm that will focus on the performance of the policy deployment in terms of packets send and computation time.
-CoVisor exploits the policies being composed to generate specific data structures instead of R-tree-based data classifiers.
+CoVisor exploits the policies being composed to generate specific data structures that will serve as rules indexes.
 Regrouping composed policies based on the common fields they affect reduces the number of rules pair considered at compilation time.
 Similarly, they correlate common attributes between policies to serve as indexes for storage. Determining the intersection of the matching fields for two policies determines the index storage for the composed policy.
 This algorithm also support the case where a single physical node spans multiple virtual switches.
 
-The second contribution is related to the view the hypervisor gives to each application.
-Due to security concerns, CoVisor present an abstract view of the topology based on the needs of the application. 
+The second contribution is related to the view provided by the hypervisor to each application.
+CoVisor present an abstract view of the topology based on the needs of the application, thus enhancing the security of the infrastructure by only granting rights for the requested usage. 
 For instance, a firewall may only see the infrastructure as a big switch since the incoming traffic should be dropped at the ingress point of the network.
 Similarly, a routing application will require full access to the network to determine the optimal routing paths.
 CoVisor also limits the actions available to each application using a fine-grained control over the capacities of each controller.
@@ -141,15 +182,16 @@ In case a physical switch fails, CoVisor notifies each application impacted by t
 
 \paragraph{FlowN}
 FlowN~\cite{FlowN-Drutskoy2012} is a network hypervisor designed to provide a full abstraction of the physical infrastructure and to propose a container-based application virtualization system. 
-The hypervisor serves each tenant with a custom virtual topology. The virtual topology requires a specific number of nodes and links but FlowN also implement bandwidth reservation as well as maximum latency per link. The decoupling of the virtual network from the physical substrate removes the burden of network maintenance from the tenant and leaves it to the service provider. In case of a switch or link failure, FlowN will migrate the virtual node on a new physical switch without having to notify the impacted tenants.
-FlowN evaluate the time it takes to migrated nodes impacting 50 virtual networks and time never exceeds 65 ms.
+The hypervisor serves each tenant with a custom virtual topology. The virtual topology requires a specific number of nodes and links but FlowN also implements bandwidth reservation as well as maximum latency per link. The decoupling of the virtual network from the physical substrate removes the burden of network maintenance from the tenant and leaves it to the service provider. In case of a switch or link failure, FlowN will migrate the virtual node on a new physical switch without having to notify the impacted tenants.
+
+The virtualization of the control layer places FlowN between tenants' applications and the physical infrastructure. When a SDN application makes a function call, FlowN will intercept it and translate it to preserve the mapping between virtual address space and the physical address space. Since FlowN is based on the NOX~\cite{nox-gude2008} SDN controller, tenants application are limited by the capacities of this controller. 
+The design of an API between applications and hypervisor is in opposition to the concept of FlowVisor~\cite{FlowVisor-Sherwood2009} where tenants directly interact with the physical nodes and FlowVisor only restrict and translate OF rules to respect the isolation requirements of the virtualization.
 
 FlowN also offers the full abstraction of the address space for the tenants.
 Each tenant will be able to use all the header fields, and FlowN will maintain through the use of a database the mapping between the physical node address space and the virtual one. FlowN uses encapsulation at the ingress point to determine to which tenant the packet must be forwarded. Encapsulation is based on VLAN tagging, in a similar fashion to Nicira~\cite{nicira}.   
 FlowN leverages the capabilities of databases to improve the performance of the mapping.
 
-The virtualization of the control layer places FlowN between tenants' applications and the physical infrastructure. When a SDN application makes a function call, FlowN will intercept it and translate it to preserve the mapping between virtual address space and the physical address space. Since FlowN is based on the NOX~\cite{nox-gude2008} SDN controller, tenants are also limited by the capacities of this controller. 
-The design of an API between applications and hypervisor is in opposition to the concept of FlowVisor~\cite{FlowVisor-Sherwood2009} where tenants directly interact with the physical nodes and FlowVisor only restrict and translate OF rules to respect the isolation requirements of the virtualization.
+
 
 \paragraph{AutoSlice}
 AutoSlice~\cite{AutoSlice-Bozakov2012} is designed to tackle the scalability issues of a distributed hypervisor, and optimize resource consumption of physical switches to overcome specific limitations.
@@ -188,8 +230,17 @@ Sharding mechanisms are responsible for the availability of the different nodes 
 
 The evaluation of NVP focuses on two things, the time and resources required to setup NVP in different scenarios and the available throughput based on which tunneling mechanism is used by NVP. Theses results are then followed by a serie of reflexions based on the experience gained after the implementation of NVP and how design challenges have been tackled.
 
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figures/litevisor.png}
+    \caption{LiteVisor architecture~\cite{Litevisor-Yang2018}}
+    \label{fig:litevisor}
+\end{figure}
+
 \paragraph{LiteVisor}
 LiteVisor~\cite{Litevisor-Yang2018} is a SDN hypervisor supporting network reconfiguration for VM migration.
 Author outline the previous work on flow aggregation to reduce the consumption of switch resources as well as the performance-sensitive context of datacenters and the limitations of existing encapsulation techniques.
-LiteVisor is divided in three components. The first one ensures the mapping between virtual and physical identifiers and translates messages sent between tenants and the controller.
-The second component is the LITE manager, responsible for aggregating flows based on tenant configurations as well as deploying them on the physical switches. The last component is the migration manager. When a VM is migrated, the cloud orchestration system notifies the migration manager about the new location of the VM. The manager then computes a new physical flow that will be transmitted to the LITE manager, which in turns decides if it can be aggregated with an existing flows or deploys the according configuration rules in the physical infrastructure.
+LiteVisor is divided in three components illustrated in Figure~\ref{fig:litevisor}. The first one ensures the mapping between virtual and physical identifiers and translates messages sent between tenants and the controller.
+The second component is the LITE manager, responsible for aggregating flows sent by the tenant's controller, as well as deploying them on the physical switches. 
+The last component is the migration manager. When a VM is migrated, the cloud orchestration system notifies the migration manager about the new location of the VM. The manager then computes a new physical flow that will be transmitted to the LITE manager, which in turns decides if it can be aggregated with an existing flows or deploys the according configuration rules in the physical infrastructure.
+

@@ -17,8 +17,9 @@ Then we propose to choose the optimal monitoring set $Mo^*$ with:
     Mo^* = \argmax\limits_{\text{Mo} \in S_{\text{abs}}} \left \{\sum\limits_{s \in S^{\text{Mo}}_{\text{abs}}}\rho(Mo^s)R(Mo^s) \right \}
 \end{equation}
 
-We present the results for in Table~\ref{tab:mdp-usecase-optiset}.
+Results for all scenarios are summarized in Table~\ref{tab:mdp-usecase-optiset}.
 
+\input{figures/RA-optiset.tex}
 
 \textbf{Scenarios a) and b)\\}
 We note that nodes 4 and 6 are always chosen in the monitoring.
@@ -37,4 +38,3 @@ There is one  notable result, in scenario e) for $p=0.7,  (b_f,b_c) = (40,40)$ w
 The other part of the counter intuitive result is due to removing node 6, the source of attacks from the monitoring. It is worth noting that this particular case represents a negligible portion of the solution space, and most of the counter intuitive result is due to the previous explanation. Considering that node 6 is removed at a point where the consequences of attacks will be minimal, we assume that removing the monitoring at this point was deemed equivalent to the do nothing action.
 
 
-\input{figures/RA-optiset.tex}
