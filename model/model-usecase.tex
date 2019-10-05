@@ -153,35 +153,32 @@ Exploiting the physical nodes leverages other aspects of the security the infras
 The initial situation is similar to the previous scenario but we use the move-based migration algorithm instead.
 The attacker is located in the network infrastructure.
 The attacker can render physical nodes unavailable to trigger the migration process and will intercept and modify the configuration data sent by the hypervisor. 
-Therefore, we have two new predicates appearing during the migration, the fact that A accesses a node, and the fact that A is not authorized to do so.
+Therefore, the $conf\_integrity$ property does not hold true anymore.
 %\GB{should this fact be generated. Should this be rather the absence of an is\_authorized predicate that would indicate the attack?}
 %\FC{Answered by email}
-At line 1 in Listing~\ref{lst:not-node-conf-q}, we ask SNARK to find all the nodes in which there is a confidentiality breach.
+At line 1 in Listing~\ref{lst:not-conf-int-q}, we ask SNARK to find all the nodes in which there is an integrity breach for their configuration.
 
-\begin{lstlisting}[caption=SNARK question to detect the node confidentiality violation., label=lst:not-node-conf-q] 
+\begin{lstlisting}[caption=SNARK question to detect the configuration integrity violation., label=lst:not-conf-int-q,captionpos=b] 
    (find-all '(ans ?n.node ?t.time-interval)
              '(and
-       (not(node-confidentiality ?n.node ?t.time-interval))
+       (not(conf-integrity ?d.data ?n.node ?t.time-interval))
                (non-empty ?t.time-interval))
-             :name 'node-conf-violation-conjecture
+             :name 'conf-int-violation-conjecture
              :num-answers 1
              :time-limit 30
-             :print-derived :print)
-
-   ;;; search for a node-confidentiality breach:
-   ;;; find all nodes for which node-confidentiality has not been maintained
+                     :print-derived :print)
+   ;;; search for a configuration integrity breach:
+   ;;; find all nodes for which conf-integrity has not been maintained
 \end{lstlisting}
-The node confidentiality breach is then proven by SNARK for node-a at line 5 in Listing~\ref{lst:not-node-conf-a}.
-Similarly to the previous information disclosure scenario, the attack starts after the beginning of the migration process but before it ends.
+The configuration integrity breach is then proven by SNARK for new\_node-a (the first migrated node) at line 3 in Listing~\ref{lst:not-conf-int-a}.
+Similarly to the previous information disclosure scenario, the attack starts after the beginning of the migration process.
 SNARK finds the beginning of the attack on node-a starting at time point time-1.
-In addition to that, Line 1 explains that the confidentiality of the node is broken by user 2 (i.e. the attacker).
 %\GB{again, please provide line numbers for the reviewer to ``see something''}
 
-\begin{lstlisting}[caption=SNARK detecting the node confidentiality violation., label=lst:not-node-conf-a] 
-(OR (NODE-ISAUTHORIZED USER-2 NEW_NODE-A (MAKE-INTERVAL TIME-1 ?X.TIME-POINT))
+\begin{lstlisting}[caption=SNARK detecting the configuration integrity violation., label=lst:not-conf-int-a,captionpos=b] 
+(AND (DATA-INTEGRITY DATA-CONF (MAKE-INTERVAL TIME-1 ?X.TIME-POINT))
  ($$TIME-PP-NOT-AFTER ?X.TIME-POINT TIME-3))
-   (REWRITE (RESOLVE 585 819) :CODE-FOR-$$TIME-PP-INTERSECTION)
    Answer (ANS (ANS NEW_NODE-A (MAKE-INTERVAL TIME-1 TIME-3)))) 
 \end{lstlisting}
 
-The proof related to the other predicates (availability, integrity, and configuration confidentiality) is identical in essence, thus we do not include it here.
+The proof related to the other security properties is identical in essence, thus we do not include it here.
