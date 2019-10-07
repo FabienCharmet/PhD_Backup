@@ -3,15 +3,45 @@
 The emergence of online services, and the cost-appealing solution to outsource the exploitation of computer infrastructures has led to a drastic increase in the needs for individual resources allocated to users. Decades ago, a simple observation made that having one physical equipment per user need was clearly impossible. Additionally, only a fraction of the power of each computer was actually used and a lot remained to be exploited.
 Exploiting those idle resources became a crucial research topic, that would pave the way to resource virtualization. There are three main resources that have been virtualized over the past decades are namely compute, storage and memory.
 These resources typically represent the basic needs for a computer.
-Virtualization gained a lot of popularity, and led to the development ouf Cloud Computing, where computer infrastructure, business information and software applications would not be handle on site anymore but deployed instead in an external site, \ie the Cloud.
+Virtualization gained a lot of popularity, and led to the development of Cloud Computing, where computer infrastructure, business information and software applications would not be handle on site anymore but deployed instead in an external site, \ie the Cloud.
 
 Among all the resources that can be virtualized inside a computer system, the network resource have not benefited from the same performance in virtualization.
 There are several primitives that have existed for a long time now, such as VLAN, VRF or MPLS tags, but the heterogeneity of network equipments and the complexity in maintaining coherent network configurations on a large scale did not provide a profitable ground for these primitives to be turned into efficient network virtualization solutions.
 
-However, everything changed with the rise of Software Defined Networking
+However, everything changed with the introduction of Software Defined Networking and the decoupling of the Control Plane from the Data Plane. Offering programmability to the Data Plane enabled applications developers to come up with new solutions that would not be hindered by the monolithic composition of the physical infrastructure and that could leverage a standard communication interface that will erase the previous difficulties they encountered.
+
+Concurrently to the development of Software Defined Networking, the evolution of the perspectives offered Cloud computing created a user-centric model where an individual can request a fully functional software solutions, such as e-commerce solution, webmail server or file hosting service, where he can be in charge of the management and configuration of his own system without having to worry about the underlying infrastructure supporting the operation of the service he ordered.
+Providing the end user with its own network resources remains within the idea of an individualization of resource usage but may also allow the end user to manage its network according to the specific needs of the service he offers.
+It pertains to the service provider to maintain the availability of the services and resources allocated to the end user.
+
+Network resources, similarly to other physical resources can suffer from attacks and failures. A network switch can unexpectedly encounter a software error, a power outage, or an attacker may target the infrastructure to compromise the regular operations of the equipments. There are two general answers to these problems, prevention and correction. Prevention consists in deploying solutions prior to the problem, like backup resources or Intrusion Prevention Systems.
+However, prevention never is 100\% efficient and when the failure or the attack occurs, correction mechanisms will take over. We consider here the specific case of resource migration.
+
+Virtual Machine migration has proven to be an efficient answer to the issues we considered previously, and has already been extensively studied. From a security perspective, an attacker can exploit vulnerabilities in the hypervisor to impact the performance of the migration, sometimes making it impossible to achieve thus forcing the target Virtual Machine to remain unusable.
+Virtual Network migration works with a similar environment, and presents a similar attack surface.
 
 
-\subsection{Evaluating the security of the migration process}
+\subsection{Securing the migration process}
+With the trajectory taken by modern architectures, the dynamic migration of virtual networks will become a prerequisite for every infrastructure provider.
+The study and exploitation of the Virtual Network migration process remains very scarce from either an academic or industrial point of view. This can be explained by the following reasons:
+
+\begin{itemize}
+    \item the maturity of the technologies used to implement SDN based network virtualization is still at an early stage. The original standard for SDN is OpenFlow~\cite{Openflow-McKeown2008}, the first of its kind to be developed in Academia and followed by industry leaders to integrate it into their physical equipments. However, over the past couple of years, OpenFlow has shown limitations considering existing physical equipments that cannot be overcome without profound changes. The new needs that emerged as interest for OpenFlow grew, lead the way to a new paradigm: the programmability of the data plane. A popular implementation of that paradigm is P4~\cite{P4}.
+    
+    \item the exploitation of virtual networks remains a problem tackled by infrastructure providers, in opposition to virtual machines where the need for these is omnipresent and is not limited to big sized actors of the industry. In combination with the previous point, there is a limited number of existing solutions, and an even smaller number of industrial solutions that have evolved beyond the prototype status. This leaves researchers with a limited number of tools for them to explore and validate theories and security principles.
+\end{itemize}
+
+We advocate that the lack of research material should not be considered as a sufficient reason not to explore the security aspect of the virtual network migration process. This idea is supported by several acceptable reasons:
+
+\begin{itemize}
+    
+    \item The migration of virtual resources ensures a certain level of availability of these resources, and any interference with that compromises the respect of the SLA defined between the service provider and the end user.
+    
+    \item The attack surface of network hypervisor is similar to traditional hypervisors. End users, potentially malicious, exploit the resources allocated to them and the interactions with these resources directly impact the underlying physical infrastructure. Therefore, any malicious user that can wrongfully exploit these interactions may impact the migration process.
+
+    \item The migration of virtual networks exposes a specific attack surface due to the specificity of the information exchanged between the data plane and the control plane (\eg configuration information). Moreover, specific disruption techniques are only available during the migration.  
+    
+\end{itemize}
 
 \subsection{Research Issues}
 
