@@ -42,9 +42,9 @@
 \usepackage[nottoc,numbib]{tocbibind}
 
 \usepackage{setspace}
-% \setstretch{1.2}
-% %  MARGIN
-% \addtolength{\textwidth}{-0.4in}
+\setstretch{1.2}
+%  MARGIN
+\addtolength{\textwidth}{-0.4in}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 
@@ -75,7 +75,7 @@
 
 
 \begin{document}
-
+\pagenumbering{roman}
 
 %Header-Make sure you update this information!!!!
 % \noindent
@@ -91,7 +91,9 @@ Abstract
 \thispagestyle{empty}
 % \pagestyle{empty}
 
+
 \newpage
+\pagenumbering{arabic}
 \section{Introduction}
 \input{introduction.tex}
  
@@ -101,10 +103,12 @@ Abstract
 
 \newpage
 \section{Definitions}
+\label{sec:basic_def}
 \input{definitions.tex}
 
 \newpage
 \section{State of the Art}
+\label{sec:sota}
 % \FC{This introduction is not meant to stay, it's just a rough explanation of the plan}
 % We know for a fact that there is not much work done on the security of VN migration.
 % In order to prove the usefulness of my work, I start with a SotA of VM migration, and the related security issues.
@@ -167,6 +171,7 @@ In this section we consider three different techniques used to solve the RA prob
 
 \newpage
 \section{Formal modeling of the migration process and its security}
+\label{sec:formal_model}
 \subsection{Motivation}
 \input{model/model-motivation.tex}
 
@@ -199,7 +204,8 @@ In this section we consider three different techniques used to solve the RA prob
 \input{model/model-conclusion.tex}
 
 \newpage
-\section{Optimizing resource allocation}
+\section{Optimizing resource allocation of monitoring resources}
+\label{sec:RAprob}
 \subsection{Motivation}
 \input{RA/RA-motivation.tex}
 
@@ -215,7 +221,7 @@ In this section we consider three different techniques used to solve the RA prob
 
 \newpage
 \input{conclusion.tex}
-
+\label{sec:thesis_conclusion}
 \newpage
 \bibliography{references}{}
 \bibliographystyle{ieeetr}

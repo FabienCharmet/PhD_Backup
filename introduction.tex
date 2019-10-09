@@ -1,14 +1,15 @@
 \subsection{Motivation}
 
 The emergence of online services, and the cost-appealing solution to outsource the exploitation of computer infrastructures has led to a drastic increase in the needs for individual resources allocated to users. Decades ago, a simple observation made that having one physical equipment per user need was clearly impossible. Additionally, only a fraction of the power of each computer was actually used and a lot remained to be exploited.
-Exploiting those idle resources became a crucial research topic, that would pave the way to resource virtualization. There are three main resources that have been virtualized over the past decades are namely compute, storage and memory.
-These resources typically represent the basic needs for a computer.
+Exploiting those idle resources became a crucial research topic, that would pave the way to resource virtualization. 
+There are three main resources that have been virtualized over the past decades, namely compute, storage and memory.
+These resources typically represent the basic elements of a computer.
 Virtualization gained a lot of popularity, and led to the development of Cloud Computing, where computer infrastructure, business information and software applications would not be handle on site anymore but deployed instead in an external site, \ie the Cloud.
 
-Among all the resources that can be virtualized inside a computer system, the network resource have not benefited from the same performance in virtualization.
-There are several primitives that have existed for a long time now, such as VLAN, VRF or MPLS tags, but the heterogeneity of network equipments and the complexity in maintaining coherent network configurations on a large scale did not provide a profitable ground for these primitives to be turned into efficient network virtualization solutions.
+Among all the resources that can be virtualized inside a computer system, the network resource have not benefited from the same performance in virtualization than the other resources.
+There are several primitives that have existed for a long time now, such as VLAN, VRF or MPLS tags, but the heterogeneity of network equipments and the complexity in maintaining coherent network configurations on a large scale did not provide a suiable ground for these primitives to be turned into efficient network virtualization solutions.
 
-However, everything changed with the introduction of Software Defined Networking and the decoupling of the Control Plane from the Data Plane. Offering programmability to the Data Plane enabled applications developers to come up with new solutions that would not be hindered by the monolithic composition of the physical infrastructure and that could leverage a standard communication interface that will erase the previous difficulties they encountered.
+However, everything changed with the introduction of the Software Defined Networking paradigm and the decoupling of the decision making for routing the traffic from the physical equipments. Offering programmability to network routers and switches enabled application developers to come up with new solutions that would not be hindered by the monolithic composition of the physical infrastructure and that could leverage a standard communication interface that will erase the previous difficulties they encountered.
 
 Concurrently to the development of Software Defined Networking, the evolution of the perspectives offered Cloud computing created a user-centric model where an individual can request a fully functional software solutions, such as e-commerce solution, webmail server or file hosting service, where he can be in charge of the management and configuration of his own system without having to worry about the underlying infrastructure supporting the operation of the service he ordered.
 Providing the end user with its own network resources remains within the idea of an individualization of resource usage but may also allow the end user to manage its network according to the specific needs of the service he offers.
@@ -21,14 +22,22 @@ Virtual Machine migration has proven to be an efficient answer to the issues we 
 Virtual Network migration works with a similar environment, and presents a similar attack surface.
 
 
-\subsection{Securing the migration process}
+\subsection{Verifying the security of the migration process}
+The security of the migration process is relevant to both the user and the physical infrastructure.
+The information related to the virtual network as well as the user traffic is impacted by the migration. The configuration will be deployed inside physical equipments and holds information on how the virtual network will be operated, while the traffic of the user will be forwarded from the original physical set of resources towards the new one.
+
+
 With the trajectory taken by modern architectures, the dynamic migration of virtual networks will become a prerequisite for every infrastructure provider.
 The study and exploitation of the Virtual Network migration process remains very scarce from either an academic or industrial point of view. This can be explained by the following reasons:
 
 \begin{itemize}
-    \item the maturity of the technologies used to implement SDN based network virtualization is still at an early stage. The original standard for SDN is OpenFlow~\cite{Openflow-McKeown2008}, the first of its kind to be developed in Academia and followed by industry leaders to integrate it into their physical equipments. However, over the past couple of years, OpenFlow has shown limitations considering existing physical equipments that cannot be overcome without profound changes. The new needs that emerged as interest for OpenFlow grew, lead the way to a new paradigm: the programmability of the data plane. A popular implementation of that paradigm is P4~\cite{P4}.
+    \item The technologies used to implement SDN based network virtualization are still at an early stage of industrial standardization. The original standard implementation for SDN is OpenFlow~\cite{Openflow-McKeown2008}, the first of its kind to be developed in Academia and followed by industry leaders, integrating it into their physical equipments. However, over the past couple of years, OpenFlow has shown limitations with regard to existing networking needs. The need for a common interface to interact in a vendor-agnostic way with physical equipments highlighted a new problem: the limitations of packet forwarding capacities of each network router. 
     
-    \item the exploitation of virtual networks remains a problem tackled by infrastructure providers, in opposition to virtual machines where the need for these is omnipresent and is not limited to big sized actors of the industry. In combination with the previous point, there is a limited number of existing solutions, and an even smaller number of industrial solutions that have evolved beyond the prototype status. This leaves researchers with a limited number of tools for them to explore and validate theories and security principles.
+    \item The limitations and needs expressed in the previous point are summarized into a new paradigm: the programmability of the data plane.
+    This paradigm proposes to let the user defines how networking protocols should be processed by the physical equipments instead of relying on their fixed capacities. A popular implementation of this paradigm is P4~\cite{P4}.
+    This paradigm dates back to 2013 thus is at an early stage from the industrial point of view, which combines with OpenFlow's early development's stage.
+    
+    \item the exploitation of virtual networks remains a business operated by infrastructure providers like Amazon or Microsoft Azure, in opposition to virtual machines where the need of these is omnipresent and is not limited to big sized actors of the industry. In combination with the previous point, there is a limited number of existing solutions, and an even smaller number of industrial ones that have evolved beyond the prototype status. This leaves researchers with a limited number of possibilities for them to explore and validate theories and security principles.
 \end{itemize}
 
 We advocate that the lack of research material should not be considered as a sufficient reason not to explore the security aspect of the virtual network migration process. This idea is supported by several acceptable reasons:
@@ -36,17 +45,49 @@ We advocate that the lack of research material should not be considered as a suf
 \begin{itemize}
     
     \item The migration of virtual resources ensures a certain level of availability of these resources, and any interference with that compromises the respect of the SLA defined between the service provider and the end user.
+    Securing the migration becomes a business requirement to avoid financial and reputation liability (\eg reputation loss because of a data breach).
     
-    \item The attack surface of network hypervisor is similar to traditional hypervisors. End users, potentially malicious, exploit the resources allocated to them and the interactions with these resources directly impact the underlying physical infrastructure. Therefore, any malicious user that can wrongfully exploit these interactions may impact the migration process.
+    \item The attack surface of network hypervisor is similar to traditional hypervisors. End users, potentially malicious, manipulate the resources allocated to them and the interactions with these resources directly impact the underlying physical infrastructure. Therefore, any malicious user that can wrongfully exploit these interactions may impact the migration process and cause harm to the system.
 
-    \item The migration of virtual networks exposes a specific attack surface due to the specificity of the information exchanged between the data plane and the control plane (\eg configuration information). Moreover, specific disruption techniques are only available during the migration.  
+    \item The migration of virtual networks exposes a particular attack surface due to the specificity of the information exchanged between the data plane and the control plane (\eg configuration information). Moreover, specific disruption techniques are only available during the migration, like man-in-the-middle attacks to intercept and modify configuration information.  
+\end{itemize}
+
+
+
+\subsection{Research Issues}
+We illustrate in this section the emerging research issues based on the existing limitations and the incentives to secure the migration process.
+
+\begin{itemize}
+    \item \textbf{Formalization } The capacity to formally express the problem using a fine grained language is crucial. The formal model should be able to represent the different properties and events occurring during the migration.
+    There are several aspects covered by the migration, the information migrated, the different actors concerned because of it and the threat model corresponding to the attacker.
+    % There are several properties that should be modeled
+    
+    \item \textbf{Implementability } The properties thwat are expressed using the formalism, as previously described, rely on events in the real world. It is necessary that the formal model provides predicates that can be mapped with observable events in the physical infrastructure. This includes physical accesses, data modifications etc. We cover this topic in Section~\ref{sec:formal_model}
+    
+    \item \textbf{Realism } The application of a formal model to an applied, concrete operational scenario involves several practical requirements. The realism of the model will depend on the gap between the theoretical assumptions made during the modeling process and the practical requirements and limitations. It is paramount to be able to reduce this gap so the solution we propose can be practically implemented into a real software implementation. We further study this topic in Section~\ref{sec:RAprob} and take a closer look at the limitations of the existing literature. 
     
 \end{itemize}
 
-\subsection{Research Issues}
 
 \subsection{Contributions}
-We present in this thesis \FC{INSERT NAME HERE} 
+We present in this thesis the conception of \FC{INSERT NAME HERE}, a first order logical predicate temporal model used to verify the security of the migration of virtual network. 
 
+We have highlighted in the literature the different lacks from a research perspective and we have provided an extended list of security properties covering different aspects of the migration, the information that is impacted because of it, as well as the specific aspect of virtual network colocation, \ie co-residency. These properties are articulated around the description of the physical infrastructure and how virtual networks are supported by it.
+The combination of the description of the physical world, the virtual world, and finally the security properties related to both gives a formal model that can be used to verify the property during the migration. We translated our model into a LISP representation to be used by a theorem prover to verify the security of the migration. We chose SNARK~\cite{snark-Stickel2000}, a first order logical theorem prover using temporal reasoning to determine the validity of the different security properties and determining the responsible actors involved in the migration.
+% This model offers the opportunity to describe 
+
+Because of the limitations set by the formal model and how proofs are generated, we relaxed the hypothesis that the monitoring of the migration is perfect and omniscient, and we proposed resource allocation model aimed at determining the optimal placement of the monitoring in the physical infrastructure. We solved this problem by modeling the migration of a virtual network and the impact an attacker can have on it with two different formalism. We first explored the use of Game Theory applied to network security, We formulate our problem and consider different types of game and see their potential applicability to solve the resource allocation problem. Upon considering a wide variety of games, we outline the inadequacy of this formalism to determine the optimal resource allocation.
+We then investigate Markov Decision Process as a potential candidate. We define the parameters that should be accounted for during the migration and propose an attacker model that will try to compromise the migration. Finally, the dynamic solution computed by a Markov Decision Process is translated into a static resource allocation that fits our security need.
 
 \subsection{Organization}
+This thesis is structured as follows: 
+Section~\ref{sec:basic_def} introduces the different technical networking concepts investigating in this thesis, namely Software Defined Networking and network virtualization using Software Defined Networking. 
+
+Section~\ref{sec:sota} reviews the existing literature, from network hypervisors, the associated security issues and finally to the resource allocation problem. 
+
+Then, Section~\ref{sec:formal_model} presents the formal model, describing the different security properties, and the mapping between formal predicates and real life network events.
+
+We describe in Section~\ref{sec:RAprob} the resource allocation problem we formulated to tackle the realism challenge we previously highlighted.
+We presents two different approaches taken to tackle this problem.
+
+Finally, Section~\ref{sec:thesis_conclusion} provides an overview of the contributions and presents several research perspectives that constitute the logical evolution of this work. 
