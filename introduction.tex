@@ -24,8 +24,11 @@ Virtual Network migration works with a similar environment, and presents a simil
 
 \subsection{Verifying the security of the migration process}
 The security of the migration process is relevant to both the user and the physical infrastructure.
-The information related to the virtual network as well as the user traffic is impacted by the migration. The configuration will be deployed inside physical equipments and holds information on how the virtual network will be operated, while the traffic of the user will be forwarded from the original physical set of resources towards the new one.
+The information related to the virtual network as well as the user traffic is impacted by the migration. The configuration will be deployed inside physical equipments and holds information on how the virtual network will be operated, while the traffic of the user will be manipulated as the migration process goes on.
+The confidentiality or the integrity of these information can be compromised by disrupting the migration process,  an attacker may alter the configuration deployed by the hypervisor in order to gain access to sensitive information.
 
+On the other hand, networking nodes can also be target of attacks, as they support the operation of the virtual network migration.
+Similarly to information, the confidentiality and integrity of nodes can be affected by preventing them from operating properly (\eg  Man-in-the-middle), but their availability can also be impacted (\eg Denial of Service).
 
 With the trajectory taken by modern architectures, the dynamic migration of virtual networks will become a prerequisite for every infrastructure provider.
 The study and exploitation of the Virtual Network migration process remains very scarce from either an academic or industrial point of view. This can be explained by the following reasons:
@@ -52,6 +55,7 @@ We advocate that the lack of research material should not be considered as a suf
     \item The migration of virtual networks exposes a particular attack surface due to the specificity of the information exchanged between the data plane and the control plane (\eg configuration information). Moreover, specific disruption techniques are only available during the migration, like man-in-the-middle attacks to intercept and modify configuration information.  
 \end{itemize}
 
+The investigation of the security of the migration of virtual network is not an easy task, as the only closely related , LIME~\cite{Lime-Ghorbani2014}, work focuses on the transparency of the migration. The first requirement consists in describing the security. As we have shown through the attack surface, there are several aspects to consider. The second requirement is to implement these aspects under a specific technological context. In this thesis we consider the Software Defined Networking paradigm and the related network virtualization as an application context. Further definitions of these concepts is given in Section~\ref{sec:basic_def}. Finally, the application of security to this specific context should be done in a way that gives some applicability to the proposed solution. We depict some limitations through the literature review.
 
 
 \subsection{Research Issues}

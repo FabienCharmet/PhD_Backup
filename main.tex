@@ -42,9 +42,19 @@
 \usepackage[nottoc,numbib]{tocbibind}
 
 \usepackage{setspace}
-\setstretch{1.2}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=black, %choose some color if you want links to stand out
+}
+
+
+\setstretch{1.21}
 %  MARGIN
 \addtolength{\textwidth}{-0.4in}
+
+
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 
@@ -68,6 +78,8 @@
 \newcommand{\etal}{et al.\xspace}
 \newcommand{\eg}{e.g.,\xspace}
 
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
 
 \title{\LARGE \bf Preservation of security properties during the migration of virtual networks in a SDN environment}
 
@@ -97,9 +109,6 @@ Abstract
 \section{Introduction}
 \input{introduction.tex}
  
-\section{Glossary}
-
-\input{glossary.tex}
 
 \newpage
 \section{Definitions}
@@ -178,7 +187,7 @@ In this section we consider three different techniques used to solve the RA prob
 \subsection{Methodology}
 \input{model/model-methodology.tex}
 
-\subsection{Assumptions and simplifications}
+\subsection{Assumptions}
 \input{model/model-assumptions.tex}
 
 \subsection{Modeling physical and virtual networks}
@@ -228,6 +237,8 @@ In this section we consider three different techniques used to solve the RA prob
 
 \newpage
 \begin{appendices}
+\input{appendixes/glossary.tex}
+\newpage
 \input{appendixes/snark-code.tex}
 \newpage
 \input{appendixes/notations.tex}

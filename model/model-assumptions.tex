@@ -6,16 +6,25 @@ This implies that all the information necessary to compute the proof is present 
 This assumption holds in our case because we have implemented a simulator to evaluate our use case. However, applying the formal model on experimental prototypes or commercial solutions will not support this hypothesis, and we will treat this issue in the next chapter.
 
 We consider that all the predicates related to determining whether a user is allowed to access a specific node or data are generated using traditional Access Control solutions.
-There is no significant contribution to be made on this aspect.
+% There is no significant contribution to be made on this aspect.
 
-When a user accesses a node or a data, we do not differentiate the type of access being made, whether it was physical or remote.
-Similarly to the previous point, Access Control solutions are perfectly fit for these questions.
+% When a user accesses a node or a data, we do not differentiate the type of access being made, whether it was physical or remote.
+Similarly to the previous point, Access Control solutions are perfectly fit to handle accesses made by user to a node or a data.
 
 
 \subsubsection{Infrastructure}
-We consider that the physical links in the network infrastructure are safe.
-This suppose that on a practical point of view, congestion issues and man-in-the-middle attacks will only be considered on physical nodes in the infrastructure.
-We also make the assumption that a physical link will not be physically cut in half.
+Physical links in the network infrastructure are considered to exempt from performance issues and safe from a security perspective.
+This suppose that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks.
+
+\textbf{Performance issues:} A network node may suffer from congestion, insufficient CPU or memory shortage. 
+
+\textbf{Security issues}: A network node may be the victim of passive listening, man-in-the-middle, software vulnerabilities exploits.
+
+We also make the assumption that a physical link will not suffer any form of physical degradation.
+
+Theses assumptions will restrict the scope of some security properties to only the physical nodes because of their inapplicability to physical links.
+
+We also assume that two physical equipments are connected via a single physical link. This assumption is used in the definition of a networking path connecting two nodes separated by several hops.
 
 \subsubsection{Virtualization}
 The implementation of the virtualization layer depends on the solution considered.
@@ -23,4 +32,4 @@ Each solution comes with its own identifiers, flow space and limitations on how 
 We justify this choice that ultimately, the hypervisor will generate a set of flow rules that will be installed in the infrastructure and therefore these rules can be seen as the final representation of the formal predicates describing the embedding of the VN.
 
 Certain migration solutions and survivable VNE algorithms consider path splitting to provide robustness to the infrastructure.
-We exclude this specificity from the model because from a formal point of view and limit the embedding of a virtual link to a single physical set of nodes.
+We exclude this specificity from the model and limit the embedding of a virtual link to a single physical set of nodes.

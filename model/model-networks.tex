@@ -1,55 +1,90 @@
 We describe here the predicates used to represent the physical network and how virtual networks are embedded on it.
 
-For an eased reading for the rest of this section, we define some variable names used later on:
+For an eased reading of the rest of this section, we define some variable names:
 
-\begin{lstlisting}[backgroundcolor = \color{lightgray}]
-hname is the unique identifier of a network hypervisor.
-vnet is the unique identifier of a virtual network.
-pnode_name is the unique identifier of a physical node.
-plink_name is the unique identifier of a physical link.
-ppath_name is the unique identifier of a physical path.
-vnode_name is the unique identifier of a virtual node.
-vlink_name is the unique identifier of a virtual link.
-vpath_name is the unique identifier of a virtual path.
-ti is the unique identifier of a time interval.
-\end{lstlisting}
+\begin{itemize}
+    \item \textbf{hname} is the unique identifier of a network hypervisor
+    \item \textbf{vnet} is the unique identifier of a virtual network
+    \item \textbf{pnode\_name} is the unique identifier of a physical node
+    \item \textbf{plink\_name} is the unique identifier of a physical link
+    \item \textbf{ppath\_name} is the unique identifier of a physical path
+    \item \textbf{vnode\_name} is the unique identifier of a virtual node
+    \item \textbf{vlink\_name} is the unique identifier of a virtual link
+    % \item \textbf{vpath\_name} is the unique identifier of a virtual path
+    \item \textbf{ti} is the unique identifier of a time interval.
+\end{itemize}
+
+Each variable is distinct from each other by adding an integer at the end.
 
 \subsubsection{Physical network modeling}
 
 
 The physical network is composed of nodes and links. We define two temporal predicates:
 
-\begin{lstlisting}[backgroundcolor = \color{lightgray}]
-physical_node(node_name,ti)
-physical_link(plink_name,node_name1,node_name2,ti)
-physical_path(ppath_name,node_name1,node_name2,ti)
-\end{lstlisting}
+physical\_node(\textbf{pnode\_name1},\textbf{ti1})
 
-These predicates represent the existence of each element and the duration for the validity of the predicate.
+This predicate declare the existence of a physical node named \textbf{pnode\_name1} and the node exist during time interval \textbf{ti1}.
 
-For instance, if node1 has a failure at $t_1$ and only comes back available again at $t_2$ until the next failure/attack at $t_3$ happens then we obtain the following predicates:
+physical\_link(\textbf{plink\_name1}|\textbf{hname1},\textbf{pnode\_name1},\textbf{pnode\_name2},\textbf{ti1})
 
-\begin{lstlisting}[backgroundcolor = \color{lightgray}]
-physical_node(node1,[0,t_1])
-physical_node(node1,[t_2,t_3])
-\end{lstlisting}
+This predicate declare the existence of a physical link named \textbf{plink\_name1}, linking physical node \textbf{pnode\_name1} (or hypervisor \textbf{hname1}) and \textbf{pnode\_name2}, and the link exist during time interval \textbf{ti1}.
 
-$t_3$ could be seen as $+\infty$ if no other incident occurs on node1.
+physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1}|\textbf{hname1},\textbf{pnode\_name2},\textbf{ti1})
+
+This predicate evaluates the existence of a physical path named \textbf{ppath\_name1} connecting \textbf{pnode\_name1} (or hypervisor \textbf{hname1}) and \textbf{pnode\_name2}, and the path exists during time interval \textbf{ti1}. 
+
+Similarly to a physical link connecting two nodes, a physical path represent the set of nodes and links establishing the connection between two end points that may be separated from each other by several physical nodes and links.
+The case of a physical path directly connecting two nodes (or a node and an hypervisor) is allowed.
+
+A physical path is given a unique identifier and is associated with a set of physical links. 
+This choice of modeling allows to distinguish the different paths possible to connect two nodes. 
+We represent this association with a predicate:
+
+part\_of\_ppath(\textbf{ppath\_name1},\textbf{plink\_name1},\textbf{ti1})
+
+This predicates associates physical link \textbf{plink\_name1} to physical path \textbf{ppath\_name1} during time \textbf{ti1}.
+
+We illustrate physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3},\textbf{ti1}) with a toy example:
+
+physical\_node(\textbf{pnode\_name1},\textbf{ti1})\\
+physical\_node(\textbf{pnode\_name2},\textbf{ti1})\\
+physical\_node(\textbf{pnode\_name3},\textbf{ti1})\\
+physical\_link(\textbf{plink\_name1},\textbf{pnode\_name1},\textbf{pnode\_name2},\textbf{ti1})\\
+physical\_link(\textbf{plink\_name2},\textbf{pnode\_name2},\textbf{pnode\_name3},\textbf{ti1})\\
+physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3},\textbf{ti1})\\
+part\_of\_ppath(\textbf{ppath\_name1},\textbf{plink\_name1},\textbf{ti1})\\
+part\_of\_ppath(\textbf{ppath\_name1},\textbf{plink\_name2},\textbf{ti1})
+
+Therefore physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3},\textbf{ti1}) holds \textbf{true}.
+
+% \textbf{Precisions on the use of time intervals}
+
+% The time interval used in these predicates represents the duration during which the predicates holds true.
+
+% For instance, if node1 has a failure at $t_1$ and only comes back available again at $t_2$ until $t_3$. We obtain the following predicates:
+
+
+% physical\_node(node1,[0,t\_1])
+% physical\_node(node1,[t\_2,t\_3])
+
+
+% $t_3$ could be seen as $+\infty$ if no other incident occurs on node1.
 
 
 \subsubsection{Network Hypervisor modeling}
 The network hypervisor is connected to the different physical nodes, and administrates them, installs flow rules \etc.
 
-\begin{lstlisting}[backgroundcolor = \color{lightgray}]
-hypervisor(hname,ti)
-hypervisor_of(hname,pnode,ppath,ti)
-\end{lstlisting}
 
-The predicate hypervisor\_of affects an hypervisor to a physical node, and affect a path between them.
-A physical path where the source and destinations nodes are identical implies a direct hop from the hypervisor to the node.
+hypervisor(\textbf{hname1},\textbf{ti1})
 
-The network hypervisor established a communication with the nodes in the infrastructure.
-This communication is carried by a physical path, the "Hypervisor - Switch link`` as depicted in Figure~\ref{fig:VNE-example-model}.
+This predicate declare the existence of the hypervisor \textbf{hname1} during time interval \textbf{ti1}.
+
+hypervisor\_of(\textbf{hname1},\textbf{pnode\_name1},\textbf{ppath\_name1},\textbf{ti1})
+
+This predicate affects hypervisor \textbf{hname1} to a physical node \textbf{pnode\_name1}, and sets \textbf{ppath\_name1} as the physical path between them during time interval \textbf{ti1}.
+
+The network hypervisor establishes a communication with the nodes in the infrastructure using physical paths.
+These paths are illustrated by the "Hypervisor - Switch links`` as depicted in Figure~\ref{fig:VNE-example-model}.
 In this figure the hypervisor is directly connected to all the nodes of the infrastructure.
 
 
@@ -57,24 +92,39 @@ In this figure the hypervisor is directly connected to all the nodes of the infr
 \subsubsection{Virtual network modeling}
 We extend the previous predicates with information related to the tenant of the virtual network and how it is embedded on top of a set of physical resources.
 
+virtual\_network(\textbf{vnet\_name1},\textbf{ti1})
 
-\begin{lstlisting}[backgroundcolor = \color{lightgray}]
-virtual_network(vnet_name,ti)
-virtual_node(vnode_name,vnet_name,ti)
-virtual_link(vlink_name,vnode_name1,vnode_name2,vnet_name,ti)
-virtual_path(vpath_name,vnode_name1,vnode_name2,ti)
-\end{lstlisting}
+This predicate declares the existence of a virtual network \textbf{vnet\_name1} during time interval \textbf{ti1}.
+
+virtual\_node(\textbf{vnode\_name1},\textbf{vnet\_name1},\textbf{ti})
+
+This predicate declares the existence of a virtual node \textbf{vnode\_name1} belonging to virtual network \textbf{vnet\_name1} during time interval \textbf{ti1}.
+
+virtual\_link(\textbf{vlink\_name1},\textbf{vnode\_name1},\textbf{vnode\_name2},\textbf{vnet\_name1},\textbf{ti1})
+
+This predicate declares the existence of a virtual link \textbf{vnode\_link1} between \textbf{vnode\_name1} and \textbf{vnode\_name2} belonging to virtual network \textbf{vnet\_name1} during time interval \textbf{ti1}.
+
+% virtual\_path(\textbf{vpath\_name1},\textbf{vnode\_name1},\textbf{vnode\_name2},\textbf{ti1})
 
 \subsubsection{Embedding modeling}
 Each virtual element, node or link, is embedded on a set of physical resources.
 Therefore, there can be one or more predicates used to describe the embedding of a virtual element.
 
-\begin{lstlisting}[backgroundcolor = \color{lightgray}]
-node_embedding(vnode_name,pnode_name,ti)
-node_embedding(vnode_name,plink_name,ti)
-link_embedding(vlink_name,pnode_name,ti)
-link_embedding(vlink_name,plink_name,ti)
-\end{lstlisting}
+
+node\_embedding(\textbf{vnode\_name1},\textbf{pnode\_name1},\textbf{ti1})
+
+This predicate affects physical node \textbf{pnode\_name1} to the embedding of virtual node \textbf{vnode\_name1} during time interval \textbf{ti1}.
+
+node\_embedding(\textbf{vnode\_name1},\textbf{plink\_name1},\textbf{ti1})
+
+This predicate affects physical link \textbf{plink\_name1} to the embedding of virtual node \textbf{vnode\_name1} during time interval \textbf{ti1}.
+
+link\_embedding(\textbf{vlink\_name1},\textbf{pnode\_link1},\textbf{ti1})
+
+This predicate affects physical link \textbf{plink\_name1} to the embedding of virtual link \textbf{vnode\_link1} during time interval \textbf{ti1}.
+
+We outline that a virtual link is a succession of physical links, therefore we do not model its embedding using solely a physical node.
+
 
 \subsubsection{Example for modeling physical and virtual networks}
 
@@ -85,53 +135,52 @@ There is no failure in the system nor any attack, therefore, we consider the tim
 
 The current infrastructure gives the following formal declaration:
 
-\begin{lstlisting}[backgroundcolor = \color{lightgray}]
-virtual_network(vSDN1,ti)
-virtual_network(vSDN2,ti)
-virtual_node(V1,vSDN1,ti)
-virtual_node(V2,vSDN1,ti)
-virtual_node(V3,vSDN1,ti)
-virtual_node(V4,vSDN2,ti)
-virtual_node(V5,vSDN2,ti)
-virtual_node(V6,vSDN2,ti)
-virtual_link(vlink1,V1,V2,vSDN1,ti)
-virtual_link(vlink2,V1,V3,vSDN1,ti)
-virtual_link(vlink3,V4,V5,vSDN2,ti)
-virtual_link(vlink4,V5,V6,vSDN2,ti)
-physical_node(P1,ti)
-physical_node(P2,ti)
-physical_node(P3,ti)
-physical_node(P4,ti)
-physical_node(P5,ti)
-physical_node(P6,ti)
-physical_link(plink1,P1,P2,ti)
-physical_link(plink2,P1,P3,ti)
-physical_link(plink3,P2,P4,ti)
-physical_link(plink4,P3,P4,ti)
-physical_link(plink5,P4,P5,ti)
-physical_link(plink6,P4,P6,ti)
-physical_path(ppath1,P1,P1,ti)
-physical_path(ppath2,P2,P2,ti)
-physical_path(ppath3,P3,P3,ti)
-physical_path(ppath4,P4,P4,ti)
-physical_path(ppath5,P5,P5,ti)
-physical_path(ppath6,P6,P6,ti)
-hypervisor(hyp1,ti)
-hypervisor_of(hyp1,P1,ppath1,ti)
-hypervisor_of(hyp1,P2,ppath2,ti)
-hypervisor_of(hyp1,P3,ppath3,ti)
-hypervisor_of(hyp1,P4,ppath4,ti)
-hypervisor_of(hyp1,P5,ppath5,ti)
-hypervisor_of(hyp1,P6,ppath6,ti)
-node_embedding(V1,P1,ti)
-node_embedding(V4,P1,ti)
-node_embedding(V2,P2,ti)
-node_embedding(V3,P3,ti)
-node_embedding(V5,P4,ti)
-node_embedding(V6,P5,ti)
-link_embedding(vlink1,plink1,ti)
-link_embedding(vlink2,plink2,ti)
-link_embedding(vlink3,plink1,ti)
-link_embedding(vlink3,plink4,ti)
-link_embedding(vlink4,plink5,ti)
-\end{lstlisting}
+
+virtual\_network(vSDN1,ti1)\\
+virtual\_network(vSDN2,ti1)\\
+virtual\_node(V1,vSDN1,ti1)\\
+virtual\_node(V2,vSDN1,ti1)\\
+virtual\_node(V3,vSDN1,ti1)\\
+virtual\_node(V4,vSDN2,ti1)\\
+virtual\_node(V5,vSDN2,ti1)\\
+virtual\_node(V6,vSDN2,ti1)\\
+virtual\_link(vlink1,V1,V2,vSDN1,ti1)\\
+virtual\_link(vlink2,V1,V3,vSDN1,ti1)\\
+virtual\_link(vlink3,V4,V5,vSDN2,ti1)\\
+virtual\_link(vlink4,V5,V6,vSDN2,ti1)\\
+physical\_node(P1,ti1)\\
+physical\_node(P2,ti1)\\
+physical\_node(P3,ti1)\\
+physical\_node(P4,ti1)\\
+physical\_node(P5,ti1)\\
+physical\_node(P6,ti1)\\
+physical\_link(plink1,P1,P2,ti1)\\
+physical\_link(plink2,P1,P3,ti1)\\
+physical\_link(plink3,P2,P4,ti1)\\
+physical\_link(plink4,P3,P4,ti1)\\
+physical\_link(plink5,P4,P5,ti1)\\
+physical\_link(plink6,P4,P6,ti1)\\
+physical\_path(ppath1,P1,hname1,ti1)\\
+physical\_path(ppath2,P2,hname1,ti1)\\
+physical\_path(ppath3,P3,hname1,ti1)\\
+physical\_path(ppath4,P4,hname1,ti1)\\
+physical\_path(ppath5,P5,hname1,ti1)\\
+physical\_path(ppath6,P6,hname1,ti1)\\
+hypervisor(hyp1,ti1)\\
+hypervisor\_of(hyp1,P1,ppath1,ti1)\\
+hypervisor\_of(hyp1,P2,ppath2,ti1)\\
+hypervisor\_of(hyp1,P3,ppath3,ti1)\\
+hypervisor\_of(hyp1,P4,ppath4,ti1)\\
+hypervisor\_of(hyp1,P5,ppath5,ti1)\\
+hypervisor\_of(hyp1,P6,ppath6,ti1)\\
+node\_embedding(V1,P1,ti1)\\
+node\_embedding(V4,P1,ti1)\\
+node\_embedding(V2,P2,ti1)\\
+node\_embedding(V3,P3,ti1)\\
+node\_embedding(V5,P4,ti1)\\
+node\_embedding(V6,P5,ti1)\\
+link\_embedding(vlink1,plink1,ti1)\\
+link\_embedding(vlink2,plink2,ti1)\\
+link\_embedding(vlink3,plink1,ti1)\\
+link\_embedding(vlink3,plink4,ti1)\\
+link\_embedding(vlink4,plink5,ti1)

@@ -24,9 +24,9 @@ We propose the following reference architecture to highlight the important featu
 \input{figures/nvh-archi.tex}
   
 Figure~\ref{fig:reference-archi-nh} presents the the reference architecture of a network hypervisor supporting a secure virtual network migration.
-On a top-down perspective, there are three different levels in the reference architecture.
-The tenant level, where end-users can deploy their own applications, SDN controllers, etc.
-The hypervisor level, including all the components required to achieve network virtualization and present the tenant with an abstract view.
+On a top-down perspective, there are three different levels in the virtualization architecture.
+The tenant level, where end-users can deploy their own applications, SDN controllers, and interact with their virtual network.
+The hypervisor level, including all the components required to achieve network virtualization, present the tenant with an abstract view, and interact with the physical infrastructure.
 The lowest level includes all the networking equipments, like SDN-enabled switches and routers.
 
 \paragraph{Control Plane Abstraction}
@@ -57,7 +57,7 @@ A particular approach is when the tenants only requires one virtual node to inte
 
 
 \subparagraph{\textbf{Flowspace}}\textbf{}\\
-The flowspace of a virtual network defines the range of values in the header fields a tenant can use in his addressing and routing schemes or if he can exploit the whole address range and other header fields.
+The flowspace of a virtual network defines the range of values in the header fields that a tenant can use in his addressing and routing schemes or if he can exploit the whole address range and other header fields.
 This includes MAC addresses, IP addresses, transport layer ports, VLAN ID etc.
 FlowVisor~\cite{FlowVisor-Sherwood2009} requires to share the flowspace among all tenants while other solutions like OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014} offer a full address space virtualization.
 
@@ -67,13 +67,14 @@ These resources are dissociated because they serve two distinct goals.
 CPU provides computation power for incoming packets and defines the forwarding capacity.
 Flow tables store the rules each tenant had inserted in the node.
 Therefore one tenant can have high CPU percentage with a small flow table if the point is to switch multiple packets to a small set of sources and destination.
+The hypervisor level, including all the components required to achieve network virtualization, present the tenant with an abstract view, and interact with the physical infrastructure.
 
 \subparagraph{\textbf{Link Resources}}\textbf{}\\
-We consider here the bandwidth and the buffer
+We consider here the bandwidth and the buffer available to process packets.
 Abstracting the physical link resources is done by giving access to the bandwidth and the links' buffers to the tenants.
 As presented for the node resources, link resources can be shared independently.
-Depending on the usage of the resources desired by each tenant, one might big buffers for reception but a low bandwidth to transmit the packets.
-Another only requires a minimum bandwidth on each virtual link.
+For instance, depending on the usage of the resources desired by each tenant, big buffers can be used to limit packets drop or a low bandwidth to forward the packets.
+Another tenant may only requires a minimum bandwidth on each virtual link.
 
 \paragraph{Virtual Network Embedding Component}
 
@@ -144,6 +145,36 @@ Depending on the type of attack, the mitigation can take several form.
 In case of a DoS attack, the security component would rely on the VNEC to provide an adequate migration scheme but it can also improve the performance of the VNEC by leveraging security techniques to determine a better substrate. 
 If the configuration of physical nodes has been altered, the redeployment of configuration rules could take into account the location of the attacker.
 
+\subsubsection{Workflows in the reference architecture}
+In this section we describe the different information flows illustrated by Figure~\ref{fig:reference-archi-nh}.
+
+\circled{1} Tenant - CPAC: This flow is mainly composed of composed of commands sent by the tenant and the view of the virtual network sent by the hypervisor. Additional traffic may include specific notifications (\eg security and performance alerts).
+
+\circled{2} CPAC - VNEC: The CPAC transmits requests for new virtual networks to be deployed in the physical infrastructure, and the VNEC returns whether or not the request is accepted.
+
+\circled{3} CPAC - Monitoring: The CPAC forwards the requests sent by the tenant to the monitoring module, for logging and security purposes. 
+
+\circled{4} CPAC - DPAC: The CPAC forwards flow rules from the tenant to the DPAC that will translate virtual identifiers to the physical ones and install these rules in the physical infrastructure.
+
+\circled{5} Security - CPAC: The security component raises alerts by analyzing networking events and tenants requests.
+
+\circled{6} VNEC - RIC: The VNEC interacts with the RIC to verify the availability of resources to compute the embedding of the requested virtual network.
+
+\circled{7} Monitoring - VNEC: The monitoring component transmits to the VNEC a migration request in case of a failure in the infrastructure.
+
+\circled{8} VNEC - DPAC: The VNEC transmits to the DPAC the flow rules corresponding to the virtual network that must be deployed in the infrastructure, whether it is a new request or a migration.
+
+\circled{9} Monitoring - Security: The monitoring forwards to the security component suspicious tenants' requests or networking events for further processing.
+
+\circled{10} RIC - Monitoring: This flow is composed of performance metrics used by the RIC to verify the proper isolation of resources in the infrastructure.
+
+\circled{11} RIC - DPAC: This flow represents the configuration sent by the RIC to the DPAC to ensure the proper isolation of resources in the infrastructure.
+
+\circled{12} Monitoring - Infrastructure: This flow is composed of topology discovery messages, performance metrics and networking events.
+
+\circled{13} DPAC - Security: The security component sends to the DPAC counter-measures to be deployed in the infrastructure.
+
+\circled{14} DPAC - Infrastructure: This flow is composed of flow rules deployed by the DPAC and networking messages sent by the infrastructure (\eg topology discovery, node failure \etc.).
 
 % \paragraph{Workflows}
 % In this section, we describe how the different components interacts together.

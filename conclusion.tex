@@ -1,5 +1,79 @@
 \section{Conclusion}
-\FC{Leveraging security techniques to determine a better substrate for the migration during an attack }
-\FC{Check reference architecture -> security component ideas}
-\FC{Extending model for multi user topology etc.}
-\FC{Verifying specific predicates}
+Network virtualization offers new service possibilities, in which a user can define his own topology to interconnect virtual machines to operate his business.
+Virtual Network migration is a process used by an infrastructure provider to ensure a certain level of quality of service for the user.
+This common maintenance operation may occur due to a physical failure of a network equipment or because the network is under an ongoing attack.
+
+Existing literature presents an extensive security study of Virtual Machines and the migration process, evaluating existing migration solutions and considering different types of attackers. We advocated that the virtualization of the network resource is subject to a similar attack surface because of the nature of the virtualization mechanism. This similarity still stands for the migration process itself, and despite the scarce literature on the topic, consequences on data security violations remain an important matter.
+
+In this thesis we investigated the security of the migration of a virtual network in a SDN environment. 
+We sought to answer three questions regarding this matter:
+
+\begin{itemize}
+    \item How can the security of the migration be characterized ?
+    \item How can the security of the migration be verified ?
+    \item How does this characterization stands in a realistic environment ?
+\end{itemize}
+
+We focused on a formal approach, providing a model to express security properties, how to observe them and how to formally verify them. 
+We covered a broad attack surface, considering both the data impacted by the migration as well as the underlying physical infrastructure supporting the operation of the virtualization and the migration process. 
+This approach is based on the hypothesis that it is possible to detect every attack and monitor every network activity in the infrastructure. 
+We proposed to alleviate this hypothesis to enable the model to be used in a realistic environment, and we formulated a resource allocation problem to do so.
+
+The first contribution presented in Section~\ref{sec:formal_model} presents a formal model to characterize the security of the migration process. We considered several security properties and described them using a temporal first order logic. Traditional properties like Confidentiality, Integrity and Availability are described, and we presented a novel property to model the colocation ratio between virtual network users: the co-residency. Co-residency is a security metric we recommend should be monitored to restrict the attack surface between two end users.
+We implemented our model in LISP, using the theorem prover SNARK~\cite{snark-Stickel2000}.
+We then mapped these logical predicates with actual networking events and attacks.
+We have proven the feasibility of the formal verification by implementing a realistic use case.
+We considered an attacker capable of rendering part of the network infrastructure unavailable and capable of accessing or modifying sensitive information.
+Results show that the attack is detected by the theorem prover and when it occured.
+
+Related work on this topic provides several models of networks and interactions between different actors in a communication. The model we proposed fills the gap introduced by network virtualization, the embedding of virtual resources on top of physical ones, the migration of a virtual network and the related security. 
+
+Section~\ref{sec:RAprob} illustrates two different approaches we have envisioned to solve the resource allocation problem. The first approach consists in modeling the problem using Game Theory, the second uses a Markov Decision Process to determine the optimal set of network nodes to monitor the infrastructure.
+
+Game Theory considers the interactions between several players, here a defender and an attacker.
+The attacker attacks the migration process under a constraint budget. Similarly, the defender can either use deception or monitoring techniques to protect the infrastructure and the migration.
+The different types of games explored have proven to be inadequate in their formalism or resolution to accurately represent and solve the resource allocation problem.
+
+A Markov Decision Process considers the interactions between an agent and a system, here the defender and its infrastructure. We modeled the evolution of the system by giving the possibility to the defender to either deploy or remove monitoring resources from a node at a time throughout the migration. We determine the rewards by computing the impact of attacks on the migration and evaluating how many nodes are actively participating in the detection of the current attack.
+We consider an threat model similar to the one presented in Section~\ref{sec:formal_model}, and we implement attacks with the use of the transitions between states, depending on the likelihood of a node being the target of the next attack. 
+Results show that the physical topology and the number of attackers are the main criteria impacting the allocation of monitoring resources, while the probability of detecting an attack was only playing a minor part in the process. 
+Markov Decision Processes have been used for resource allocation problems in the literature, but their use for security purposes remains limited. Our contribution illustrates the capacities of MDP to simulate the behaviour of an attacker without having to formally integrate him as an extra agent, comparatively to the game we proposed.
+
+The focus of our study was centered around the physical infrastructure and the embedding of virtual network on top of it. We have illustrated the exploitation of the migration process using several existing network attacks~\cite{Sphinx-Dhawan2015,vulnflow-Costa2013}.
+There are two main security aspects that have been left out of this study, namely the interactions between the tenant and the hypervisor, as well as the security of the internal components of the network hypervisor.
+
+Additionally, the focus of the resource allocation problem was set on the defender's point of view, while putting the impact of the attacker's capacities on transition and rewards. This aspect may not be suited for other types of attacks that could be more complex, when the attack of one node is multi-staged for instance.
+
+The security of the migration of virtual networks constituted a challenging research topic from a security perspective, because of the recent advances in networking techniques and the lack of specific formalisms and related solutions. We proposed a model in this thesis that sought to be the first step towards advanced evaluation models. We also focused on the applicability of this model and problem resolution tools to be usable in a realistic environment. From this starting point, we envision several research leads that can be explored to complete this work on different aspects.
+
+\subsection{Perspectives for future work}
+
+The model we have presented earlier describes the traditional security properties considered in a computer system. We proposed a first property specifically related to virtual networks: the co-residency. Exploiting this property can be done by monitoring the number of migrations happening in the infrastructure, and determine which end users are impacted. Co-residency can be seen as a threshold when a user seems to share physical resources with another too often, potential sign of a malicious behaviour.
+The network hypervisor can implement virtual network migration to reduce the co-residency between users, thus limiting the existing attack surface, similarly to the works presented in~\cite{nomad-Moon2015b,malicious-atya2017}.
+
+Live migration of Virtual Machines is a well studied topic, and the characterization of the network behaviour during the migration has been considered from a security point of view.
+Achleitner~\etal~\cite{stealth-Achleitner2017a} proposed to combine the migration traffic with noise to make the migration process undetectable. Investigating the behavior of network nodes as well as characterizing the network traffic with a statistical model may serve as a basis for the definition of a stealth property related to the network migration process. 
+
+Upon the characterization of the security properties, implementing secure migration primitives becomes the second step toward a secured migration process. These primitives describe how the virtual network configuration is deployed inside the physical infrastructure, and propose specific metrics and probes to be used in the generation of the execution trace. Obvious cryptographic protocols will partly answer the question but these may not be applicable everywhere and other properties are not fit for this solution. We envision a migration scheduling algorithm as a counter measure to the information collection capacities of the attacker considered in the threat model of this thesis.
+
+The resource allocation problem was modeled to consider the migration of only one virtual network at a time. While this assumptions holds because the attacker is targeting a single user, it is weakened when several virtual networks are migrated simultaneously. Introducing uncertainty about the potential targets in the algorithm makes it more difficult to determine the optimal monitoring nodes. A solution to this problem is to construct a decision tree to represent the possible attacks and the corresponding targets, depending on the embedding of each virtual network.
+
+As we have previously highlighted, the attack surface considered in this thesis focused on preventing unlawful manipulation or access to sensitive traffic or network equipments. Some network hypervisors focused on resource isolation, to maintain the fair use between users. A potential way to compromise the migration process is to throttle the migration process by impacting either the physical network resources available and/or the communication between tenants and the hypervisor to disrupt the hypervisor from the control plane side.
+
+The complexity incurred by the number of states generated to compute the optimal policy of a Markov Decision Process represents a computationally heavy problem for the implementation of our work inside a Cloud infrastructure composed of thousands of network nodes, virtual machines and tenants. We may investigate this aspect by proposing the clustering of the infrastructure into small kernels and apply our MDP resolution on each kernel. Then, we would propose a combining technique that would tie kernels together.
+
+The modeling of the MDP and the different components supposed a uniformity in the detection capacity and behaviour of elements in the infrastructure (\eg attacks have identical execution traces independently from the attack source or the underlying network equipments). We propose to evaluate the behaviour of physical network equipments under realistic attack scenarios and propose a categorization from collected data. This can be then leveraged to augment the representation of compromised nodes during the migration.
+
+We may consider Partially Observable Markov Decision Processes (POMDP) to extend the impact of network attacks.
+The formalism used in this thesis supposes that the agent is immediately aware of which node has been compromised by the attacker. The use of a POMDP introduces uncertainty in the decision process due to the inability of the agent to accurately determine which node has been compromised on a real-time basis. POMDP would also imply to explore new directions for the definition of the \textit{a priori} deployment.
+
+% We improved the design of our verification model for its use in a realistic context by considering its deployment under an imperfect and resource constrained environment. 
+
+% More precisely, we have proposed a formal representation of the security, mapped this model with concrete networking events and generated a formal proof of the verification of the security. 
+
+% Finally, we designed a resource allocation problem to alleviate the hypothesis made for the formal model that network monitoring was perfect and cost free. We studied two formalism to solve this problem, namely Game Theory and Markov Decision Processes.  
+% \FC{Leveraging security techniques to determine a better substrate for the migration during an attack }
+% \FC{Check reference architecture -> security component ideas}
+% \FC{Extending model for multi user topology etc.}
+% \FC{Verifying specific predicates}
+% \FC{dynam}
