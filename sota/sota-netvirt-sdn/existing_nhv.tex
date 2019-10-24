@@ -250,3 +250,4 @@ LiteVisor is divided in three components illustrated in Figure~\ref{fig:liteviso
 The second component is the LITE manager, responsible for aggregating flows sent by the tenant's controller, as well as deploying them on the physical switches. 
 The last component is the migration manager. When a VM is migrated, the cloud orchestration system notifies the migration manager about the new location of the VM. The manager then computes a new physical flow that will be transmitted to the LITE manager, which in turns decides if it can be aggregated with an existing flows or deploys the according configuration rules in the physical infrastructure.
 
+Table~\ref{tab:existing-nhv} summarizes existing hypervisors, the type of abstraction used to present each tenant with his virtual network and whether or not the hypervisor handles the migration of virtual networks.

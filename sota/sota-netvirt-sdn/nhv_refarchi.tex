@@ -81,17 +81,24 @@ Another tenant may only requires a minimum bandwidth on each virtual link.
 The Virtual Network Embedding Component (VNEC) is in charge of determining the optimal set of physical resources to embed a virtual network and to handle the case where a virtual network must be migrated due to failure of a switch or because of an attack on the system.
 
 \subparagraph{Virtual Network Embedding}
-The Virtual Network Embedding (VNE) is a resource allocation problem, linked with Linear Programming and optimization techniques.
+The Virtual Network Embedding (VNE) is a resource allocation problem related to optimization techniques.
 The use of VNE algorithm to automatically deploy virtual networks is compulsory to avoid manual and impractical configuration operations.
-The VNEC is in charged of keeping track of available resources so he can determine whether or not to accept the virtual network creation request.
-The set of physical resources may also be subject to location or security constraints.
-A standard user requirements can be either resources or placement.
-For instance, a user will need a certain amount of nodes, connected with a minimum bandwidth with the possibility to automatically migrate the topology in case of failures.
-More specific constraints would be the physical location of the topology.
-It can happen the traffic may not go through certain physical nodes.
-This placement problem is similar to virtual machine placement since there might be legal limitations to ensure the data is staying in a closed environment.
-Distributed network hypervisors or multi-cloud hypervisor may be subject to this constraint since network equipments are geographically distributed.
-Security constraints include the availability of cryptography to cipher the communication end to end, the possibility to refuse to host a virtual network on the same physical substrate or even the same datacenter that another virtual network etc.
+The VNEC is in charge of keeping track of available resources so it can determine whether or not to accept the virtual network creation request.
+The tenant's request is represented by a virtual network, and can include specific requirements such as minimum bandwidth, specific flow table size or the use of cryptographic functions on each virtual link.
+The tenant may also specify whether or not his virtual network should be migrated if needed, and if a degraded mode is accepted during the recovery of normal operations.
+The embedding of a virtual network can be constrained by the physical location of the underlying nodes.
+Specific legislation may forbid confidential data from leaving the physical space of a country for instance.
+On a similar aspect, a user may not want to share the same physical substrate with other tenants.
+Distributed network hypervisors or multi-cloud hypervisor may be subject to such constraint since network equipments are geographically distributed.
+
+% The set of physical resources may also be subject to location or security constraints.
+% A standard user requirements can be either resources or placement.
+% For instance, a user will need a certain amount of nodes, connected with a minimum bandwidth with the possibility to automatically migrate the topology in case of failures.
+% More specific constraints would be the physical location of the topology.
+% It can happen the traffic may not go through certain physical nodes.
+% This placement problem is similar to virtual machine placement since there might be legal limitations to ensure the data is staying in a closed environment.
+
+% Security constraints include the availability of cryptography to cipher the communication end to end, the possibility to refuse to host a virtual network on the same physical substrate or even the same datacenter that another virtual network etc.
 
 \subparagraph{Virtual Network Migration}
 In order to answer to failures, attacks, and optimization issues, it is possible to migrate the virtual network on a different set of physical resources. 
@@ -103,7 +110,7 @@ For instance, depending on the Service Level Agreement (SLA) between a particula
 \paragraph{Resource Isolation}
 The resource isolation component (RIC) ensures tenants that they are served the amount of resources they have requested.
 It ensures that each tenant does not exceed the amount of resources they have been allocated.
-FlowVisor-based hypervisors~\cite{FlowVisor-Sherwood2009,ADVisor-Salvadori2012,VeRTIGO-Corin2012a,EnhancedFV-Min2012,SlicesIsolator-El-Azzab2011,DoubleFV-Yin2013} all implement bandwidth and CPU isolation, and some tackle advanced issue on resource sharing. One of the problems with implementing resource isolation is that the hypervisor relies on vendor specific implementation of these isolation features, thus leading to heterogeneity problems.
+FlowVisor-based hypervisors~\cite{FlowVisor-Sherwood2009,ADVisor-Salvadori2012,VeRTIGO-Corin2012a,EnhancedFV-Min2012,SlicesIsolator-El-Azzab2011,DoubleFV-Yin2013} all implement bandwidth and CPU isolation, and some tackle advanced issue on resource sharing. One of the problems with implementing resource isolation is that the hypervisor relies on vendor specific implementation of these isolation features, thus leading to heterogeneity problems if the implementation varies or if the feature is missing from an equipment.
 
 
 \paragraph{Monitoring}
@@ -112,13 +119,13 @@ The first one is to ensure the proper functioning of the hypervisor's operations
 The second one is to serve the Security Component with data that will be used in detecting, preventing and mitigating attacks on tenants' virtual networks or on the hypervisor.
 Most hypervisors implement a monitoring component to perform standard virtualization operations, while very few solutions implemented a monitoring to support advanced features or detect attacks~\cite{VeRTIGO-Corin2012a,CoVisor-Jin2015,FlowN-Drutskoy2012,AutoSlice-Bozakov2012,NVP-Koponen2014,ONVisor-Han2018}.
 
-There are several different type of information hat must be monitored:
+There are several different type of information that may be monitored:
 
 \subparagraph{Tenant to hypervisor traffic} Requests and configuration commands sent by a tenant can impact the security of the virtualization infrastructure. A malicious tenant may exploit vulnerable hypervisors by sending forged requests that will alter legitmate users' virtual networks. The monitoring module may forward the tenant's requests to the Security Component for further investigation.
 
 \subparagraph{Management traffic} 
 The notifications sent by topology discovery protocols such as LLDP notify the hypervisor about the current state of the physical network equipments. If a switch has a failure or becomes the target of an attack the VNEC or the Security Component will be notified. The VNEC may then trigger a migration to relocate the virtual network on a new physical substrate or the Security Component will raise an alert and trigger mitigation procedures.
-Management traffic also includes packets sent by and to physical equipments to ensure their proper functioning.
+Management traffic also includes packets sent by and to physical equipments to ensure their proper operation.
 This includes metrics about the resources used on each switch, information about the particular configuration of a switch or the potential errors raised.
 
 \subparagraph{Configuration requests} An attacker located inside the physical infrastructure may leverage vulnerabilities in switches or in the authentication scheme to deploy malicious configuration rules These rules may alter the behavior of the networking equipments and may lead to a data exfiltration scenario or a Denial of Service.
@@ -127,16 +134,16 @@ The Security Component will be notified about these configuration packets.
 \paragraph{Security Component}
 The Security Component (SC) is in charge of detecting, preventing and mitigating attacks on the virtualization infrastructure. The SC relies on the monitoring in the infrastructure to collect useful data related to the security of the virtual networks and the physical equipments.
 The problem of the security inside a network hypervisor is not very well studied and especially in the context of the migration of virtual networks.
-The SC can operate on several levels, namely detection, prevention and mitigation.
+% The SC can operate on several levels, namely detection, prevention and mitigation.
 
 \subparagraph{Detection}
 The detection of attacks relies on associating networking events and tenant inputs with a security model.
-For instance, the number of tenant requests may be monitored in order to detect a flooding behavior that would lead to an overload of the system. Another fitting example is to examine the content of configuration rules and determine if their deployment in the infrastructure would generate unwanted behavior.
+For instance, the number of tenant requests may be monitored in order to detect a flooding behavior that would lead to an overload of the system. Another fitting example is to examine the content of configuration rules and match this content against a set of security rules.
 There is so far no proposition of an attack detection mechanism for network hypervisors.
 
 \subparagraph{Prevention}
 Prevention of attacks can be implemented by either limiting the attack surface accessible to an attacker or by preventing the attack to reach its destination. The limitation of the attack surface is proposed by CoVisor~\cite{CoVisor-Jin2015} where each tenant is limited in its ability to process packet.
-NVP~\cite{NVP-Koponen2014} implements tunnels between virtual nodes to simplify the routing the physical infrastructure and ensure a certain level of confidentiality.
+NVP~\cite{NVP-Koponen2014} implements tunnels between virtual nodes to simplify the routing of the physical infrastructure and ensure a certain level of confidentiality.
 ONVisor~\cite{ONVisor-Han2018} implements an access control module in charge of authenticating tenants applications and prevent them from interfering with other virtual networks.
 This will require the setup of particular pipeline that may redirect packets to the security component and drop them accordingly. This aspect is not well exploited because it is strongly correlated to the ability of detecting attacks, which is also not well investigated. 
 
@@ -158,7 +165,7 @@ In this section we describe the different information flows illustrated by Figur
 
 \circled{5} Security - CPAC: The security component raises alerts by analyzing networking events and tenants requests.
 
-\circled{6} VNEC - RIC: The VNEC interacts with the RIC to verify the availability of resources to compute the embedding of the requested virtual network.
+\circled{6} VNEC - RIC: The VNEC interacts with the RIC to maintain the availability of resources to compute the embedding of the requested virtual network.
 
 \circled{7} Monitoring - VNEC: The monitoring component transmits to the VNEC a migration request in case of a failure in the infrastructure.
 

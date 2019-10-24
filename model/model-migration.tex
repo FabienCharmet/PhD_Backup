@@ -14,35 +14,44 @@ Similarly, a virtual node is the end point of several flow rules.
 Therefore, a virtual node can be seen a collection of flow rules describing the end point of several virtual links, SDN-wise.
 
 We include in this work the possibility to describe a one-to-many mapping between a virtual node and a physical node.
-Figure~\ref{fig:1tomany} (from VeRTIGO~\cite{VeRTIGO-Corin2012a}) depicts the one to many mapping between virtual and physical elements.
+Figure~\ref{fig:1tomany} (from VeRTIGO~\cite{VeRTIGO-Corin2012a}) depicts the one to many mapping between virtual and physical elements. The virtual network is composed of three nodes embedded by physical nodes B, C and G.
+The virtual link connecting virtual nodes between B and G is seen as a single link while actually there are physical nodes D and E and the corresponding physical links supporting the embedding.
+Thus, one virtual link is mapped to many physical resources.
 
-We describe two migration algorithms in the following subsections, a naive implementation and an more elaborate one.
+We describe two migration algorithms in the following subsections, a naive algorithm and a more elaborate one. 
+The ordering of the selection of nodes and links for the migration is studied in~\cite{vnm-lo2013}. 
+We consider this to be out of scope of this thesis and we chose a naive ordering for the implementation of the migration algorithms.
+We propose our version of this algorithm (see Algorithm~\ref{algo:move_algo}) where during the migration phase, both VNs (old and new) will coexist to maintain the availability of the virtual network.
+
+
 These algorithms use different functions in order to migrate the topology: create\_link, delete\_link, create\_node, delete\_node and embedding. 
 Each function will be associated to predicates representing the state of the virtual networks during the migration.
 We explain what each function does, SDN-wise:
 
 \begin{itemize}
-\item Create\_link($vlink\_name,path$): This function will deploy flow rules related to $vlink\_name$ on the different nodes composing $path$. It generates $virtual\_link$ and $link\_embedding$ predicates, and returns the identifier of the migrated link.
+\item Create\_link($vlink\_name,embed$): This function will deploy flow rules related to $vlink\_name$ on the different nodes composing $embed$. It generates $virtual\_link$ and $link\_embedding$ predicates, and returns the identifier of the migrated link.
 \item Delete\_link($vlink\_name$): This function will remove the flow rules pertaining to $vlink\_name$ from the physical nodes embedding it.
-\item Create\_node($vnode\_name,path$): This function will deploy flow rules related to $vnode\_name$ on the different nodes composing $path$. It generates $virtual\_node$ and $node\_embedding$ predicates, and returns the identifier of the migrated node.
+\item Create\_node($vnode\_name,embed$): This function will deploy flow rules related to $vnode\_name$ on the different nodes composing $embed$. It generates $virtual\_node$ and $node\_embedding$ predicates, and returns the identifier of the migrated node.
 \item Delete\_node($vnode\_name$): This function will remove the flow rules related to  $vnode\_name$ on the physical nodes embedding it.
-\item embedding($vlink\_name|vnode\_name$) returns the physical substrate allocated by the VNE component for either $vlink\_name$ or $vnode\_name$.
+\item embedding($vlink\_name|vnode\_name$) returns the set of resources used for the embedding of either $vlink\_name$ or $vnode\_name$. It is then used to instantiate virtual nodes and links.
 \end{itemize}
+
+
 
 \subsubsection{Move based migration algorithm}
 \label{sec:move-algo}
 
 An intuitive migration algorithm is described in~\cite{Lime-Ghorbani2014}. 
-This algorithm aims at migrating the resources all at once, as depicted in Algorithm~\ref{algo:move_algo}.
+This algorithm aims at migrating the resources all at once.
 However, during the migration phase, the VNs are not operational as both are shutdown.
-We propose our version of the algorithm (see Algorithm~\ref{algo:move_algo}) where during the migration phase, both VNs (old and new) will coexist.
+We propose our version of this algorithm (see Algorithm~\ref{algo:move_algo}) where during the migration phase, both VNs (old and new) will coexist to maintain the availability of the virtual network.
 
 First (line 3) we initialize $new\_topology$ as the migrated topology. Then, for each virtual node in the topology, we retrieve the new embedding decided by the VNE component (lines 4-5).
 Then (line 6) we instantiate the new virtual node and add the information to $new\_topology$
 We repeat the process for the virtual links (lines 7-9).
 Then we remove the flow rules related to the old virtual nodes from the original substrate (lines 10-11) and from the old virtual links (lines 12-13).
 
-An underlying aspect of the cohabitation of the old and new VNs is the necessity to redirect new incoming flows through the newly migrated VN.
+An underlying aspect of the coexistence of the old and new VNs is the necessity to redirect new incoming flows through the newly migrated VN instead of the old one.
 This is handled by setting specific priorities for the flow rules corresponding to the VN.
 
 
@@ -52,12 +61,12 @@ This is handled by setting specific priorities for the flow rules corresponding 
 % \State $nodes \gets List\_of\_nodes(topology)$
 $new\_topology \gets \{\emptyset\}$\\
 \For{$node$ \textbf{in} $topology$}{
-$path \gets$ embedding($node$)\\
-$new\_topology \gets$~$new\_topology$~$\cup$~create\_node($node$,$path$)
+$embed \gets$ embedding($node$)\\
+$new\_topology \gets$~$new\_topology$~$\cup$~create\_node($node$,$embed$)
 }
 \For{$link$ \textbf{in} $topology$}{
-$path \gets$ embedding($link$)\\
-$new\_topology \gets$~$new\_topology$~$\cup$~create\_node($link$,$path$)
+$embed \gets$ embedding($link$)\\
+$new\_topology \gets$~$new\_topology$~$\cup$~create\_link($link$,$embed$)
 }
 \For{$node$ \textbf{in} $topology$}{
 delete\_node($node$)
@@ -73,33 +82,33 @@ delete\_link($link$)
 \subsubsection{Iterative migration algorithm}
 Another algorithm we consider is described in~\cite{vnm-lo2013}.
 This algorithm iteratively moves nodes one after another, while dynamically creating links for the migrated nodes and deleting the old ones.
-The migration progress is depicted in Algorithm~\ref{algo:iterative_algo}.
+We represent this algorithm in pseudo-code in Algorithm~\ref{algo:iterative_algo}.
 % Create two arrays, one to hold nodes left to be migrated, one to hold the nodes that have been migrated (lines 2-3).
 
 First, initialize a counter to remember the number of iterations of the algorithm (Line 5).
 % While there are nodes to be migrated, do the following (Lines 5 to 28):
-Select a node among the remaining nodes (line 7), we refer to it as the old node. Instantiate the new node (line 9) and create the virtual links between the new node and the nodes that have not been migrated (lines 11-14).
+Select a node among the remaining nodes (line 7), we refer to it as node $n$. Instantiate the new node (line 9) and create the virtual links between the new node and the nodes that have not been migrated (lines 11-14).
 If this is not the first iteration of the algorithm, there might be virtual links that must be deployed between the new node and the nodes that have already been migrated. (lines 15-20).
 There may also be links between migrated nodes and the old node.
 If so, they are deleted. (lines 21-24)
 
 
 
-\begin{algorithm}[ht]
 \textbf{Input: }$topology$ as the virtual network\\
+\begin{algorithm}[ht]
 \textbf{Output: } $new\_topology$ as the migrated topology\\
  $remaining\_nodes \gets list\_of\_nodes(topology)$\\
  $migrated\_nodes \gets \emptyset$\\
  $iter \gets 1$\\
 \While {$remaining\_nodes \neq \emptyset$}{
  $n \gets Select\_node(remaining\_nodes)$\\
- $path \gets$ embedding($n$)\\
- $new\_n \gets$ create\_node($n,path$)\\
+ $embed \gets$ embedding($n$)\\
+ $new\_n \gets$ create\_node($n,embed$)\\
  \For{$node$ \textbf{in} $remaining\_nodes$}{
     \uIf{exist\_link($new\_n,node,topology$)}{
         $vlink \gets $link($new\_n,node,topology$)\\
-        $path \gets$ embedding($vlink,topology$)\\
-        create\_link($vlink,path$)\\
+        $embed \gets$ embedding($vlink,topology$)\\
+        create\_link($vlink,embed$)\\
     }
  }
 %  $Deploy\_links(new\_n,remaining\_nodes,topology)$\\
@@ -108,8 +117,8 @@ If so, they are deleted. (lines 21-24)
  \For{$node$ \textbf{in} $migrated\_nodes$}{
     \uIf{exist\_link($new\_n,node,topology$)}{
         $vlink \gets $link($new\_n,node,topology$)\\
-        $path \gets$ embedding($vlink,topology$)\\
-        create\_link($vlink,path$)\\
+        $embed \gets$ embedding($vlink,topology$)\\
+        create\_link($vlink,embed$)\\
     }
  }
 %  $Deleted\_links(n,migrated\_nodes,topology)$
