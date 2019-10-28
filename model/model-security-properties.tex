@@ -106,7 +106,7 @@ We define two predicates, $d\_integrity(D,ti)$ and $p\_integrity(P,D,N,ti)$, whi
 Therefore, if a data has not been legitimately processed, its integrity holds if it hasn't been modified in any other way.
 \begin{myformula}
 $d\_integrity(D,ti) \Leftrightarrow \forall t_1,t_2\in ti ~ \overline{processed(D, ti)} \Rightarrow 
-~D_{t_1}=D_{t_2}]$ 
+~D_{t_1}=D_{t_2}$ 
 \end{myformula}
 %\RW{I changed the formatting for clarity}
 
@@ -206,14 +206,14 @@ Let $A$ be an asset, $U$ a user and $ti$ a time interval.
 %\FC{In the same way we consider confidentiality and integrity, as long availability is preserved we don't need time, but we need to pinpoint the time intervals related to the violation if needed.}
 
 \begin{myformula}
-$availability(A) \Leftrightarrow \forall ti~is\_accessible(A,U,ti) \wedge is\_usable(A,U,ti) \Rightarrow is\_asset\_authorized(U,A,ti)$
+$availability(A) \Leftrightarrow \forall ti~is\_accessible(U,A,ti) \wedge is\_usable(U,A,ti) \Rightarrow is\_asset\_authorized(U,A,ti)$
 \end{myformula}
 
 % \RW{why would an asset not be available, if it is useable and the user is authorized?  is it because an authorized path does not exist?}
 % \FC{I've added authorization}
 \begin{itemize}
-\item $is\_accessible(A,U,ti)$ is true if user $U$ can contact asset $A$ during time interval $ti$.
-\item $is\_usable(A,U,ti)$ is true if user $U$ can use asset $A$ during time interval $ti$.
+\item $is\_accessible(U,A,ti)$ is true if user $U$ can contact asset $A$ during time interval $ti$.
+\item $is\_usable(U,A,ti)$ is true if user $U$ can use asset $A$ during time interval $ti$.
 \item $is\_asset\_authorized(U,A,ti)$ is true if user $U$ is allowed to access asset $A$  during time interval $ti$.
 \end{itemize}
 
@@ -222,12 +222,13 @@ $availability(A) \Leftrightarrow \forall ti~is\_accessible(A,U,ti) \wedge is\_us
 \textbf{Formal definition:} Let $N$ be a network node and $ti$ be a time interval.
 
 \begin{myformula}
-$node\_availability(N) \Leftrightarrow \forall t,U~ is\_accessible(N,U,ti) \wedge can\_process(N,ti) \Rightarrow is\_node\_authorized(U,N,ti)$
+$node\_availability(N) \Leftrightarrow \forall t,U~ is\_accessible(U,N,ti) \wedge can\_process(N,ti) \Rightarrow is\_node\_authorized(U,N,ti)$
 \end{myformula}
 
 \begin{itemize}
-\item $can\_process(N,t)$ is true if $N$ processes packets normally (\eg no congestion etc.)
-\item $is\_node\_authorized(U,N,ti)$ is true if user $U$ is authorized to access node $N$ during time interval $ti$
+\item $is\_accessible(U,N,ti)$ is true if user $U$ can contact node $N$ during time interval $ti$.
+\item $can\_process(N,ti)$ is true if $N$ processes packets normally during time interval $ti$ (\eg no congestion etc.).
+\item $is\_node\_authorized(U,N,ti)$ is true if user $U$ is authorized to access node $N$ during time interval $ti$.
 \end{itemize} 
 
 \textbf{Property 1b:} A virtual node $n$ is available if the physical nodes embedding it are available.
@@ -326,19 +327,19 @@ We present a potential mapping between the formal predicates and the correspondi
 \paragraph{Confidentiality}
 The confidentiality section introduces the following predicates:
 \begin{itemize}
-\item reads(U,D)
+\item reads(U,D,t)
 \newline
-This predicate is true if either a monitoring tool accesses traffic or if the traffic is forwarded to a virtual machine. (Note the VM may not be legitimate.)
+This predicate is true if a monitoring tool accesses traffic,  or if the traffic is forwarded to a virtual machine, owned by either a legitimate or malicious user.
 
-\item is\_data\_authorized(D,U)
+\item is\_data\_authorized(U,D,t)
 \newline
 This predicate is true if user U is the intended recipient of data D (\eg destination IP).
 D can be inspected with monitoring tools to verify the destination IP field.
-\item is\_node\_authorized(N,U)
+\item is\_node\_authorized(U,N,t)
 \newline
 This predicate is true if user U is authorized to access the physical node.
 This is a typical use of Access Control.
-\item access(N,U)
+\item accessing(U,N,t)
 \newline
 This predicate is true if U logs in N using a CLI or use remote access to interact with N.
 The logs of N can be exploited to verify the accesses made.
@@ -354,17 +355,18 @@ The integrity section introduces the following predicates:
 \item processed(D,ti)
 \newline
 If D has reached its final destination before ti then the predicate holds true.
-Otherwise, the forwarding process performed on D during ti can be verified by checking the related flow rules, and D can be analyzed to see if it matches the expected results. (\ie no extra illegitimate manipulation have been performed).
+Otherwise, the forwarding process performed on D during ti can be verified by checking the related flow rules, and D can be analyzed to see if it matches the expected results. (\ie no extra illegitimate manipulations have been performed).
 
 \item modified(P,ti)
 \newline
 The evolution of P implies legitimate modification of the corresponding flow rules, which can be monitored by the hypervisor.
 
-\item deval(D,t)
+% \item deval(D,t)
+\item $D_{t}$
 \newline
-This is done by reading the value of D, using for instance a monitoring tool.
+This is done by reading the value of D using a monitoring tool.
 
-\item peval(P,t)
+\item $P_t$
 \newline
 The process P can be monitored by querying the related flow rules
 
@@ -372,20 +374,29 @@ The process P can be monitored by querying the related flow rules
 \newline
 The flow rules of node N can be queried to check if they matches process P.
 
-\item \FC{Should I reintroduce is\_node\_authorized ?}
+\item is\_node\_authorized(U,N,t)\\
+Identical to the predicate presented earlier
 \end{itemize}
 
 \paragraph{Availability}
 The availability section introduces the following predicates:
 \begin{itemize}
-\item is\_accessible(N,t)
+\item is\_accessible(U,A,ti)
 \\ This predicate is evaluated by regularly sending an Openflow ECHO request to the node.
 \\ SDN controllers already send such requests.
 
-\item can\_process(N,t)
+\item is\_accessible(U,N,ti)
+\\Identical to the previousr predicate
+
+\item is\_usable(U,A,ti)
+\\This predicate is evaluated by monitoring the performance of A with monitoring tools .
+
+
+\item can\_process(N,ti)
 \\ OpenFlow switches provides statistics and primitives can show the amount of CPU power used.
 
-\item \FC{Should I reintroduce is\_node\_authorized ?}
+\item is\_node\_authorized(U,N,ti)\\
+Identical to the predicate presented earlier
 \end{itemize}
 
 % \paragraph{Authenticity}

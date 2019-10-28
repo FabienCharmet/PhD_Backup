@@ -95,7 +95,7 @@ Giving access of one flowspace to two different tenants would break the isolatio
 The same limitations come regarding the address space available to tenants.
 ADVisor alleviate this limitation by defining a set of identifiers that will be allocated to each tenant. These identifiers are referred to as "flowspace`` but they do not exactly hold the same meaning as defined by FlowVisor~\cite{FlowVisor-Sherwood2009}. Indeed, each tenant has access to the whole flowspace (\ie the whole header fields) except for the few bits reserved by ADVisor to store the necessary identifiers.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[scale=0.6]{figures/double_fv.pdf}
     \caption{Architecture of Double FlowVisor}
@@ -106,7 +106,7 @@ ADVisor alleviate this limitation by defining a set of identifiers that will be 
 Double FlowVisor~\cite{DoubleFV-Yin2013} combines two instances of FlowVisor to virtualize a multi-domain network and provide a unified view of the virtual network, as presented in Figure~\ref{fig:double-fv}. The first instance of FlowVisor (FlowVisor 1) is used to hide the heterogeneity of the different network domains. These domains are connected together and are abstracted and a NOX controller~\cite{nox-gude2008} is connected to FlowVisor.
 Then, the second FlowVisor  (FlowVisor 2) instance will connect NOX with the tenants' applications. This instance maintains the embedding between virtual resources and the physical substrate, and translates commands sent by the tenant into commands deployed in the physical infrastructure. In addition to that, the second FlowVisor instance is in charge to tag each flow with an identifier related to the tenant.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[scale=0.7]{figures/openvirtex.pdf}
     \caption{Identifier translation at edge switches in OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}}
@@ -236,7 +236,7 @@ A sharding coordinator will monitor the signals sent by the different nodes and 
 
 % The evaluation of NVP focuses on two things, the time and resources required to setup NVP in different scenarios and the available throughput based on which tunneling mechanism is used by NVP. Theses results are then followed by a serie of reflexions based on the experience gained after the implementation of NVP and how design challenges have been tackled.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[scale=0.5]{figures/litevisor.pdf}
     \caption{LiteVisor architecture~\cite{Litevisor-Yang2018}}

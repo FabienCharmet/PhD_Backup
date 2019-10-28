@@ -143,7 +143,7 @@ Finally, the transparency of the migration is ensured by the migration controlle
 In complement to the works aiming at improving the performance and the scalability of the virtualization infrastructure and the migration process, we now consider the works taking a formal approach to study specific properties of the migration process or using the migration process for security purposes.
 
 \paragraph{Inter-flow consistency}
-In a SDN infrastructure, the configuration deployed inside SDN switches will regularly be updated and evolve. Such modifications are invoked by the SDN controller and deployed among several switches.
+In a SDN infrastructure, the configuration deployed inside SDN switches will be updated and evolve regularly. Such modifications are invoked by the SDN controller and deployed among several switches.
 Flow consistency ensures that each flow will be processed by either the old or the new configuration all along the way, and not by a combination of the two.
 However, Lui~\etal argue in~\cite{Liu2015a} that making sure that each individual flow has its own consistency preserved is not enough to respect certain security and reliability requirements.
 It becomes necessary to model relationships between flows and to preserve certain properties throughout the migration.
@@ -155,32 +155,33 @@ This problem related to the delay in actually deploying the configuration inside
 The spatial isolation problem is approached using a dependence graph. Each path taken by a flow is mapped with the physical nodes they go through. Then, in case of overlapping node for several flows, the node is seen as a mutex node (similarly to the mutex of an operating system).
 No flow may go through a mutex node if another flow is currently using it.
 This ensures that specific traffic may not cohabit inside the same physical resources.
-To ensure the version isolation of different flows, the system identifies the set of flows that must be isolated. Then, it picks one to be processed normally and forward to the controller all the traffic of the remaining flows. This way, it make sures that there is not two flows being processed by 2 different versions of a configuration. And when all the cached traffic is reinjected inside the infrastructure, it is being processed by a fully updated networking state.
+To ensure the version isolation of different flows, the system identifies the set of flows that must be isolated. Then, it picks one to be processed normally and forward to the controller all the traffic of the remaining flows. This way, it makes sure that there are not two flows being processed by 2 different versions of a configuration. And when all the cached traffic is re-injected inside the infrastructure, it is being processed by a fully updated networking state.
 The generation of the dependence graphs is done by categorizing flows into two classes and using a greedy algorithm to determine how to minimize the amount of packet caching that should be done at the controller.
-From the graph is determined the ordering of the migration sequences. Each sequence is composed of several configuration modification, and these modifications are also ordered to minimize the migration time. 
+The ordering of the migration sequences is determined From the graph. Each sequence is composed of several configuration modification, and these modifications are also ordered to minimize the migration time. 
 
-\paragraph{Moving Target Defense} Dynamically changing the location of sensitive targets is a classic technique called Moving Target Defense. Such changes prevent an attacker from accurately knowing the attack surface of the system he is attacking because the configuration regularly changes. Chowdhary~\etal use MTD techniques as part of a Detect-Analyze-Counter cycle inside a SDN-based Cloud infrastructure. 
+\paragraph{Moving Target Defense} Dynamically changing the location of sensitive targets is a technique called Moving Target Defense. Such changes prevent an attacker from accurately knowing the attack surface of the system he is attacking because the configuration regularly changes. Chowdhary~\etal~\cite{Chowdhary2016} use MTD techniques as part of a Detect-Analyze-Counter cycle inside a SDN-based Cloud infrastructure. 
 The security system is composed of four modules: a detection module, a vulnerability analyzer, a counter-measure creation and deployment component and a policy conflict resolution.
 The detection module is in charge of gathering information about the vulnerabilities in the infrastructure.
-Then, the analyzer will use these information to dynamically generate an attack graph representing the capacities of the attacker. 
+Then, the analyzer will use this  information to dynamically generate an attack graph representing the capacities of the attacker. 
 A counter-measure will then be generated to mitigate the potential attacks and propose it to the conflict resolution module that will determine if the newly created counter-measure is not going to have harmful side effects. Once the counter-measure is accepted it is deployed in the infrastructure and the detection module is notified of the new configuration. This cycle approach creates a dynamic detection/mitigation environment.
-The aspect of attack detection is left out in this paper, as it is already a widely explored topic.
+The attack detection aspect is left out in this paper, as it is already a widely explored topic.
 A well known drawback of attack graphs is the difficult scalability when the number of states grows.
 This problem makes the graph generation computationally intractable. Partitioning the attack graphs into smaller regions based on each tenant using the infrastructure simplifies the generation.
 These sub-attack graphs are then simply merged together for the counter measure to be generated.
 The counter-measure component determines which VM should be migrated based on a security score based on the CVSS Base Score.
 Once the target VM is chosen, new flow rules are computed to realize the migration. 
-The conflict resolution inspects the flow rules that should be deployed and extract the actions of each rule and verify that they do not overlap with other existing flow rules. If a conflict arises, this module will try to find alternative rules. In the event where this would not be possible, the proposed counter-measure is rejected and a new one is searched.
+The conflict resolution inspects the flow rules that should be deployed and extracts the actions of each rule and verify that they do not overlap with other existing flow rules. If a conflict arises, this module will try to find alternative rules. In the event where this would not be possible, the proposed counter-measure is rejected and a new one is computed.
 
 \paragraph{Seamless migration}
-In the previous works, minimizing the service disruption caused by the migration has always been a major concern in the design of the solution. However, while the efficiency of the solution was evaluated with various experiments, there was no formal approach describing the transparency of the migration and to ensure that no disruption of service will be experienced by a tenant.
+In the previous works, minimizing the service disruption caused by the migration has always been a major concern in the design of the solution. However, while the efficiency of the solution was evaluated with various experiments, there was no formal approach describing the transparency of the migration and ensuring that no disruption of service will be experienced by a tenant.
 The topic of seamless migration is brought up in~\cite{toward-Ghorbani2014} where Ghorbani~\etal take a closer look at network virtualization using SDN techniques.
 Precisely, the focus is put on the one-to-many mapping, also known as the `Big Switch" abstraction.
 Distributing a single virtual resource over several physical one may not preserve the per-flow correctness.
-Similarly to the version isolation presented in~\cite{Liu2015a}, flow correctness ensures that one packet is always processed by one specific version of a network configuration.
+Similarly to the version isolation presented in~\cite{Liu2015a}, flow correctness considers flows individually and ensures that each packet of each flow  is always processed by one specific version of a network configuration. 
+% Version isolation ensures that flows are processed by a single global configuration while flow correctness ensures that end points receive packets in the proper order to avoid errors at the application level.
 However, this definition does not ensure that the ordering of packets as seen by the tenant's applications and controllers is a good representation of how the packets were originally sent and ordered by the end point.
 A new definition of correctness is proposed to make sure that the ordering of packets is preserved from end to end.
-Following this introduction of end-to-end correctness, a solution for a seamless migration of VNs and VMs is done in LIME~\cite{Lime-Ghorbani2014}.
+Following this introduction of end-to-end correctness, a solution for a seamless migration of VNs and VMs is proposed in LIME~\cite{Lime-Ghorbani2014}.
 The first contribution of this paper is a formal model for network virtualization migration, and it defines a transparency property related to the physical observation of the migration.
 The second is an implementation of virtual network migration process that is proven to respect the transparency property previously defined.
 It is important to note that transparency does not exclude packet loss but it is aimed to be extremely reduced.
