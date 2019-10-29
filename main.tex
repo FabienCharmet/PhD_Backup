@@ -40,6 +40,7 @@
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{3}
 \usepackage[nottoc,numbib]{tocbibind}
+\usepackage{minted}
 
 \usepackage{setspace}
 \usepackage{hyperref}
@@ -49,6 +50,9 @@
     linkcolor=black, %choose some color if you want links to stand out
 }
 
+\lstset{numbers=left,numberstyle=\tiny,numbersep=5pt,language=Lisp,
+  stringstyle=\ttfamily\small,basicstyle=\ttfamily\footnotesize,
+  showstringspaces=false,breaklines=true,keywordstyle=\color{black},}
 
 \setstretch{1.21}
 %  MARGIN
@@ -158,11 +162,15 @@ Network virtualization has leveraged the use of SDN to provide a flexible abstra
 
 \input{sota/sota-netvirt-sdn/existing_vnmigration.tex}
 
-\subsection{Security of VM migration}
+\subsection{Network \& VM security}
+
+We have presented in the previous sections the existing solutions for network virtualization and virtual network migration. We now delve into the security aspect of network virtualization, and the related topics. The security of virtual migration is a topic that has never been properly studied yet, while the security of VM migration has been thoroughly investigated. Following sections cover two main topics, namely the security of the VM migration process and existing formal models for network security.
+
+\subsubsection{Security of VM migration}
 
 \input{sota/sota-VM/attacking_vmmigration.tex}
 
-\subsection{Formal Models for network security}
+\subsubsection{Formal Models for network security}
 
 \input{sota/sota-FM/existing_formalmodels.tex}
 

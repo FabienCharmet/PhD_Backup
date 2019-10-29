@@ -29,9 +29,7 @@ In this section, we consider the network topology prior to any migration.
 We solely have the axioms related to the virtual topology, the corresponding users, and the data carried across the network.
 We formulate our question to SNARK and verify that the confidentiality is already established prior to the migration (question and answer in Listing~\ref{lst:init-conf-q} and~\ref{lst:init-conf-a}, respectively).
 
-\lstset{numbers=left,numberstyle=\tiny,numbersep=5pt,language=Lisp,
-  stringstyle=\ttfamily\small,basicstyle=\ttfamily\footnotesize,
-  showstringspaces=false,breaklines=true,keywordstyle=\color{black},}
+
 
 \begin{lstlisting}[caption=SNARK question to validate the initial situation., label=lst:init-conf-q] 
 (find-all '(ans ?d.data ?t.time-interval)

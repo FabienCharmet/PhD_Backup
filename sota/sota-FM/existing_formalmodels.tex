@@ -1,7 +1,7 @@
 Formal models for network security cover a broad range of topics and applications.
 We consider here the models providing a form of algebra to represent, to a certain extent different security properties. We categorized these models into three different sections: languages used for the security analysis of a communication protocol, languages used to implement a form of access control for an information system and finally languages used to describe the infrastructure enforcing the security services.
 
-\subsubsection{Communication protocol analysis}
+\paragraph{Communication protocol analysis}
 In computer networks, confidentiality and authentication of the communications were among the most important properties to measure and protect.
 In~\cite{CSP-Schneider1996}, messages exchanged between users are described and characterized by a set of security properties.
 The author uses the Communicating Sequential Processes (CSP) algebra to represent the different actors involved in a network communication, including a potential attacker. 
@@ -18,7 +18,7 @@ This is true in current networks, where the heterogeneity of the infrastructure 
 Security properties are defined as logical predicates combined with temporal operators such as: always, sometimes in the past etc.
 The evaluation of a protocol's security is performed using the AVISPA tool~\cite{avispa}, in which model checking techniques are used to determine the potential vulnerabilities existing in the protocol.
 
-\subsubsection{Access Control based languages}
+\paragraph{Access Control based languages}
 A common way to describe networking system is by representing the interactions between the users with Access Control Lists (ACL).
 ACLs can be seen as a set of rules that will either allow or deny the right to perform a specific action, to let a specific flow go through a firewall etc.
 Representing authorization depends on the level of abstraction desired.
@@ -30,19 +30,19 @@ MulVal~\cite{mulval-Ou2013} extends the notion of ACL analysis by implementing a
 First of all, the model uses the Common Vulnerabilities and Exposures (CVE) to describe the vulnerabilities in the infrastructure. This approach is different from~\cite{Matousek2008} because CVE impacts workstations, services and (mis)configuration. The security aspect is no longer only limited to  Layer 3\&4 filtering.
 With the use of CVE comes the definition of attacks on the system and how they are performed.
 Instead of converting each CVE into a specific attack, MulVal leverages the language definition to define broader attacks.
-Therefore, each time a vulnerability is discovered, it will most likely fall under an attack already existing, thus minimizing configuration time about the attack.
+Therefore, each time a vulnerability is discovered, it will most likely fall under an already existing attack, thus minimizing configuration time about the attack.
 MulVal's reasoning system is implemented to take into account sequential combinations of events.
 Indeed, an attack may not be a single access to a resource but instead an access to a resource, followed by a privilege escalation that is concluded by the execution or arbitrary code on a machine.
 They illustrate this by implementing an attack on a webserver and using the rights of the webserver to access a fileserver and install a corrupted binary that will be later on executed by an innocent user.
 
-Taking an extra step back in the abstraction level, OrBAC~\cite{orbac} describes Access Control policies at the organization level. Simply put, an organisation is an entity, in which a role (\ie group of users) will be given a permission to do a specific activity (\ie action) on a view (\ie object) in a certain context (\ie under certain conditions).
+Going one step higher in the abstraction level, OrBAC~\cite{orbac} describes Access Control policies at the organization level. Simply put, an organisation is an entity, in which a role (\ie group of users) will be given a permission to do a specific activity (\ie action) on a view (\ie object) in a certain context (\ie under certain conditions).
 Security policies include permission, prohibition or obligation to perform an activity.
 OrBAC also uses the notion of contexts~\cite{context-orbac} which represents the conditions that must be met to authorize (or prevent) a user to perform a specific task.
 The OrBAC model defines security policies using a set of logical predicates. These predicates will then be used to represent the permissions granted to the user.
-We consider here the work done in~\cite{Cuppens} to convert high level policies into practical firewall configurations. Thanks to the possibility to precisely distribute permissions to the users, it is possible to use OrBac in a ``white list" mode, even though firewalls may be configured with prohibitions (\ie dropping packets by default as the last rule.
+We have considered here the work presented in~\cite{Cuppens} to convert high level policies into practical firewall configurations. Thanks to the possibility to precisely distribute permissions to the users, it is possible to use OrBac in a ``white list" mode, even though firewalls may be configured with prohibitions (\ie dropping packets by default as the last rule.
 Finally, OrBAC offers a conflict resolution module in charge of detecting conflicts between high level policies and may propose solutions to solve them.
 
-\subsubsection{Infrastructure based languages}
+\paragraph{Infrastructure based languages}
 In the previous sections we looked at formal models in general systems, and the details of the underlying infrastructure were not always either clear or even studied. We now consider solutions that have a closer link with the infrastructure used to support the specifications made with the language.
 
 M2D2~\cite{M2D2-Morin2002} is a specification language used to correlate alerts raised by Intrusion Detection Systems (IDS) inside an Information System (IS).
@@ -68,36 +68,41 @@ When only considering planned modifications on the system, implementing these mo
 The SDN paradigm decouples the control plane from the data plane and offers to software developers a new flexibility to implement applications and services on top of a network.
 Reitblatt~\etal propose in~\cite{abstraction-reitblatt2012} a formalism to describe network changes in a high level fashion that will automatically translated into low level configuration while preventing service disruption or unwanted exposition to security breaches.
 This configuration translation relies on the fact that any update technique can be simplified into a two phases mechanism. First of all the new configuration is deployed inside switches and is then enforced by affecting the new policy to the ingress ports.
-The main idea to describe properties on the flows in the network uses the set of networking paths that a flow is allowed to take.
-It becomes now possible to implement routing properties where a flow must go through a specific node or there should not be any network loops inside the SDN configuration on the switches.
+The main idea to describe properties on the flows in the network is to use the set of networking paths that a flow is allowed to take.
+It now becomes possible to implement routing properties where a flow must go through a specific node or that there should not be any network loops inside the SDN configuration on the switches.
 However, it becomes difficult to implement properties that require access to more networking attributes or require more expressiveness. This problem is tackled in Merlin~\cite{Merlin-Soule2013}.
 Merlin extends the language with new properties and quantifiers.
 Merlin implements regular expressions that can be used to match network locations as well as transformations.
-Transformation are packet processing functions that have been names so they can be used in several locations.
+Transformations are packet processing functions that have been named so they can be used in several locations.
 
 
 
-\subsubsection{Discussion}
+\paragraph{Discussion}
 
 A lot of languages are used to describe network communications and the physical infrastructure supporting them. While model checking is a common accepted technique to verify that certain properties are verified under a specific model, the use of temporal reasoning remains limited to specific contexts.
-The description of security properties and their formalization is sometimes limited to a binary view, which is verified/not verified and maybe lacks quantifiers to represent a form of tolerance.
-Table~\ref{tab:fm-summary} summarizes the different works we have presented, and outlines which propertizes were considered: \textbf{C}onfidentiality, \textbf{I}ntegrity, \textbf{A}vailability, \textbf{A}ccess \textbf{C}ontrol and \textbf{Auth}enticity. We differentiated AC from authentication because authentication is used by AC to grant permissions to authenticated users.
 
+The use of CVE for the description provides numerous advantages, such as a common knowledge database, the wide range of properties available and the precision available to describe the impacts of a security violation.
+
+
+The description of security properties and their formalization is sometimes limited to a binary view, which is verified/not verified and maybe lacks quantifiers to represent a form of tolerance in the verification.
+
+
+Table~\ref{tab:fm-summary} summarizes the different works we have presented, and outlines which properties were considered: \textbf{C}onfidentiality, \textbf{I}ntegrity, \textbf{A}vailability, \textbf{A}ccess and \textbf{C}ontrol. 
+The \textbf{T}emporality column represents whether or not temporal reasoning is used by the model checker in the considered work.
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
-\begin{table}[]
-\centering
+\begin{table}[h]
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|l|c|c|c|}
 \hline
-Reference                        & C & I & A & Auth. & AC & Environment   & Analysis               \\ \hline
-\cite{CSP-Schneider1996}         & X & X &   & X     &    & Network       & Communication protocol \\ \hline
-\cite{HLPSL-Chevalier2004}       & X & X &   & X     &    & Network       & Communication protocol \\ \hline
-\cite{Matousek2008}              &   &   &   & X     & X  & Network       & Network configuration  \\ \hline
-\cite{mulval-Ou2013}             & X & X & X & X     & X  & Global infra. & CVE                    \\ \hline
-\cite{orbac}                     &   &   &   & X     & X  & Global infra. & Security policy        \\ \hline
-\cite{M2D2-Morin2002}            & X & X & X & X     & X  & Global infra. & CVE                    \\ \hline
-\cite{abstraction-reitblatt2012} &   &   &   & X     & X  & Network       & Network configuration  \\ \hline
+Reference                        & C & I & A & AC & Temporality & Environment   & Analysis               \\ \hline
+\cite{CSP-Schneider1996}         & X & X &   &    &             & Network       & Communication protocol \\ \hline
+\cite{HLPSL-Chevalier2004}       & X & X &   &    & X           & Network       & Communication protocol \\ \hline
+\cite{abstraction-reitblatt2012} &   &   &   & X  & X           & Network       & Network configuration  \\ \hline
+\cite{Matousek2008}              &   &   &   & X  &             & Network       & Network configuration  \\ \hline
+\cite{mulval-Ou2013}             & X & X & X & X  & X           & Global infra. & CVE                    \\ \hline
+\cite{M2D2-Morin2002}            & X & X & X & X  & X           & Global infra. & CVE                    \\ \hline
+\cite{orbac}                     &   &   &   & X  &             & Global infra. & Security policy        \\ \hline
 \end{tabular}%
 }
 \caption{Summary of formal models}
