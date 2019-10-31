@@ -1,10 +1,16 @@
-\label{sec:proof-detects-violation}
-%Part of this effort is devoted to using automatic reasoning to establish that a network enforces confidentiality properties or to detect that such properties can be violated.
-In section~\ref{sec:prop-conf}, we have formally described different properties related to the confidentiality in a network environment.
-In this section we  present a first-order theorem prover that will be used to detect the violation of the security properties.
-We use SRI's open-source first-order reasoner SNARK~\cite{snark-Stickel2000}.
+\subsubsection{Formal theory about theorem proving}
+\input{model/model-theory.tex}
+
+
+
 
 \subsubsection{SNARK: A first order temporal logic theorem prover}
+\label{sec:proof-detects-violation}
+%Part of this effort is devoted to using automatic reasoning to establish that a network enforces confidentiality properties or to detect that such properties can be violated.
+In section~\ref{sec:proving-theory}, we have described some aspects of the theory of first order logic theorem proving.
+In this section we  present a first-order theorem prover that will be used to detect the violation of the security properties.
+We use the Stanford Research Institute's open-source first-order reasoner SNARK~\cite{snark-Stickel2000}.
+
 SNARK is fully automatic and uses machine-oriented inference rules, such as \textit{resolution} for general-purpose reasoning and \textit{paramodulation} and \textit{rewriting} for reasoning about equality.
 It has special facilities
 %\GB{is listing all features supported by SNARK relevant in the paper?} 

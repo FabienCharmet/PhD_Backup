@@ -58,7 +58,8 @@
 %  MARGIN
 \addtolength{\textwidth}{-0.4in}
 
-
+\newtcolorbox{myformula}{colback=block-gray,boxrule=0pt,boxsep=0pt,breakable,halign= flush left}
+\definecolor{block-gray}{gray}{0.95}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 
@@ -164,7 +165,7 @@ Network virtualization has leveraged the use of SDN to provide a flexible abstra
 
 \subsection{Network \& VM security}
 
-We have presented in the previous sections the existing solutions for network virtualization and virtual network migration. We now delve into the security aspect of network virtualization, and the related topics. The security of virtual migration is a topic that has never been properly studied yet, while the security of VM migration has been thoroughly investigated. Following sections cover two main topics, namely the security of the VM migration process and existing formal models for network security.
+We have presented in the previous sections existing solutions for network virtualization and virtual network migration. We now delve into the security aspect of network virtualization, and the related topics. The security of virtual migration is a topic that has never been properly studied yet, while the security of VM migration has been thoroughly investigated. Following sections cover two main topics, namely the security of the VM migration process and existing formal models for network security.
 
 \subsubsection{Security of VM migration}
 
@@ -176,10 +177,11 @@ We have presented in the previous sections the existing solutions for network vi
 
 \subsection{Resource Allocation}
 The resource allocation (RA) problem consists in determine the optimal way to spend limited resources in order to achieve maximum profit while respecting a set of constraints.
-In this section we consider three different techniques used to solve the RA problem, under certain circumstances. 
+The VNE problem is subclass of the RA problem, where the VNE component will determine the set of physical resources that will embed a virtual network, while maximizing the acceptance rate, \ie the ratio between accepted VN requests and total number of requests.
+The VNE problem is constrained by available resources, but there might be functional constraints like security requirements or geographical positioning rules.
+In this section we consider two different techniques used to solve the RA problem, under certain circumstances. 
 
-
-\input{sota/sota-RA/LP.tex}
+% \input{sota/sota-RA/LP.tex}
 \input{sota/sota-RA/GT.tex}
 \input{sota/sota-RA/MDP.tex}
 
@@ -225,8 +227,6 @@ In this section we consider three different techniques used to solve the RA prob
 \label{sec:RAprob}
 \subsection{Motivation}
 \input{RA/RA-motivation.tex}
-
-
 
 \newpage
 \subsection{Game Theory}

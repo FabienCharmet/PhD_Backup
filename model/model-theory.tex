@@ -1,0 +1,68 @@
+\label{sec:proving-theory}
+We present in this section specific aspects of first order logic theorem proving that will be used later on in this thesis. We will give a brief overview of the first order logic theory and we will then present several verification mechanisms.
+
+\paragraph{First order logic}
+First order logic if a formal system describing a theory using declarative propositions, predicates and quantification.
+
+A declarative proposition is a set of terms  that may be connected together using logical operators.
+We illustrate this with the following example:
+
+$P \Rightarrow Q$ means "$P$ implies $Q$``. $P$ and $Q$ are the terms of the proposition and $\Rightarrow$ is the logical operator representing implication.
+
+The first order logic admits the following logical operators:
+
+\begin{itemize}
+    \item $\forall$: The forall operator, $\forall x\in S$ means for all $x$ pertaining to set $S$.
+    \item $\exists$: The exist operator, $\exists x\in S$ means there exist at least one $x$ pertaining to set $S$.
+    \item $\neg$: The negation operator, $\neg A$ means then logical negation of A, also noted $\overline{A}$.
+    \item $\wedge$: The conjunction operator, $A \wedge B$ means the logical arithmetic A AND B.
+    \item $\vee$: The disjunction operator, $A \vee B$ means the logical arithmetic A OR B.
+    \item brackets $( )$: Brackets are used to order the resolution of the logical proposition, similarly to traditional arithmetic.
+    \item $\Rightarrow$: The implication operator, $A \Rightarrow B$ means A implies B.
+    \item $\Leftrightarrow$: The bidirectional implication operator, $A \Leftrightarrow B$ means "A implies B`` AND "B implies A``.
+\end{itemize}
+
+Predicates are functions, takes as input a set of terms (variables) and returning as an output a binary value, True or False.
+
+For instance, we can define $P(A,B,C) \Rightarrow A \wedge (B \vee C)$, which would yield for the following example: $P(True,False,True)=True$.
+
+We propose a more complex example: $P(A) \Leftrightarrow \forall B, A \Rightarrow B$ means that P(A) is equivalent of A implying B, for all possible B.
+
+We will now present some rules of inference used for first order logic theorem proving.
+A rule of inference is a rule defining the deduction process, it takes a set of propositions as input and returns a proposition which is a conclusion drawn from the input propositions.
+
+We use $\vdash$ to represent the result of the deduction from a set of proposition.
+
+\paragraph{Modus ponens and modus tollens}\textbf{\\}
+Modus ponens is a rule of inference using the affirmation in an implication to deduce the conclusion.
+Considering the simple example given previously, $P \Rightarrow Q$, if we assert that $P$ is true, then we use modus ponens to conclude that $Q$ is true as well. This is summarized as "If P implies Q and P is true, then Q must be true" : $P \Rightarrow Q, P \vdash Q$.
+
+Similarly Modus tollens uses the negation in the consequence of an implication to deduce the conclusion.
+Considering $P \Rightarrow Q$, asserting that $Q$ if false, then $P$ must be false as well: $P \Rightarrow Q, \neg Q \vdash \neg P$.
+
+\paragraph{Resolution principle}\textbf{\\}
+The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield false. An unsatisfiable clause is a proposition that cannot be true no matter the value of its terms.
+
+For instance, $P \vee \neg P$ is obviously unsatisfiable.
+
+The resolution principle uses substitution in a set of propositions to reach a conclusion.
+We consider the simple example presented in~\cite{snark-Stickel2000} and refer the reader to~\cite{symbolic-proof} for additional reading, more specifically on variable unification.
+
+Consider the following propositions $\neg P \vee Q$ and $P \vee R$, the resolution principle will return $Q \vee R$ as a logical combination of the previous propositions.
+
+\paragraph{Paramodulation}\textbf{\\}
+The paramodulation is an inference rule used to exploit the equality existing between terms and the occurrence of term in a proposition. The paramodulation can be seen as \textit{substitution in case of equality}.
+
+Consider the proposition $P(x) = true$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
+
+Consider now $P(x) \ vee Q(x)$ and $x = y \vee R(y)$, paramodulation deduce the proposition $P(x) \vee Q(x) \vee R(x)$.\\
+$P(x) \ vee Q(x)$ and $x = y \vee R(y) \vdash P(x) \vee Q(x) \vee R(x)$
+
+\paragraph{Rewriting rules}\textbf{\\}
+Rewriting rules are used to replace an expression by another in a set of propositions.
+This is done to simplify the search space when applying inference rules~\cite{snark-Stickel2000}.
+
+We illustrate this with a simple example: $P \Leftrightarrow Q \wedge R, P \vee T$ is rewritten as $Q \wedge R \vee T$. 
+
+The rewriting rule may be condition to replace the left hand side of an equivalence by the other, but may also apply substitutions to terms in the proposition only on one side of the proposition.
+We also refer the reader to~\cite{snark-Stickel2000,symbolic-proof} for further explanations.
