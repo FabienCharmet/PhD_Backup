@@ -22,34 +22,33 @@ The aim of an MDP is to determine an optimal policy, defining for each possible 
 
 
 \paragraph{Solving an MDP}
-\label{sec:optimalpolicy}
-Before determining the optimal policy for a MDP, we have to dive into the notion of reward of an MDP. Any action chosen in a specific state may reward the agent. However, the choice made now may also lead the agent to negative consequences that will not compensate for the immediate reward obtained. 
-This kind of drawback is mitigated with the notion of a long term reward, called utility. The utility of a state is the immediate reward gained when entering this state plus the rewards that can be obtained from reachable states.
-These future rewards are impacted with a discount factor, because the principle of uncertainty makes them less attractive than the immediate reward.
-With all these considerations, we can now determine the optimal policy for the defender.
-The solution of an MDP consists in determining the action that will maximize the immediate and future rewards for each existing state.
+% \label{sec:optimalpolicy}
+% Before determining the optimal policy for a MDP, we have to dive into the notion of reward of an MDP. Any action chosen in a specific state may reward the agent. However, the choice made now may also lead the agent to negative consequences that will not compensate for the immediate reward obtained. 
+% This kind of drawback is mitigated with the notion of a long term reward, called utility. The utility of a state is the immediate reward gained when entering this state plus the rewards that can be obtained from reachable states.
+% These future rewards are impacted with a discount factor, because the principle of uncertainty makes them less attractive than the immediate reward.
+% With all these considerations, we can now determine the optimal policy for the defender.
+The solution of an MDP consists in determining the action that will maximize the utility function.
 
 \subparagraph{The Bellman equation}
-Bellman proposes in~\cite{bellman1957} an analysis of equations that will help in decision making using a MDP. 
-More precisely, the determination of the maximum reward expected in an MDP is expressed as non-linear equations, however he proves that they possess quasi-linear properties that allow us to solve these equations using methods only applicable to linear cases. 
-The Bellman equation shown in Fig.~\ref{fig:bellmaneq} lays the groundwork for solving MDPs using dynamic programming.
+Bellman proposes in~\cite{bellman1957} an analysis of equations that will help determining the maximum reward expected in an MDP, expressed as non-linear equations. However he proves that they possess quasi-linear properties that allow us to solve these equations using methods only applicable to linear cases. 
+The Bellman equation shown in Equation~\eqref{eq:bellmaneq} lays the groundwork for solving MDPs using dynamic programming.
 This equation states that the optimal utility $U(s)$ expected from a state $s$ is the sum of the reward obtained when entering state $s$ and the expected discounted sum of probable utilities of the neighbours of $s$. $\gamma$ represents the discount factor for the future reward.
 
-\textbf{Vocabulary and notations precisions}\\
+\FC{Error with equation numbering, do not forget}
+
+\textbf{Vocabulary and notations clarifications}\\
 $R(s,a,s')$ is sometimes simplified to $R(s,a)$ in the literature.\\
 The term value is sometimes used interchangeably with utility.
 
-\begin{figure}[h]
-\[ U(s) = \max\limits_a \left \{R(s,a) + \gamma   \sum\limits_{s'} P(s,a,s')U(s') \right \} \]
+\begin{equation}
+V(s) = \max\limits_a \left \{R(s,a) + \gamma   \sum\limits_{s'} P(s,a,s')V(s') \right \}
+\label{eq:bellmaneq}
+\end{equation}
 
-\[ V(s) = \max\limits_a \left \{R(s,a) + \gamma   \sum\limits_{s'} P(s,a,s')V(s') \right \} \]
 
-\caption{The Bellman's equation}
-\label{fig:bellmaneq}
-\end{figure}
 
 The solution of a MDP is the optimal policy $\pi(s)$, which is a vector defining the optimal action for each possible state in the MDP.
-There are three main algorithms to determin the optimal policy: Value Iteration, Policy Iteration and Q-Learning.
+There are three main algorithms to determine the optimal policy: Value Iteration~\cite{bellman1957}, Policy Iteration~\cite{policyiteration} and Q-Learning~\cite{qlearning}.
 We detail those algorithms hereafter.
 % There are several algorithms to determine the optimal policy, notably Value/Policy Iteration and Q-Learning.
 % We will focus on Value Iteration because Q-Learning is applied to systems where the transition model is unknown, and Policy Iteration is very similar to Value Iteration.
@@ -94,50 +93,38 @@ Policy Iteration works as follows:
     \end{algorithm}
 \end{enumerate}
 
+% \newpage
+
 The computational complexity of both algorithms is studied in~\cite{mdpcomplexity}.
+Results show that MDPs can be solved in a polynomial time, but existing solutions are barely using the structure specificities of a MDP.
 
 \subparagraph{Q-Learning}
-The Q-Learning algorithm~\cite{qlearning} is used when the MDP considered does not provide an explicit definition of its model (\ie transitions and/or rewards).
+The Q-Learning algorithm~\cite{qlearning} is used when the considered MDP does not provide an explicit definition of its model (\ie transitions and/or rewards).
 The agent only knows what state he's in, and upon choosing an action the agent will observe a reward for transitioning from state $s_t$ to $s_{t+1}$.
 The Q function defines the \textit{quality} of action $a$ at state $s_t$.
 Similarly to the Value Iteration algorithm, updating the Q function starts with an arbitrary initialization and will be gradually updated as time passes (See Equation~\eqref{eq:updatingq}).
 
-\begin{figure}
-
 \begin{equation}\label{eq:updatingq}
-Q'(s_{t},a_{t}) \leftarrow (1-\alpha) \cdot \underbrace{Q(s_{t},a_{t})}_{\text{old value}} + \underbrace{\alpha}_{\text{learning rate}} \cdot  \overbrace{\bigg( \underbrace{r(s_t,s_{t+1})}_{\text{observed reward}} + \underbrace{\gamma \max_{a}Q(s_{t+1}, a)}_{\text{estimate of optimal discounted value}} \bigg) }^{\text{learned value}}
+Q'(s_{t},a_{t}) = (1-\alpha) \cdot \underbrace{Q(s_{t},a_{t})}_{\text{old value}} + \underbrace{\alpha}_{\text{learning rate}} \cdot  \overbrace{\bigg( \underbrace{r(s_t,s_{t+1})}_{\text{observed reward}} + \underbrace{\gamma \max_{a}Q(s_{t+1}, a)}_{\text{optimal discounted value}} \bigg) }^{\text{learned value}}
 \end{equation}
-\caption{Updating the Q function}
-\end{figure}
 
-\FC{DON'T FORGET TO CHANGE FIGURE TO EQUATION, STILL BUGGY}
+
+% \FC{DON'T FORGET TO CHANGE FIGURE TO EQUATION, STILL BUGGY}
 
 \paragraph{MDP-based Resource Allocation}
+\textbf{\newline}
+We consider here the use of MDP in the context of the resource allocation problem.
+We divide the following works into two categories, whether the MDP is used to process resource allocation requests or to directly allocate resources on an infrastructure.
+Table~\ref{tab:MDP-summary} summarizes the investigated works.
 
-Using a MDP in resource allocation can become computationally intractable in case of an exponentially large state space, especially in large physical systems like data centers. In order to provide scalability to the resource allocation model, a combination of queuing models and MDP is proposed in~\cite{Tesauro2006}.
-Autonomic management in server clusters requires to minimize a maximum the human interactions needed to configure and maintain the system.
-However, providing such automated management requires to be able to choose the optimal configuration when needed.
-This is an approach typically based on Q-Learning because the evolution of the system is not completely formalized.
-The global aim is to allocate servers to trading applications that will maximize the SLA revenues, \ie the business value.
-Authors state that doing a live training of the model will lead to performance issues and do an offline training using typical queuing model. The MDP will be trained offline using a previously collected dataset (states) and this training will be completed with a queuing model that provides management decisions as the initial policy (actions).
-The evaluation of the work is done on a realistic data-center prototype, hosting a trading application. 
-Several scenarios are considered, open and closed-loops in the traffic as well as the delay incurred by allocating resources.
-
+\subparagraph{Allocation requests optimization}
+\textbf{\\}
 Wireless networks are subjects to several constraints because of the heterogeneous devices composing them and the varying quality of service due to external causes. Seamless transition between networking technologies are a great part of the user experience quality. In~\cite{navarro2008}, the problem of vertical handoff, \ie changing from one technology to another (\eg 5G to WiFi), is modeled to determine the optimal transitions that will provide the best service quality. 
-The type of MDP in this article includes \textit{time epochs} wich are a discrete representation of the time.
+The type of MDP in this article includes \textit{time epochs} which are a discrete representation of the time.
 The state space of the MDP describes the different configurations in terms of available bandwidth, average delay and identification information for the current network.
 The actions available are simply whether to remain with the same networking technology or to switch for another. The reward function considers the quality of service and the cost of switching to another technology.
 Authors describes implementations issues related to the 802.21 standard and implement several extensions to their current model including QoS parameters and handling horizontal handoff (\ie switch from one base station to another).
 Extensive evaluations using real life use cases are performed and results are compared with a set of well known heuristics.
-
-Authors in~\cite{Bokani2015} consider a similar problem where the problem of HTTP-based streaming is performed in a vehicular environment.
-HTTP-based streaming uses small chunks of video stored on the server with different quality version to provide a seamless streaming experience thanks to adaptative algorithm. 
-These algorithms determine what is the best quality chunk can be delivered to the user considering the current available bandwidth etc. Instead of using \textit{time epochs} to represent the buffering of the video and the deadline before video freezing, the length of buffered video time is used along the quality level of the current chunk to describe the states of the MDP. 
-Actions of the MDP represent the quality of the next chunk to be download by the user.
-The reward function is based on the quality of the downloaded chunk, and penalties are applied if the video froze while playing as well as a penalty for changing the quality level between two consecutive chunks.
-The MDP is then solved using the Value Iteration algorithm, but this model requires to know beforehand the bandwidth model. 
-These limitations can be overcome by using a Q-Learning function where the bandwidth map is unknown but instead the MDP will be trained.
-
 
 Using a MDP to allocate security services to cloud users is studied in~\cite{Liang2011}.
 Authors start by describing the security services provided by the cloud, and the underlying RA problem.
@@ -155,6 +142,17 @@ The actions available are accepting, rejecting or transferring the request.
 The reward system is based on the price paid by the user, the potential cost to transfer the service to an adjacent domain, but also the resources consumed to process the requests. 
 This work proposes a more detailed resource consumption compared to~\cite{Liang2011}.
 
+\subparagraph{Resource allocation optimization}
+\textbf{\\}
+Using a MDP in resource allocation can become computationally intractable in case of an exponentially large state space, especially in large physical systems like data centers. In order to provide scalability to the resource allocation model, a combination of queuing models and MDP is proposed in~\cite{Tesauro2006}.
+Autonomic management in server clusters requires to minimize the number of human interactions required to configure and maintain the system.
+However, providing such automated management requires to be able to choose the optimal configuration when needed.
+This is an approach typically based on Q-Learning because the evolution of the system is not completely formalized.
+The global aim is to allocate servers to trading applications that will maximize the SLA revenues, \ie the business value.
+Authors state that doing a live training of the model will lead to performance issues and do an offline training using typical queuing model. The MDP will be trained offline using a previously collected dataset (states) and this training will be completed with a queuing model that provides management decisions as the initial policy (actions).
+The evaluation of the work is done on a realistic data-center prototype, hosting a trading application. 
+Several scenarios are considered, open and closed-loops in the traffic as well as the delay incurred by allocating resources.
+
 Wang~\etal propose in~\cite{Wang2013} a resource allocation solution for CPU requests in cloud environments.
 They divide the problem is divided into two sub-problems: configuring the voltage and frequency of each core to optimize request treatment and providing an optimal request dispatching solution that maximize the revenue generated while accounting for several parameters.
 Costs are estimated using the energy consumption of each core in the cluster, the average response time it takes to process a request.
@@ -167,25 +165,36 @@ The MDPs solutions are then integrated into an optimization under constraints pr
 This problem is then solved using an algorithm maximizing the sum of linear fractional functions.
 
 
+Authors in~\cite{Bokani2015} consider a similar problem where the problem of HTTP-based streaming is performed in a vehicular environment.
+HTTP-based streaming uses small chunks of video stored on the server with different quality version to provide a seamless streaming experience thanks to adaptative algorithms. 
+These algorithms determine what is the best quality chunk can be delivered to the user considering the current available bandwidth etc. Instead of using \textit{time epochs} to represent the buffering of the video and the deadline before video freezing, the length of buffered video time is used along the quality level of the current chunk to describe the states of the MDP. 
+Actions of the MDP represent the quality of the next chunk to be download by the user.
+The reward function is based on the quality of the downloaded chunk, and penalties are applied if the video froze while playing as well as a penalty for changing the quality level between two consecutive chunks.
+The MDP is then solved using the Value Iteration algorithm, but this model requires to know beforehand the bandwidth model. 
+These limitations can be overcome by using a Q-Learning function where the bandwidth map is unknown but instead the MDP will be trained.
+
 \paragraph{Summary}
-The resource allocation problem has been solved with various methodologies, each of which has its own point of view. Linear programming only consider the point of view of the infrastructure own or the system defender, while game theory accounts for the point of view of both the attacker and the defender.
-Finally the MDP ends up being a one user optimization method bu the description of the reward function and the transitions between states may reflect external interactions.
+The resource allocation problem has been investigated using two different methodologies, namely the Game Theory formalism and Markov Decision Processes, each of which has its own point of view and advantages and limitations
+Game Theory accounts for the point of view of an attacker and a defender, allowing to extensively model the behavior of an attacker and his impact on the defended system.\\
+Finally the MDP ends up being a one user optimization method but the description of the reward function and the transitions between states may reflect external interactions, which could represent the impact of an attacker.
 A strong advantage of MDP over game theory models lies in the flexibility of the formalism to describe the actions available and the methods available to solve it.
 
 
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
-\begin{table}[htbp]
+\begin{table}[h]
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-Reference          & States                          & Actions                         & Reward                                    & Summary                                          \\ \hline
-\cite{Tesauro2006} & Available servers               & Allocation decision             & Cost / Profit                             & Offline training of a MDP using queuing models \\ \hline
-\cite{navarro2008} & Available resources, delay      & Remain on or switch technology  & QoS / Cost                                & Optimizing vertical handoff for maximum QoS    \\ \hline
-\cite{Liang2011}   & Consumed resources              & Acceptation/Refusal of requests & Cost / Profit                             & Security services allocation in the cloud      \\ \hline
-\cite{Liang2012}   & Number of services deployed     & Accept/Reject/Transfer requests & Cost / Profit / Energy                    & Service allocation in mobile cloud networks    \\ \hline
-\cite{Wang2013}    & Queue length of a single core   & CPU frequencies                 & Cost                                      & Determining optimal cores in a server cluster  \\ \hline
-\cite{Bokani2015}  & Quality of video, buffered time & Next chunk quality              & Quality, freezing time, quality switching & Determining the optimal video quality          \\ \hline
+Reference          & States                          & Actions                         & Reward                 & Summary                                        \\ \hline
+\multicolumn{5}{|c|}{Allocation requests management}                                                                                                             \\ \hline
+\cite{navarro2008} & Available resources, delay      & Remain on or switch technology  & QoS / Cost             & Optimizing vertical handoff for maximum QoS    \\ \hline
+\cite{Liang2011}   & Consumed resources              & Acceptation/Refusal of requests & Cost / Profit          & Security services allocation in the cloud      \\ \hline
+\cite{Liang2012}   & Number of services deployed     & Accept/Reject/Transfer requests & Cost / Profit / Energy & Service allocation in mobile cloud networks    \\ \hline
+\multicolumn{5}{|c|}{Resource allocation optimization}                                                                                                           \\ \hline
+\cite{Tesauro2006} & Available servers               & Allocation decision             & Cost / Profit          & Offline training of a MDP using queuing models \\ \hline
+\cite{Wang2013}    & Queue length of a single core   & Choose CPU frequencies          & Cost                   & Determining optimal cores in a server cluster  \\ \hline
+\cite{Bokani2015}  & Quality of video, buffered time & Next chunk quality              & Quality, freezing time & Determining the optimal video quality          \\ \hline
 \end{tabular}%
 }
 \caption{Summary of RA solutions using MDP}

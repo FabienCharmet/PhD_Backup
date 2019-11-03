@@ -15,15 +15,15 @@ A network hypervisor should support the following operations:
 Casado~\etal propose a first formalization of a general purpose network hypervisor in~\cite{Netvirt_Definition-Casado2010}. They decouple the virtual network view from the physical infrastructure, and the network hypervisor enforces the mapping between the logical and physical planes.
 
 Authors illustrate the processing of incoming traffic by simultaneously representing it in the logical plane and in the physical plane.
-The logical plane will perform a lookup to determine the next logical node to forward the traffic to and then such decision will then be transmitted to the physical plane where another lookup will be performed to determine what is the physical equivalent of the logical forwarding decision.
+The logical plane will perform a lookup to determine the next logical node to forward the traffic to and then such decision will be transmitted to the physical plane where another lookup will be performed to determine what is the physical equivalent of the logical forwarding decision.
 
-The analysis of the different works presented in the previous section, this double lookup approach has not been considered to be a suitable solution for the virtual to physical mapping. The majority of existing hypervisors will either slice the physical network thus maintaining no mapping between tenants and the infrastructure, or will maintain a mapping but it will be only used to translate flow rules from the virtual header space to the physical one. Their implementation of a network hypervisor prototype does not seem to include regular loopbacks but only maintain a mapping similarly to all the other related solutions.
+The analysis of the different works presented in the previous section illustrates that this double lookup approach has not been considered to be a suitable solution for the virtual to physical mapping. The majority of existing hypervisors will either slice the physical network thus maintaining no mapping between tenants and the infrastructure, or will maintain a mapping but it will be only used to translate flow rules from the virtual header space to the physical one. Their implementation of a network hypervisor prototype does not seem to include regular loopbacks but only maintain a mapping similarly to all the other related solutions.
 
 We propose the following reference architecture to highlight the important features that should be available for a secure network migration, and also to outline some shortcomings in existing solutions.
 
 \input{figures/nvh-archi.tex}
   
-Figure~\ref{fig:reference-archi-nh} presents the the reference architecture of a network hypervisor supporting a secure virtual network migration.
+Figure~\ref{fig:reference-archi-nh} presents the reference architecture of a network hypervisor supporting a secure virtual network migration.
 On a top-down perspective, there are three different levels in the virtualization architecture.
 The tenant level, where end-users can deploy their own applications, SDN controllers, and interact with their virtual network.
 The hypervisor level, including all the components required to achieve network virtualization, present the tenant with an abstract view, and interact with the physical infrastructure.
@@ -32,7 +32,7 @@ The lowest level includes all the networking equipments, like SDN-enabled switch
 \paragraph{Control Plane Abstraction}
 The Control Plane Abstraction component (CPAC) provides the tenants with an interface to interact with the rest of the virtualization layer.
 This component is essential to the functioning of a network hypervisor and is implemented in every hypervisor.
-When a tenant requests a virtual topology, he describes his requirements in terms of virtual nodes, links, minimal bandwidth, security etc. This request is received by the CPAC that will transmit it to the VN Embedding component for further treatment.
+When a tenant requests a virtual network, he describes his requirements in terms of virtual nodes, links, minimal bandwidth, security \etc This request is received by the CPAC that will transmit it to the VN Embedding component for further treatment.
 CPAC also defines tenants' capacities to interact with their virtual network, which can be either hypervisor based control or full control.
 Hypervisor based control limits the capacities of the tenants by only exposing an API to interact with their slice in a specific manner. For instance, the tenant may only use the API of the hypervisor or must use a specific programming language to implement his applications for the hypervisor~\cite{FlowN-Drutskoy2012,NetworkHypervisor-Huang2013}. 
 The full control describes an hypervisor where the tenant can use any application or SDN controller to interact with his virtual network. The tenant is not constrained by technical limitations of the hypervisor's components.
@@ -50,14 +50,14 @@ In practice, the abstraction can be done for several resources:
 
 \subparagraph{\textbf{Topology}}\textbf{}\\
 The hypervisor decouples the logical topology required by the tenant from the physical infrastructure.
-Topology mapping can be either 1-to-1 or many-to-1. 
-The first mapping corresponds to the case where one virtual node is embedded on one physical node, similarly FlowVisor~\cite{FlowVisor-Sherwood2009} where the physical infrastructure is sliced and a small portion of it is presented to each tenant.
-The second one abstracts several physical nodes and links to a virtual single node or link, as  presented in~\cite{OpenVirteX-Al-Shabibi2014}.
-A particular approach is when the tenants only requires one virtual node to interconnect his VMs, and does not want to bear the burden of maintaining physical equipments, or the enforce routing etc. This approach is referred in the literature as the ``Big Switch Abstraction".
+Topology mapping can be either 1-to-1 or 1-to-many. 
+The first mapping corresponds to the case where one virtual node (resp. link) is embedded on one physical node (resp. link), similarly FlowVisor~\cite{FlowVisor-Sherwood2009} where the physical infrastructure is sliced and a small portion of it is presented to each tenant.
+The second one abstracts a single virtual node or link to, as presented in~\cite{OpenVirteX-Al-Shabibi2014,VeRTIGO-Corin2012a}.
+A particular approach is when the tenant only requires one virtual node to interconnect his VMs, and does not want to bear the burden of maintaining physical equipments, or to enforce the routing \etc In the literature this approach is referred to as the ``Big Switch Abstraction".
 
 
 \subparagraph{\textbf{Flowspace}}\textbf{}\\
-The flowspace of a virtual network defines the range of values in the header fields that a tenant can use in his addressing and routing schemes or if he can exploit the whole address range and other header fields.
+The flowspace of a virtual network defines the range of values in the header fields that a tenant can use in his addressing and routing schemes, or if he can exploit the whole address range and other header fields.
 This includes MAC addresses, IP addresses, transport layer ports, VLAN ID etc.
 FlowVisor~\cite{FlowVisor-Sherwood2009} requires to share the flowspace among all tenants while other solutions like OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014} offer a full address space virtualization.
 
@@ -67,7 +67,7 @@ These resources are dissociated because they serve two distinct goals.
 CPU provides computation power for incoming packets and defines the forwarding capacity.
 Flow tables store the rules each tenant had inserted in the node.
 Therefore one tenant can have high CPU percentage with a small flow table if the point is to switch multiple packets to a small set of sources and destination.
-The hypervisor level, including all the components required to achieve network virtualization, present the tenant with an abstract view, and interact with the physical infrastructure.
+The hypervisor level, including all the components required to achieve network virtualization, presents the tenant with an abstract view, and interacts with the physical infrastructure.
 
 \subparagraph{\textbf{Link Resources}}\textbf{}\\
 We consider here the bandwidth and the buffer available to process packets.
@@ -84,7 +84,10 @@ The Virtual Network Embedding Component (VNEC) is in charge of determining the o
 The Virtual Network Embedding (VNE) is a resource allocation problem related to optimization techniques.
 The use of VNE algorithm to automatically deploy virtual networks is compulsory to avoid manual and impractical configuration operations.
 The VNEC is in charge of keeping track of available resources so it can determine whether or not to accept the virtual network creation request.
-The tenant's request is represented by a virtual network, and can include specific requirements such as minimum bandwidth, specific flow table size or the use of cryptographic functions on each virtual link.
+The tenant's request is represented by a virtual network, and can include specific requirements such as minimum bandwidth, specific flow table  size or the use of cryptographic functions on each virtual link \etc 
+% When a tenant requests a virtual network, he describes his requirements in terms of virtual nodes, links, minimal bandwidth, security \etc 
+This request is received by the CPAC that will transmit it to the VN Embedding component for further treatment.
+
 The tenant may also specify whether or not his virtual network should be migrated if needed, and if a degraded mode is accepted during the recovery of normal operations.
 The embedding of a virtual network can be constrained by the physical location of the underlying nodes.
 Specific legislation may forbid confidential data from leaving the physical space of a country for instance.
