@@ -1,20 +1,20 @@
 \subsubsection{Game Theory}
 
 
-\paragraph{Definitions}
+\paragraph{Definitions}\textbf{\\}
 Game theory is a mathematical model used to represent the interactions between several agents (\ie players).
 The model is called a game, in which players will have the possibility to choose an action and will be rewarded based on their choice and the choice made by the other players.
-We now provide a set of definition that will be used throughout this section.
+We now provide a set of definitions that will be used throughout this section.
 
 \textbf{Strategies} are the actions available to a player. Each player has its own strategies, that may differ from a player to another.
 
-\textbf{Utility function} is a function representing the gains and cost for a player
+\textbf{Utility function} is a function representing the gains and cost for a player.
 
 \textbf{Perfect information} describes a game where each player knows the full history of strategies played by other players. Otherwise the game is an imperfect information game.
 
-\textbf{Complete information} describes a game where each player knows the possible strategies available to all other players as well as their payoff. The opposite is called an incomplete information game.
+\textbf{Complete information} describes a game where each player knows the strategies available to all other players as well as their payoff. The opposite is called an incomplete information game.
 
-\textbf{Cooperative games} are games where all players will collaborate to maximize their gain in opposition to non-cooperative games where players only maximize their own benefit.
+\textbf{Cooperative games} are games where all players will collaborate to maximize their gain, in opposition to non-cooperative games where players only maximize their own benefit.
 
 \textbf{Two players zero-sum games} describe a situation where the gain obtained by a player equals the other player's loss.
 
@@ -26,40 +26,40 @@ We now provide a set of definition that will be used throughout this section.
 
 \textbf{Security games} are two players non cooperative games where an attacker will compromise a system while an administrator will defend it~\cite{book-gt}.
 
-\textbf{Nash equilibrium} is a set of strategies from which no player has any incentive to unilaterally deviate. It represent the optimal situation for all players.
+\textbf{Nash equilibrium} is a set of strategies from which no player has any incentive to unilaterally deviate. It represents an optimal situation for all players.
 
 Game Theory has been applied to network security in different ways, IDS configuration and optimization, as well as resource allocation problems. We will focus on the latter. We summarized the different works in Table~\ref{tab:sota-gt}.
 
 %  \paragraph{Static games}
  One of the first works using Game Theory applied to network security is presented by Kodialam~\etal in~\cite{MuraliKodialam2003}, where they model a link sampling for an attack detection problem.
  The aim is to determine the sampling frequency that will optimize the chances of detecting an attack going through the network.
- An attacker will launch attacks from a single node and choose one out of several paths and try to reach the victim's node.
+ An attacker will launch attacks from a single node and choose one out of several paths to reach the victim's node.
  If one packet reaches the victim without being detected, the attack is considered successful.
  Both attacker and defender are usually under budget constraints to decide which strategy to implement.
- The formulation is represented as a minmax problem where the the attacker will minimize the maximum detection probability possible for the defender.
+ The formulation is represented as a minmax problem where the attacker will minimize the maximum detection probability possible for the defender.
  The game is then solved using the max-flow algorithm, which determines the attacker's strategy as well as the corresponding optimal sampling distribution.
- Otrok~\etal extends this work in~\cite{otrok1,otrok2} where the model is extended in two ways: either the game is played with imperfect information or the attack model is extended.
+ Otrok~\etal extends this work in~\cite{otrok1,otrok2} where the model is extended in two ways: either the game is played with imperfect information or the attacker model is augmented.
  In~\cite{MuraliKodialam2003} the attacker was forced to choose one path to launch his attack to his victim, while in~\cite{otrok1} the attacker may fragment his attack through several paths in the network.
  Two scenarios are examined: one attacker sending multiple packets and multiple attackers sending one packet.
  In the first case, the attack is deemed successful if the attacker can send a certain amount of packets without being detected.
- In the second case, the attack is a success if each attacker can send one packet to the victim without being detected.
+ In the second case, the attack is a success if every attacker can send one packet to the victim without being detected.
  The game is formulated with the same notations as in~\cite{MuraliKodialam2003} and is solved similarly as well.
  The second extension~\cite{otrok2} uses a MANET network for the infrastructure.
- A MANET network is composed of several clusters geographically closed from each other.
- Each cluster is comprised of several nodes, and regularly one node in the cluster will be elected leader and will be tasked to perform the detection tasks. The authors address several issues arising with this election system and potentially reluctant node to perform intrusion detection.
+ A MANET network is composed of several clusters geographically close from each other.
+ Each cluster is comprised of several nodes, and regularly one node in the cluster will be elected leader and will be tasked to perform the detection tasks. The authors address several issues arising with this election system or a potentially reluctant node to perform intrusion detection.
  Since the real intentions of the nodes in the cluster are not precisely known, a reputation system is considered to determine the amount of trust given to each node.
  Formally speaking, the game is said of imperfect information because it cannot be definitely determined if a leader node has loyally fulfilled its duties.
  
  A standard approach in network security is to determine which nodes in the infrastructure are the most likely to be targeted by attacks. 
  Similarly to previous works, both attacker and defender are under constraint budgets.
  Agah~\etal~\cite{agah2004} consider this problem in a sensor network, where sensors are grouped into clusters and where one sensor is the clusterhead who will support the detection tasks.
- The game considered in this situation is usually to let the attacker choose one or more clusterheads to attack, or does nothing, while the defender will choose which clusterhead to defend.
+ The game considered in this situation is usually to let the attacker choose one or more clusterheads to attack, or to do nothing, while the defender will choose which clusterhead to defend.
  Attacking and defending the infrastructure incur certain costs and rewards that are expressed in the utility functions.
  
  Chen~\etal~\cite{Chen2009} study the same problem in a traditional network. The attacker possesses a certain budget to be spent on attacking the nodes while the defender will allocate resources to protect certain nodes.
- Each node is assigned an asset, which represent the raw gain obtained by the attacker if he targets this node.
+ Each node is assigned an asset value, which represent the raw gain obtained by the attacker if he targets this node.
  This raw gain is then impacted with the detection probability and the false positive rate, which determine the final payoffs for both players.
- The game is solved using the Nash Equilibrium~\cite{nasheq} to determine the optimal mixed strategies for both player.
+ The game is solved using the Nash Equilibrium~\cite{nasheq} to determine the optimal mixed strategies for both players.
  This work has then been extended in~\cite{interdep-ismail2017} to consider the interdependencies of nodes.
  The assumption is that the attacker can target specific nodes because they may grant him some additional privileges to attack other nodes.
  The work concludes with a set of formal results for static security games.
@@ -71,11 +71,11 @@ Game Theory has been applied to network security in different ways, IDS configur
 %  \paragraph{Stochastic games}
 In previous games, the consequences of actions were accounted for in the utility function, where the detection of an attack would impact with a coefficient the gain (resp. loss) for an attacker (resp. defender).
 However, stochastic games allow to model the different possible outcomes of a situation in a more detailed fashion.
-For instance, if the attack is successful, the system may transition from a healthy state toward a compromised state, where the attacker is given better rewards ubin the future.
+For instance, if the attack is successful, the system may transition from a healthy state toward a compromised state, where the attacker is given better rewards in the future.
 In this regard, Sallhammar~\etal describe such a game in~\cite{sallhammar2005}.
 The system is modeled as a Continuous Time Markov Chain in which the transition probabilities will depend on the attack performed on the system. Similarly to previous work, the attacker may also choose to do nothing.
-This work focuses on modelling intentional faults due to attacks, since faults due to accident have different statistical properties such has randomness, faults are independent from each other etc.
-They also consider several type of attacker behavior where the consequences of being detected may be unknown and or the attacker may not care about them.
+This work focuses on modelling intentional faults due to attacks, since faults due to accident have different statistical properties such has randomness, faults are independent from each other \etc
+They also consider different types of attacker behaviors where the consequences of being detected may be unknown and or the attacker may not care about them.
 The model is then extended in~\cite{Nguyen2009} where the model accounts for interdependencies of nodes to compromise the infrastructure.
 
 Game Theory applied to network security has been surveyed in~\cite{Roy2010,Kiennert2018} where the scope of the survey is extended to other aspects, such as the optimization of an IDS with regard to available detection techniques and countermeasures.
@@ -83,7 +83,7 @@ Game Theory applied to network security has been surveyed in~\cite{Roy2010,Kienn
  % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
 % \usepackage{graphicx}
-\begin{table}[h]
+\begin{table}[ht]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c|c|c|}
 \hline
@@ -96,6 +96,6 @@ Reference                               & Type of game       & Summary          
 \cite{Nguyen2009}                       & Stochastic game    &                                                    \\ \hline
 \end{tabular}%
 }
-\caption{Summary of Game Theory solutions}
+\caption{Summary of Game Theory for the RA problem}
 \label{tab:sota-gt}
 \end{table}

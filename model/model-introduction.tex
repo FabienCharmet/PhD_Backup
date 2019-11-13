@@ -1,0 +1,21 @@
+The state of the art highlights numerous issues and challenges related to the use of SDN for the virtualization of network resources.
+On a more recent basis, the migration of virtual networks has also been an important research topic, as the availability of a virtual network is as crucial as the availability of a Virtual Machine.
+However, and this is where the gap between VM migration and VN migration lies, the security of the former has been extensively studied while the latter remains to be done.
+
+The different models presented in the state of the art are based on traditional networks.
+One important challenge is to consider the specificities of the SDN paradigm in the design of the formal model.
+The security approach of existing models are either too high level (ACL based languages~\cite{orbac,mulval-Ou2013}) or very technical (CVE based security description like M2D2~\cite{M2D2-Morin2002}).
+We need an intermediate positioning where a formal approach can be articulated with the particularities of the SDN paradigm.
+
+We aims at studying the security of the migration process from a formal perspective.
+The scope of this work is to provide a formal proof of the security during the migration, which can be later used to reconstruct the serie of events that lead to the security breach. We exclude a real-time computation of the proof with regard to this requirement.
+
+The first task is to propose definitions for the following security properties: confidentiality, integrity, availability 
+% , authenticity 
+and co-residency, the latter being a property specifically related to the security of the virtualization infrastructure.
+
+The next task is to link the formal predicates with networking or SDN related events that will serve as the basis to construct the formal trace of the migration process.
+Monitoring tools can then be used to detect specific events in the network. Such events will then be converted into the corresponding formal predicates and will constitute an execution trace from the formal point of view.
+We will implement a simulator for such purposes.
+
+Finally, the formal trace generated in the previous task will be used by a theorem prover to construct a formal proof of the preservation, or the violation, of the security properties associated to the migration process. The theorem prover has to provide temporal reasoning facility as the migration process is seen as a chronological sequence of events that may ultimately lead to a security breach.

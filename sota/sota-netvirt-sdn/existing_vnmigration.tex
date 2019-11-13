@@ -1,23 +1,23 @@
 \subsection{Migration of virtual networks with SDN}
 In this section we reference the different virtual network migration solutions.
-We start by presenting solutions published on the same year as OpenFlow and that have been used as a reference work in a majority of SDN-based migration solution.
+We start by presenting solutions published on the same year as OpenFlow and that have been used as a reference in a majority of SDN-based migration solution.
 
 \subsubsection{Preliminary work}
 
 \paragraph{VROOM}
 Virtual ROuters On the Move (VROOM)~\cite{VROOM-Wang2008} is an early work about how the migration of virtual routers should be implemented on top of the physical infrastructure. 
 VROOM outlines that most of the network state changes are caused by planned maintenance.
-Moreover, power consumption is also a primary concern because efficient migration can save up to hundreds of millions of dollars.
-In this regard, VROOM present an network virtualization and migration technique aiming at minimizing these costs and maintenance duration.
+Moreover, power consumption is also a primary concern because efficient migrations can save up to hundreds of millions of dollars.
+In this regard, VROOM presents a network virtualization and migration technique aiming at minimizing these costs and the duration of maintenance.
 VROOM is composed of 3 building blocks: router virtualization, data and control plane separation, and dynamic interface binding.
 Router virtualization is already implemented in some commercial routers, and VROOM presents a hardware and software implementation using either software or hardware solutions.
 Data and control plane separation is achieved by using different virtualization environments (VE) in a virtualization infrastructure, namely OpenVZ~\cite{openvz}.
 The data plane is implemented using OpenVZ first VE (VE0) in which the software implementation of the physical router will use a Linux kernel while the hardware implementation uses a NetFPGA circuit.
 The control plane (\ie virtual routers) is also implemented using OpenVZ but using separate VEs (VE1, VE2, ...).
 Each virtual router is stored in a VE, in which a kernel and routing protocol are implemented using a software suite.
-The dynamic binding of physical and virtual interface is divided into two main functions.
-The first one implements the mapping of the virtual router with the corresponding FIB inside the physical router.
-The second is the mapping of the FIB of the physical router with a corresponding physical interface.
+The dynamic binding of the physical and virtual interfaces is divided into two main functions.
+The first one implements the mapping of the virtual router with the corresponding Forwarding Information Base (FIB) inside the physical router.
+The second one is the mapping of the FIB of the physical router with a corresponding physical interface.
 
 \paragraph{Virtual Network Embedding and path migration}
 Yu~\etal proposed in~\cite{VNE-Yu2008} a VNE model designed to support the splitting of a virtual link over several physical links, as well as dynamic virtual network reconfiguration.
@@ -29,7 +29,7 @@ Authors provide an extensive evaluation of their mapping and migration algorithm
 Both~\cite{VROOM-Wang2008} and~\cite{VNE-Yu2008} have been published on the same year as the publication of OpenFlow~\cite{Openflow-McKeown2008}, an implementation of the Software Defined Network paradigm that will become the standard of SDN for both industry and academia.
 Despite the fact these publications are not based on SDN, they lay grounds for plenty of the works we will now describe.
 
-We divide the existing VN migration solution into three categories: whether the solution is designed to improve the performance of the infrastructure, whether if was implemented on a specific virtualization platform or finally if it tackles a specific security problem.
+We divide the existing VN migration solution into three categories: whether the solution is designed to improve the performance of the infrastructure, whether it was implemented on a specific virtualization platform or finally if it tackles a specific security problem.
 
 \subsubsection{Improving the performance of the infrastructure}
 Ye~\etal propose in~\cite{Ye2017a} a resource utilization model in which they aim to maximize the resource allocation on switches while looking to determine controllers that can be shut down due to underutilization and migrate switches.
@@ -38,12 +38,11 @@ The switch migration problem is described as NP-hard and is approximated using a
 This approximation determines the allocation of network switches on controllers that will maximize their utilization. 
 From this distribution, authors construct a Markov chain that represent the different distributions strategies and where transitioning from a state to another corresponds to migrating a switch from a controller to another controller.
 
-In~\cite{Wang2017d}, Wang \etal study a problem similar to~\cite{Ye2017a}, but are more focused on the migration and its efficiency, and present a Switch Migration-based Decision Making (SMDM) scheme. 
-The problem is divided into three parts: detecting the overload of the controller due to an excessive amount of OF requests, the modeling of the migration's performance and finally, modeling the trade-off between the profit generated by the migration and the cost it incurred.
+In~\cite{Wang2017d}, Wang \etal study a problem similar to~\cite{Ye2017a}, but are more focused on the migration and its efficiency, and present a Switch Migration-based Decision Making (SMDM) scheme. The problem is divided into three parts: detecting the overload of the controller due to an excessive amount of OF requests, the modeling of the migration's performance and finally, modeling the trade-off between the profit generated by the migration and the cost it incurred.
 The overload detection correlates two types of information to determine overloaded controllers.
-The first one is the actual amount of requests received by controllers, while the second is the ratio of load between each pair of controllers.
-This ratio is then bound to a threshold above witch a migration will be triggered to relieve one controller from its load and reallocate it to the other.
-Modeling the efficiency of the migration consider both the load variation of the controllers as well as the overhead of messages exchanged to implement the migration.  
+The first one is the actual amount of requests received by controllers, while the second is the load ratio between each pair of controllers.
+This ratio is then bound to a threshold above which a migration will be triggered to relieve one controller from its load and reallocate it to the other.
+Modeling the efficiency of the migration considers both the load variation of the controllers as well as the overhead of messages exchanged to implement the migration.  
 Finally, the migration strategy is in charge of determining which switch should be selected as the next candidate for the migration and where it should be migrated.
 Figure~\ref{fig:smdm-wang2017d} illustrate the interactions of the different components of the solution.
 
@@ -59,37 +58,37 @@ The cost of the migration is based on two metrics, the completion time of the mi
 Based on the original embedding and the new destination substrate, the goal is to determine the ordering of node migration that will minimize the cost of the migration.
 For each step in the migration, the time taken to migrate a node is divided into two parts. The first one represents the time taken to prepare the migration and the second one is the time taken to actually transmit the different information to the destination substrate.
 The cost of a migration step is the product of the time it takes to migrate the information and the impact the migration incurs on the bandwidth.
-Virtual nodes' status is based on whether the node has been migrated, if it will be at this step of the migration or if it will be later.
+Virtual nodes are categorized based on whether the node has been migrated, if it will be at this step of the migration or if it will be later.
 Similarly, the virtual links' are divided into three categories, whether the nodes composing the links have been migrated, will be migrated or will not be migrated.
 The categorization of virtual resources is then used to determine the cost of the migration.
 Three different virtual network migration algorithms are presented, differentiated by the fact that nodes may be either migrated one node at a time or multiple nodes may be migrated together.
 The first algorithm is a greedy iteration over the individual costs of migrating each nodes.
 The second algorithm is designed to minimize the migration time. Since migrated nodes are constrained not to be a neighbour of any other node, the algorithm determines the biggest set of independent nodes.
 Then, the algorithm leverages the fact that several nodes can be migrated simultaneously to reduce the total migration time.
-The third algorithm is a combination of the first two, where a trade of between migration time and migration cost is sought. The algorithm computes the different sets of independent nodes, and instead of choosing the largest one, they migrate the set with the smallest cost.
+The third algorithm is a combination of the first two, where a tradeoff between migration time and migration cost is sought. The algorithm computes the different sets of independent nodes, and instead of choosing the largest one, choose the set with the smallest cost.
 Again, this algorithm uses the simultaneous node migration to choose the set with the smallest cost.
 
 Robust virtual network migration is studied in~\cite{Ko2017c}. Authors outline that traditional migration suffers from down times proportional to the size of the migrated virtual networks, while protection mechanisms cannot be adapted to support the dynamic changes in the network.
 Three requirements are defined while considering drawbacks of existing migration techniques. 
 First, the tenant's controller should never be involved in the migration.
-Then the migration process should account for the network traffic status inside the physical infrastructure.
+Second, the migration process should account for the network traffic status inside the physical infrastructure.
 Finally, the migration process should minimize the number of interactions between the network hypervisor and the physical infrastructure.
 Protection and restoration techniques are described to account for these requirements.
-Protection consists in deploying inside the physical nodes calculated backup paths, prior to any incident.
+Protection consists in deploying backup paths on the physical nodes, calculated prior to any incident.
 This way, in case of a failure the traffic can immediately be routed through the alternative path. 
 This method implies that the hypervisor must maintain regularly updated backup paths in each node, incurring computational overhead, bandwidth consumption as well as limitations on the physical resources of the switch.
-Restoration is the case where all the backup paths are stored inside the network hypervisor memory and only deployed in case of a real life failure.
-This method is based on the assumption that failure will rarely happen, thus being resource effective because it will not generate an important number of messages between the infrastructure and the hypervisor.
-The network hypervisor determines backup path that will minimize the the amount of messages sent to the infrastructure.
+Restoration is the case where all the backup paths are stored inside the network hypervisor and only deployed in case of a failure.
+This method is based on the assumption that failures will rarely happen, thus the method being resource effective because it will not generate an important number of messages between the infrastructure and the hypervisor.
+The network hypervisor determines a backup path that will minimize the the amount of messages sent to the infrastructure.
 To do so, the backup path must use the same links as the original while only differing at the failure point.
 Updates of backup paths are performed regularly while a monitoring device collects statistic on available resources to determine if the current backup paths can still be used.
 The migration solution is implemented using OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}, where the path calculator and storage mechanisms will be adapted to fit the new requirements. Then new components related to the prioritization of backup paths, updating existing paths and monitoring the physical network are implemented and integrated into the hypervisor.
 
-Improving the revenue generated with network virtualization is done through migration.
+Improving the revenue generated with network virtualization can be done through migration.
 In ~\cite{fragment-Liu2018}, the purpose of VN migration is to optimize the acceptance ratio of new virtual network requests as well as the revenue to cost ratio.
-While traditional VNE algorithms only rely on the individual capacities of nodes and links, they do not consider node with the bandwidth of adjacent virtual links.
+While traditional VNE algorithms only rely on the individual capacities of nodes and links, they do not consider nodes with the bandwidth of adjacent virtual links.
 To this end, the notion of fragment degree for a virtual node is introduced and is defined as a weighted combination of the CPU consumption ratio of the virtual node on its embedding node and the bandwidth consumption ratio of adjacent virtual links on the physical substrate.
-The fragment degree of each virtual node is then associated with the embedding cost of existing virtual networks into a multi-objective integer linear programming. This problem being NP-hard, authors make it computationally tractable with a novel algorithm: Fragment-aware Virtual network Reconfiguration (FA-VNR).
+The fragment degree of each virtual node is then associated with the embedding cost of existing virtual networks into a multi-objective integer linear program. This problem being NP-hard, authors make it computationally tractable with a novel algorithm: Fragment-aware Virtual network Reconfiguration (FA-VNR).
 This algorithm first defines a migration trigger. 
 % Maximizing revenue over time pushed for a periodical migration of VNs.
 Then, it determines which set of physical nodes must be reconfigured by computing a dynamic threshold of ``fragmentation" in the infrastructure.
@@ -98,10 +97,11 @@ Once the destination substrate has been chosen, virtual nodes will be migrated a
 
 \subsubsection{Hardware specific virtual network migration}
 We present here two migration solutions that have been implemented on a particular physical infrastructure.
-While~\cite{Lo2014} is not specifically designed to work on a SDN infrastructure, the problems and challenges it introduces remain valid under the SDN paradigm.
+While~\cite{Lo2014} is not specifically designed to work on a SDN infrastructure, the problems and challenges it introduces remain valid in the SDN paradigm.
 
-\paragraph{PlanetLab} PlanetLab~\cite{planetlab} (PL) is a virtualization infrastructure used to provide slices of network resources for research experiments. Lo~\etal state in~\cite{Lo2014} that VN migration is a field where practical implementation and evaluation remain to be explored. They proposed a migration scheme and implemented it in PL, namely PL-VNM. This process should be designed to be automated, fast and minimize the service disruption time. While the migration process is automated, there is no detection component to automatically trigger the migration. Due to technical limitations of PL it is impossible to migrate a VN from a substrate to another. An alternative is proposed by partitioning the resources within a slice thus defining new virtual networks inside a PL slice. Virtual routers are instantiated for each virtual node required by the topology, and use an API to install forwarding rules in the kernel space of the physical node. 
-The migration process consists in cloning the network state of virtual nodes (\ie FIB) and then  redirect tenant's VMs traffic through the newly created virtual network.
+\paragraph{PlanetLab}\textbf{\\} 
+PlanetLab~\cite{planetlab} (PL) is a virtualization infrastructure used to provide slices of network resources for research experiments. Lo~\etal state in~\cite{Lo2014} that VN migration is a field where practical implementation and evaluation remain to be explored. They proposed a migration scheme and implemented it in PL, namely PL-VNM. This process should be designed to be automated, fast and minimize the service disruption time. While the migration process is automated, there is no detection component to automatically trigger the migration. Due to technical limitations of PL it is impossible to migrate a VN from a substrate to another. An alternative is proposed by partitioning the resources within a slice thus defining new virtual networks inside a PL slice. Virtual routers are instantiated for each virtual node required by the topology, and use an API to install forwarding rules in the kernel space of the physical node. 
+The migration process consists in cloning the network state of virtual nodes (\ie FIB) and then  redirect VMs' traffic through the newly created virtual network.
 While the duplication of networking state does not cause any packet loss from the tenant's point of view, setting up the redirection is most likely to create service disruption.
 Two different approaches are taken and evaluated. The first one consists in preparing the scheduling for the host redirection and then sequentially send commands to the gateways federing the hosts, namely remote scheduling.
 Figure~\ref{fig:plvnm} depicts the modules of PL-VNM and how the migration process is handled.
@@ -111,7 +111,7 @@ Both approaches make it hard to have a full control over the migration's timing.
 Authors conclude with three recommendations for the PL infrastructure and in general for network hypervisors.
 First, enabling gateway task scheduling with a magnitude order of ms. As is, \textit{at} scheduling uses seconds for tasks triggers while path latency of remote scheduling is a few hundreds of ms.
 Then, allowing the migration scheduler to prioritize migration commands to reduce the delay induced in the actual start of the command.
-Finally, implement asymmetric packet routing inside the infrastructure.
+Finally, implementing asymmetric packet routing inside the infrastructure.
 Because of the routing mode used in PL, each link in the gateway must have the same physical source and destination, thus preventing an asymmetric migration of the FIB from being effective. 
 
 \begin{figure}[ht]
@@ -121,7 +121,7 @@ Because of the routing mode used in PL, each link in the gateway must have the s
     \label{fig:plvnm}
 \end{figure}
 
-\paragraph{GENI} The GENI platform~\cite{GENI-Berman2014} is a network infrastructure based on SDN and used to provide isolated environments for researchers to run experiments.
+\paragraph{GENI} \textbf{\\}The GENI platform~\cite{GENI-Berman2014} is a network infrastructure based on SDN and used to provide isolated environments for researchers to run experiments.
 Zhao~\etal propose in~\cite{Zhao2017} a VN migration scheme implemented using GENI. Similarly to PlanetLab, GENI has not been designed to support the migration of VNs over different physical substrates. Implementing the VNs inside a GENI slice can be done by allocating all required resources from all tenants. This solution comes with drawbacks however: no clear isolation between VNs, lack of flexibility in case there is a need for a topology change and finally, in case of a failure of a VN or a host, the whole topology must be rebuilt.
 Another approach consists in allocating one slice for a single VN and then, and when migrating it allocate a new slice. The main challenge is to set up communication between the old and the new slice during the migration, since GENI enforces isolation between slices.
 In addition to the inter-slice communication, the migration process should not cause packet loss and be invisible to the tenant.
@@ -129,10 +129,8 @@ A proposed approach separates the old VN, the new VN and the hosts by setting up
 Without these gateways, the learning switch implemented by GENI would not allow to connect the hosts to the new VN because of conflicting rules (same source/destination, different output ports).
 The three slices will then share a common VLAN to communicate together.
 In order to minimize the packet loss incurred by the migration, the migration is optimized by scheduling the sequence of flows that will be deployed on the physical substrate.
-First the rules between gateways and the new VN are set up, then we redirect hosts' traffic toward the second gateway and finally old VN rules are dropped leading to a full disconnection of the former VN.
-A problem similar For instance, a critical flow carrying important information should not share a link with a certain traffic that may be subject to surges, thus leading to congestion and the important flow not being delivered. Another case would be when attackers would try to infer information on critical flows and then exploit the infrastructure.
-
-to the migration with PlanetLab is how the migration is scheduled on the physical switches.
+First the rules between gateways and the new VN are set up, then it redirects hosts' traffic toward the second gateway and finally old VN rules are dropped leading to a full disconnection of the former VN.
+A problem similar to the migration with PlanetLab is how the migration is scheduled on the physical switches.
 The first option is to remotely control network interfaces using SSH.
 An SSH connection with each switch is established and old interfaces will be shut down while activating the new ones.
 However, the lag induced by SSH authentication and by the time it takes to transmit commands makes the migration unpredictable.
@@ -142,58 +140,61 @@ Finally, the transparency of the migration is ensured by the migration controlle
 \subsubsection{Formal verification and security}
 In complement to the works aiming at improving the performance and the scalability of the virtualization infrastructure and the migration process, we now consider the works taking a formal approach to study specific properties of the migration process or using the migration process for security purposes.
 
-\paragraph{Inter-flow consistency}
-In a SDN infrastructure, the configuration deployed inside SDN switches will be updated and evolve regularly. Such modifications are invoked by the SDN controller and deployed among several switches.
+\paragraph{Inter-flow consistency}\textbf{\\}
+In a SDN infrastructure, the configuration deployed on SDN switches will be updated and evolve regularly. Such modifications are invoked by the SDN controller and deployed among several switches.
 Flow consistency ensures that each flow will be processed by either the old or the new configuration all along the way, and not by a combination of the two.
-However, Lui~\etal argue in~\cite{Liu2015a} that making sure that each individual flow has its own consistency preserved is not enough to respect certain security and reliability requirements.
+However, Liu~\etal argue in~\cite{Liu2015a} that making sure that each individual flow has its own consistency preserved is not enough to respect certain security and reliability requirements.
 It becomes necessary to model relationships between flows and to preserve certain properties throughout the migration.
 The properties considered here are spatial isolation and version isolation.
 The spatial isolation of two flows consists in preventing them from sharing a common physical resource before, during and after a change in the network configuration.
-For instance, a critical flow carrying important information should not share a link with a certain traffic that may be subject to surges, thus leading to congestion and the important flow not being delivered. Another case would be when attackers would try to infer information on critical flows and then exploit the infrastructure.
+For instance, a critical flow carrying important information should not share a link with a certain traffic that may be subject to surges, thus leading to link congestion and the important flow not being delivered. Another case would be when attackers would try to intercept information on critical flows and then exploit the infrastructure.
 Version isolation ensures that a configuration affecting different flows is fully deployed and prevents one flow being processed with one configuration and another flow with another version of the configuration.
-This problem related to the delay in actually deploying the configuration inside the switches, as outlined with PlanetLab and GENI.
+This problem is related to the delay in actually deploying the configuration inside the switches, as outlined with PlanetLab and GENI.
 The spatial isolation problem is approached using a dependence graph. Each path taken by a flow is mapped with the physical nodes they go through. Then, in case of overlapping node for several flows, the node is seen as a mutex node (similarly to the mutex of an operating system).
 No flow may go through a mutex node if another flow is currently using it.
 This ensures that specific traffic may not cohabit inside the same physical resources.
 To ensure the version isolation of different flows, the system identifies the set of flows that must be isolated. Then, it picks one to be processed normally and forward to the controller all the traffic of the remaining flows. This way, it makes sure that there are not two flows being processed by 2 different versions of a configuration. And when all the cached traffic is re-injected inside the infrastructure, it is being processed by a fully updated networking state.
-The generation of the dependence graphs is done by categorizing flows into two classes and using a greedy algorithm to determine how to minimize the amount of packet caching that should be done at the controller.
-The ordering of the migration sequences is determined From the graph. Each sequence is composed of several configuration modification, and these modifications are also ordered to minimize the migration time. 
+The generation of the dependence graphs is done by categorizing flows into two classes and using a greedy algorithm to determine how to minimize the amount of packet caching that would be done at the controller.
+The ordering of the migration sequences is determined from the graph. Each sequence is composed of several configuration modification, and these modifications are also ordered to minimize the migration time. 
 
-\paragraph{Moving Target Defense} Dynamically changing the location of sensitive targets is a technique called Moving Target Defense. Such changes prevent an attacker from accurately knowing the attack surface of the system he is attacking because the configuration regularly changes. Chowdhary~\etal~\cite{Chowdhary2016} use MTD techniques as part of a Detect-Analyze-Counter cycle inside a SDN-based Cloud infrastructure. 
+\paragraph{Moving Target Defense}\textbf{\\}
+Dynamically changing the location of sensitive targets is a technique called Moving Target Defense (MTD). Such changes prevent an attacker from accurately knowing the attack surface of the system he is attacking. 
+% because the configuration regularly changes. 
+Chowdhary~\etal~\cite{Chowdhary2016} use MTD techniques as part of a Detect-Analyze-Counter cycle inside a SDN-based Cloud infrastructure. 
 The security system is composed of four modules: a detection module, a vulnerability analyzer, a counter-measure creation and deployment component and a policy conflict resolution.
 The detection module is in charge of gathering information about the vulnerabilities in the infrastructure.
-Then, the analyzer will use this  information to dynamically generate an attack graph representing the capacities of the attacker. 
+Then, the analyzer will use these information to dynamically generate an attack graph representing the capacities of the attacker. 
 A counter-measure will then be generated to mitigate the potential attacks and propose it to the conflict resolution module that will determine if the newly created counter-measure is not going to have harmful side effects. Once the counter-measure is accepted it is deployed in the infrastructure and the detection module is notified of the new configuration. This cycle approach creates a dynamic detection/mitigation environment.
 The attack detection aspect is left out in this paper, as it is already a widely explored topic.
 A well known drawback of attack graphs is the difficult scalability when the number of states grows.
-This problem makes the graph generation computationally intractable. Partitioning the attack graphs into smaller regions based on each tenant using the infrastructure simplifies the generation.
+This problem makes the graph generation computationally intractable. Partitioning the attack graph into smaller regions based on each tenant using the infrastructure simplifies the generation.
 These sub-attack graphs are then simply merged together for the counter measure to be generated.
 The counter-measure component determines which VM should be migrated based on a security score based on the CVSS Base Score.
-Once the target VM is chosen, new flow rules are computed to realize the migration. 
+Once the target VM is chosen, new flow rules are computed to implement the migration. 
 The conflict resolution inspects the flow rules that should be deployed and extracts the actions of each rule and verify that they do not overlap with other existing flow rules. If a conflict arises, this module will try to find alternative rules. In the event where this would not be possible, the proposed counter-measure is rejected and a new one is computed.
 
-\paragraph{Seamless migration}
+\paragraph{Seamless migration}\textbf{\\}
 In the previous works, minimizing the service disruption caused by the migration has always been a major concern in the design of the solution. However, while the efficiency of the solution was evaluated with various experiments, there was no formal approach describing the transparency of the migration and ensuring that no disruption of service will be experienced by a tenant.
 The topic of seamless migration is brought up in~\cite{toward-Ghorbani2014} where Ghorbani~\etal take a closer look at network virtualization using SDN techniques.
 Precisely, the focus is put on the one-to-many mapping, also known as the `Big Switch" abstraction.
 Distributing a single virtual resource over several physical one may not preserve the per-flow correctness.
 Similarly to the version isolation presented in~\cite{Liu2015a}, flow correctness considers flows individually and ensures that each packet of each flow  is always processed by one specific version of a network configuration. 
 % Version isolation ensures that flows are processed by a single global configuration while flow correctness ensures that end points receive packets in the proper order to avoid errors at the application level.
-However, this definition does not ensure that the ordering of packets as seen by the tenant's applications and controllers is a good representation of how the packets were originally sent and ordered by the end point.
+However, this definition does not ensure that the ordering of packets as seen by the tenant's applications and controllers is a good representation of how the packets were originally sent and ordered by the other end point.
 A new definition of correctness is proposed to make sure that the ordering of packets is preserved from end to end.
 Following this introduction of end-to-end correctness, a solution for a seamless migration of VNs and VMs is proposed in LIME~\cite{Lime-Ghorbani2014}.
 The first contribution of this paper is a formal model for network virtualization migration, and it defines a transparency property related to the physical observation of the migration.
-The second is an implementation of virtual network migration process that is proven to respect the transparency property previously defined.
+The second is an implementation of a virtual network migration process that is proven to respect the transparency property previously defined.
 It is important to note that transparency does not exclude packet loss but it is aimed to be extremely reduced.
 The migration of the virtual network resources relies on switch cloning.
 LIME will instantiate several copies of each virtual node and orchestrate the migration so the tenant's traffic is still forwarded during the migration.
 In opposition to the requirement made in~\cite{Ko2017c}, LIME will notify the tenant application in case of a physical failure of a link.
 Ghorbani~\etal then use the formal model to extend the transparency property to the one-to-many mapping problem of~\cite{toward-Ghorbani2014}.
-Since the idea is to propose a ``Big Switch" abstraction while behind the scene the virtual resource is being replicated across several physical node, the point is to make sure that all nodes located on the edge of the Big Switch are preserving the ordering of the packets even when the configuration is updated.
+Since the idea is to propose a ``Big Switch" abstraction while behind the scene the virtual resource is being replicated across several physical nodes, the point is to make sure that all nodes located on the edge of the Big Switch are preserving the ordering of the packets even when the configuration is updated.
 The observation correctness introduced in LIME is enhanced with the concept of weak causality where an event has weak causal dependency with another if the first event has triggered the other under certain conditions.
 Thus, the observable ordering of events will matter only if those events are correlated.
 
 \subsubsection{Summary}
-The study of VN migration remains a topic of interest has it has been studied but often with the same objective: creating a migration process that will improve the performance of the infrastructure. 
+The study of VN migration remains a topic of interest as it has been studied but often with the same objective: creating a migration process that will improve the performance of the infrastructure. 
 The migration process has not been studied under the security perspective.
 This leaves space for defining the security of the migration process, its properties and how can they be observed and verified.

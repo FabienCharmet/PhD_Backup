@@ -6,7 +6,7 @@ We limit the description of the different axioms used by SNARK for simplicity of
 % The full implementation of the use case in SNARK is described in Appendix~\ref{appendix:snark-code}.
 
 We have implemented a simulator to generate the formal trace of the migration.
-This work includes the topology, the algorithm used, the attacks on the migration process and the different rights users have on the infrastructure.
+This work includes the topology, the algorithms used, the attacks on the migration process and the different rights users have on the infrastructure.
 
 \subsubsection{Use case setup}
 We have set up a network topology with six nodes, as depicted in Figure~\ref{fig:usecase-topo}
@@ -31,7 +31,7 @@ We formulate our question to SNARK and verify that the confidentiality is alread
 
 
 
-\begin{lstlisting}[caption=SNARK question to validate the initial situation., label=lst:init-conf-q] 
+\begin{lstlisting}[caption=SNARK question to validate the initial situation., label=lst:init-conf-q,captionpos=b] 
 (find-all '(ans ?d.data ?t.time-interval)
  '(and
  (data-confidentiality ?d.data ?t.time-interval)
@@ -46,47 +46,45 @@ We formulate our question to SNARK and verify that the confidentiality is alread
 ;;; has been maintained
 
 
-(find-all '(ans ?n.node ?t.time-interval)
+(find-all '(ans ?d.data ?t.time-interval)
  '(and
- (node-confidentiality ?n.node ?t.time-interval)
+ (config-integrity ?d.data ?n.node ?t.time-interval)
 (non-empty ?t.time-interval))
- :name 'node-confidentiality-preservation-conjecture
+ :name 'config-integrity-preservation-conjecture
  :num-answers 1
  :time-limit 30  
  :print-derived :print)
 
-;;; search for a node-confidentiality breach:
-;;; find all nodes for which node-confidentiality 
+;;; search for a config-integrity breach:
+;;; find all configurations for which config-integrity
 ;;; has been maintained
 \end{lstlisting}
 
 %\GB{could you comment a bit about what piece of SNARK response  in Lst.~\ref{lst:init-conf-a} gives away the result?}
 The interpretation of results provided by SNARK depends on how the question has been formulated.
-Lines 1 and 15 from Listing~\ref{lst:init-conf-q} contain requests for the format of the answer.
-In these lines, we request SNARK to verify if both nodes and data have their confidentiality respected. The answer will display the time intervals verifying the preservation.
-Lines 5 and 15 of Listing~\ref{lst:init-conf-a} hold the answer.
+Listing~\ref{lst:init-conf-q} contains requests for the format of the answer.
+For the data confidentiality, line 1 describes what are the variables we are looking for. Lines 2-4 describes what SNARK has to prove, \ie the data confidentiality property that holds on a non empty time interval.
+Lines 5-8 are options passed to SNARK for the resolution.
+We have a similar request in lines 15-22 for the configuration integrity property.
+
+Lines 5 and 11 of Listing~\ref{lst:init-conf-a} hold the answers.
 We can establish from line 5 that data-1 has its confidentiality respected (and it is the only one used in our experiment).
-At line 15, we have proven that node-1 is not compromised.
-The same goes for all the other nodes of the topology, 
-for the sake of brevity, these proofs have been omitted.
+At line 11, we have proven that conf-1 is not compromised either (and it is the only one used as well).
+% The same goes for all the other nodes of the topology, for the sake of brevity, these proofs have been omitted.
 %but we do not provide the print out in this paper.
 
-\begin{lstlisting}[caption=SNARK validating the initial situation, label=lst:init-conf-a] 
+\begin{lstlisting}[caption=SNARK validating the initial situation, label=lst:init-conf-a,captionpos=b] 
 (Row 69
-(OR ($$TIME-PP-NOT-BEFORE TIME-0 TIME-1) 
-(= (SOME-USER1 DATA-1 (MAKE-INTERVAL TIME-0 TIME-1)) USER-2))
+(OR ($$TIME-PP-NOT-BEFORE TIME-0 TIME-4) 
+(= (SOME-USER1 DATA-1 (MAKE-INTERVAL TIME-0 TIME-4)) USER-2))
 (RESOLVE 66 NON-EMPTY-IF-TIME-POINTS-ORDERED)
-Answer (ANS (ANS DATA-1 (MAKE-INTERVAL TIME-0 TIME-1)))) 
+Answer (ANS (ANS DATA-1 (MAKE-INTERVAL TIME-0 TIME-4)))) 
 
-(OR ($$TIME-PP-NOT-BEFORE TIME-0 TIME-1)
- (= (SOME-USER1 (SOME-DATA NODE-A (MAKE-INTERVAL TIME-0 TIME-1)) (MAKE-INTERVAL TIME-0 TIME-1)) USER-2)
- (= (SOME-USER NODE-A (MAKE-INTERVAL TIME-0 TIME-1)) USER-2)
- (NOT (DATA-AT-NODE (SOME-DATA NODE-A (MAKE-INTERVAL TIME-0 TIME-1)) NODE-A (MAKE-INTERVAL TIME-0 TIME-1)))
- (NOT
-  (DATA-ISAUTHORIZED USER-1 (SOME-DATA NODE-A (MAKE-INTERVAL TIME-0 TIME-1))
-   (MAKE-INTERVAL TIME-0 TIME-1))))
-   (RESOLVE 115 NON-EMPTY-IF-TIME-POINTS-ORDERED)
-   Answer (ANS (ANS NODE-A (MAKE-INTERVAL TIME-0 TIME-1)))) 
+
+(Row 480
+   (AFTER TIME-2 TIME-3)
+   (REWRITE (RESOLVE 235 0-IS-BEFORE-1) :CODE-FOR-$$TIME-PP-COMPOSITION)
+   Answer (ANS (ANS CONF-1 (MAKE-INTERVAL TIME-0 TIME-1)))) 
 \end{lstlisting}
 
 
@@ -101,7 +99,7 @@ The migration process starts and nodes and links are being migrated, one after a
 At some point during the migration, the attacker will start his attack to gain access to the data carried through the VN.
 This results into the generation of two predicates, one about the attacker reading the data, and the other about him not being authorized to do so. 
 When the migration process ends, the data has been compromised.
-In SNARK, the data has been named data-1 and the migration ends at time point time-9.
+In SNARK, the piece of data has been named data-1 and the migration ends at time point time-9.
 We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf-q}.
 
 % \begin{figure}[h]
@@ -114,7 +112,7 @@ We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf
 % \includegraphics[scale=0.5]{not-data-confidentiality-answer}
 % \caption{SNARK detecting the data confidentiality violation\label{fig:not-data-conf-a}}
 % \end{figure}
-\begin{lstlisting}[caption=SNARK question to detect the data confidentiality violation., label=lst:not-data-conf-q] 
+\begin{lstlisting}[caption=SNARK question to detect the data confidentiality violation., label=lst:not-data-conf-q,captionpos=b] 
    (find-all '(ans ?d.data ?t.time-interval)
              '(and
        (not(data-confidentiality ?d.data ?t.time-interval))
@@ -127,7 +125,7 @@ We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf
 ;;; find all data for which data-confidentiality has been maintained
 
 \end{lstlisting}
-\begin{lstlisting}[caption=SNARK detecting the data confidentiality violation., label=lst:not-data-conf-a] 
+\begin{lstlisting}[caption=SNARK detecting the data confidentiality violation., label=lst:not-data-conf-a,captionpos=b] 
 (Row 2112  
 (OR
  (NOT
@@ -147,36 +145,82 @@ Line 10 highlights that the attacker does not have the authorization to read the
 %\GB{could you point out directly which line you are referring to by labeling and referring to independent lines in the listing?}
 
 \subsubsection{Migration alteration attack}
-Exploiting the physical nodes leverages other aspects of the security the infrastructure.
+Exploiting the physical nodes leverages other aspects of the security of the infrastructure.
 The initial situation is similar to the previous scenario but we use the move-based migration algorithm instead.
 The attacker is located in the network infrastructure.
-The attacker can render physical nodes unavailable to trigger the migration process and will intercept and modify the configuration data sent by the hypervisor. 
-Therefore, the $conf\_integrity$ property does not hold true anymore.
-%\GB{should this fact be generated. Should this be rather the absence of an is\_authorized predicate that would indicate the attack?}
-%\FC{Answered by email}
-At line 1 in Listing~\ref{lst:not-conf-int-q}, we ask SNARK to find all the nodes in which there is an integrity breach for their configuration.
+The attacker can render physical nodes unavailable to trigger the migration process and will intercept and modify the configuration sent by the hypervisor. 
+Therefore, the $conf\_integrity$ property does not hold anymore.
+
+We implement in SNARK the $conf\_integrity$ property, as depicted in Listing~\ref{lst:conf-integrity-definition}.\\
+Lines 1-3 define the equivalence between the $conf\_integrity$ property and the other predicates.\\
+Line 4 defines a logical AND between the predicates at Lines 5,11,14,17,20 and 23.\\
+Line 5 defines \textit{?t.t-int}, a time interval as the intersection of all the time intervals expressed in the following predicates.\\
+Line 11 assigns controller \textit{?c.controller} to node \textit{?n.node}.\\
+Line 14 defines \textit{?p.path} as the path between \textit{?c.controller} and \textit{?n.node}.\\
+Line 17 assigns configuration \textit{?d.data} to node \textit{?n.node}.\\
+Line 20 represents preservation of the integrity of configuration data \textit{?d.data}.\\
+Note that we modeled the implication ($\Rightarrow$) defined in Section\ref{sec:security_prop} as a logical AND (\ie $\wedge$).\\
+Line 23 ensures that \textit{?t.t-int} is not empty.
+
+\begin{lstlisting}[caption=SNARK definition of the configuration integrity., label=lst:conf-integrity-definition,captionpos=b] 
+(implied-by
+  (config-integrity 
+     ?d.data ?n.node ?t.t-int)
+  (and
+    (= ?t.t-int
+       (intersection
+    	  (time-i ?r1.t-pt ?r2.t-pt)
+    	  (time-i ?s1.t-pt ?s2.t-pt)
+    	  (time-i ?u1.t-pt ?u2.t-pt)
+    	  (time-i ?v1.t-pt ?v2.t-pt)))
+    (is-hypervisor-of
+       ?c.controller ?n.node 
+       (time-i ?r1.t-pt ?r2.t-pt))
+    (is-path 
+	   ?c.controller ?p.path ?n.node
+       (time-i ?s1.t-pt ?s2.t-pt))
+    (conf-of-node
+	   ?d.data ?n.node
+       (time-i ?u1.t-pt ?u2.t-pt))
+    (d-integrity
+	   ?d.data
+       (time-i ?u1.t-pt ?u2.t-pt))
+    (non-empty ?t.t-int)))
+
+\end{lstlisting}
+
+We formulate in Listing~\ref{lst:not-conf-int-q} the question for SNARK.\\
+Line 1 represents the format of the answer, here we simply look for which configuration is being compromised. In lines 2-4 we search for the violation of the $conf\_integrity$ property over a non empty interval. Similarly to other questions, lines 5-8 represent parameters for SNARK to use in the resolution.
 
 \begin{lstlisting}[caption=SNARK question to detect the configuration integrity violation., label=lst:not-conf-int-q,captionpos=b] 
-   (find-all '(ans ?n.node ?t.time-interval)
+   (find-all '(ans ?d.data ?t.time-interval)
              '(and
        (not(conf-integrity ?d.data ?n.node ?t.time-interval))
                (non-empty ?t.time-interval))
-             :name 'conf-int-violation-conjecture
+             :name 'conf-integrity-violation-conjecture
              :num-answers 1
-             :time-limit 30
+             :time-limit 5
                      :print-derived :print)
    ;;; search for a configuration integrity breach:
-   ;;; find all nodes for which conf-integrity has not been maintained
+   ;;; find all configurations for which conf-integrity has not been maintained
 \end{lstlisting}
-The configuration integrity breach is then proven by SNARK for new\_node-a (the first migrated node) at line 3 in Listing~\ref{lst:not-conf-int-a}.
-Similarly to the previous information disclosure scenario, the attack starts after the beginning of the migration process.
-SNARK finds the beginning of the attack on node-a starting at time point time-1.
+
+The configuration integrity breach is then proven by SNARK in Listing~\ref{lst:not-conf-int-a} for conf-1 at line 8 between time points time-3 and time-4 .
+Similarly to the previous information disclosure scenario, the attack starts after the beginning of the migration process, as shown by the answer term starting at time-3.
+
+The proofs related to the other security properties are identical in essence, thus we do not include them here.
+% SNARK finds the beginning of the attack on node-a starting at time point time-3.
 %\GB{again, please provide line numbers for the reviewer to ``see something''}
 
 \begin{lstlisting}[caption=SNARK detecting the configuration integrity violation., label=lst:not-conf-int-a,captionpos=b] 
-(AND (DATA-INTEGRITY DATA-CONF (MAKE-INTERVAL TIME-1 ?X.TIME-POINT))
- ($$TIME-PP-NOT-AFTER ?X.TIME-POINT TIME-3))
-   Answer (ANS (ANS NEW_NODE-A (MAKE-INTERVAL TIME-1 TIME-3)))) 
+(Row 197
+   FALSE
+   (REWRITE (RESOLVE 154 2-IS-BEFORE-3) :CODE-FOR-$$TIME-PP-INTERSECTION)
+   Answer 
+(ANSWER-IF (= (CONF-1 (MAKE-INTERVAL TIME-1 TIME-4) (MAKE-INTERVAL TIME-1 TIME-3)) PROCESS-1)
+ (ANS (ANS (MAKE-INTERVAL TIME-3 TIME-4))) (ANS (ANS (MAKE-INTERVAL TIME-2 TIME-3)))))
+)
+((ANS (ANS CONF1 (MAKE-INTERVAL TIME-3 TIME-4)))
+
 \end{lstlisting}
 
-The proof related to the other security properties is identical in essence, thus we do not include it here.

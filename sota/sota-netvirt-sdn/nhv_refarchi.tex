@@ -104,11 +104,11 @@ Distributed network hypervisors or multi-cloud hypervisor may be subject to such
 % Security constraints include the availability of cryptography to cipher the communication end to end, the possibility to refuse to host a virtual network on the same physical substrate or even the same datacenter that another virtual network etc.
 
 \subparagraph{Virtual Network Migration}
-In order to answer to failures, attacks, and optimization issues, it is possible to migrate the virtual network on a different set of physical resources. 
+In order to answer to failures, attacks, and optimization issues, it is possible to migrate the virtual network on a different subset of physical resources. 
 Therefore, changes in the infrastructure, failure on a link or a switch, or over-consumption of network resources may require a change in the mapping of the virtual topology on the physical network.
 The VNEC will be notified by the monitoring component, and then recompute the mapping of the topology with the physical infrastructure~\cite{VeRTIGO-Corin2012a,AutoSlice-Bozakov2012,CoVisor-Jin2015}.
 There are cases where the tenant should be notified about the migration.
-For instance, depending on the Service Level Agreement (SLA) between a particular tenant and the infrastructure provider, the migration may not be doable.
+For instance, depending on the Service Level Agreement (SLA) between a particular tenant and the infrastructure provider, the migration may not be doable for reasons similar to the one presented earlier.
 
 \paragraph{Resource Isolation}
 The resource isolation component (RIC) ensures tenants that they are served the amount of resources they have requested.
@@ -117,26 +117,26 @@ FlowVisor-based hypervisors~\cite{FlowVisor-Sherwood2009,ADVisor-Salvadori2012,V
 
 
 \paragraph{Monitoring}
-Monitoring the virtualization infrastructure serve two different purposes.
+Monitoring the virtualization infrastructure serves two different purposes.
 The first one is to ensure the proper functioning of the hypervisor's operations and is implemented on every hypervisor. However, it can range from switch discovery (similarly to a SDN controller) to resource monitoring and failure detection.
 The second one is to serve the Security Component with data that will be used in detecting, preventing and mitigating attacks on tenants' virtual networks or on the hypervisor.
 Most hypervisors implement a monitoring component to perform standard virtualization operations, while very few solutions implemented a monitoring to support advanced features or detect attacks~\cite{VeRTIGO-Corin2012a,CoVisor-Jin2015,FlowN-Drutskoy2012,AutoSlice-Bozakov2012,NVP-Koponen2014,ONVisor-Han2018}.
 
-There are several different type of information that may be monitored:
+There are several types of information that may be monitored:
 
 \subparagraph{Tenant to hypervisor traffic} Requests and configuration commands sent by a tenant can impact the security of the virtualization infrastructure. A malicious tenant may exploit vulnerable hypervisors by sending forged requests that will alter legitmate users' virtual networks. The monitoring module may forward the tenant's requests to the Security Component for further investigation.
 
 \subparagraph{Management traffic} 
-The notifications sent by topology discovery protocols such as LLDP notify the hypervisor about the current state of the physical network equipments. If a switch has a failure or becomes the target of an attack the VNEC or the Security Component will be notified. The VNEC may then trigger a migration to relocate the virtual network on a new physical substrate or the Security Component will raise an alert and trigger mitigation procedures.
+The notifications sent by topology discovery protocols such as LLDP notify the hypervisor about the current state of the physical network equipments. If a switch has a failure or becomes the target of an attack, the Security Component will be notified. The VNEC may then trigger a migration to relocate the virtual network on a new physical substrate or the Security Component will raise an alert and trigger mitigation procedures.
 Management traffic also includes packets sent by and to physical equipments to ensure their proper operation.
 This includes metrics about the resources used on each switch, information about the particular configuration of a switch or the potential errors raised.
 
-\subparagraph{Configuration requests} An attacker located inside the physical infrastructure may leverage vulnerabilities in switches or in the authentication scheme to deploy malicious configuration rules These rules may alter the behavior of the networking equipments and may lead to a data exfiltration scenario or a Denial of Service.
+\subparagraph{Configuration requests} An attacker located inside the physical infrastructure may leverage vulnerabilities in switches or in the authentication scheme to deploy malicious configuration rules. These rules may alter the behavior of the networking equipments and may lead to a data exfiltration scenario or a Denial of Service.
 The Security Component will be notified about these configuration packets.
 
 \paragraph{Security Component}
-The Security Component (SC) is in charge of detecting, preventing and mitigating attacks on the virtualization infrastructure. The SC relies on the monitoring in the infrastructure to collect useful data related to the security of the virtual networks and the physical equipments.
-The problem of the security inside a network hypervisor is not very well studied and especially in the context of the migration of virtual networks.
+The Security Component (SC) is in charge of detecting, preventing and mitigating attacks on the virtualization infrastructure. The SC relies on the monitoring of the infrastructure to collect useful data related to the security of the virtual networks and the physical equipments.
+The problem of the security inside a network hypervisor has only been partially studied~\cite{Costa2015}, but not in the context of the migration of virtual networks.
 % The SC can operate on several levels, namely detection, prevention and mitigation.
 
 \subparagraph{Detection}
@@ -145,9 +145,9 @@ For instance, the number of tenant requests may be monitored in order to detect 
 There is so far no proposition of an attack detection mechanism for network hypervisors.
 
 \subparagraph{Prevention}
-Prevention of attacks can be implemented by either limiting the attack surface accessible to an attacker or by preventing the attack to reach its destination. The limitation of the attack surface is proposed by CoVisor~\cite{CoVisor-Jin2015} where each tenant is limited in its ability to process packet.
-NVP~\cite{NVP-Koponen2014} implements tunnels between virtual nodes to simplify the routing of the physical infrastructure and ensure a certain level of confidentiality.
-ONVisor~\cite{ONVisor-Han2018} implements an access control module in charge of authenticating tenants applications and prevent them from interfering with other virtual networks.
+Prevention of attacks can be implemented by either limiting the attack surface accessible to an attacker or by preventing the attack to reach its destination. The limitation of the attack surface is proposed by CoVisor~\cite{CoVisor-Jin2015} where each tenant is limited in its ability to handle network traffic.
+NVP~\cite{NVP-Koponen2014} implements tunnels between virtual nodes to simplify the routing of the physical infrastructure and ensure a certain level of security.
+ONVisor~\cite{ONVisor-Han2018} implements an access control module in charge of authenticating tenants applications and preventing them from interfering with other virtual networks.
 This will require the setup of particular pipeline that may redirect packets to the security component and drop them accordingly. This aspect is not well exploited because it is strongly correlated to the ability of detecting attacks, which is also not well investigated. 
 
 \subparagraph{Mitigation}
@@ -160,21 +160,21 @@ In this section we describe the different information flows illustrated by Figur
 
 \circled{1} Tenant - CPAC: This flow is mainly composed of composed of commands sent by the tenant and the view of the virtual network sent by the hypervisor. Additional traffic may include specific notifications (\eg security and performance alerts).
 
-\circled{2} CPAC - VNEC: The CPAC transmits requests for new virtual networks to be deployed in the physical infrastructure, and the VNEC returns whether or not the request is accepted.
+\circled{2} CPAC - VNEC: The CPAC transmits requests for new virtual networks to be deployed on the physical infrastructure, and the VNEC returns whether or not the request is accepted.
 
-\circled{3} CPAC - Monitoring: The CPAC forwards the requests sent by the tenant to the monitoring module, for logging and security purposes. 
+\circled{3} CPAC - Monitoring: The CPAC forwards requests sent by the tenant to the monitoring module, for logging and security purposes. 
 
-\circled{4} CPAC - DPAC: The CPAC forwards flow rules from the tenant to the DPAC that will translate virtual identifiers to the physical ones and install these rules in the physical infrastructure.
+\circled{4} CPAC - DPAC: The CPAC forwards flow rules from the tenant to the DPAC that will translate virtual identifiers into the physical ones and deploy these rules on the physical infrastructure.
 
 \circled{5} Security - CPAC: The security component raises alerts by analyzing networking events and tenants requests.
 
 \circled{6} VNEC - RIC: The VNEC interacts with the RIC to maintain the availability of resources to compute the embedding of the requested virtual network.
 
-\circled{7} Monitoring - VNEC: The monitoring component transmits to the VNEC a migration request in case of a failure in the infrastructure.
+\circled{7} Monitoring - VNEC: The monitoring component transmits to the VNEC a notification for migration in case of a failure in the infrastructure.
 
 \circled{8} VNEC - DPAC: The VNEC transmits to the DPAC the flow rules corresponding to the virtual network that must be deployed in the infrastructure, whether it is a new request or a migration.
 
-\circled{9} Monitoring - Security: The monitoring forwards to the security component suspicious tenants' requests or networking events for further processing.
+\circled{9} Monitoring - Security: The monitoring forwards to the security component suspicious requests or networking events for further processing.
 
 \circled{10} RIC - Monitoring: This flow is composed of performance metrics used by the RIC to verify the proper isolation of resources in the infrastructure.
 
