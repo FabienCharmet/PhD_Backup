@@ -1,12 +1,12 @@
 \label{sec:security_prop}
-In this section, we define the different security properties we consider in the environment during the migration.
-We propose several security properties: confidentiality, integrity, availability, usually referred to as CIA~\cite{ISO/IEC270012013}, and we introduce co-residency.
-After providing a formal definition of the security property, we refine it into several properties related to the operation of SDN networks and virtualization. Each property concerns physical elements of the SDN infrastructure, and we provide the equivalent properties for the virtual nodes and links if they exist. 
+In this section, we define the different security properties we consider during the migration of virtual networks.
+We propose several security properties: confidentiality, integrity, availability, usually referred to as CIA~\cite{ISO/IEC270012013}, and we introduce co-residency, a property related to the virtualization process.
+After providing a formal definition of each security property, we refine it into several properties related to the operation of SDN networks and virtualization. Each property concerns physical elements of the SDN infrastructure, and we provide the equivalent properties for the virtual nodes and links if they exist. 
 % For the rest of this section, we note $E_n$ (respectively $E_l$) the underlying resources embedding virtual node $n$ (respectively virtual link $l$).
 
 \subsubsection{Confidentiality}
 \label{sec:prop-conf}
-Confidentiality is a characteristic that applies to information.
+Confidentiality is a characteristic related to information.
 To protect and preserve the confidentiality of information means to ensure that it is not made available or disclosed to unauthorized entities~\cite{ISO/IEC270012013}.
 Therefore, in network security, the confidentiality of a message in transit in the network is defined by the ability of an authorized  user to read data forwarded by an element of the network.
 Formally we can define a predicate $confidentiality(D)$ as follows:
@@ -23,7 +23,7 @@ $ confidentiality(D) \Leftrightarrow \forall U,t~reads(U,D,t) \Rightarrow is\_da
 Simply put, if at any time no user reads $D$ or every user reading $D$ is authorized to do so, then the confidentiality of $D$ is preserved.
 From a cryptographical perspective, ciphered data and plain text data are treated as the same regarding their confidentiality while in transit in the network.
 Obviously, ciphered data is more secured than plain text data but this is not in the scope of this model.\\
-From this definition, we can describe several properties directly affecting the physical and virtual topology.
+From this definition, we can describe several properties directly affecting the physical infrastructure or virtual networks.
 
 
 % Give names instead of numbers 1, 2?
@@ -45,7 +45,7 @@ confidentiality(D) \wedge is\_carrying(N,D,t) \wedge (accessing(U,N,t) \Rightarr
 \item $is\_carrying(N,D,t)$ is true if node $N$ is carrying data $D$ at time $t$.
 \end{itemize}
 
-\textbf{Property 1b:} A virtual node respects the confidentiality of the data it is carrying if and only if the embedding nodes respect the confidentiality of the data as well.
+\textbf{Property 1b:} A virtual node respects the confidentiality of the data it is carrying if and only if the embedding nodes have their confidentiality respected as well.
 %\RW{is the table helpful?  the formula seems clearer to me. rw}\FC{Cleaned}
 \newline \textbf{Formal definition:} Let $n$ be a virtual node and $E_n$ the physical resources embedding $n$.
 
@@ -78,7 +78,7 @@ $path\_confidentiality(P) \Leftrightarrow \bigwedge\limits_{n \in L_N^P}node\_co
 % \end{myformula}
 
 \textbf{Property 3:} A node's configuration remains confidential during a migration if the employed communication channel respects the confidentiality of the communication.
-\newline \textbf{Formal definition:} Let $N$ be a node, $conf$ be the configuration to be pushed, $C$ be an hypervisor.
+\newline \textbf{Formal definition:} Let $N$ be a node, $P$ a path, $conf$ be the configuration to be pushed, $C$ be an hypervisor.
 \newline
 
 \begin{myformula}
@@ -101,7 +101,7 @@ $
 We emphasize on the fact that the integrity property is evaluated over a period of time instead of being instantaneous.
 %\RW{unclear--why "therefore";  what are the temporal values of a piece of information? is that the result of eval at a given time?}\FC{Yes, the integrity of information means that it remains constant through time, unless processed, obviously}
 
-We define two predicates, $d\_integrity(D,ti)$ and $p\_integrity(P,D,N,ti)$, which represent  the integrity of the data $D$ itself and the integrity of the process $P$ used by node $N$ to manipulate $D$, over a time interval $ti$. 
+We define two predicates, $d\_integrity(D,ti)$ and $p\_integrity(P,D,ti)$, which represent  the integrity of the data $D$ itself and the integrity of the process $P$ used to manipulate $D$, over a time interval $ti$. 
 
 Therefore, if a data has not been legitimately processed, its integrity holds if it hasn't been modified in any other way.
 \begin{myformula}
@@ -124,7 +124,7 @@ $p\_integrity(P, ti) \Leftrightarrow \forall t_1,t_2 \in ti~ \overline{modified(
 
 \begin{itemize}
 \item $modified(P,ti)$ holds true if process $P$ has been modified legitimately during time interval ti
-\item $peval(P,t)$ returns the process $P$ at time $t$
+% \item $peval(P,t)$ returns the process $P$ at time $t$
 \end{itemize}
 %\RW{you use P for paths and processes. and p for a function. what is the output of data? is it the value (eval?)}\FC{I don't understand}\GB{beware: you've been using $P$ for two distinct notions. I think that what RW means it that $p$ evaluates the realization of process $P$ over data $D$. In that sense you could, replace $p$ by the keyword $eval$}
 
@@ -163,7 +163,7 @@ $vlink\_integrity(n) \Leftrightarrow \bigwedge\limits_{N \in E_l} node\_integrit
 \newline
 
 \begin{myformula}
-$path\_integrity(P) \Leftrightarrow \bigwedge\limits_{n \in L_N}integrity(n) $
+$path\_integrity(P) \Leftrightarrow \bigwedge\limits_{n \in L_N^P}integrity(n) $
 \end{myformula}
 
 % \textbf{Property 2b:} A virtual path preserves integrity from end to end if all its virtual nodes and links preserve their own integrity.
@@ -198,7 +198,7 @@ $
 An asset is available if it is accessible and usable when
 needed by an authorized entity~\cite{ISO/IEC270012013}.
 
-We can define the predicate $availability(A)$ which represents the availability of asset $A$.
+We can define the predicate $availability(A)$ representing the availability of asset $A$.
 \newline
 Let $A$ be an asset, $U$ a user and $ti$ a time interval.
 \newline
@@ -206,7 +206,7 @@ Let $A$ be an asset, $U$ a user and $ti$ a time interval.
 %\FC{In the same way we consider confidentiality and integrity, as long availability is preserved we don't need time, but we need to pinpoint the time intervals related to the violation if needed.}
 
 \begin{myformula}
-$availability(A) \Leftrightarrow \forall ti~is\_accessible(U,A,ti) \wedge is\_usable(U,A,ti) \Rightarrow is\_asset\_authorized(U,A,ti)$
+$availability(A) \Leftrightarrow \forall U,ti~is\_accessible(U,A,ti) \wedge is\_usable(U,A,ti) \Rightarrow is\_asset\_authorized(U,A,ti)$
 \end{myformula}
 
 % \RW{why would an asset not be available, if it is useable and the user is authorized?  is it because an authorized path does not exist?}

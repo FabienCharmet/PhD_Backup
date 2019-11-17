@@ -97,7 +97,7 @@ Once the destination substrate has been chosen, virtual nodes will be migrated a
 
 \subsubsection{Hardware specific virtual network migration}
 We present here two migration solutions that have been implemented on a particular physical infrastructure.
-While~\cite{Lo2014} is not specifically designed to work on a SDN infrastructure, the problems and challenges it introduces remain valid in the SDN paradigm.
+While~\cite{Lo2014} is not specifically designed to work on an SDN infrastructure, the problems and challenges it introduces remain valid in the SDN paradigm.
 
 \paragraph{PlanetLab}\textbf{\\} 
 PlanetLab~\cite{planetlab} (PL) is a virtualization infrastructure used to provide slices of network resources for research experiments. Lo~\etal state in~\cite{Lo2014} that VN migration is a field where practical implementation and evaluation remain to be explored. They proposed a migration scheme and implemented it in PL, namely PL-VNM. This process should be designed to be automated, fast and minimize the service disruption time. While the migration process is automated, there is no detection component to automatically trigger the migration. Due to technical limitations of PL it is impossible to migrate a VN from a substrate to another. An alternative is proposed by partitioning the resources within a slice thus defining new virtual networks inside a PL slice. Virtual routers are instantiated for each virtual node required by the topology, and use an API to install forwarding rules in the kernel space of the physical node. 
@@ -141,7 +141,7 @@ Finally, the transparency of the migration is ensured by the migration controlle
 In complement to the works aiming at improving the performance and the scalability of the virtualization infrastructure and the migration process, we now consider the works taking a formal approach to study specific properties of the migration process or using the migration process for security purposes.
 
 \paragraph{Inter-flow consistency}\textbf{\\}
-In a SDN infrastructure, the configuration deployed on SDN switches will be updated and evolve regularly. Such modifications are invoked by the SDN controller and deployed among several switches.
+In an SDN infrastructure, the configuration deployed on SDN switches will be updated and evolve regularly. Such modifications are invoked by the SDN controller and deployed among several switches.
 Flow consistency ensures that each flow will be processed by either the old or the new configuration all along the way, and not by a combination of the two.
 However, Liu~\etal argue in~\cite{Liu2015a} that making sure that each individual flow has its own consistency preserved is not enough to respect certain security and reliability requirements.
 It becomes necessary to model relationships between flows and to preserve certain properties throughout the migration.
@@ -160,7 +160,7 @@ The ordering of the migration sequences is determined from the graph. Each seque
 \paragraph{Moving Target Defense}\textbf{\\}
 Dynamically changing the location of sensitive targets is a technique called Moving Target Defense (MTD). Such changes prevent an attacker from accurately knowing the attack surface of the system he is attacking. 
 % because the configuration regularly changes. 
-Chowdhary~\etal~\cite{Chowdhary2016} use MTD techniques as part of a Detect-Analyze-Counter cycle inside a SDN-based Cloud infrastructure. 
+Chowdhary~\etal~\cite{Chowdhary2016} use MTD techniques as part of a Detect-Analyze-Counter cycle inside an SDN-based Cloud infrastructure. 
 The security system is composed of four modules: a detection module, a vulnerability analyzer, a counter-measure creation and deployment component and a policy conflict resolution.
 The detection module is in charge of gathering information about the vulnerabilities in the infrastructure.
 Then, the analyzer will use these information to dynamically generate an attack graph representing the capacities of the attacker. 

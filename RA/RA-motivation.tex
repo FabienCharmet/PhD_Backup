@@ -1,4 +1,4 @@
-In the previous chapter we have presented a formal model describe several security aspects of a SDN virtualization infrastructure, and more precisely we considered the virtual network migration process as a specific context in the virtualization.
+In the previous chapter we have presented a formal model describe several security aspects of an SDN virtualization infrastructure, and more precisely we considered the virtual network migration process as a specific context in the virtualization.
 
 We made several assumptions for this work, and one of the strongest is the perfect knowledge of the events in the network infrastructure. The proof given by the formal model relies on the fact that we have a complete knowledge of all the events that happened during the migration. As we have explained why during the experimental evaluation of our formal model that assumption holds. However, this assumption is too strong to be considered in a real life environment. Current IDS solutions cannot ensure that all attacks and events impacting the migration can be detected, therefore the perfect knowledge assumption does not hold.
 
@@ -15,7 +15,7 @@ The main drawback in solving security resource allocation problems with Linear P
 
 The Game Theory formalism is at the other end of the spectrum, where the behavior of both the infrastructure owner and the attacker can be modeled.
 The formalism provides different types of games, each corresponding to particular situations and how players choose their action.
-Game Theory does not explore the resource allocation problem in a SDN environment, and we expect some applicability in our study.
+Game Theory does not explore the resource allocation problem in an SDN environment, and we expect some applicability in our study.
 
 Markov Decision Processes sit between linear programming and Game Theory, where the model only considers the perspective of one entity, but gives the entity actions to make to interact with the system. The resource allocation problem is not well studied using MDP, but it provides enough granularity in the actions and the transition model to be worth investigating.
 

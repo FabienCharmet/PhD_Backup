@@ -6,7 +6,7 @@ This common maintenance operation may occur due to a physical failure of a netwo
 
 Existing literature presents an extensive security study of Virtual Machines and the migration process, evaluating existing migration solutions and considering different types of attackers. We advocated that the virtualization of the network resource is subject to a similar attack surface because of the nature of the virtualization mechanism. This similarity still stands for the migration process itself, and despite the scarce literature on the topic, consequences on data security violations remain an important matter.
 
-In this thesis we investigated the security of the migration of a virtual network in a SDN environment. 
+In this thesis we investigated the security of the migration of a virtual network in an SDN environment. 
 We sought to answer three questions regarding this matter:
 
 \begin{itemize}
@@ -20,12 +20,12 @@ We covered a broad attack surface, considering the data impacted by the migratio
 This approach is based on the hypothesis that it is possible to detect every attack and monitor every network activity in the infrastructure. 
 We proposed to alleviate this hypothesis to enable the model to be used in a realistic environment, and we formulated a resource allocation problem to do so.
 
-The first contribution presents a formal model to characterize the security of the migration process. We considered several security properties and described them using a temporal first order logic. Traditional properties like Confidentiality, Integrity and Availability are described and detailed them in the context of a SDN infrastructure.
+The first contribution presents a formal model to characterize the security of the migration process. We considered several security properties and described them using a temporal first order logic. Traditional properties like Confidentiality, Integrity and Availability are described and detailed them in the context of an SDN infrastructure.
 % , and we presented a novel property to model the colocation ratio between virtual network users: the co-residency. 
 % Co-residency is a security metric we recommend should be monitored to restrict the attack surface between two end users.
 We implemented our model in LISP, using the theorem prover SNARK~\cite{snark-Stickel2000}.
 We mapped these logical predicates with actual networking events and attacks described in the literature.
-We have proven the feasibility of the formal verification in a SDN infrastructure by implementing realistic use cases.
+We have proven the feasibility of the formal verification in an SDN infrastructure by implementing realistic use cases.
 The proof computed with SNARK can be used to determine which event caused the security violation and when it happened.
 % We considered an attacker capable of rendering part of the network infrastructure unavailable and capable of accessing or modifying sensitive information.
 % Results show that the attack is detected by the theorem prover and when it occured.

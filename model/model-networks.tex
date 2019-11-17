@@ -23,17 +23,17 @@ The physical network is composed of nodes and links. We define two temporal pred
 
 physical\_node(\textbf{pnode\_name1},\textbf{ti1})
 
-This predicate declare the existence of a physical node named \textbf{pnode\_name1} and the node exist during time interval \textbf{ti1}.
+This predicate declares the existence of a physical node named \textbf{pnode\_name1} and the node exists during time interval \textbf{ti1}.
 
-physical\_link(\textbf{plink\_name1}|\textbf{hname1},\textbf{pnode\_name1},\textbf{pnode\_name2},\textbf{ti1})
+physical\_link(\textbf{plink\_name1},\textbf{hname1}$\vert$\textbf{pnode\_name1},\textbf{pnode\_name2},\textbf{ti1})
 
-This predicate declare the existence of a physical link named \textbf{plink\_name1}, linking physical node \textbf{pnode\_name1} (or hypervisor \textbf{hname1}) and \textbf{pnode\_name2}, and the link exist during time interval \textbf{ti1}.
+This predicate declares the existence of a physical link named \textbf{plink\_name1}, linking physical node \textbf{pnode\_name1} (or hypervisor \textbf{hname1}) with \textbf{pnode\_name2}, and the link exists during time interval \textbf{ti1}.
 
-physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1}|\textbf{hname1},\textbf{pnode\_name2},\textbf{ti1})
+physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1}$\vert$\textbf{hname1},\textbf{pnode\_name2},\textbf{ti1})
 
-This predicate evaluates the existence of a physical path named \textbf{ppath\_name1} connecting \textbf{pnode\_name1} (or hypervisor \textbf{hname1}) and \textbf{pnode\_name2}, and the path exists during time interval \textbf{ti1}. 
+This predicate declares the existence of a physical path named \textbf{ppath\_name1} connecting \textbf{pnode\_name1} (or hypervisor \textbf{hname1}) with \textbf{pnode\_name2}, and the path exists during time interval \textbf{ti1}. 
 
-Similarly to a physical link connecting two nodes, a physical path represent the set of nodes and links establishing the connection between two end points that may be separated from each other by several physical nodes and links.
+Similarly to a physical link connecting two nodes, a physical path represent the set of nodes and links establishing the connection between two end points that may be separated by several physical nodes and links.
 The case of a physical path directly connecting two nodes (or a node and an hypervisor) is allowed.
 
 A physical path is given a unique identifier and is associated with a set of physical links. 
@@ -55,7 +55,7 @@ physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3}
 part\_of\_ppath(\textbf{ppath\_name1},\textbf{plink\_name1},\textbf{ti1})\\
 part\_of\_ppath(\textbf{ppath\_name1},\textbf{plink\_name2},\textbf{ti1})
 
-Therefore physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3},\textbf{ti1}) holds \textbf{true}.
+Therefore physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3},\textbf{ti1}) holds \textbf{true} because the part\_of\_ppath predicates build a valid path.
 
 % \textbf{Precisions on the use of time intervals}
 
@@ -72,16 +72,15 @@ Therefore physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pno
 
 
 \subsubsection{Network Hypervisor modeling}
-The network hypervisor is connected to the different physical nodes, and administrates them, installs flow rules \etc.
-
+The network hypervisor is connected to the different physical nodes, administrates them, installs flow rules \etc.
 
 hypervisor(\textbf{hname1},\textbf{ti1})
 
-This predicate declare the existence of the hypervisor \textbf{hname1} during time interval \textbf{ti1}.
+This predicate declares the existence of the hypervisor \textbf{hname1} during time interval \textbf{ti1}.
 
 hypervisor\_of(\textbf{hname1},\textbf{pnode\_name1},\textbf{ppath\_name1},\textbf{ti1})
 
-This predicate affects hypervisor \textbf{hname1} to a physical node \textbf{pnode\_name1}, and sets \textbf{ppath\_name1} as the physical path between them during time interval \textbf{ti1}.
+This predicate affects hypervisor \textbf{hname1} to the physical node \textbf{pnode\_name1}, and sets \textbf{ppath\_name1} as the physical path between them during time interval \textbf{ti1}.
 
 The network hypervisor establishes a communication with the nodes in the infrastructure using physical paths.
 These paths are illustrated by the "Hypervisor - Switch links`` as depicted in Figure~\ref{fig:VNE-example-model}.
@@ -90,7 +89,7 @@ In this figure the hypervisor is directly connected to all the nodes of the infr
 
 
 \subsubsection{Virtual network modeling}
-We extend the previous predicates with information related to the tenant of the virtual network and how it is embedded on top of a set of physical resources.
+We extend the previous predicates with information related to the tenant of the virtual network and how the VN is embedded on top of a set of physical resources.
 
 virtual\_network(\textbf{vnet\_name1},\textbf{ti1})
 
@@ -117,19 +116,19 @@ This predicate affects physical node \textbf{pnode\_name1} to the embedding of v
 
 node\_embedding(\textbf{vnode\_name1},\textbf{plink\_name1},\textbf{ti1})
 
-This predicate affects physical link \textbf{plink\_name1} to the embedding of virtual node \textbf{vnode\_name1} during time interval \textbf{ti1}.
+This predicate affects physical link \textbf{plink\_name1} to the embedding of virtual node \mbox{\textbf{vnode\_name1}} during time interval \textbf{ti1}.
 
 link\_embedding(\textbf{vlink\_name1},\textbf{pnode\_link1},\textbf{ti1})
 
 This predicate affects physical link \textbf{plink\_name1} to the embedding of virtual link \textbf{vnode\_link1} during time interval \textbf{ti1}.
 
-We outline that a virtual link is a succession of physical links, therefore we do not model its embedding using solely a physical node.
+We outline that a virtual link is a succession of physical links, therefore we do not model its embedding using a single physical node.
 
 
 \subsubsection{Example for modeling physical and virtual networks}
 
-We consider the use case of Fig.~\ref{fig:VNE-example-model}.
-There is no failure in the system nor any attack, therefore, we consider the time interval ti to represent the duration of the predicates.
+We consider the example depicted in Fig.~\ref{fig:VNE-example-model}.
+There is no failure in the system nor any attack, therefore, we use the time interval \textbf{ti1} to represent the duration of the predicates.
 
 \input{figures/vne_example_model.tex}
 

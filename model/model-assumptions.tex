@@ -13,12 +13,12 @@ Similarly to the previous point, Access Control solutions are perfectly fit to h
 
 
 \subsubsection{Infrastructure}
-Physical links in the network infrastructure are considered to exempt from performance issues and safe from a security perspective.
-This suppose that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks.
+Physical links in the network infrastructure are considered to be exempt from performance issues and safe from a security perspective.
+This supposes that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks.
 
-\textbf{Performance issues:} A network node may suffer from congestion, insufficient CPU or memory shortage. 
+\textbf{Performance issues:} A network node may suffer from congestion, insufficient CPU power or memory shortage. 
 
-\textbf{Security issues}: A network node may be the victim of passive listening, man-in-the-middle, software vulnerabilities exploits.
+\textbf{Security issues}: A network node may be the victim of passive listening, man-in-the-middle or software vulnerabilities exploits.
 
 We also make the assumption that a physical link will not suffer any form of physical degradation.
 
@@ -28,8 +28,8 @@ We also assume that two physical equipments are connected via a single physical 
 
 \subsubsection{Virtualization}
 The implementation of the virtualization layer depends on the solution considered.
-Each solution comes with its own identifiers, flow space and limitations on how the user may design its virtual network and with how much granularity he may install flow rules in his VN. Therefore, we exclude from our formal model the consideration of the technical specificities of the network hypervisor.
+Each solution comes with its own identifiers, flow space and limitations on how the user may design his virtual network and with how much granularity he may install flow rules in his VN. Therefore, we exclude from our formal model the consideration of the technical specificities of the network hypervisor.
 We justify this choice that ultimately, the hypervisor will generate a set of flow rules that will be installed in the infrastructure and therefore these rules can be seen as the final representation of the formal predicates describing the embedding of the VN.
 
-Certain migration solutions and survivable VNE algorithms consider path splitting to provide robustness to the infrastructure.
-We exclude this specificity from the model and limit the embedding of a virtual link to a single physical set of nodes.
+Some migration solutions and survivable VNE algorithms consider path splitting to provide robustness to the infrastructure.
+We exclude this specificity from the model and limit the embedding of a virtual link to a single set of physical nodes.

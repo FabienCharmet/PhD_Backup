@@ -56,7 +56,7 @@ The Network Hypervisor~\cite{NetworkHypervisor-Huang2013} aims at providing a un
 The ultimate goal of the Network Hypervisor is to enable HyperNets~\cite{HyperNet-Huang2013a}. HyperNets are envisioned as a sort of final form for network services. A user may request a virtual network to serve specific needs (\eg Video Streaming) and connect specific clients together.
 The HyperNet should be able to automatically determine what are the physical resources that should be allocated in terms of positioning, computational power etc. In addition to this, HyperNets should provide routing procedures specifically design for the requested service (\ie prioritize video traffic over less relevant traffic).
 In order to provide the support of said HyperNets, the Network Hypervisor provides API functions. These functions includes network discovery so they can allocate suitable physical resources close the HyperNet users as well as design a suitable topology to interconnect all participants.
-Moreover, they implement a dynamic join/leave feature, where users will be allowed to connect to a SDN virtual network without being directly connected to one. The use of IP tunneling solves such connectivity issues.
+Moreover, they implement a dynamic join/leave feature, where users will be allowed to connect to an SDN virtual network without being directly connected to one. The use of IP tunneling solves such connectivity issues.
 Aside from these high level API functions, the role of the Network Hypervisor is to concatenate the different network resources connected to it.
 This hypervisor has been implemented to work on top of the ProtoGENI~\cite{protoGENI} infrastructure.
 
@@ -186,7 +186,7 @@ In case a physical switch fails, CoVisor notifies each application impacted by t
 FlowN~\cite{FlowN-Drutskoy2012} is a network hypervisor designed to provide a full abstraction of the physical infrastructure and to propose a container-based application virtualization system. 
 The hypervisor serves each tenant with a custom virtual topology. The virtual topology requires a specific number of nodes and links but FlowN also implements bandwidth reservation as well as maximum latency per link. The decoupling of the virtual network from the physical substrate removes the burden of network maintenance from the tenant and leaves it to the service provider. In case of a switch or link failure, FlowN will migrate the virtual node on a new physical switch without notifying the impacted tenants.
 
-The virtualization of the control layer places FlowN between tenants' applications and the physical infrastructure. When a SDN application makes a function call, FlowN will intercept it and translate it to preserve the mapping between the virtual address space and the physical address space. Since FlowN is based on the NOX~\cite{nox-gude2008} SDN controller, tenants application are limited by the capacities of this controller. 
+The virtualization of the control layer places FlowN between tenants' applications and the physical infrastructure. When an SDN application makes a function call, FlowN will intercept it and translate it to preserve the mapping between the virtual address space and the physical address space. Since FlowN is based on the NOX~\cite{nox-gude2008} SDN controller, tenants application are limited by the capacities of this controller. 
 The design of an API between applications and the hypervisor is in opposition to the concept of FlowVisor~\cite{FlowVisor-Sherwood2009} where tenants directly interact with the physical nodes and FlowVisor only restrict and translate OF rules to respect the isolation requirements of the virtualization.
 
 FlowN also offers the full abstraction of the address space for the tenants.
@@ -243,7 +243,7 @@ A sharding coordinator will monitor the signals sent by the different nodes and 
 \end{figure}
 
 \paragraph{LiteVisor}
-LiteVisor~\cite{Litevisor-Yang2018} is a SDN hypervisor supporting network reconfiguration for VM migration.
+LiteVisor~\cite{Litevisor-Yang2018} is an SDN hypervisor supporting network reconfiguration for VM migration.
 Author outline the previous work on flow aggregation to reduce the consumption of switch resources as well as the performance-sensitive context of datacenters and the limitations of existing encapsulation techniques.
 LiteVisor is divided in three components illustrated in Figure~\ref{fig:litevisor}. The first one ensures the mapping between virtual and physical identifiers and translates messages sent between tenants and the controller.
 The second component is the LITE manager, responsible for aggregating flows sent by the tenant's controller, as well as deploying them on the physical switches. 
