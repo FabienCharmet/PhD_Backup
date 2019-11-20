@@ -1,3 +1,6 @@
+The formal model and the different attacks we have described in the previous sections allow us to represent the security of the migration of virtual network. The security is defined in terms of predicates and equations, and can be evaluated using a theorem prover.
+In this section, we detail theoretical aspects of theorem proving, then, we will present the theorem prover used in our work, SNARK~\cite{snark-Stickel2000}.
+
 \subsubsection{Formal theory about theorem proving}
 \input{model/model-theory.tex}
 
@@ -7,7 +10,7 @@
 \subsubsection{SNARK: A first order temporal logic theorem prover}
 \label{sec:proof-detects-violation}
 %Part of this effort is devoted to using automatic reasoning to establish that a network enforces confidentiality properties or to detect that such properties can be violated.
-In section~\ref{sec:proving-theory}, we have described some aspects of the theory of first order logic theorem proving.
+In section~\ref{sec:proving-theory}, we have described several aspects of the first order logic theorem proving theory.
 In this section we  present a first-order theorem prover that will be used to detect the violation of the security properties.
 We use the Stanford Research Institute's open-source first-order reasoner SNARK~\cite{snark-Stickel2000}.
 
@@ -31,7 +34,7 @@ Weights can be assigned to symbols, which cause SNARK to focus attention on “l
 Also, an ordering is applied to symbols, which cause SNARK to focus on particular parts of a sentence. 
 Typically, symbols will be replaced by other symbols that are smaller in the ordering. 
 Since first-order theorem proving is undecidable and the search can go on forever, we give SNARK a time limit on proving a given theorem. 
-This is set empirically \-—-- for the examples considered here, most of the theorems were proven in less than a second. The use cases took no more than 30 seconds.
+This is set empirically \-—-- for the examples considered here, most of the theorems were proven in less than a second. The bigger use cases presented later took no more than 30 seconds.
 SNARK will automatically search for a series of proofs of a given conjecture, each yielding a different answer.
 In general, there may be an infinity of answers to a query, but we rely on the time limit mechanism to cut off the search.
 
@@ -40,7 +43,7 @@ In general, there may be an infinity of answers to a query, but we rely on the t
 \subsubsection{Proving a simple violation with SNARK}
 \label{sec:find-violation}
 The operation and formalism of SNARK will be illustrated in the context of a simple example.
-We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a virtual topology.
+We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a virtual network.
 This example makes a simple assumption regarding the possibility of reading a data in the network. If the data is carried by a node during a certain time interval, then it can be read via the nodes connected to it, directly or via a path of nodes, during a subset of this time interval.
 This assumption alleviate the unnecessary burden of modeling the actual routing performed by network nodes and will instead focus on the configuration installed in the nodes.
 Rather than presenting the axioms of the theory in advance, we will introduce them as they are required in the proof.
@@ -48,7 +51,7 @@ Rather than presenting the axioms of the theory in advance, we will introduce th
 Note that SNARK adopts a LISP-like notation for expressions; thus, we write \verb'(P A B)' rather than \verb'P(A, B)'. 
 Variables with "\verb'?'" prefixes indicate entities that we must find as the proof is under way.
 Variables in a sentence are ``dummies'' \---- they may be systematically renamed without changing the meaning of the sentence. 
-The notation \verb'?t.t-int' is a variable \verb'?t' of sort \verb't-int', \ie a time interval. 
+The notation \verb'?t.t-int' is a variable \verb'?t' of type (sort) \verb't-int', \ie a time interval. 
 Other variables are of sort \verb'user', \verb'data', and \verb'path'.
 As the proof is under way, these variables will become instantiated with concrete terms of compatible sorts, \eg \verb'?u.user' with \verb'user-1'. 
 These instantiations will be reflected in the corresponding answer term.

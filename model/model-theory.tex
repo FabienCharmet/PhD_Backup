@@ -2,7 +2,7 @@
 We present in this section specific aspects of first order logic theorem proving that will be used later on in this thesis. We will give a brief overview of the first order logic theory and we will then present several verification mechanisms.
 
 \paragraph{First order logic}
-First order logic if a formal system describing a theory using declarative propositions, predicates and quantification.
+The first order logic is a formal system describing a theory using declarative propositions, predicates and quantification.
 
 A declarative proposition is a set of terms  that may be connected together using logical operators.
 We illustrate this with the following example:
@@ -12,9 +12,9 @@ $P \Rightarrow Q$ means "$P$ implies $Q$``. $P$ and $Q$ are the terms of the pro
 The first order logic admits the following logical operators:
 
 \begin{itemize}
-    \item $\forall$: The forall operator, $\forall x\in S$ means for all $x$ pertaining to set $S$.
-    \item $\exists$: The exist operator, $\exists x\in S$ means there exist at least one $x$ pertaining to set $S$.
-    \item $\neg$: The negation operator, $\neg A$ means then logical negation of A, also noted $\overline{A}$.
+    \item $\forall$: The forall operator, $\forall x\in S$ means for all elements $x$ in set $S$.
+    \item $\exists$: The exist operator, $\exists x\in S$ means there exist at least one $x$ in set $S$.
+    \item $\neg$: The negation operator, $\neg A$ means then logical negation of A, often noted $\overline{A}$.
     \item $\wedge$: The conjunction operator, $A \wedge B$ means the logical arithmetic A AND B.
     \item $\vee$: The disjunction operator, $A \vee B$ means the logical arithmetic A OR B.
     \item brackets $( )$: Brackets are used to order the resolution of the logical proposition, similarly to traditional arithmetic.
@@ -22,7 +22,7 @@ The first order logic admits the following logical operators:
     \item $\Leftrightarrow$: The bidirectional implication operator, $A \Leftrightarrow B$ means "A implies B`` AND "B implies A``.
 \end{itemize}
 
-Predicates are functions, takes as input a set of terms (variables) and returning as an output a binary value, True or False.
+Predicates are functions taking a set of terms (variables) as input and returning a binary value, True or False, as an output.
 
 For instance, we can define $P(A,B,C) \Rightarrow A \wedge (B \vee C)$, which would yield for the following example: $P(True,False,True)=True$.
 
@@ -43,7 +43,7 @@ Considering $P \Rightarrow Q$, asserting that $Q$ if false, then $P$ must be fal
 \paragraph{Resolution principle}\textbf{\\}
 The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield false. An unsatisfiable clause is a proposition that cannot be true no matter the value of its terms.
 
-For instance, $P \vee \neg P$ is obviously unsatisfiable.
+For instance, $P \vee \neg P$ is obviously unsatisfiable, \ie it is always False.
 
 The resolution principle uses substitution in a set of propositions to reach a conclusion.
 We consider the simple example presented in~\cite{snark-Stickel2000} and refer the reader to~\cite{symbolic-proof} for additional reading, more specifically on variable unification.
@@ -55,8 +55,8 @@ The paramodulation is an inference rule used to exploit the equality existing be
 
 Consider the proposition $P(x) = true$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
 
-Consider now $P(x) \ vee Q(x)$ and $x = y \vee R(y)$, paramodulation deduce the proposition $P(x) \vee Q(x) \vee R(x)$.\\
-$P(x) \ vee Q(x)$ and $x = y \vee R(y) \vdash P(x) \vee Q(x) \vee R(x)$
+Consider now the propositions $P(x) \vee Q(y)$ and $(x = y) \vee R(y)$, paramodulation deduce the proposition $P(y) \vee Q(y) \vee R(y)$.\\
+$P(x) \vee Q(y)$, $(x = y) \vee R(y) \vdash P(y) \vee Q(y) \vee R(y)$
 
 \paragraph{Rewriting rules}\textbf{\\}
 Rewriting rules are used to replace an expression by another in a set of propositions.

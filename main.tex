@@ -120,18 +120,21 @@ Abstract
  
 
 \newpage
-\section{Definitions}
+\section{State of the Art}
+\label{sec:sota}
+In this section, we provide a literature review of the different topics studied in this thesis.
+First of all, we start by defining the different networking and virtualization concepts considered in this thesis.
+Secondly, we examine the existing network hypervisors, and detail them under the scope of network migration with regard to the type of abstraction they provide.
+Thirdly, we will investigate the security of the Virtual Network migration, namely by considering the attack surface of a similar problem, Live Virtual Machine migration, as well as the formal models used to express security properties in a computer network.
+Both topics will outline the needs for a security study of the VN migration problem.
+Lastly, the last topic considered here is related to the resource allocation problem in a network infrastructure, and we will present different formalism used in this context.
+This problem is studied to improve the applicability of a model to a real life environment.
+
+\subsection{Definitions}
 \label{sec:basic_def}
 \input{definitions.tex}
 
 \newpage
-\section{State of the Art}
-\label{sec:sota}
-In this section, we provide a literature review of the different topics studied in this thesis.
-First of all, we examine the existing network hypervisors, and detail them under the scope of network migration with regard to the type of abstraction they provide.
-Then we will investigate the security of the Virtual Network migration, namely by considering the attack surface of a similar problem, Live Virtual Machine migration, as well as the formal models used to express security properties in a computer network.
-The last topic considered here is related to the resource allocation problem in a network infrastructure, and we will present different formalism used in this context.
-
 \subsection{Network virtualization using SDN}
 
 Network virtualization has leveraged the use of SDN to provide a flexible abstraction layer to service providers. In this section, we first propose classification criteria for network hypervisors and then evaluate existing hypervisors against this classification. We will propose a reference architecture for network hypervisors implementing a secure network migration feature, based on existing solutions.
@@ -202,6 +205,7 @@ In this section we consider two different techniques used to solve the RA proble
 \subsection{Problem verification using a theorem prover}
 \input{model/model-snark.tex}
 
+\newpage
 \subsection{Use cases: Detection of security violations}
 \input{model/model-usecase.tex}
 
@@ -212,7 +216,7 @@ In this section we consider two different techniques used to solve the RA proble
 \newpage
 \section{Optimizing resource allocation of monitoring resources}
 \label{sec:RAprob}
-\subsection{Motivation}
+\subsection{Introduction}
 \input{RA/RA-motivation.tex}
 
 \newpage

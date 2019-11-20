@@ -26,7 +26,7 @@ We define the first two basic time points time-0 and time-1 to respectively repr
 
 \subsubsection{Initial Situation}
 In this section, we consider the network topology prior to any migration.
-We solely have the axioms related to the virtual topology, the corresponding users, and the data carried across the network.
+We solely have the axioms related to the virtual network, the corresponding users, and the data carried across the network.
 We formulate our question to SNARK and verify that the confidentiality is already established prior to the migration (question and answer in Listing~\ref{lst:init-conf-q} and~\ref{lst:init-conf-a}, respectively).
 
 
@@ -67,6 +67,7 @@ For the data confidentiality, line 1 describes what are the variables we are loo
 Lines 5-8 are options passed to SNARK for the resolution.
 We have a similar request in lines 15-22 for the configuration integrity property.
 
+We execute SNARK to find the proofs of these two questions.
 Lines 5 and 11 of Listing~\ref{lst:init-conf-a} hold the answers.
 We can establish from line 5 that data-1 has its confidentiality respected (and it is the only one used in our experiment).
 At line 11, we have proven that conf-1 is not compromised either (and it is the only one used as well).
@@ -93,14 +94,15 @@ Answer (ANS (ANS DATA-1 (MAKE-INTERVAL TIME-0 TIME-4))))
 %\FC{No, but I forgot to mention that we assign an attack per algorithm}
 This attack considers two users, one legitimate and one attacker.
 The attacker is a collocated user.
-In this scenario, the iterative migration algorithm will be used.
+In this scenario, the iterative migration algorithm is used.
 During the initial phase, only the legitimate user is active.
 The migration process starts and nodes and links are being migrated, one after another.
 At some point during the migration, the attacker will start his attack to gain access to the data carried through the VN.
 This results into the generation of two predicates, one about the attacker reading the data, and the other about him not being authorized to do so. 
 When the migration process ends, the data has been compromised.
 In SNARK, the piece of data has been named data-1 and the migration ends at time point time-9.
-We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf-q}.
+We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf-q}, specifying which terms we are looking for.
+Similarly to previous examples, lines 3-4 represent the violation of the confidentiality over a non-empty time interval.
 
 % \begin{figure}[h]
 % \centering
@@ -125,6 +127,12 @@ We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf
 ;;; find all data for which data-confidentiality has been maintained
 
 \end{lstlisting}
+
+We can see that SNARK confirms the data confidentiality violation at line 12 from Listing~\ref{lst:not-data-conf-a}.
+Since the attack started during the migration (i.e after time point time-1), SNARK detects the beginning of the confidentiality violation at time point time-4.
+Line 10 highlights that the attacker does not have the authorization to read the data.
+%\GB{could you point out directly which line you are referring to by labeling and referring to independent lines in the listing?}
+
 \begin{lstlisting}[caption=SNARK detecting the data confidentiality violation., label=lst:not-data-conf-a,captionpos=b] 
 (Row 2112  
 (OR
@@ -139,17 +147,13 @@ We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf
    (RESOLVE 1938 18)
    Answer (ANS (ANS DATA-1 (MAKE-INTERVAL TIME-4 TIME-9)))) 
 \end{lstlisting}
-We can see that SNARK confirms the data confidentiality violation at line 12 from Listing~\ref{lst:not-data-conf-a}.
-Since the attack started during the migration (i.e after time point time-1), SNARK detects the beginning of the confidentiality violation at time point time-4.
-Line 10 highlights that the attacker does not have the authorization to read the data.
-%\GB{could you point out directly which line you are referring to by labeling and referring to independent lines in the listing?}
+
 
 \subsubsection{Migration alteration attack}
 Exploiting the physical nodes leverages other aspects of the security of the infrastructure.
 The initial situation is similar to the previous scenario but we use the move-based migration algorithm instead.
-The attacker is located in the network infrastructure.
-The attacker can render physical nodes unavailable to trigger the migration process and will intercept and modify the configuration sent by the hypervisor. 
-Therefore, the $conf\_integrity$ property does not hold anymore.
+The attacker is located in the network infrastructure and can render physical nodes unavailable to trigger the migration process. He will then intercept and modify the configuration sent by the hypervisor. 
+Therefore, the $conf\_integrity$ property is not respected anymore.
 
 We implement in SNARK the $conf\_integrity$ property, as depicted in Listing~\ref{lst:conf-integrity-definition}.\\
 Lines 1-3 define the equivalence between the $conf\_integrity$ property and the other predicates.\\
@@ -190,7 +194,7 @@ Line 23 ensures that \textit{?t.t-int} is not empty.
 \end{lstlisting}
 
 We formulate in Listing~\ref{lst:not-conf-int-q} the question for SNARK.\\
-Line 1 represents the format of the answer, here we simply look for which configuration is being compromised. In lines 2-4 we search for the violation of the $conf\_integrity$ property over a non empty interval. Similarly to other questions, lines 5-8 represent parameters for SNARK to use in the resolution.
+Line 1 represents the format of the answer, here we look for which configuration is being compromised. In lines 2-4 we search for the violation of the $conf\_integrity$ property over a non empty interval. Similarly to other questions, lines 5-8 represent parameters for SNARK to use in the resolution.
 
 \begin{lstlisting}[caption=SNARK question to detect the configuration integrity violation., label=lst:not-conf-int-q,captionpos=b] 
    (find-all '(ans ?d.data ?t.time-interval)
