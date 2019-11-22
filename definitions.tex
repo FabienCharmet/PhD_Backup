@@ -3,7 +3,7 @@ Specifically, we will detail the Software Defined Networking paradigm, and the n
 
 \subsubsection{Software Defined Networking}
 
-Traditional networks are complex and difficult to operate~\cite{complexnetworks}, due to their heterogeneity and lack of interoperability. The network administrator is often tasked to configure each network element individually, and has to either do it manually or use low-level vendor specific scripts to deploy the configuration. The impossibility to aggregate these tasks into a unified workflow becomes more and more problematic as network infrastructures grow, especially for Cloud Providers.
+Traditional networks are complex and difficult to operate~\cite{complexnetworks}, due to their heterogeneity and lack of interoperability. The network administrator is often tasked to configure each network element individually, and has to either do it manually or use low-level vendor specific scripts to deploy the configuration. The impossibility to aggregate these tasks into a unified workxflow becomes more and more problematic as network infrastructures grow, especially for Cloud Providers.
 
 To overcome these aspects, a new networking paradigm has been proposed, namely Software Defined Networking (SDN).
 The SDN paradigm consists in decoupling the control plane and the data plane.
@@ -33,11 +33,13 @@ Figure~\ref{fig:matching-fields} summarizes the different OF header fields a flo
 
 For decades hypervisors have enabled the sharing and isolation of physical resources among several virtual machines.
 Multiple users can run their own operating system simultaneously over a single physical machine.
-On the other hand, virtualization of the network resource was implemented with VLANs, MPLS and VRF primitives, all of which were limited in terms of programmability and adaptability. The emergence of SDN and its flexibility for the design of network applications has been leveraged to give the network resource a suitable virtualization solution.
+On the other hand, virtualization of the network resource was implemented with VLANs, MPLS and VRF primitives, all of which were limited in terms of programmability and adaptability. The emergence of SDN and its flexibility for the design of network applications has been leveraged to give the network resource a novel virtualization solution.
 
 Figure~\ref{fig:virt-archi} illustrates the differences between a classic SDN environment and an SDN virtualization infrastructure. In Figure~\ref{fig:virt-archi} (a), different applications will be deployed on the SDN controller and will impact the whole physical network.
 In Figure~\ref{fig:virt-archi} (b), the network hypervisor abstracts the view of the physical infrastructure into virtual networks to the end users (also referred to as tenants).
 Each tenant will be able to deploy its applications on his own virtual network, that will in turn only impact the physical resources associated to it.
+The network hypervisor can be seen as an improved controller, as it allows a user to interact with network resources. The difference lies in it does so for multiple users and isolates them from each other.
+There are several hypervisors actually extending existing SDN controllers to enable network virtualization (\eg~\cite{FlowN-Drutskoy2012} or~\cite{ONVisor-Han2018}).
 
 \begin{figure}[ht]
     \centering
@@ -57,14 +59,17 @@ Two main information are used by tenants of the virtualization infrastructure, t
 \textbf{The flowspace} is the set of header parameters the tenant can use when deploying flow rules to configure his virtual network (see Figure~\ref{fig:matching-fields}). The hypervisor may restrict the use of certain headers because the virtualization already uses them as internal identifiers.
 For instance, the VLAN PCP field is sometimes used for this purpose.
 
-Providing a virtual network to the tenant can be done in three different ways, by slicing the physical infrastructure, by mapping it with the related physical resources or by providing an API to the tenant.\\
-\textbf{A slice} is the set of resources allocated to a virtual network.
-Slicing the physical infrastructure consists in presenting the tenant with only a small part of the infrastructure while hiding the rest of the network equipments.
-The hypervisor gives tenants a direct access to the network nodes composing the slice, and the flow rules installed by the tenant will be rewritten to match the flow space he has been allocated.\\
+\textbf{Abstractions of the physical infrastructure}
+Abstracting the physical infrastructure to the tenant can be done in two different ways, by slicing the physical infrastructure or by mapping the virtual network with the related physical resources.
+% or by providing an API to the tenant.\\
+\textbf{A slice} is the set of physical resources allocated to a virtual network.
+Slicing the physical infrastructure consists in allocating only a subset of the infrastructure to the tenant while hiding the rest of the network equipments.
+The hypervisor gives the tenant a direct access to the network nodes composing the slice, and the flow rules installed by the tenant will be rewritten to only match the flow space he has been allocated.\\
 The term slice is also found in the literature to describe the subdivision of a single physical resource. For instance, a slice can be a subdivision of a physical node corresponding to a specific tenant.\\
 \textbf{Mapping} the virtual network with the physical infrastructure is an approach differing from network slicing by presenting an arbitrary network to the tenant while maintaining a mapping between the virtual elements used by the tenant and the physical resources they correspond to.
 Similarly to slicing, when a tenant will interact with his virtual network, the hypervisor will be tasked to translate the identifiers and parameters used in the virtual network into the corresponding ones from the physical infrastructure.\\
 \textbf{Providing} an API to the tenant allows the network hypervisor to have a better control over the capacities a tenant has on his virtual network. This extra abstraction layer can be used to limit the interactions of a tenant with his own virtual network or to alleviate existing limitations a tenant has to deploy network applications on top of his virtual network. 
+
 \input{figures/vne.tex}
 
 \subsubsection{Virtual Network Migration}

@@ -1,13 +1,13 @@
 \label{sec:proving-theory}
-We present in this section specific aspects of first order logic theorem proving that will be used later on in this thesis. We will give a brief overview of the first order logic theory and we will then present several verification mechanisms.
+We present in this section specific aspects of first order logic theorem proving that will be used later on in this thesis. We will give a brief overview of the first order logic theory and we will then present the basics of theorem proving and several verification mechanisms.
 
 \paragraph{First order logic}
 The first order logic is a formal system describing a theory using declarative propositions, predicates and quantification.
 
-A declarative proposition is a set of terms  that may be connected together using logical operators.
+A declarative proposition, also referred to as a clause, is a set of terms  that may be connected together using logical operators.
 We illustrate this with the following example:
 
-$P \Rightarrow Q$ means "$P$ implies $Q$``. $P$ and $Q$ are the terms of the proposition and $\Rightarrow$ is the logical operator representing implication.
+$P \Rightarrow Q$ means "$P$ implies $Q$``. $P$ and $Q$ are the terms of the clause and $\Rightarrow$ is the logical operator representing implication.
 
 The first order logic admits the following logical operators:
 
@@ -24,9 +24,13 @@ The first order logic admits the following logical operators:
 
 Predicates are functions taking a set of terms (variables) as input and returning a binary value, True or False, as an output.
 
-For instance, we can define $P(A,B,C) \Rightarrow A \wedge (B \vee C)$, which would yield for the following example: $P(True,False,True)=True$.
+For instance, we can define $P(A,B,C) = A \wedge (B \vee C)$, which would yield for the following example: $P(True,False,True)=True$.
 
-We propose a more complex example: $P(A) \Leftrightarrow \forall B, A \Rightarrow B$ means that P(A) is equivalent of A implying B, for all possible B.
+\paragraph{First order logic Theorem Proving}\textbf{\\}
+The purpose of theorem proving is to determine if a set of clauses is satisfiable or unsatisfiable.
+A satisfiable clause that admits a solution that makes it true.
+An unsatisfiable clause is a clause that cannot be true no matter the values of its terms.
+The theorem prover will apply inference rules on the original set of clauses and try to reach another set of clauses where the satisfiability can be determined.
 
 We will now present some rules of inference used for first order logic theorem proving.
 A rule of inference is a rule defining the deduction process, it takes a set of propositions as input and returns a proposition which is a conclusion drawn from the input propositions.
@@ -41,21 +45,23 @@ Similarly Modus tollens uses the negation in the consequence of an implication t
 Considering $P \Rightarrow Q$, asserting that $Q$ if false, then $P$ must be false as well: $P \Rightarrow Q, \neg Q \vdash \neg P$.
 
 \paragraph{Resolution principle}\textbf{\\}
-The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield false. An unsatisfiable clause is a proposition that cannot be true no matter the value of its terms.
+The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield false. 
 
-For instance, $P \vee \neg P$ is obviously unsatisfiable, \ie it is always False.
+For instance, $P \wedge \neg P$ is obviously unsatisfiable, \ie it is always False.
 
-The resolution principle uses substitution in a set of propositions to reach a conclusion.
+The resolution principle uses substitution in a set of clauses to reach a conclusion.
 We consider the simple example presented in~\cite{snark-Stickel2000} and refer the reader to~\cite{symbolic-proof} for additional reading, more specifically on variable unification.
+We also refer the reader to the Method of Davis and Putnam and more specifically on the One-Literal Rule.
 
-Consider the following propositions $\neg P \vee Q$ and $P \vee R$, the resolution principle will return $Q \vee R$ as a logical combination of the previous propositions.
+Consider the following clauses: $\neg P \vee Q$ and $P \vee R$. The resolution principle returns $Q \vee R$ as a resolvent of the previous propositions.
+
 
 \paragraph{Paramodulation}\textbf{\\}
 The paramodulation is an inference rule used to exploit the equality existing between terms and the occurrence of term in a proposition. The paramodulation can be seen as \textit{substitution in case of equality}.
 
 Consider the proposition $P(x) = true$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
 
-Consider now the propositions $P(x) \vee Q(y)$ and $(x = y) \vee R(y)$, paramodulation deduce the proposition $P(y) \vee Q(y) \vee R(y)$.\\
+Consider now the two propositions: $P(x) \vee Q(y)$, $(x = y) \vee R(y)$, paramodulation deduces the proposition $P(y) \vee Q(y) \vee R(y)$.\\
 $P(x) \vee Q(y)$, $(x = y) \vee R(y) \vdash P(y) \vee Q(y) \vee R(y)$
 
 \paragraph{Rewriting rules}\textbf{\\}

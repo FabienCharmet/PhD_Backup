@@ -1,29 +1,29 @@
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
 % \usepackage{graphicx}
-\begin{table}[ht]
+\begin{table}[]
 \centering
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|c|c|c|c|c|c|l|c|}
+\begin{tabular}{|c|c|c|c|c|c|l|}
 \hline
-Name                     & CPAC                      & DPAC          & Topology      & VNE & VNM & Security & Resource Isolation \\ \hline
-FlowVisor                & \multirow{6}{*}{Openflow} & Proxyfication & Not arbitrary & No  & No  & No       & CPU/BW             \\ \cline{1-1}
-ADVisor                  &                           & Mapping       & Arbitrary     & No  & No  & No       & CPU/BW             \\ \cline{1-1}
-VeRTIGO                  &                           & Mapping       & Arbitrary     & Yes & Yes & No       & CPU/BW             \\ \cline{1-1}
-Enhanced FV              &                           & Proxyfication & Not Arbitrary & No  & No  & No       & CPU/BW             \\ \cline{1-1}
-Slices Isolator          &                           & Proxyfication & Not Arbitrary & No  & No  & No       & CPU/BW/Int/Mem     \\ \cline{1-1}
-Double FV                &                           & Mapping       & Arbitrary     & Yes & No  & No       & CPU/BW/Int/Mem     \\ \hline
-Compositional Hypervisor & Openflow                  & Openflow      & Not Arbitrary & Yes & No  & No       &                    \\ \hline
-CoVisor                  & Openflow                  & Mapping       & Arbitrary     & Yes & Yes & Yes      &                    \\ \hline
-FlowN                    & API                       & Mapping       & Arbitrary     & Yes & Yes & No       & BW                 \\ \hline
-Network Hypervisor       & API                       & API           & Arbitrary     & Yes & No  & No       &                    \\ \hline
-AutoSlice                & Openflow                  & Mapping       & Arbitrary     & Yes & Yes & No       & BW                 \\ \hline
-NVP                      & Openflow                  & Mapping       & Full Mesh     & No  & Yes & Yes      &                    \\ \hline
-OpenVirteX               & Openflow                  & Mapping       & Arbitrary     & Yes & No  & No       &                    \\ \hline
-SR-PVX                   & POF                       & Mapping       & Arbitrary     & Yes & No  & No       & BW                 \\ \hline
-WhiteVisor               & White box                 & Mapping       & Arbitrary     & Yes & No  & No       &                    \\ \hline
-ONVisor                  & API                       & Mapping       & Arbitrary     & Yes & No  & Yes      &                    \\ \hline
-LiteVisor                & Openflow                  & Mapping       & Arbitrary     & Yes & Yes & No       &                    \\ \hline
+Name                                                            & CPAC                      & DPAC          & Topology      & VNE & VNM & Security \\ \hline
+FlowVisor~\cite{FlowVisor-Sherwood2009}                         & \multirow{6}{*}{FC} & Proxyfication & Not arbitrary & No  & No  & No       \\ \cline{1-1} \cline{3-7} 
+ADVisor~\cite{ADVisor-Salvadori2012}                            &                           & Mapping       & Arbitrary     & No  & No  & No       \\ \cline{1-1} \cline{3-7} 
+VeRTIGO~\cite{VeRTIGO-Corin2012a}                               &                           & Mapping       & Arbitrary     & Yes & Yes & No       \\ \cline{1-1} \cline{3-7} 
+Enhanced FlowVisor~\cite{EnhancedFV-Min2012}                    &                           & Proxyfication & Not Arbitrary & No  & No  & No       \\ \cline{1-1} \cline{3-7} 
+Slices Isolator~\cite{SlicesIsolator-El-Azzab2011}              &                           & Proxyfication & Not Arbitrary & No  & No  & No       \\ \cline{1-1} \cline{3-7} 
+Double FV~\cite{DoubleFV-Yin2013}                               &                           & Mapping       & Arbitrary     & Yes & No  & No       \\ \hline
+Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} & FC                  & Openflow      & Not Arbitrary & Yes & No  & No       \\ \hline
+CoVisor~\cite{CoVisor-Jin2015}                                  & FC                  & Mapping       & Arbitrary     & Yes & Yes & Yes      \\ \hline
+FlowN~\cite{FlowN-Drutskoy2012}                                 & HB                       & Mapping       & Arbitrary     & Yes & Yes & No       \\ \hline
+Network Hypervisor~\cite{NetworkHypervisor-Huang2013}           & HB                       & Mapping           & Arbitrary     & Yes & No  & No       \\ \hline
+AutoSlice~\cite{AutoSlice-Bozakov2012,AutoSlice2-Bozakov2014}   & FC                  & Mapping       & Arbitrary     & Yes & Yes & No       \\ \hline
+NVP~\cite{NVP-Koponen2014}                                      & FC                  & Mapping       & Full Mesh     & No  & Yes & Yes      \\ \hline
+OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}                     & FC                  & Mapping       & Arbitrary     & Yes & No  & No       \\ \hline
+SR-PVX~\cite{PVX-Li2017}                                        & FC                       & Mapping       & Arbitrary     & Yes & No  & No       \\ \hline
+WhiteVisor~\cite{whitevisor-Yu2019}                             & FC                 & Mapping       & Arbitrary     & Yes & No  & No       \\ \hline
+ONVisor~\cite{ONVisor-Han2018}                                  & HB                       & Mapping       & Arbitrary     & Yes & No  & Yes      \\ \hline
+LiteVisor~\cite{Litevisor-Yang2018}                             & FC                  & Mapping       & Arbitrary     & Yes & Yes & No       \\ \hline
 \end{tabular}%
 }
 \caption{Comparison of the network hypervisors with the reference architecture}

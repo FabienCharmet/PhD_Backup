@@ -1,29 +1,62 @@
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
-\begin{table}[ht]
+\begin{table}[]
+\centering
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|l|l|}
 \hline
-Name                     & Abstraction & Migration & Summary                                                                                                                      \\ \hline
-FlowVisor                & Slicing     & No        & Coexistence of experimental and production networks                                                                          \\ \hline
-Enhanced FV              & Slicing     & No        & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor\\ minimum bandwidth guaranteed\end{tabular}                                   \\ \hline
-Slices Isolator          & Slicing     & No        & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor\\ Node and link resources isolation\end{tabular}                              \\ \hline
-Compositional Hypervisor & API         & No        & Unifying heterogeneous SDN applications                                                                                      \\ \hline
-Network Hypervisor       & API         & No        & Implementing service oriented VNs: HyperNets                                                                                 \\ \hline
-ADVisor                  & Mapping     & No        & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor with resoure mapping\\ Flowspace sharing among tenants\end{tabular}           \\ \hline
-Double FV                & Mapping     & No        & Multi-domain virtualization                                                                                                  \\ \hline
-WhiteVisor               & Mapping     & No        & SDN Virtualization over WhiteBox switches                                                                                    \\ \hline
-ONVisor                  & Mapping     & No        & ONOS based hypervisor                                                                                                        \\ \hline
-OpenVirteX               & Mapping     & No        & Arbitrary topology, full flowspace allocation                                                                                \\ \hline
-SR-PVX                   & Mapping     & No        & Protocol Oblivious Forwarding for Source Routing                                                                             \\ \hline
-VeRTIGO                  & Mapping     & Yes       & \begin{tabular}[c]{@{}c@{}}Extending ADVisor\\ 1-to-many mapping vs Big Switch Abstraction\end{tabular}                      \\ \hline
-CoVisor                  & Mapping     & Yes       & \begin{tabular}[c]{@{}c@{}}Extending Compositional Hypervisor\\ Flexible visibility and performance improvement\end{tabular} \\ \hline
-FlowN                    & Mapping     & Yes       & Container based application virtualization                                                                                   \\ \hline
-AutoSlice                & Mapping     & Yes       & Distributed hypervisor for scalability                                                                                       \\ \hline
-NVP                      & Mapping     & Yes       & Full mesh network virtualization between compute nodes                                                                       \\ \hline
-LiteVisor                & Mapping     & Yes       & Flow aggregation and VN migration for VM migration                                                                           \\ \hline
+Name                                                            & Abstraction & Migration & Tenant identification                                                                     & Resource Isolation \\ \hline
+FlowVisor~\cite{FlowVisor-Sherwood2009}                         & Slicing     & No        & Flowspace                                                                                 & CPU/BW             \\ \hline
+Enhanced FlowVisor~\cite{EnhancedFV-Min2012}                    & Slicing     & No        & VLAN PCP field                                                                            & CPU/BW             \\ \hline
+Slices Isolator~\cite{SlicesIsolator-El-Azzab2011}              & Slicing     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     \\ \hline
+Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} & API         & No        &                                                                                           &                    \\ \hline
+Network Hypervisor~\cite{NetworkHypervisor-Huang2013}           & API         & No        & IP Adress                                                                                 &                    \\ \hline
+ADVisor~\cite{ADVisor-Salvadori2012}                            & Mapping     & No        & \begin{tabular}[c]{@{}l@{}}VLAND ID\\ MPLS labes\\ 802.1ad multiple vlan tag\end{tabular} & CPU/BW             \\ \hline
+Double FV~\cite{DoubleFV-Yin2013}                               & Mapping     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     \\ \hline
+WhiteVisor~\cite{whitevisor-Yu2019}                             & Mapping     & No        & VLAN ID                                                                                   &                    \\ \hline
+ONVisor~\cite{ONVisor-Han2018}                                  & Mapping     & No        & Encapsulation                                                                             &                    \\ \hline
+OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}                     & Mapping     & No        & IP + MAC fields                                                                           &                    \\ \hline
+SR-PVX~\cite{PVX-Li2017}                                        & Mapping     & No        & Encapsulation                                                                             & BW                 \\ \hline
+VeRTIGO~\cite{VeRTIGO-Corin2012a}                               & Mapping     & Yes       & Full header sequence                                                                      & CPU/BW             \\ \hline
+CoVisor~\cite{CoVisor-Jin2015}                                  & Mapping     & Yes       &                                                                                           &                    \\ \hline
+FlowN~\cite{FlowN-Drutskoy2012}                                 & Mapping     & Yes       & Encapsulation                                                                             & BW                 \\ \hline
+AutoSlice~\cite{AutoSlice-Bozakov2012,AutoSlice2-Bozakov2014}   & Mapping     & Yes       & Encapsulation                                                                             & BW                 \\ \hline
+NVP~\cite{NVP-Koponen2014}                                      & Mapping     & Yes       & Software switches                                                                         &                    \\ \hline
+LiteVisor~\cite{Litevisor-Yang2018}                             & Mapping     & Yes       & \begin{tabular}[c]{@{}l@{}}IP Header\\ VxLAN ID\end{tabular}                              &                    \\ \hline
 \end{tabular}%
 }
 \caption{Summary of existing hypervisors}
 \label{tab:existing-nhv}
 \end{table}
+
+
+% % Please add the following required packages to your document preamble:
+% % \usepackage{graphicx}
+% \begin{table}[ht]
+% \centering
+% \resizebox{\textwidth}{!}{%
+% \begin{tabular}{|c|c|c|l|l|c|}
+% \hline
+% Name                     & Abstraction & Migration & Tenant identification                                                                     & Resource Isolation & Summary                                                                                                                      \\ \hline
+% FlowVisor~\cite{FlowVisor-Sherwood2009}                & Slicing     & No        & Flowspace                                                                                 & CPU/BW             & Coexistence of experimental and production networks                                                                          \\ \hline
+% Enhanced FlowVisor~\cite{EnhancedFV-Min2012}              & Slicing     & No        & VLAN PCP field                                                                            & CPU/BW             & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor \\ Admission Control\end{tabular}                                             \\ \hline
+% Slices Isolator~\cite{SlicesIsolator-El-Azzab2011}          & Slicing     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor\\ Node and link resources isolation\end{tabular}                              \\ \hline
+% Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} & API         & No        &                                                                                           &                    & Unifying heterogeneous SDN applications                                                                                      \\ \hline
+% Network Hypervisor~\cite{NetworkHypervisor-Huang2013}       & API         & No        & IP Adress                                                                                 &                    & Implementing service oriented VNs: HyperNets                                                                                 \\ \hline
+% ADVisor~\cite{ADVisor-Salvadori2012}                  & Mapping     & No        & \begin{tabular}[c]{@{}l@{}}VLAND ID\\ MPLS labes\\ 802.1ad multiple vlan tag\end{tabular} & CPU/BW             & \begin{tabular}[c]{@{}c@{}}Extending FlowVisor with resoure mapping\\ Flowspace sharing among tenants\end{tabular}           \\ \hline
+% Double FV~\cite{DoubleFV-Yin2013}                & Mapping     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     & Multi-domain virtualization                                                                                                  \\ \hline
+% WhiteVisor~\cite{whitevisor-Yu2019}               & Mapping     & No        & VLAN ID                                                                                   &                    & SDN Virtualization over WhiteBox switches                                                                                    \\ \hline
+% ONVisor~\cite{ONVisor-Han2018}                  & Mapping     & No        & Encapsulation                                                                             &                    & ONOS based hypervisor                                                                                                        \\ \hline
+% OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}               & Mapping     & No        & IP + MAC fields                                                                           &                    & Arbitrary topology, full flowspace allocation                                                                                \\ \hline
+% SR-PVX~\cite{PVX-Li2017}                   & Mapping     & No        & Encapsulation                                                                             & BW                 & Protocol Oblivious Forwarding for Source Routing                                                                             \\ \hline
+% VeRTIGO~\cite{VeRTIGO-Corin2012a}                  & Mapping     & Yes       & Full header sequence                                                                      & CPU/BW             & \begin{tabular}[c]{@{}c@{}}Extending ADVisor \\ 1-to-many mapping vs Big Switch Abstraction\end{tabular}                     \\ \hline
+% CoVisor~\cite{CoVisor-Jin2015}                  & Mapping     & Yes       &                                                                                           &                    & \begin{tabular}[c]{@{}c@{}}Extending Compositional Hypervisor\\ Flexible visibility and performance improvement\end{tabular} \\ \hline
+% FlowN~\cite{FlowN-Drutskoy2012}                    & Mapping     & Yes       & Encapsulation                                                                             & BW                 & Container based application virtualization                                                                                   \\ \hline
+% AutoSlice~\cite{AutoSlice-Bozakov2012,AutoSlice2-Bozakov2014}                & Mapping     & Yes       & Encapsulation                                                                             & BW                 & Distributed hypervisor for scalability                                                                                       \\ \hline
+% NVP~\cite{NVP-Koponen2014}                      & Mapping     & Yes       & Software switches                                                                         &                    & Full mesh network virtualization between compute nodes                                                                       \\ \hline
+% LiteVisor~\cite{Litevisor-Yang2018}                & Mapping     & Yes       & \begin{tabular}[c]{@{}l@{}}IP Header\\ VxLAN ID\end{tabular}                              &                    & Flow aggregation and VN migration for VM migration                                                                           \\ \hline
+% \end{tabular}%
+% }
+% \caption{Summary of existing hypervisors}
+% \label{tab:existing-nhv}
+% \end{table}
