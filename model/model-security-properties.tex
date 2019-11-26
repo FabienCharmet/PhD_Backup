@@ -134,7 +134,7 @@ $p\_integrity(P, ti) \Leftrightarrow \forall t_1,t_2 \in ti~ \overline{modified(
 \textbf{Formal definition:} Let $N$ be a network element, $D$ some data and $P$ a function modeling the process used by $N$ to handle data $D$.
 
 \begin{myformula}
-$node\_integrity(N) \Leftrightarrow \forall D,ti,\exists P~p\_integrity(P,ti) \wedge d\_integrity(D,ti) \wedge process\_of(N,P,ti)$
+$node\_integrity(N) \Leftrightarrow \forall D,ti,P~p\_integrity(P,ti) \wedge d\_integrity(D,ti) \wedge process\_of(N,P,ti)$
 \end{myformula}
 
 \begin{itemize}
@@ -306,7 +306,7 @@ Precisely, two virtual networks are co-residing together if they are embedded, p
 We define co-residency with the following predicate:
 Let $V_1$ and $V_2$ be two virtual topologies belonging to different users, $P_1$ and $P_2$ two sets of physical resources and let $ti$ be a time interval.
 \begin{myformula}
-$\exists P_1,P_2$~s.t.~$P_1 \cap P_2~\neq~\emptyset, coresidency(V_1,V_2,ti) \Leftrightarrow$\\ $is\_embedding(P_1,V_1,t_i) \wedge is\_embedding(P_2,V_2,t_i)$
+$coresidency(V_1,V_2,ti) \Leftrightarrow \exists P_1,P_2$~s.t.~$P_1 \cap P_2~\neq~\emptyset, $\\ $is\_embedding(P_1,V_1,t_i) \wedge is\_embedding(P_2,V_2,t_i)$
 \end{myformula}
 
 \begin{itemize}

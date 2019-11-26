@@ -1,14 +1,14 @@
 \subsubsection{Game Theory}
 
-
-\paragraph{Definitions}\textbf{\\}
-Game theory is a mathematical model used to represent the interactions between several agents (\ie players).
+Game theory is a mathematical formalism used to represent the interactions between several agents (\ie players).
 The model is called a game, in which players will have the possibility to choose an action and will be rewarded based on their choice and the choice made by the other players.
 We now provide a set of definitions that will be used throughout this section.
 
-\textbf{Strategies} are the actions available to a player. Each player has its own strategies, that may differ from a player to another.
+\paragraph{Definitions}\textbf{\\}
 
-\textbf{Utility function} is a function representing the gains and cost for a player.
+\textbf{Strategies} are the actions available to a player. Each player has his own strategies, that may differ from a player to another.
+
+\textbf{Utility function} is a function representing the overall gain (resp. loss) for a player.
 
 \textbf{Perfect information} describes a game where each player knows the full history of strategies played by other players. Otherwise the game is an imperfect information game.
 
@@ -16,7 +16,7 @@ We now provide a set of definitions that will be used throughout this section.
 
 \textbf{Cooperative games} are games where all players will collaborate to maximize their gain, in opposition to non-cooperative games where players only maximize their own benefit.
 
-\textbf{Two players zero-sum games} describe a situation where the gain obtained by a player equals the other player's loss.
+\textbf{Zero-sum games} describe a situation where the gains obtained by some players equal the other players' losses.
 
 \textbf{Static games} are games where players choose their strategy simultaneously. These games are also often referred to as \textit{one-shot} games.
 
@@ -26,8 +26,20 @@ We now provide a set of definitions that will be used throughout this section.
 
 \textbf{Security games} are two players non cooperative games where an attacker will compromise a system while an administrator will defend it~\cite{book-gt}.
 
-\textbf{Nash equilibrium} is a set of strategies from which no player has any incentive to unilaterally deviate. It represents an optimal situation for all players.
+\paragraph{Solving the game}\textbf{\\}
+We only consider here non cooperative games, as attackers and defenders have globally opposite goals.
+Solving a game consists in determining the strategy that each player will choose to maximize his gain.
 
+There are two types of strategies, either pure or mixed.\\
+A pure strategy is determined deterministically by the player (\ie always making the same decision in a given situation).\\
+A mixed strategy is defined by assigning probability over each pure strategy (\eg equiprobability of choosing one strategy among all).
+
+The solution of a game is often referred to as a Nash Equilibrium~\cite{nasheq} which is a set of strategies from which no player has any incentive to unilaterally deviate. It represents an optimal situation for all players.
+
+In a two players zero sum game, each player minimizes the maximum gain of his opponent. 
+The Nash equilibrium is expressed with the minmax problem~\cite{minmax}.
+
+\paragraph{Game Theory based Resource Allocation}
 Game Theory has been applied to network security in different ways, IDS configuration and optimization, as well as resource allocation problems. We will focus on the latter. We summarized the different works in Table~\ref{tab:sota-gt}.
 
 %  \paragraph{Static games}
@@ -74,7 +86,7 @@ However, stochastic games allow to model the different possible outcomes of a si
 For instance, if the attack is successful, the system may transition from a healthy state toward a compromised state, where the attacker is given better rewards in the future.
 In this regard, Sallhammar~\etal describe such a game in~\cite{sallhammar2005}.
 The system is modeled as a Continuous Time Markov Chain in which the transition probabilities will depend on the attack performed on the system. Similarly to previous work, the attacker may also choose to do nothing.
-This work focuses on modelling intentional faults due to attacks, since faults due to accident have different statistical properties such has randomness, faults are independent from each other \etc
+This work focuses on modelling intentional faults due to attacks, since accidental faults have different statistical properties such has randomness, faults are independent from each other \etc
 They also consider different types of attacker behaviors where the consequences of being detected may be unknown and or the attacker may not care about them.
 The model is then extended in~\cite{Nguyen2009} where the model accounts for interdependencies of nodes to compromise the infrastructure.
 
@@ -88,11 +100,11 @@ Game Theory applied to network security has been surveyed in~\cite{Roy2010,Kienn
 \begin{tabular}{|c|c|c|}
 \hline
 Reference                               & Type of game       & Summary                                            \\ \hline
-\cite{MuraliKodialam2003,otrok1,otrok2} & Static game        & Link sampling optimization for IDS                 \\ \hline
+\cite{MuraliKodialam2003,otrok1,otrok2} & Static game        & Link sampling allocation for IDS                 \\ \hline
 \cite{agah2004}                         & Static game        & Monitoring resource allocation in a sensor network \\ \hline
 \cite{Chen2009,interdep-ismail2017}      & Static game        & Resource allocation  in an infrastructure          \\ \hline
 \cite{Zhu2009b}                         & Collaborative game & Trust management in untrusted environments         \\ \hline
-\cite{sallhammar2005}.                  & Stochastic game    & \multirow{2}{*}{Modeling the attacker}             \\ \cline{1-2}
+\cite{sallhammar2005}.                  & Stochastic game    & \multirow{2}{*}{Attack modeling for resource allocation}             \\ \cline{1-2}
 \cite{Nguyen2009}                       & Stochastic game    &                                                    \\ \hline
 \end{tabular}%
 }

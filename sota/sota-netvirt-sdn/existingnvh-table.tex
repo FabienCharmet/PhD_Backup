@@ -1,34 +1,32 @@
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
 \begin{table}[]
-\centering
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c|c|c|l|l|}
 \hline
-Name                                                            & Abstraction & Migration & Tenant identification                                                                     & Resource Isolation \\ \hline
+Reference                                                       & Abstraction & Migration & Tenant identification                                                                     & Resource Isolation \\ \hline
 FlowVisor~\cite{FlowVisor-Sherwood2009}                         & Slicing     & No        & Flowspace                                                                                 & CPU/BW             \\ \hline
 Enhanced FlowVisor~\cite{EnhancedFV-Min2012}                    & Slicing     & No        & VLAN PCP field                                                                            & CPU/BW             \\ \hline
 Slices Isolator~\cite{SlicesIsolator-El-Azzab2011}              & Slicing     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     \\ \hline
-Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} & API         & No        &                                                                                           &                    \\ \hline
-Network Hypervisor~\cite{NetworkHypervisor-Huang2013}           & API         & No        & IP Adress                                                                                 &                    \\ \hline
+Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} & API         & No        & N/A                                                                                       & N/A                \\ \hline
+Network Hypervisor~\cite{NetworkHypervisor-Huang2013}           & API         & No        & IP Adress                                                                                 & N/A                \\ \hline
 ADVisor~\cite{ADVisor-Salvadori2012}                            & Mapping     & No        & \begin{tabular}[c]{@{}l@{}}VLAND ID\\ MPLS labes\\ 802.1ad multiple vlan tag\end{tabular} & CPU/BW             \\ \hline
 Double FV~\cite{DoubleFV-Yin2013}                               & Mapping     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     \\ \hline
-WhiteVisor~\cite{whitevisor-Yu2019}                             & Mapping     & No        & VLAN ID                                                                                   &                    \\ \hline
-ONVisor~\cite{ONVisor-Han2018}                                  & Mapping     & No        & Encapsulation                                                                             &                    \\ \hline
-OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}                     & Mapping     & No        & IP + MAC fields                                                                           &                    \\ \hline
+WhiteVisor~\cite{whitevisor-Yu2019}                             & Mapping     & No        & VLAN ID                                                                                   & N/A                \\ \hline
+ONVisor~\cite{ONVisor-Han2018}                                  & Mapping     & No        & Encapsulation                                                                             & N/A                \\ \hline
+OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}                     & Mapping     & No        & IP + MAC fields                                                                           & N/A                \\ \hline
 SR-PVX~\cite{PVX-Li2017}                                        & Mapping     & No        & Encapsulation                                                                             & BW                 \\ \hline
 VeRTIGO~\cite{VeRTIGO-Corin2012a}                               & Mapping     & Yes       & Full header sequence                                                                      & CPU/BW             \\ \hline
-CoVisor~\cite{CoVisor-Jin2015}                                  & Mapping     & Yes       &                                                                                           &                    \\ \hline
+CoVisor~\cite{CoVisor-Jin2015}                                  & Mapping     & Yes       & N/A                                                                                       & N/A                \\ \hline
 FlowN~\cite{FlowN-Drutskoy2012}                                 & Mapping     & Yes       & Encapsulation                                                                             & BW                 \\ \hline
 AutoSlice~\cite{AutoSlice-Bozakov2012,AutoSlice2-Bozakov2014}   & Mapping     & Yes       & Encapsulation                                                                             & BW                 \\ \hline
-NVP~\cite{NVP-Koponen2014}                                      & Mapping     & Yes       & Software switches                                                                         &                    \\ \hline
-LiteVisor~\cite{Litevisor-Yang2018}                             & Mapping     & Yes       & \begin{tabular}[c]{@{}l@{}}IP Header\\ VxLAN ID\end{tabular}                              &                    \\ \hline
+NVP~\cite{NVP-Koponen2014}                                      & Mapping     & Yes       & Software switches                                                                         & N/A                \\ \hline
+LiteVisor~\cite{Litevisor-Yang2018}                             & Mapping     & Yes       & \begin{tabular}[c]{@{}l@{}}IP Header\\ VxLAN ID\end{tabular}                              & N/A                \\ \hline
 \end{tabular}%
 }
 \caption{Summary of existing hypervisors}
 \label{tab:existing-nhv}
 \end{table}
-
 
 % % Please add the following required packages to your document preamble:
 % % \usepackage{graphicx}
