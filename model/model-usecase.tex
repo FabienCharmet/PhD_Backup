@@ -2,7 +2,7 @@
 In this section we describe, with our model, the information disclosure and migration alteration attacks detailed in Section~\ref{sec:model-attacks}.
 We prove the feasibility of detecting security violations with each attack, using the migration algorithms presented in Section~\ref{sec:migration}.
 We describe a virtual topology and verify that the initial setup is respecting the security properties previously defined.
-We limit the description of the different axioms used by SNARK for simplicity of reading.
+We do not include every single axiom used by SNARK for simplicity of reading.
 % The full implementation of the use case in SNARK is described in Appendix~\ref{appendix:snark-code}.
 
 We have implemented a simulator to generate the formal trace of the migration.
@@ -41,10 +41,6 @@ We formulate our question to SNARK and verify that the confidentiality is alread
  :time-limit 30  
  :print-derived :print)
 
-;;; search for a data-confidentiality breach:
-;;; find all data for which data-confidentiality
-;;; has been maintained
-
 
 (find-all '(ans ?d.data ?t.time-interval)
  '(and
@@ -54,10 +50,6 @@ We formulate our question to SNARK and verify that the confidentiality is alread
  :num-answers 1
  :time-limit 30  
  :print-derived :print)
-
-;;; search for a config-integrity breach:
-;;; find all configurations for which config-integrity
-;;; has been maintained
 \end{lstlisting}
 
 %\GB{could you comment a bit about what piece of SNARK response  in Lst.~\ref{lst:init-conf-a} gives away the result?}
@@ -65,7 +57,7 @@ The interpretation of results provided by SNARK depends on how the question has 
 Listing~\ref{lst:init-conf-q} contains requests for the format of the answer.
 For the data confidentiality, line 1 describes what are the variables we are looking for. Lines 2-4 describes what SNARK has to prove, \ie the data confidentiality property that holds on a non empty time interval.
 Lines 5-8 are options passed to SNARK for the resolution.
-We have a similar request in lines 15-22 for the configuration integrity property.
+We have a similar request in lines 11-18 for the configuration integrity property.
 
 We execute SNARK to find the proofs of these two questions.
 Lines 5 and 11 of Listing~\ref{lst:init-conf-a} hold the answers.
@@ -157,13 +149,13 @@ Therefore, the $conf\_integrity$ property is not respected anymore.
 
 We implement in SNARK the $conf\_integrity$ property, as depicted in Listing~\ref{lst:conf-integrity-definition}.\\
 Lines 1-3 define the equivalence between the $conf\_integrity$ property and the other predicates.\\
-Line 4 defines a logical AND between the predicates at Lines 5,11,14,17,20 and 23.\\
+Line 4 defines a logical AND between the following predicates:\\
 Line 5 defines \textit{?t.t-int}, a time interval as the intersection of all the time intervals expressed in the following predicates.\\
 Line 11 assigns controller \textit{?c.controller} to node \textit{?n.node}.\\
 Line 14 defines \textit{?p.path} as the path between \textit{?c.controller} and \textit{?n.node}.\\
 Line 17 assigns configuration \textit{?d.data} to node \textit{?n.node}.\\
 Line 20 represents preservation of the integrity of configuration data \textit{?d.data}.\\
-Note that we modeled the implication ($\Rightarrow$) defined in Section\ref{sec:security_prop} as a logical AND (\ie $\wedge$).\\
+Note that we modeled the implication ($\Rightarrow$) defined in Section~\ref{sec:security_prop} as a logical conjunction.\\
 Line 23 ensures that \textit{?t.t-int} is not empty.
 
 \begin{lstlisting}[caption=SNARK definition of the configuration integrity., label=lst:conf-integrity-definition,captionpos=b] 
@@ -193,7 +185,7 @@ Line 23 ensures that \textit{?t.t-int} is not empty.
 
 \end{lstlisting}
 
-We formulate in Listing~\ref{lst:not-conf-int-q} the question for SNARK.\\
+We formulate in Listing~\ref{lst:not-conf-int-q} the question for SNARK.
 Line 1 represents the format of the answer, here we look for which configuration is being compromised. In lines 2-4 we search for the violation of the $conf\_integrity$ property over a non empty interval. Similarly to other questions, lines 5-8 represent parameters for SNARK to use in the resolution.
 
 \begin{lstlisting}[caption=SNARK question to detect the configuration integrity violation., label=lst:not-conf-int-q,captionpos=b] 
@@ -205,8 +197,6 @@ Line 1 represents the format of the answer, here we look for which configuration
              :num-answers 1
              :time-limit 5
                      :print-derived :print)
-   ;;; search for a configuration integrity breach:
-   ;;; find all configurations for which conf-integrity has not been maintained
 \end{lstlisting}
 
 The configuration integrity breach is then proven by SNARK in Listing~\ref{lst:not-conf-int-a} for conf-1 at line 8 between time points time-3 and time-4 .

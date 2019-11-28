@@ -137,7 +137,7 @@ This problem is studied to improve the applicability of a model to a real life e
 \newpage
 \subsection{Network virtualization using SDN}
 
-Network virtualization has leveraged the use of SDN to provide a flexible abstraction layer to service providers. In this section, we first propose classification criteria for network hypervisors and then evaluate existing hypervisors against this classification. We will propose a reference architecture for network hypervisors implementing a secure network migration feature, based on existing solutions.
+Network virtualization has leveraged the use of SDN to provide a flexible abstraction layer to service providers. In this section, we first propose classification criteria for network hypervisors and then evaluate existing hypervisors based on this classification. We will then propose a reference architecture for network hypervisors implementing a secure network migration feature, based on existing solutions.
 
 \input{sota/sota-netvirt-sdn/introduction.tex}
 
@@ -184,7 +184,6 @@ In this section, we consider two different techniques used to solve the RA probl
 \newpage
 \section{Formal modeling of the migration process and its security}
 \label{sec:formal_model}
-\subsection{Introduction}
 \input{model/model-introduction.tex}
 
 % \subsection{Methodology}
@@ -196,12 +195,16 @@ In this section, we consider two different techniques used to solve the RA probl
 \subsection{Modeling physical and virtual networks}
 \input{model/model-networks.tex}
 
+\newpage
 \subsection{Modeling the migration of Virtual Networks}
 \input{model/model-migration.tex}
 
+\newpage
 \subsection{Security properties applied to Virtual Network migration}
 \input{model/model-security-properties.tex}
 
+\input{figures/virtualization-attack-surface.tex}
+\newpage
 \subsection{Attack model against the migration}
 \input{model/model-attack-model.tex}
 
@@ -219,10 +222,8 @@ In this section, we consider two different techniques used to solve the RA probl
 \newpage
 \section{Optimizing resource allocation of monitoring resources}
 \label{sec:RAprob}
-\subsection{Introduction}
 \input{RA/RA-motivation.tex}
 
-\newpage
 \subsection{Game Theory}
 \input{RA/GT.tex}
 

@@ -44,7 +44,7 @@ In general, there may be an infinity of answers to a query, but we rely on the t
 \label{sec:find-violation}
 The operation and formalism of SNARK will be illustrated in the context of a simple example.
 We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a virtual network.
-This example makes a simple assumption regarding the possibility of reading a data in the network. If the data is carried by a node during a certain time interval, then it can be read via the nodes connected to it, directly or via a path of nodes, during a subset of this time interval.
+This example makes a simple assumption regarding the possibility of reading a piece of data in the network. If the data is carried by a node during a certain time interval, then it can be read via the nodes connected to it, directly or via a path of nodes, during a subset of this time interval.
 This assumption alleviate the unnecessary burden of modeling the actual routing performed by network nodes and will instead focus on the configuration installed in the nodes.
 Rather than presenting the axioms of the theory in advance, we will introduce them as they are required in the proof.
 
@@ -127,7 +127,7 @@ This may be regarded as the negation of a goal to be established (line 2).
 Thus, we are looking for a user who can read the data via a path of nodes but who is not authorized to do so (lines 7-11).
 We establish that the intersection is not empty by showing that its endpoints are in temporal order, \ie the negation of \verb' (not-before ?t1.t-pt ?t2.t-pt)' (line 14).
 
-Note that the intersection of the two intervals has been simplified to a single time-interval whose start point is the maximum of the two start-points and whose finish point is the minimum of the two finish points.  
+Note that the intersection of the two intervals has been simplified to a single time-interval whose start point is the maximum of the two start-points and whose final point is the minimum of the two final points.  
 This has been accomplished by rewriting the term according to an axiom of the theory:
 
 \begin{lstlisting}[numbers=none]

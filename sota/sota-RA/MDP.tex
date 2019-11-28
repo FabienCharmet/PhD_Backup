@@ -83,18 +83,21 @@ Policy Iteration works as follows:
                     $V(s) = P(s,a,s')[R(s,a,s') + \gamma \sum_{s'}V(s')]$\\
                     $\Delta = max(\Delta,|temp-V(s)|)$
                 }
-            \tcc{Repeat until convergence of the value}
+            \tcc{Repeat until convergence of the utility}
             }
-        \end{algorithm}
+        \end{algorithm}\newpage
     \item Improve policy
     \begin{algorithm}
         stable-policy = True
         \ForEach{$s\in S$}{
             $temp = \pi(s)$\\
+            \tcc{Compute new policy}
             $\pi(s) = \argmax\limits_a \left \{ P(s,a,s')[R(s,a,s') + \gamma \sum\limits_{s'}V(s')] \right \}$\\
+            \tcc{Did the policy change ?}
             \uIf{$temp \neq \pi(s)$}{stable-policy=False}
         }
         \uIf{stable-policy}{exit}
+        \tcc{If the policy changed recompute states values}
         \uElse{goto Step 2}
     \end{algorithm}
 \end{enumerate}
@@ -102,7 +105,7 @@ Policy Iteration works as follows:
 
 
 The computational complexity of both algorithms is studied in~\cite{mdpcomplexity}.
-Results show that MDPs can be solved in a polynomial time, but existing solutions are barely using the structure specificities of an MDP.
+Results show that MDPs can be solved in a polynomial time, but existing solutions are barely using the structure specificities of an MDP. Simply put, MDPs are solved like any other optimization problem.
 
 \subparagraph{Q-Learning}
 The Q-Learning algorithm~\cite{qlearning} is used when the MDP does not provide an explicit definition of its model (\ie transitions and/or rewards).
@@ -119,9 +122,9 @@ Q'(s_{t},a_{t}) = (1-\alpha) \cdot \underbrace{Q(s_{t},a_{t})}_{\text{old value}
 
 \paragraph{MDP-based Resource Allocation}
 \textbf{\newline}
-We consider here the use of MDP in the context of the resource allocation problem.
+We consider here the use of MDPs in the context of the resource allocation problem.
 We divide the following works into two categories, whether the MDP is used to process resource allocation requests or to directly allocate resources on an infrastructure.
-Table~\ref{tab:MDP-summary} summarizes the investigated works.
+Table~\ref{tab:MDP-summary} summarizes the surveyed works.
 
 \subparagraph{Allocation requests optimization}
 \textbf{\\}
@@ -134,11 +137,11 @@ Authors describes implementations issues related to the 802.21 standard and impl
 
 Using an MDP to allocate security services to cloud users is studied in~\cite{Liang2011}.
 Authors start by describing the security services provided by the cloud, and the underlying RA problem.
-They consider that the arrival of security services requests follow a Poisson law, and the system will either accept or reject the request. Formally speaking, authors use a Semi MDP (SMDP) which is an extension of traditional MDP that include asynchronous events from outside the system and continuous time (in opposition to the discrete time approach of MDP).
+They consider that the arrival of security services requests follow a Poisson law, and the system will either accept or reject the request. Formally speaking, authors use a Semi MDP (SMDP) which is an extension of traditional MDP that include asynchronous events from outside the system and continuous time (in opposition to the discrete time approach of an MDP).
 The states of the MDP represent the number of security services currently served to the users. In addition to requests arrival events, the departure of users (incurring a freeing of the resources) is also modeled as an event. The reward function is based on the cost of occupation of the cloud resources by the security services compensated by the revenues generated. 
 From this resource allocation model the blocking probability is derived, \ie which class of service is most likely to be rejecting requests from users. Extensive numerical evaluations are performed to determine optimal revenues under different request arrival rates.
 
-RA problems become even more relevant in constrained environment with limited resources.
+RA problems become even more relevant in environment with limited resources.
 Allocating the right amount of resources in mobile Cloud networks will improve the user experience and failing to deliver will hurt the business model.
 Such approach is considered in~\cite{Liang2012} where authors use an MDP to handle resource transfer between mobile cloud domains. Each cloud domain composing the network can host a certain amount of services using its own resources. 
 This work also uses the SMDP model because the request arrival formalism is well defined.
@@ -167,15 +170,15 @@ They also use a Poisson law to model the arrival rate of requests but do not ext
 The states of the MDP are defined by the queue length of the core, limited to a maximum queue size. The actions available are the frequency applied by the core to process requests.
 The reward function considered is a cost function that should be minimized.
 The energy consumption considers both the dynamic energy consumption due to processing requests as well the static power consumed by an idle core.
-The MDPs solutions are then integrated into an optimization under constraints problem that will determine the optimal resource allocation to maximize the profits obtained from serving users while considering energy consumption.
+The MDP solutions are then integrated into an optimization under constraints problem that will determine the optimal resource allocation to maximize the profits obtained from serving users while considering energy consumption.
 This problem is then solved using an algorithm maximizing the sum of linear fractional functions.
 
 
-Authors in~\cite{Bokani2015} consider a similar problem where the problem of HTTP-based streaming is performed in a vehicular environment.
+Authors in~\cite{Bokani2015} consider a similar situation where the problem of HTTP-based streaming is performed in a vehicular environment.
 HTTP-based streaming uses small chunks of video stored on the server with different quality version to provide a seamless streaming experience thanks to adaptative algorithms. 
-These algorithms determine what is the best quality chunk that can be delivered to the user considering the current available bandwidth etc. Instead of using \textit{time epochs} to represent the buffering of the video and the deadline before video freezing, the length of buffered video time is used along the quality level of the current chunk to describe the states of the MDP. 
+These algorithms determine what is the best quality chunk that can be delivered to the user considering the current available bandwidth. Instead of using \textit{time epochs} to represent the buffering of the video and the deadline before video freezing, the length of buffered video time is used along the quality level of the current chunk to describe the states of the MDP. 
 Actions of the MDP represent the quality of the next chunk to be downloaded by the user.
-The reward function is based on the quality of the downloaded chunk, and penalties are applied if the video froze while playing as well as a penalty for changing the quality level between two consecutive chunks.
+The reward function is based on the quality of the downloaded chunk, and penalties are applied if the video froze while playing. Additionally, a penalty for changing the quality level between two consecutive chunks is also applied.
 The MDP is then solved using the Value Iteration algorithm, but this model requires to know beforehand the bandwidth model. 
 These limitations can be overcome by using a Q-Learning function where the bandwidth map is unknown but instead the MDP will be trained.
 
@@ -183,7 +186,7 @@ These limitations can be overcome by using a Q-Learning function where the bandw
 The resource allocation problem has been investigated using two different methodologies, namely the Game Theory formalism and Markov Decision Processes, each of which has their own advantages and limitations
 Game Theory accounts for the point of view of an attacker and a defender, allowing to extensively model the behavior of an attacker and his impact on the defended system.\\
 The MDP ends up being a one user optimization method but the description of the reward function and the transitions between states may reflect external interactions, which could represent the impact of an attacker.
-A strong advantage of MDP over game theory models lies in the flexibility of the formalism to describe the actions available and the methods available to solve it.
+A strong advantage of MDPs over game theory models lies in the flexibility of the formalism to describe the actions available and the methods available to solve it.
 
 
 % Please add the following required packages to your document preamble:

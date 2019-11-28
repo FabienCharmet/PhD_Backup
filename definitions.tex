@@ -3,7 +3,7 @@ Specifically, we will detail the Software Defined Networking paradigm, and the n
 
 \subsubsection{Software Defined Networking}
 
-Traditional networks are complex and difficult to operate~\cite{complexnetworks}, due to their heterogeneity and lack of interoperability. The network administrator is often tasked to configure each network element individually, and has to either do it manually or use low-level vendor specific scripts to deploy the configuration. The impossibility to aggregate these tasks into a unified workxflow becomes more and more problematic as network infrastructures grow, especially for Cloud Providers.
+Traditional networks are complex and difficult to operate~\cite{complexnetworks}, due to their heterogeneity and lack of interoperability. The network administrator is often tasked to configure each network element individually, and has to either do it manually or use low-level vendor specific scripts to deploy the configuration. The impossibility to aggregate these tasks into a unified workflow becomes more and more problematic as network infrastructures grow.
 
 To overcome these aspects, a new networking paradigm has been proposed, namely Software Defined Networking (SDN).
 The SDN paradigm consists in decoupling the control plane and the data plane.
@@ -52,9 +52,9 @@ There are several hypervisors actually extending existing SDN controllers to ena
 The process of mapping a virtual network with its underlying resources is referred to as Virtual Network Embedding (VNE), and is illustrated in Figure~\ref{fig:VNE}.
 When a user requests a virtual network, he specifies the topology he needs, how much bandwidth is required for the links and possibly other constraints such as the geographical location of the physical resources.
 The role of the VNE is to determine which resources are suited for this request, while optimizing the number of virtual networks that can be accepted in the infrastructure.
-Moreover, the hypervisor is in charge to provide isolation between tenants, preventing them from interacting with other tenants' virtual networks. Isolation covers either the resources allocated to tenants, such as bandwidth, switch CPU or flow tables memory, but it also includes the topology itself so a tenant cannot manipulate traffic that does not belong to him.
+Moreover, the hypervisor is in charge of providing isolation between tenants, preventing them from interacting with other tenants' virtual networks. Isolation covers either the resources allocated to tenants, such as bandwidth, switch CPU or flow tables memory, but it also includes the topology itself so a tenant cannot manipulate traffic that does not belong to him.
 
-Two main information are used by tenants of the virtualization infrastructure, the address space and the flowspace.\\
+Two types of information are used by tenants of the virtualization infrastructure, the address space and the flowspace.\\
 \textbf{The address space} is the set of IP addresses that a tenant can assign to the hosts in his virtual network.\\
 \textbf{The flowspace} is the set of header parameters the tenant can use when deploying flow rules to configure his virtual network (see Figure~\ref{fig:matching-fields}). The hypervisor may restrict the use of certain headers because the virtualization already uses them as internal identifiers.
 For instance, the VLAN PCP field is sometimes used for this purpose.
@@ -62,7 +62,7 @@ For instance, the VLAN PCP field is sometimes used for this purpose.
 \textbf{Abstractions of the physical infrastructure}
 Abstracting the physical infrastructure to the tenant can be done in two different ways, by slicing the physical infrastructure or by mapping the virtual network with the related physical resources.
 % or by providing an API to the tenant.\\
-\textbf{A slice} is the set of physical resources allocated to a virtual network.
+\textbf{A slice}~\cite{FlowVisor-Sherwood2009} is the set of physical resources allocated to a virtual network.
 Slicing the physical infrastructure consists in allocating only a subset of the infrastructure to the tenant while hiding the rest of the network equipments.
 The hypervisor gives the tenant a direct access to the network nodes composing the slice, and the flow rules installed by the tenant will be rewritten to only match the flow space he has been allocated.\\
 The term slice is also found in the literature to describe the subdivision of a single physical resource. For instance, a slice can be a subdivision of a physical node corresponding to a specific tenant.\\

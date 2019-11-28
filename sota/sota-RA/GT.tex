@@ -39,7 +39,7 @@ The solution of a game is often referred to as a Nash Equilibrium~\cite{nasheq} 
 In a two players zero sum game, each player minimizes the maximum gain of his opponent. 
 The Nash equilibrium is expressed with the minmax problem~\cite{minmax}.
 
-\paragraph{Game Theory based Resource Allocation}
+\paragraph{Game Theory based Resource Allocation}\textbf{\\}
 Game Theory has been applied to network security in different ways, IDS configuration and optimization, as well as resource allocation problems. We will focus on the latter. We summarized the different works in Table~\ref{tab:sota-gt}.
 
 %  \paragraph{Static games}
@@ -51,7 +51,7 @@ Game Theory has been applied to network security in different ways, IDS configur
  The formulation is represented as a minmax problem where the attacker will minimize the maximum detection probability possible for the defender.
  The game is then solved using the max-flow algorithm, which determines the attacker's strategy as well as the corresponding optimal sampling distribution.
  Otrok~\etal extends this work in~\cite{otrok1,otrok2} where the model is extended in two ways: either the game is played with imperfect information or the attacker model is augmented.
- In~\cite{MuraliKodialam2003} the attacker was forced to choose one path to launch his attack to his victim, while in~\cite{otrok1} the attacker may fragment his attack through several paths in the network.
+ In~\cite{MuraliKodialam2003} the attacker is forced to choose one path to launch his attack to his victim, while in~\cite{otrok1} the attacker may fragment his attack through several paths in the network.
  Two scenarios are examined: one attacker sending multiple packets and multiple attackers sending one packet.
  In the first case, the attack is deemed successful if the attacker can send a certain amount of packets without being detected.
  In the second case, the attack is a success if every attacker can send one packet to the victim without being detected.
@@ -63,7 +63,7 @@ Game Theory has been applied to network security in different ways, IDS configur
  Formally speaking, the game is said of imperfect information because it cannot be definitely determined if a leader node has loyally fulfilled its duties.
  
  A standard approach in network security is to determine which nodes in the infrastructure are the most likely to be targeted by attacks. 
- Similarly to previous works, both attacker and defender are under constraint budgets.
+ Similarly to previous works, both attacker and defender are under constrained budgets.
  Agah~\etal~\cite{agah2004} consider this problem in a sensor network, where sensors are grouped into clusters and where one sensor is the clusterhead who will support the detection tasks.
  The game considered in this situation is usually to let the attacker choose one or more clusterheads to attack, or to do nothing, while the defender will choose which clusterhead to defend.
  Attacking and defending the infrastructure incur certain costs and rewards that are expressed in the utility functions.
@@ -81,12 +81,12 @@ Game Theory has been applied to network security in different ways, IDS configur
  The game describes an altruistic utility function in which two main criteria are taken into account: the amount of trust between nodes and the satisfaction level for the quality of service provided.
 
 %  \paragraph{Stochastic games}
-In previous games, the consequences of actions were accounted for in the utility function, where the detection of an attack would impact with a coefficient the gain (resp. loss) for an attacker (resp. defender).
+In previous games, the consequences of actions were accounted for in the utility function, where the detection of an attack would impact with a coefficient the gain (resp. loss) for an attacker (resp. a defender).
 However, stochastic games allow to model the different possible outcomes of a situation in a more detailed fashion.
 For instance, if the attack is successful, the system may transition from a healthy state toward a compromised state, where the attacker is given better rewards in the future.
 In this regard, Sallhammar~\etal describe such a game in~\cite{sallhammar2005}.
 The system is modeled as a Continuous Time Markov Chain in which the transition probabilities will depend on the attack performed on the system. Similarly to previous work, the attacker may also choose to do nothing.
-This work focuses on modelling intentional faults due to attacks, since accidental faults have different statistical properties such has randomness, faults are independent from each other \etc
+This work focuses on modelling intentional faults due to attacks and differentiate them from accidental faults using statistical properties such as randomness, faults independency \etc
 They also consider different types of attacker behaviors where the consequences of being detected may be unknown and or the attacker may not care about them.
 The model is then extended in~\cite{Nguyen2009} where the model accounts for interdependencies of nodes to compromise the infrastructure.
 
@@ -99,7 +99,7 @@ Game Theory applied to network security has been surveyed in~\cite{Roy2010,Kienn
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c|c|c|}
 \hline
-Reference                               & Type of game       & Summary                                            \\ \hline
+\textbf{Reference}                               & \textbf{Type of game}       & \textbf{Summary}                                            \\ \hline
 \cite{MuraliKodialam2003,otrok1,otrok2} & Static game        & Link sampling allocation for IDS                 \\ \hline
 \cite{agah2004}                         & Static game        & Monitoring resource allocation in a sensor network \\ \hline
 \cite{Chen2009,interdep-ismail2017}      & Static game        & Resource allocation  in an infrastructure          \\ \hline

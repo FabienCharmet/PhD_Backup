@@ -35,14 +35,15 @@ The theorem prover will apply inference rules on the original set of clauses and
 We will now present some rules of inference used for first order logic theorem proving.
 A rule of inference is a rule defining the deduction process, it takes a set of propositions as input and returns a proposition which is a conclusion drawn from the input propositions.
 
-We use $\vdash$ to represent the result of the deduction from a set of proposition.
+We use \{clause 1, clause2, ..., clause n\} to define a set of n clauses.\\
+We use $\vdash$ to represent the result of the deduction from a set of clauses.
 
 \paragraph{Modus ponens and modus tollens}\textbf{\\}
 Modus ponens is a rule of inference using the affirmation in an implication to deduce the conclusion.
-Considering the simple example given previously, $P \Rightarrow Q$, if we assert that $P$ is true, then we use modus ponens to conclude that $Q$ is true as well. This is summarized as "If P implies Q and P is true, then Q must be true" : $P \Rightarrow Q, P \vdash Q$.
+Considering the simple example given previously, $P \Rightarrow Q$, if we assert that $P$ is true, then we use modus ponens to conclude that $Q$ is true as well. This is summarized as ``If P implies Q and P is true, then Q must be true" : $P \Rightarrow Q, P \vdash Q$.
 
 Similarly Modus tollens uses the negation in the consequence of an implication to deduce the conclusion.
-Considering $P \Rightarrow Q$, asserting that $Q$ if false, then $P$ must be false as well: $P \Rightarrow Q, \neg Q \vdash \neg P$.
+Considering $P \Rightarrow Q$, asserting that $Q$ is false, then $P$ must be false as well: $P \Rightarrow Q, \neg Q \vdash \neg P$.
 
 \paragraph{Resolution principle}\textbf{\\}
 The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield false. 
@@ -53,7 +54,8 @@ The resolution principle uses substitution in a set of clauses to reach a conclu
 We consider the simple example presented in~\cite{snark-Stickel2000} and refer the reader to~\cite{symbolic-proof} for additional reading, more specifically on variable unification.
 We also refer the reader to the Method of Davis and Putnam and more specifically on the One-Literal Rule.
 
-Consider the following clauses: $\neg P \vee Q$ and $P \vee R$. The resolution principle returns $Q \vee R$ as a resolvent of the previous propositions.
+Consider the following clauses: $\{\neg P \vee Q,P \vee R\}$.\\
+The resolution principle returns the clause $Q \vee R$ as a resolvent of the previous propositions.
 
 
 \paragraph{Paramodulation}\textbf{\\}
@@ -61,14 +63,16 @@ The paramodulation is an inference rule used to exploit the equality existing be
 
 Consider the proposition $P(x) = true$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
 
-Consider now the two propositions: $P(x) \vee Q(y)$, $(x = y) \vee R(y)$, paramodulation deduces the proposition $P(y) \vee Q(y) \vee R(y)$.\\
-$P(x) \vee Q(y)$, $(x = y) \vee R(y) \vdash P(y) \vee Q(y) \vee R(y)$
+Consider now the two propositions: $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\}$.\\
+Paramodulation deduces the proposition $P(y) \vee Q(y) \vee R(y)$.\\
+$\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\} \vdash P(y) \vee Q(y) \vee R(y)$
 
 \paragraph{Rewriting rules}\textbf{\\}
 Rewriting rules are used to replace an expression by another in a set of propositions.
 This is done to simplify the search space when applying inference rules~\cite{snark-Stickel2000}.
 
-We illustrate this with a simple example: $P \Leftrightarrow Q \wedge R, P \vee T$ is rewritten as $Q \wedge R \vee T$. 
+We illustrate this with a simple example:\\
+$\{P \Leftrightarrow Q \wedge R, P \vee T\}$ is rewritten as $Q \wedge R \vee T$. 
 
 The rewriting rule may be condition to replace the left hand side of an equivalence by the other, but may also apply substitutions to terms in the proposition only on one side of the proposition.
 We also refer the reader to~\cite{snark-Stickel2000,symbolic-proof} for further explanations.
