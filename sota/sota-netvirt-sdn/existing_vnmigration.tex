@@ -2,7 +2,7 @@
 \subsection{Migration of virtual networks with SDN}
 \label{sec:sota-vnmigration}
 In this section, we discuss the different virtual network migration solutions.
-We start by presenting solutions published on the same year as OpenFlow and that have been used as a reference in a majority of SDN-based migration solution.
+We start by presenting solutions published on the same year as OpenFlow and that have been used as a reference in a majority of SDN-based migration solutions.
 
 \subsubsection{Preliminary work}
 
@@ -60,8 +60,8 @@ We summarize these issues into three categories: whether the solution is designe
 Lo~\etal introduce in~\cite{vnm-lo2013} the design of a virtual network migration process.
 The cost of the migration is based on two metrics, the completion time of the migration as well as the bandwidth consumption.
 Based on the original embedding and the new destination substrate, the goal is to determine the ordering of node migration that will minimize the cost of the migration.
-For each step in the migration, the time taken to migrate a node is divided into two parts. The first one represents the time taken to prepare the migration and the second one is the time taken to actually transmit the different information to the destination substrate.
-The cost of a migration step is the product of the time it takes to migrate the information and the impact the migration incurs on the bandwidth.
+For each step in the migration, the time taken to migrate a node is divided into two parts. The first one represents the time taken to prepare the migration and the second one is the time taken to actually transmit information to the destination substrate.
+The cost of a migration step is the product of the time it takes to migrate the information with the impact the migration incurs on the bandwidth.
 Virtual nodes are categorized based on whether the node has been migrated, if it will be at this step of the migration or if it will be later.
 Similarly, the virtual links' are divided into three categories, whether the nodes composing the links have been migrated, will be migrated or will not be migrated.
 The categorization of virtual resources is then used to determine the cost of the migration.

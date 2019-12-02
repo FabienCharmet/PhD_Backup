@@ -103,7 +103,13 @@
 \maketitle
 
 \begin{abstract}
-Abstract
+This thesis investigates the security of virtual network migration. Over the years, virtualization has been used to optimize physical resources and to support businesses' infrastructures. Virtualization consists in exposing a fraction of a resource for a user to operate. Virtual Machines are used to host business services like Web servers or a backup service. Network virtualization has not benefited from the same interest from researchers and the industry. The Software Defined Networking paradigm has introduced new possibilities to implement network virtualization and provide users with a flexible network, decoupled from the physical equipments. Virtual Networks are used to interconnect Virtual Machines and can be configured with specific routing policies or security protocols. In case of a failure of the resource, either accidental or intentional, the virtualization infrastructure will migrate the resource to maintain the service provided.
+
+The security of Virtual Machines and their migration is a well researched topic that has been widely in the past, while the study of network virtualization and especially their migration are only beginning the required consideration. The motivation of this research is to provide a description of the security of the virtual network migration process in the context of Software Defined Networking.
+
+We propose to model the virtualization infrastructure and describe the security of the migration process using a first order temporal logic. We then use this logic with a theorem prover to verify if a security violation occurred during the migration of a network. This model is based on the assumption that the formal proof is computed using perfect monitoring. We alleviate this assumption by modeling a resource allocation problem. We use a Markov Decision Process to determine the optimal placement of monitoring resources in the infrastructure.
+
+
 \end{abstract}
 
 \tableofcontents
@@ -156,7 +162,7 @@ Network virtualization has leveraged the use of SDN to provide a flexible abstra
 \newpage
 \subsection{Network \& VM security}
 
-We have presented in Sections~\ref{sec:sota-vnmigration} and~\ref{sec:existing-nhv} existing solutions for network virtualization and virtual network migration. We now delve into the security aspect of network virtualization, and the related security topics. The security of VN migration is a topic that has never been  studied yet, while the security of VM migration has been thoroughly investigated. Following sections cover two topics, namely the security of the Live VM migration process and existing formal models for network security.
+We have presented in Sections~\ref{sec:existing-nhv} and~\ref{sec:sota-vnmigration} existing solutions for network virtualization and virtual network migration. We now delve into the security aspect of network virtualization, and the related security topics. The security of VN migration is a topic that has never been  studied yet, while the security of VM migration has been thoroughly investigated. The following sections cover two topics, namely the security of the Live VM migration process and existing formal models for network security.
 Existing formal models are useful to understand to which extend security in networks has been expressed but also it will help us to determine what has not beed modeled yet.
 
 \subsubsection{Security of VM migration}
@@ -172,7 +178,7 @@ Existing formal models are useful to understand to which extend security in netw
 The resource allocation (RA) problem consists in determining the optimal way to spend limited resources in order to achieve maximum profit while satisfying a set of constraints.
 The VNE problem is a subclass of the RA problem, where the VNE component will determine the set of physical resources that will embed a virtual network, while maximizing the acceptance rate, \ie the ratio between accepted VN requests and total number of requests.
 The VNE problem is constrained by available resources, but there might be other constraints like security requirements or geographical positioning rules.
-In this section, we consider two different techniques used to solve the RA problem, namely the Game Theory formalism and Markov Decision Processes. 
+In this section, we consider two different formalisms used to solve the RA problem, namely Game Theory and Markov Decision Processes. 
 
 % \input{sota/sota-RA/LP.tex}
 \input{sota/sota-RA/GT.tex}

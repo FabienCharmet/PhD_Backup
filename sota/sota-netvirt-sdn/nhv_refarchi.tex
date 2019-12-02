@@ -1,7 +1,7 @@
 \subsubsection{Reference architecture of a network hypervisor}
 \label{sec:reference_archi}
 %\GB{a good start is the paper from Casado et al., published at PRESTO'10, where the idea of a network hypervisor is introduced. A quick introduction of network virtualization in general, and how SDN stands in this landscape, would be helpful. Please refer to the following website: \url{http://packetpushers.net/sdn-network-virtualization-hypervisors/}. I suggest to even go as far as to mention the state of the art of network virtualization: from VLANs and VPNs, to network slicing, to network hypervisors}
-A reference architecture is the theoretical design of an element that will include all necessary components. 
+A reference architecture is a template for the architecture of a software solution, and defines a vocabulary to compare existing implementations. 
 We consider here the design of a network hypervisor supporting a secure virtual network migration.
 A network hypervisor should support the following operations:
 \begin{itemize}
@@ -158,7 +158,7 @@ In case of a DoS attack, the security component would rely on the VNEC to provid
 \subsubsection{Workflows in the reference architecture}
 In this section we describe the different information flows illustrated by Figure~\ref{fig:reference-archi-nh}.
 
-\circled{1} Tenant - CPAC: This flow is mainly composed of commands sent by the tenant and the view of the virtual network sent by the hypervisor. Additional traffic may include specific notifications (\eg security and performance alerts).
+\circled{1} Tenant - CPAC: This flow is mainly composed of requests sent by the tenant and the view of the virtual network sent by the hypervisor. Additional traffic may include specific notifications (\eg security and performance alerts).
 
 \circled{2} CPAC - VNEC: The CPAC transmits requests for new virtual networks to be deployed on the physical infrastructure, and the VNEC returns whether or not the request is accepted.
 
