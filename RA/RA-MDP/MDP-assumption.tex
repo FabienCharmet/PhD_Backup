@@ -1,32 +1,17 @@
-\label{sec:hypotheses}
-In this section we describe the assumptions made about the scope of the MDP.
+\label{sec:mdp-system-hypotheses}
+We describe here the assumptions made about the infrastructure and the migration process.
 
-\textbf{Migration}
+% \textbf{Migration}
+\begin{itemize}
 
-All nodes in the original substrate have been fully compromised by the attacker and thus are not considered as candidates for the destination substrate.  
-This assumption is reinforced by the fact that forcing all the resources to be reallocated could be leveraged by the attacker in an attempt to have the target virtual network relocated closer to his virtual machines.
-Virtual machines are already subject to such attacks, as presented by Atya \etal in~\cite{stalling-atya2017,malicious-atya2017}.
-The migration will deploy in the destination substrate all the flow rules necessary to operate the virtual network properly. The migration of the virtual nodes is sequential~\cite{Lime-Ghorbani2014}, thus all the nodes will be migrated one at a time.
-We suppose that both virtual network and physical infrastructures are static (\ie the topology does not change over time).
+    \item
+    The migration will deploy in the destination substrate all the flow rules necessary to operate the virtual network properly. We consider that the migration of the virtual nodes is sequential~\cite{Lime-Ghorbani2014}, thus all the nodes will be migrated one at a time.
+    We suppose that both virtual network and physical infrastructures are static (\ie the topology does not change over time).
+    
+    \item All nodes in the original substrate have been fully compromised by the attacker and thus are not considered as candidates for the destination substrate.  
+    This assumption is reinforced by the fact that forcing all the resources to be reallocated could be leveraged by the attacker in an attempt to have the target virtual network relocated closer to his virtual machines.
+    Virtual machines are already subject to such attacks, as presented by Atya \etal in~\cite{stalling-atya2017,malicious-atya2017}.
 
-\textbf{Monitoring}
-
-The deployment of the monitoring on the nodes impacts the defender financially and the infrastructure's performance. Based on the work of Ismail \etal~\cite{interdep-ismail2017}, we consider the monitoring cost  proportional to the intrinsic value of the nodes, (\eg CPU time on a powerful machine is more expensive compared to a smaller one). 
-% The performance impact is considered uniform on all the nodes. 
-
-We consider the monitoring imperfect with a certain attack detection probability.
-Each node on the path of an attack has the same probability to detect it, \eg there is no node more efficient than another. 
-
-\textbf{Targeting nodes}
-\label{sec:attacking}
-% \GB{one of the main assumptions is therefore that the attack path is in the substrate}
-% \FC{The attack path is from attacker to target node. However, the other path, the path used to exfiltrate data will be in the substrate obviously. I will differentiate these two types of paths}
-
-During the migration, the attacker may target nodes to construct the path that will support the exfiltration of the information.
-We make the assumption that substrate nodes are more likely to be attacked since at least one must be part of the path leading to the exfiltration point.
-The attacker's strategy for choosing which nodes he attacks is based on the information gathering he performs while attacking. The details of such activity is considered out of the scope of this thesis.
-Similar work on cloud environments for virtual machines colocation has been proposed in~\cite{getoffmucloud-Ristenpart2009, incentivemtd-Zhang2012}.
-% \GB{not sure of this term being used in the literature. What about co-location or even co-residency?} 
-% \FC{Correct spelling seems to be collocation but literature says colocation, let's go}
-Johnson \etal propose in~\cite{mitigateAPT-johnson2013} a real time metric that determines the node that is the most likely to be the next target of an attack.
-If the attacker was able to establish the full path then we consider that the global attack was successful.
+    \item
+    We also assume that each node takes the same amount of time to migrate (\ie no node is longer to migrate in the infrastructure than another).
+\end{itemize}

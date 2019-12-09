@@ -1,4 +1,4 @@
-\documentclass[a4paper, 11pt]{article}
+\documentclass[a4paper, 11pt]{report}
 \usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
 % \usepackage{lipsum} %This package just generates Lorem Ipsum filler text. 
 \usepackage{fullpage} % changes the margin
@@ -40,7 +40,8 @@
 \setcounter{tocdepth}{3}
 \usepackage[nottoc,numbib]{tocbibind}
 \usepackage{minted}
-
+\usepackage{epigraph}
+\usepackage{quotchap}
 \usepackage{setspace}
 
 \usepackage{hyperref}
@@ -111,6 +112,41 @@ We propose to model the virtualization infrastructure and describe the security 
 
 
 \end{abstract}
+\newpage
+\section*{Dedication}
+I dedicate this work to my father, whom I miss very much.
+
+\newpage
+
+\begin{savequote}
+testzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+\end{savequote}
+\chapter*{Acknowledgments}
+
+
+As I finally reach the end of this long yet interesting journey, I realize I have so many people to thank.
+
+I would like to thank my PhD supervisor, Professor Abdallah M'Hamet, for his wisdom and his advice that made every interaction interesting.
+
+I also deeply thank Professor Gregory Blanc and Professor Christophe Kiennert, without whom this work 
+would never have been possible. Their remarks, their patience and their tremendous support helped me throughout this long path. They made me realize what matters during the PhD life and what it means to set high expectations for myself.
+
+This whole opportunity would not have been possible without the trust of Professor Herv\'e Debar, who gave me a chance to become an Engineer and then a Doctor. I have had premium hands on experience on research and infrastructure deployment. I owe him all these years spent at T\'el\'ecom SudParis.
+
+I am grateful for the collaboration I had with Doctor Richard Waldinger at the Stanford Research Institute. His expertise in theorem proving and his remarks made this work possible. I enjoyed every moment of our collaboration.
+
+I have so many colleagues to thanks here, for the support and cheerfulness they brought in.
+Thank you Nesrine, Gamain, Miroslav, Stef, Seb, Christian, Olivier. I also wish good luck to Mariana, Antoine, Mus, Maria, Hadjer, who should cross this line one day or another.
+
+A big thank to all of my friends in no particular order: Guillaume, Jo, Thomas, Nico, Yoan, whose company made me laugh when I needed it the most. 
+
+A very special mention to my family, which went through thick and thin with me, and to whom my love is unconditional. 
+
+Finally, there are three persons I have to thank for their incredible work during my PhD: Francoise Abad, Sandra Gchweinder and Zahia Zendagui. They made every single day run smoothly.
+
+All mistakes are mine, enjoy your reading !
+
+\newpage
 
 \tableofcontents
 \listoffigures
@@ -121,12 +157,12 @@ We propose to model the virtualization infrastructure and describe the security 
 
 \newpage
 \pagenumbering{arabic}
-\section{Introduction}
+\chapter{Introduction}
 \input{introduction.tex}
  
 
 \newpage
-\section{State of the Art}
+\chapter{State of the Art}
 \label{sec:sota}
 In this section, we provide a literature review of the different topics studied in this thesis.
 First of all, we start by defining the different networking and virtualization concepts considered in this thesis.
@@ -188,7 +224,7 @@ In this section, we consider two different formalisms used to solve the RA probl
 \input{sota/sota-conclusion.tex}
 
 \newpage
-\section{Formal modeling of the migration process and its security}
+\chapter{Formal modeling of the migration process and its security}
 \label{sec:formal_model}
 \input{model/model-introduction.tex}
 
@@ -226,18 +262,17 @@ In this section, we consider two different formalisms used to solve the RA probl
 \input{model/model-conclusion.tex}
 
 \newpage
-\section{Optimizing resource allocation of monitoring resources}
+\chapter{Optimizing resource allocation of monitoring resources}
 \label{sec:RAprob}
 \input{RA/RA-motivation.tex}
 
-\subsection{Game Theory}
 \input{RA/GT.tex}
 
 \newpage
-\subsection{Markov Decision Process}
 \input{RA/MDP.tex}
 
 \newpage
+\chapter{Conclusion}
 \input{conclusion.tex}
 \newpage
 \bibliography{references}{}

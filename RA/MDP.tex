@@ -1,17 +1,18 @@
-We have considered the formalism of Game Theory as a method to solve the resource allocation problem, but the lack of flexibility and the complexity of determining the optimal solution made it not applicable for our problem. Derived from Game Theory come Markov Decision Processes (MDP).
-MDP is a formalism used to represent an agent and the actions he can choose to impact a system. The purpose of this model is to find the best action to choose depending on the state of the system (\ie the optimal policy). Because a practical solution to the RA problem is a set of node to support the monitoring of the infrastructure, we will develop a statistical analysis of the optimal policy and convert the dynamic answer of a MDP into a static \textit{a priori} deployment.
+\subsection{Second approach: Markov Decision Process}
+We have considered the formalism of Game Theory as a method to solve the resource allocation problem, but the lack of flexibility and the complexity of determining the optimal solution make it inadequate for our problem. We consider here Markov Decision Processes (MDP).
+MDP is a formalism used to represent an agent and the actions he can choose to interact with a system. The general purpose of an MDP is to find the best action for each possible state of the system (\ie the optimal policy). Because a practical solution to this RA problem is a set of node supporting the monitoring of the infrastructure, we will develop a statistical analysis of the optimal policy and convert the dynamic answer of a MDP into a static \textit{a priori} deployment.
 An experimental prototype is available on github\footnote{\label{github}\url{https://github.com/FabienCharmet/MDPRA}}.
 
-\subsubsection{Requirements}
-\input{RA/RA-MDP/MDP-Requirements.tex}
+
+% \input{RA/RA-MDP/MDP-Requirements.tex}
 
 \input{figures/migration_trigger.tex}
 
+\subsubsection{System assumptions}
+\input{RA/RA-MDP/MDP-assumption.tex}
+
 \subsubsection{Attacker Model}
 \input{RA/RA-MDP/MDP-attackmodel.tex}
-
-\subsubsection{Assumptions}
-\input{RA/RA-MDP/MDP-assumption.tex}
 
 \subsubsection{Modeling the RA problem with a MDP}
 \input{RA/RA-MDP/MDP-MDP.tex}

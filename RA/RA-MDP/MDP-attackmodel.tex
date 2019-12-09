@@ -1,23 +1,26 @@
 \label{sec:attack_model}
-Fig.~\ref{fig:trigger} depicts the evolution of the infrastructure once the attacker makes part of it unavailable. 
+Fig.~\ref{fig:trigger} depicts the evolution of the infrastructure once the attacker renders part of it unavailable. 
 At first, the virtual network is running on a healthy physical substrate; but once the attack is launched, the substrate becomes unavailable and the virtual network must be migrated quickly to reduce the end user's service interruption.
-The success of the attacks on the migration relies on two main aspects: the ability to affect the configuration of SDN nodes as well as  to retrieve the exfiltrated data.
+Figure~\ref{fig:data-exfiltration-attack} illustrates the attacker's objective.
+In order to exfiltrate the network traffic of his victim, the attacker will compromise nodes in the infrastructure. The nodes he will attack will be used to create a path between the victim's network and an exfiltration point (\eg a Virtual Machine) owned by the attacker.
+
+The success of the attacks on the migration relies on two main aspects: the ability of the attacker to impact the configuration of SDN nodes as well as his ability to exfiltrate data.
 While the latter can be easily solved by owning virtual machines in the infrastructure, the former requires to be able to alter nodes configuration. This has been proven possible in~\cite{Taxonomy_Hizver2015, Bokani2015, attain-Ujcich2017}.
 Precisely, the attacker is able to spoof the identity of the network hypervisor, and thus is able to inject malicious flow rules inside the nodes to create the data exfiltration path. 
 However, he is not able to be designated as the original network hypervisor in the nodes' configurations. 
 This can be explained because it requires advanced configuration privileges. Moreover, a physical node missing from the legitimate hypervisor's topology view is easily detectable, in comparison to malicious flow rules injected inside the physical nodes.
 Even though the virtualization infrastructure hosts several virtual networks and end users, we limit the scope of the attacker to a unique target virtual network. 
-He has been able to determine which nodes to attack to trigger the migration thanks to prior scanning and information gathering. 
+The attacker has been able to determine which nodes to attack to trigger the migration thanks to prior scanning and information gathering. 
 Nevertheless, he has no exact knowledge about which nodes will be selected as the destination substrate and he will discover it by doing further scanning and fingerprinting  while he is attacking the infrastructure.  
 Even if the attacker may target all nodes in the infrastructure, he has no incentives to attack nodes that will not contribute to exfiltrate data from his victim's network. 
 
 We can find a description of such techniques in~\cite{Hong2015,Sphinx-Dhawan2015}.
-This information gathering is out of scope of this thesis and we consider that the attacker will choose his targets as presented in Section~\ref{sec:target_proba}.
+This information gathering is out of scope of this thesis and we consider that the attacker will choose his targets using the strategy presented in Section~\ref{sec:target_proba}.
 From the point of view of the defender, it is impossible to accurately know which node will be attacked.
 
 The attacker may own several virtual machines inside the infrastructure, thus has several sources to launch an attack. However, he can only attack one node at a time. 
 We suppose that each node will always be attacked from the same source. 
-Because of the short time interval considered for the migration, we suppose that the attack will always take the same path. 
+Because of the short time interval considered for the migration, we suppose that the attack will always take the same path (\ie no change in the flow rules for routing the attack). 
 This path will be considered to determine the global detection probability of the attack.
 % , since all the nodes monitoring the path may see the attack come through.
 % \GB{so this is very important to understand at what level is located the attacker. Is she another tenant? Or does she have access to the substrate? Do attack packets flow at the data plane or at the control plane?}.\FC{The attack is routed in the control plane but impacts the data plane. I don't want to go to deep in details so we do not add too much confusion. We can simplify by saying that the control plane topology is the same as the data plane topology.}

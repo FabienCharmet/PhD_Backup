@@ -1,6 +1,6 @@
 \label{sec:attacker-model}
 The migration of a VN instantiates new virtual nodes and links.
-Thus, based on  the migration functions we introduced in Section~\ref{sec:migration} and the predicates we have defined in Section~\ref{sec:security_prop}, we will describe the different components of a threat against the migration process using the following syntax
+Thus, based on  the migration functions we introduced in Section~\ref{sec:model-migration} and the predicates we have defined in Section~\ref{sec:security_prop}, we will describe the different components of a threat against the migration process using the following syntax
 %\GB{terms?}
 %\FC{The syntax is the combination of terms}
 : Attacker - Action - Target.
@@ -46,7 +46,7 @@ The configuration data encompasses the different flow rules deployed on the phys
 It is important to note that both configuration data and management data are issued by the hypervisor but do not serve the same purpose nor have the same frequency of use, even though they use the same communication channel.
 Management data are regularly exchanged between the hypervisor and the switch to maintain the view of the infrastructure (\eg symmetric messages like HELLO requests), while configuration data are sent when installing new flow rules or removing old ones (asynchronous messages).
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \cline{1-1} \cline{3-3} \cline{5-5}
@@ -77,7 +77,7 @@ We summarize these attacks in Table~\ref{tab:use-case-attack}.
 
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
-\begin{table}[h]
+\begin{table}[ht]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|}
 \hline

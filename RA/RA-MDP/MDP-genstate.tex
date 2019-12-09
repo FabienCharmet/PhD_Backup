@@ -1,5 +1,18 @@
 We describe in Algorithms~\ref{algo:genstate1},~\ref{algo:genstate2} and~\ref{algo:genstate3} how we generated the exhaustive set of states.
-We used a reccursive function that will loop first generate all possible attacks when choosing action $d$ (lines 8-18). A second loop will iterate over available nodes and each time will check if the remaining $b_f$ and $b_c$ budgets allow the action to be performed(lines 20, 35, 57 and 67). Available actions will be performed normally, while for others the remaining $b_f$ budget will be consumed and the current state will transition to an absorbing state.
+We remind the reader that action $m_i$ deploys monitoring on node $i$, action $u_i$ removes monitoring from node $i$, finally action $d$ does nothing.
+We also use the function $Select\_node$ presented in Algorithm~\ref{algo:iterative_algo} from Section~\ref{sec:model-migration}.
+
+
+\textbf{Algorithm~\ref{algo:genstate1}:}
+
+We generate the current state $s$ (line 3) and add it to the set of states $S$.\\
+If there are nodes to migrate, we migrate select the next one (line 6), migrate it (line 7) and remove it from the list of nodes to migrate (line 8).\\
+We check if there is no time left for the migration, and exit if so (lines 9-10).\\
+Then we calculate all possible transitions for action $d$.\\
+We change the $At$ if there is an attack (lines 12-13) or if there is no attack (lines 14-15).\\
+We then generate the destination state $s'$ (line 16).
+We compute the transiti r action $d$ (line 21).
+Finally we start a new recursion (line 22).
 
 \begin{algorithm}[htbp]
   \DontPrintSemicolon
@@ -12,7 +25,8 @@ We used a reccursive function that will loop first generate all possible attacks
   \SetKwProg{Fn}{Function}{:}{}
   \SetKwInOut{Input}{Input}
   \SetKwInOut{Output}{Output}
-  \Output{$S$ as the set of states, $P$ as the transition matrix}
+  \Input{$nodes\_to\_migrate$ as the set of nodes to migrate}
+  \Output{$S$ as the set of states, $P$ as the transition matrix, $R$ as the reward matrix}
 % %   \tcc{Defining the structure of a transition and a reward}
 %   $\text{transition}$ = $<\text{src state}, \text{dst state},\text{action}, \text{proba}>$\;
 % %   \tcc{Defining the structure of a reward}
@@ -20,80 +34,94 @@ We used a reccursive function that will loop first generate all possible attacks
   \Fn{\FGenerate{$b_f$, $b_c$, $Mi$, $Mo$, $At$, $lastAttack$}}{
     $s \gets State(b_f,b_c,Mi,Mo,At)$\;
     $S \gets S \cup s$\;
-    \uIf{nodes\_to\_migrate $\neq \emptyset$}{$Mi \gets Mi \cup NextNodeToMigrate()$}
-    \uIf{$b_f < \min\limits_i c_f^i$}{exit()}
-      }
-      \tcc{Looping for the do nothing action}
+    \uIf{$nodes\_to\_migrate \neq \emptyset$}{
+        $NextNode \gets Select\_node(nodes\_to\_migrate)$\;
+        $Mi \gets Mi \cup NextNode$\;
+        $nodes\_to\_migrate \gets nodes\_to\_migrate \backslash{} NextNode $\;
+    }
+    \uIf{$b_f < c_f$}{exit()}
+      \tcc{Looping over the possible attacks}
       \ForEach{$j$ in \{$0,..,n$\}}{
       \uIf{$j>0$}{$At' \gets At \cup j$}
        \uElse{$At' \gets At$}
-      $s' \gets State(b_f - c^0_f,b_c,Mi,Mo,At')$\;
-      \uIf{$i==0$}{$P(s,do\_nothing,s') \gets 1-\alpha$}
-      \uElse{$P(s,do\_nothing,s') \gets \Pi(j)$}
-      Generate($b_f-c_f^0,b_c,Mi,Mo,At',j)$
+            \uIf{$j==0$}{$P(s,d,s') \gets 1-\alpha$}
+      \uElse{$P(s,d,s') \gets \Pi(j)$}
+      $R(s,d,s') \gets compute\_reward(j,At')$\;
+      Generate($b_f-c_f,b_c,Mi,Mo,At',j)$
       }
-
+      }
     }
     \caption{Generating the MDP (1/3)} 
     \label{algo:genstate1}
     \end{algorithm}
     
-    
+   
+\textbf{Algorithm~\ref{algo:genstate2}:}\\
+We loop over all the nodes to generate their monitoring and unmonitoring action (line 25).\\
+First we check if there is enough budget $b_c$ to monitor node $i$ (line 26).\\
+If so we check if it is already monitoring (line 27).\\
+If it is, we repeat the same process as in Algorithm~\ref{algo:genstate1} for the transition generation (lines 27-37).\\
+We assign a null reward for this action (line 38).\\
+We start a new recursion (line 39).\\
+If it is not, we add node $i$ to the set of monitoring nodes $Mo$.\\
+Then we compute the transition as previously done (lines 42-51).\\
+We compute the reward for action $m_i$ (line 52) and start a new recursion (line 53).\\
+
+\textbf{Algorithm~\ref{algo:genstate3}:}\\
+If there is not enough $b_c$ budget (line 56) we generate the destination state and compute the attacks and  transitions (lines 57-66).\\
+We assign a null reward (line 67) and start a new recursion (line 68).\\
+We then consider the action $u_i$ and check if node $i$ is monitoring the infrastructure (line 69). \\
+We remove node $i$ from the set of monitoring nodes $Mo$ (line 70).\\
+We generate the destination state and compute the attacks and transitions (lines 71-80) and assign a reward (line 81).
+Then we start a new recursion (line 82).
+If node $i$ is not monitoring the infrastructure (line 83), we compute the destination state, attacks and transitions (lines 84-93).
+We assign a null reward (line 94) and start a new recursion (line 95).
+
+Finally, we start the generation of the states (line 96).
+
 % \SetNlSty{texttt}{(}{)}
 \begin{algorithm}[htbp]
   \LinesNumbered
-\setcounter{AlgoLine}{19}
+\setcounter{AlgoLine}{22}
 % This is to restore vline mode if you did not take the package as \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
   \SetAlgoVlined
 %This is to hide Begin keyword
 \SetKwBlock{Begin}{}{end}
 
 \Begin{
+\Begin{
       \tcc{Looping over monitor and unmonitor acctions}
       \ForEach{$i$ in \{$1,..,n$\}}{
-      \tcc{If there is no budget for this action}
-      \uIf{$b_f < c_f^i$}{
-      \ForEach{$j$ in \{$0,..,n$\}}{
-      \uIf{$j>0$}{$At' \gets At \cup j$}
-       \uElse{$At' \gets At$}
-      $s' \gets State(b_f - c^d,b_c,Mi,Mo,At')$\;
-       \uIf{$i==0$}{
-       $P(s,m_i,s') \gets 1-\alpha$\;
-       $P(s,u_i,s') \gets 1-\alpha$\;
-       }
-      \uElse{$P(s,m_i,s') \gets \Pi(j)$\;
-      $P(s,u_i,s') \gets \Pi(j)$\;}
-      }
-      Generate($0,b_c,Mi,Mo,At',j$)\;
-      }
-    }
       \tcc{If there is enough budget to monitor}
-      \uIf{$b_f > c^i_f$ and $b_c > c^i_c$}{
+      \uIf{$b_c > c^i_c$}{
         \tcc{Is the node already monitored ?}
         \uIf{$i \in Mi$}{
         \ForEach{$j$ in \{$0,..,n$\}}{
             \uIf{$j>0$}{$At' \gets At \cup j$}
        \uElse{$At' \gets At$}
-            $s' \gets State(b_f - c^i_f,b_c,Mi,Mo,At')$\;
+            $s' \gets State(b_f - c_f,b_c,Mi,Mo,At')$\;
             \uIf{$j==0$}{$P(s,m_i,s') \gets 1-\alpha$}
             \uElse{$P(s,m_i,s') \gets \Pi(j)$}
-            Generate($b_f-c_f^i,b_c,Mi,Mo,At',j$)\;
+            $R(s,m_i,s') \gets 0$\;
+            Generate($b_f-c_f,b_c,Mi,Mo,At',j$)\;
         }
         }
         \uElse{
-        $Mo' \gets Mo \cup i$
-                \ForEach{$j$ in \{$0,..,n$\}}{
-            \uIf{$j>0$}{$At' \gets At \cup j$}
-       \uElse{$At' \gets At$}
-            $s' \gets State(b_f - c^i_f,b_c - c^i_c,Mi,Mo',At')$\;
-            $P(s,m_i,s') \gets \Pi(j)$\;
-            Generate($b_f-c_f^i,b_c- c^i_c,Mi,Mo',At',j$)\;
+            $Mo' \gets Mo \cup i$\;
+            \ForEach{$j$ in \{$0,..,n$\}}{
+                \uIf{$j>0$}{$At' \gets At \cup j$}
+                \uElse{$At' \gets At$}
+                $s' \gets State(b_f - c_f,b_c - c^i_c,Mi,Mo',At')$\;
+                \uIf{$j==0$}{$P(s,m_i,s') \gets 1-\alpha$}
+                \uElse{$P(s,m_i,s') \gets \Pi(j)$}
+                $R(s,m_i,s') \gets compute\_reward(j,At')$\;
+                Generate($b_f-c_f,b_c- c^i_c,Mi,Mo',At',j$)\;
         }
-
+}
         }
       }
       }
-      
+          }
       
 \caption{Generating the MDP (2/3)} 
 \label{algo:genstate2}
@@ -102,48 +130,55 @@ We used a reccursive function that will loop first generate all possible attacks
 % \SetNlSty{texttt}{(}{)}
 \begin{algorithm}[htbp]
   \LinesNumbered
-\setcounter{AlgoLine}{71}
+\setcounter{AlgoLine}{53}
 % This is to restore vline mode if you did not take the package as \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
   \SetAlgoVlined
 %This is to hide Begin keyword
 \SetKwBlock{Begin}{}{end}
 
 \Begin{
+\Begin{
       \tcc{If there is not enough computational budget to monitor}
-      \uIf{$b_f > c^i_f$ and $b_c < c^i_c$}{
+      \uIf{$b_c < c^i_c$}{
         \ForEach{$j$ in \{$0,..,n$\}}{
             \uIf{$j>0$}{$At' \gets At \cup j$}
-       \uElse{$At' \gets At$}
-            $s' \gets State(b_f - c^i_f,b_c,Mi,Mo,At')$\;
-            $P(s,m_i,s') \gets \Pi(j)$\;
-            Generate($b_f-c_f^i,b_c- c^i_c,Mi,Mo,At',j$)\;
+            \uElse{$At' \gets At$}
+            $s' \gets State(b_f - c_f,b_c,Mi,Mo,At')$\;
+            \uIf{$j==0$}{$P(s,m_i,s') \gets 1-\alpha$}
+            \uElse{$P(s,m_i,s') \gets \Pi(j)$}
+            
+            $R(s,m_i,s') \gets 0$\;
+            Generate($b_f-c_f,b_c,Mi,Mo,At',j$)\;
         }
       }
-      \tcc{If there is enough budget to unmonitor}
-       \uIf{$b_f > c^i_f$}{
+      \tcc{Is node $i$ monitoring the infrastructure }
        \uIf{$i \in Mo$}{
-       $Mo' \gets Mo \ i$
+       $Mo' \gets Mo \backslash{} i$\;
        \ForEach{$j$ in \{$0,..,n$\}}{
        \uIf{$j>0$}{$At' \gets At \cup j$}
        \uElse{$At' \gets At$}
-       $s' \gets State(b_f - c^i_f,b_c,Mi,Mo',At')$\;
+       $s' \gets State(b_f - c_f,b_c+c^i_c,Mi,Mo,At')$\;
         \uIf{$j==0$}{$P(s,u_i,s') \gets 1-\alpha$}
         \uElse{$P(s,u_i,s') \gets \Pi(j)$}
         }
-        Generate($b_f-c_f^i,b_c+ c^i_c,Mi,Mo',At',j$)\;
+        $R(s,m_i,s') \gets compute\_reward(j,At')$\;
+        Generate($b_f-c_f,b_c+ c^i_c,Mi,Mo',At',j$)\;
         }
         \uElse{
         \tcc{Is the node not monitored ?}
         \ForEach{$j$ in \{$0,..,n$\}}{
-       $At' \gets At \cup j$\;
-       $s' \gets State(b_f - c^i_f,b_c,Mi,Mo,At')$\;
+       \uIf{$j>0$}{$At' \gets At \cup j$}
+       \uElse{$At' \gets At$}
+       $s' \gets State(b_f - c_f,b_c,Mi,Mo,At')$\;
        \uIf{$j==0$}{$P(s,u_i,s') \gets 1-\alpha$}
         \uElse{$P(s,u_i,s') \gets \Pi(j)$}
         }
-        Generate($b_f-c_f^i,b_c,Mi,Mo,At',j$)\;   
+        $R(s,m_i,s') \gets 0$\;
+        
+        Generate($b_f-c_f,b_c,Mi,Mo,At',j$)\;   
         }
-       }
-      
+       
+      }
       }
       
 

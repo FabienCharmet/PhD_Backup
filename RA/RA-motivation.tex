@@ -1,24 +1,19 @@
-In the previous chapter we have presented a theoretical model describing the virtualization of the network resource. We focused on describing how virtual networks are mapped with the physical infrastructure, and we described how the migration of virtual networks is done. Then, we focused on the security aspect of the migration process and how an attacker may compromise it in order to gain unlawful access to confidential information or to alter the configuration of migrated networks.
+In the previous chapter we have presented a theoretical model describing the virtualization of the network resource. We focused on describing how virtual networks are mapped with the physical infrastructure, and we described how the migration of virtual networks is done. Then, we focused on the security aspects of the migration process and how an attacker may compromise it in order to gain unlawful access to confidential information or to alter the configuration of migrated networks.
 
 We made several assumptions for this work, and one of the strongest is the omniscience of the detection mechanisms set up in the infrastructure to generate the execution trace. The proof given by the formal model relies on the fact that we have a complete knowledge of all the events that happened during the migration.  This hypothesis holds during the experimental evaluation of our formal model. 
 However, the perfect knowledge hypothesis is too strong to be considered in a real life environment. 
-Current IDS solution struggle to process an overwhelming amount of information, caused when the detection parameters capture too many events. This results in generating too many alerts that become a burden to process.
+Current IDS solutions struggle to process large amounts of information, caused when the detection parameters cause to capture too many events. This results in generating too many alerts that become a burden to process.
 
-We propose to alleviate this hypothesis for a real life use case with an optimization model for the deployment of the monitoring in the infrastructure.
-We consider a virtualization infrastructure, and want to improve the security of the migration process.
-Monitoring solutions incur a financial cost for the service provider, as well as a performance impact because computing resources are not dedicated to the virtualization service.
-The main objective is to determine which nodes in the infrastructure should support the monitoring function.
-The optimal deployment should consider the attacks launched on the migration.
-The problem considered here is a typical instance of the resource allocation problem.
+We propose to alleviate this hypothesis for a real life use case by optimizing the monitoring of the infrastructure. We formulate a Resource Allocation problem, in which a defender will have to select a limited number of network node that will have to monitor the infrastructure and detect attacks against the migration process. We aim at determining which nodes in the infrastructure will provide the best coverage to detect the attacks.
 
-Several solution for the resource allocation are presented in the state of the art. 
-Linear Programming models the system with a set of equations, and maximize a reward function under a set of constraints.
-The main drawback in solving security resource allocation problems with Linear Programming is the lack of consideration for the attacker's capacities in the solution.
+Several formalisms for the resource allocation problem have been reviewed in Chapter~\ref{sec:sota}:
 
-The Game Theory formalism is at the other end of the spectrum, where the behavior of both the infrastructure owner and the attacker can be modeled.
-The formalism provides different types of games, each corresponding to particular situations and how players choose their action.
+The Game Theory formalism is used to represent both attacker and defender and how one can attack (resp. defend) the infrastructure.
+The formalism provides different types of games, each defining different interactions between the attacker and the defender.
+We aim at using Game Theory to model different attacks on the infrastructure and similarly different defense strategies to protect it.
 Game Theory does not explore the resource allocation problem in an SDN environment, and we expect some applicability in our study.
 
-Markov Decision Processes sit between linear programming and Game Theory, where the model only considers the perspective of one entity, but gives the entity actions to make to interact with the system. The resource allocation problem is not well studied using MDP, but it provides enough granularity in the actions and the transition model to be worth investigating.
-
-
+Markov Decision Processes are used to represent how a defender may choose network nodes to support the monitoring.
+While the attacker is not directly represented as an agent that will interact with the infrastructure, he can be represented by impacting the rewards obtained by the defender.
+The solution of an MDP is a dynamic strategy that the defender should follow depending on the current state of the infrastructure.
+We intend to convert the dynamic aspect of this solution into an \textit{a priori} deployment of the monitoring resources (\ie deploying the resources prior to the migration of the virtual networks).
