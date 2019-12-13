@@ -1,10 +1,10 @@
-\subsubsection{Game Theory}
+\subsection{Game Theory}
 
 Game theory is a mathematical formalism used to represent the interactions between several agents (\ie players).
 The model is called a game, in which players will have the possibility to choose an action and will be rewarded based on their choice and the choice made by the other players.
 We now provide a set of definitions that will be used throughout this section.
 
-\paragraph{Definitions}\textbf{\\}
+\subsubsection{Definitions}\textbf{\\}
 
 \textbf{Strategies} are the actions available to a player. Each player has his own strategies, that may differ from a player to another.
 
@@ -26,7 +26,7 @@ We now provide a set of definitions that will be used throughout this section.
 
 \textbf{Security games} are two players non cooperative games where an attacker will compromise a system while an administrator will defend it~\cite{book-gt}.
 
-\paragraph{Solving the game}\textbf{\\}
+\subsubsection{Solving the game}\textbf{\\}
 We only consider here non cooperative games, as attackers and defenders have globally opposite goals.
 Solving a game consists in determining the strategy that each player will choose to maximize his gain.
 
@@ -39,10 +39,10 @@ The solution of a game is often referred to as a Nash Equilibrium~\cite{nasheq} 
 In a two players zero sum game, each player minimizes the maximum gain of his opponent. 
 The Nash equilibrium is expressed with the minmax problem~\cite{minmax}.
 
-\paragraph{Game Theory based Resource Allocation}\textbf{\\}
+\subsubsection{Game Theory based Resource Allocation}\textbf{\\}
 Game Theory has been applied to network security in different ways, IDS configuration and optimization, as well as resource allocation problems. We will focus on the latter. We summarized the different works in Table~\ref{tab:sota-gt}.
 
-%  \paragraph{Static games}
+%  \subsubsection{Static games}
  One of the first works using Game Theory applied to network security is presented by Kodialam~\etal in~\cite{MuraliKodialam2003}, where they model a link sampling for an attack detection problem.
  The aim is to determine the sampling frequency that will optimize the chances of detecting an attack going through the network.
  An attacker will launch attacks from a single node and choose one out of several paths to reach the victim's node.
@@ -82,7 +82,7 @@ Game Theory has been applied to network security in different ways, IDS configur
  Each node in the network is constrained by a set of resources and may distribute these resources to other nodes in order to participate to the intrusion detection.
  The game describes an altruistic utility function in which two main criteria are taken into account: the amount of trust between nodes and the satisfaction level for the quality of service provided.
 
-%  \paragraph{Stochastic games}
+%  \subsubsection{Stochastic games}
 In previous games, the consequences of actions were accounted for in the utility function, where the detection of an attack would impact with a coefficient the gain (resp. loss) for an attacker (resp. a defender).
 However, stochastic games allow to model the different possible outcomes of a situation in a more detailed fashion.
 For instance, if the attack is successful, the system may transition from a healthy state toward a compromised state, where the attacker is given better rewards in the future.

@@ -1,7 +1,7 @@
 In this section we will present the different network concepts and paradigms that will be explored throughout this thesis.
 Specifically, we will detail the Software Defined Networking paradigm, and the network virtualization techniques that have emerged from it.
 
-\subsubsection{Software Defined Networking}
+\subsection{Software Defined Networking}
 
 Traditional networks are complex and difficult to operate~\cite{complexnetworks}, due to their heterogeneity and lack of interoperability. The network administrator is often tasked to configure each network element individually, and has to either do it manually or use low-level vendor specific scripts to deploy the configuration. The impossibility to aggregate these tasks into a unified workflow becomes more and more problematic as network infrastructures grow.
 
@@ -28,7 +28,7 @@ Figure~\ref{fig:matching-fields} summarizes the different OF header fields a flo
     \label{fig:matching-fields}
 \end{figure}
 
-\subsubsection{Network Virtualization using SDN}
+\subsection{Network Virtualization using SDN}
 \label{def:netvirt}
 
 For decades hypervisors have enabled the sharing and isolation of physical resources among several virtual machines.
@@ -72,7 +72,7 @@ Similarly to slicing, when a tenant will interact with his virtual network, the 
 
 \input{figures/vne.tex}
 
-\subsubsection{Virtual Network Migration}
+\subsection{Virtual Network Migration}
 The migration of a Virtual Network is a maintenance process used to change the embedding of the virtual network. 
 This correspond to the allocation of a set of physical resources to partially or totally replace the original embedding of the virtual network.
 There are several reasons to migrate a Virtual Network, requests acceptance ratio optimization, resource failure, attacks on the infrastructure.

@@ -4,9 +4,9 @@
 In this section, we discuss the different virtual network migration solutions.
 We start by presenting solutions published on the same year as OpenFlow and that have been used as a reference in a majority of SDN-based migration solutions.
 
-\subsubsection{Preliminary work}
+\subsection{Preliminary work}
 
-\paragraph{VROOM}
+\subsubsection{VROOM}
 Virtual ROuters On the Move (VROOM)~\cite{VROOM-Wang2008} is an early work about how the migration of virtual routers should be implemented on top of the physical infrastructure. 
 VROOM outlines that most of the network state changes are caused by planned maintenance.
 Moreover, power consumption is also a primary concern because efficient migrations can save up to hundreds of millions of dollars.
@@ -21,7 +21,7 @@ The dynamic binding of the physical and virtual interfaces is divided into two m
 The first one implements the mapping of the virtual router with the corresponding Forwarding Information Base (FIB) inside the physical router.
 The second one is the mapping of the FIB of the physical router with a corresponding physical interface.
 
-\paragraph{Virtual Network Embedding and path migration}
+\subsubsection{Virtual Network Embedding and path migration}
 Yu~\etal proposed in~\cite{VNE-Yu2008} a VNE model designed to support the splitting of a virtual link over several physical links, as well as dynamic virtual network reconfiguration.
 The whole work is intended to improve resource allocation and maximize the acceptance rate. 
 Path splitting takes a virtual link with a required amount of bandwidth that cannot be embedded on the physical infrastructure, and divides it into several smaller links that can be accepted by the infrastructure.
@@ -35,7 +35,7 @@ Despite the fact that these publications are not based on SDN, they lay grounds 
 We divide the existing VN migration solutions based on the research issue they tackle to identify the existing lacks in the study of the migration process.
 We summarize these issues into three categories: whether the solution is designed to improve the performance of the infrastructure, whether it was implemented to explore technical limitations on a virtualization platform or finally if it explored the migration from a formal perspective.
 
-\subsubsection{Improving the performance of the infrastructure}
+\subsection{Improving the performance of the infrastructure}
 % Ye~\etal propose in~\cite{Ye2017a} a resource utilization model in which they aim to maximize the resource allocation on switches while looking to determine controllers that can be shut down due to underutilization and migrate switches.
 % Authors solve the resource allocation problem using optimization under constraints techniques. 
 % The switch migration problem is described as NP-hard and is approximated using a Log-sum-exp approximation.
@@ -100,13 +100,13 @@ Then, it determines which set of physical nodes must be reconfigured by computin
 Similarly, the algorithm determines a set of virtual nodes to migrate based on their economical performance.
 Once the destination substrate has been chosen, virtual nodes will be migrated and each virtual link connected to them will be redeployed using a shortest path algorithm.
 
-\subsubsection{Evaluating virtualization platforms}
+\subsection{Evaluating virtualization platforms}
 We present here two migration solutions that have been implemented on a particular physical infrastructure.
 While~\cite{Lo2014} is not specifically designed to work on an SDN infrastructure, the problems and challenges it explores remain valid in the SDN paradigm.
 Both solutions aim at outlining the technical limitations faced when migrating VNs.
 
-\paragraph{PlanetLab}\textbf{\\} 
-PlanetLab~\cite{planetlab} (PL) is a virtualization infrastructure used to provide slices of network resources for research experiments. Lo~\etal state in~\cite{Lo2014} that VN migration is a field where practical implementation and evaluation remain to be explored. They proposed a migration scheme and implemented it in PL, namely PL-VNM. This process should be designed to be automated, fast and to minimize the service disruption time. While the migration process is automated, there is no detection component to automatically trigger the migration. Due to technical limitations of PL it is impossible to migrate a VN from a slice to another. An alternative is proposed by partitioning the resources within a slice thus defining new virtual networks inside a PL slice and limiting the migration to the VNs created in a single slice. Virtual routers are instantiated for each virtual node required by the topology, and use an API to install forwarding rules in the kernel space of the physical node.
+\subsubsection{PlanetLab}\textbf{\\} 
+PlanetLab~\cite{Chun2003d} (PL) is a virtualization infrastructure used to provide slices of network resources for research experiments. Lo~\etal state in~\cite{Lo2014} that VN migration is a field where practical implementation and evaluation remain to be explored. They proposed a migration scheme and implemented it in PL, namely PL-VNM. This process should be designed to be automated, fast and to minimize the service disruption time. While the migration process is automated, there is no detection component to automatically trigger the migration. Due to technical limitations of PL it is impossible to migrate a VN from a slice to another. An alternative is proposed by partitioning the resources within a slice thus defining new virtual networks inside a PL slice and limiting the migration to the VNs created in a single slice. Virtual routers are instantiated for each virtual node required by the topology, and use an API to install forwarding rules in the kernel space of the physical node.
 Authors proprose a simple migration algorithm based on the size of the flows to migrate.
 The migration process consists in cloning the network state of virtual nodes (\ie FIB) and then  redirect VMs' traffic through the newly created virtual network.
 While the duplication of networking state does not cause any packet loss from the tenant's point of view, setting up the redirection is most likely to create service disruption.
@@ -129,7 +129,7 @@ Because of the routing mode used in PL, each link in the gateway must have the s
     \label{fig:plvnm}
 \end{figure}
 
-\paragraph{GENI} \textbf{\\}
+\subsubsection{GENI} \textbf{\\}
 The GENI platform~\cite{GENI-Berman2014} is a network infrastructure based on SDN and used to provide isolated environments for researchers to run experiments.
 Zhao~\etal propose in~\cite{Zhao2017} a VN migration scheme implemented using GENI. 
 Similarly to PlanetLab, GENI has not been designed to support the migration of VNs over different physical substrates. 
@@ -150,10 +150,10 @@ However, the latency induced by SSH authentication and by the time it takes to t
 On the other hand, the migration can be done by sending OF rules as the migration progresses. This method is deemed faster than the other one because it does not use SSH and its authentication overhead but it is also less secure.
 Finally, the transparency of the migration is ensured by the migration controller who will act as a proxy between VNs and switches, intercepting packets and rewriting header fields to maintain a consistent view of the network.
 
-\subsubsection{Formal verification of the migration}
+\subsection{Formal verification of the migration}
 In complement to the works aiming at improving the performance and the scalability of the virtualization infrastructure and the migration process, we now consider the works taking a formal approach to study specific properties of the migration and the migration process. These approaches contrast with the previous ones because they study specific properties related to the migration of virtual networks instead of focusing on operational aspects. Formal approaches are useful to model underlying concepts of practical solutions.
 
-\paragraph{Inter-flow consistency}\textbf{\\}
+\subsubsection{Inter-flow consistency}\textbf{\\}
 In an SDN infrastructure, the configuration deployed on SDN switches will be updated and evolve regularly. Such modifications are invoked by the SDN controller and deployed among several switches.
 Flow consistency ensures that each flow will be processed by either the old or the new configuration all along the way, and not by a combination of the two.
 However, Liu~\etal argue in~\cite{Liu2015a} that making sure that each individual flow has its own consistency preserved is not enough to respect certain security and reliability requirements.
@@ -170,7 +170,7 @@ To ensure the version isolation of different flows, the system identifies the se
 The generation of the dependency graphs is done by categorizing flows into two classes, whether they should be forwarded to the hypervisor, and using a greedy algorithm to determine how to minimize the amount of packet caching that would be done at the controller.
 The ordering of the migration sequences is determined from the graph. Each sequence is composed of several configuration modifications, and these modifications are also ordered to minimize the migration time. 
 
-\paragraph{Moving Target Defense}\textbf{\\}
+\subsubsection{Moving Target Defense}\textbf{\\}
 Dynamically changing the location of sensitive targets is a technique called Moving Target Defense (MTD). Such changes prevent an attacker from accurately knowing the attack surface of the system he is attacking. 
 % because the configuration regularly changes. 
 Chowdhary~\etal~\cite{Chowdhary2016} use MTD techniques as part of a Detect-Analyze-Counter cycle inside an SDN-based Cloud infrastructure. 
@@ -186,7 +186,7 @@ The counter-measure component determines which VM should be migrated based on th
 Once the target VM is chosen, new flow rules are computed to implement the migration. 
 The conflict resolution inspects the flow rules that should be deployed and extracts the actions of each rule and verify that they do not overlap with other existing flow rules. If a conflict arises, this module will try to find alternative rules. In the event where this would not be possible, the proposed counter-measure is rejected and a new one is computed.
 
-\paragraph{Seamless migration}\textbf{\\}
+\subsubsection{Seamless migration}\textbf{\\}
 In the previous works, minimizing the service disruption caused by the migration has always been a major concern in the design of the solution. However, while the efficiency of the solution was evaluated with various experiments, there was no formal approach describing the transparency of the migration and ensuring that no disruption of service will be experienced by a tenant.
 The topic of seamless migration is brought up in~\cite{toward-Ghorbani2014} where Ghorbani~\etal take a closer look at network virtualization using SDN techniques.
 Precisely, the focus is put on the one-to-many mapping, also known as the `Big Switch" abstraction.
@@ -208,7 +208,7 @@ The observation correctness introduced in LIME is enhanced with the concept of w
 Thus, the observable ordering of events will matter only if those events are correlated.
 
 
-\subsubsection{Summary}
+\subsection{Summary}
 The study of VN migration remains a topic of interest as it has been studied but often with the same objective: creating a migration process that will improve the performance of the infrastructure. 
 Table~\ref{tab:existing-vnm} summarizes the surveyed works. Several types of algorithms are proposed, usually either a migration scheduling algorithm or a VNE-related algorithm. 
 The bandwidth remain the most common metric used, as it is one of the main criteria to support virtual networks. Other operational metrics like migration duration of CPU consumption are used for performance improvement.

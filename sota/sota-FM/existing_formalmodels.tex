@@ -4,7 +4,7 @@ We also focus on whether or not a form of temporal logic is used to support the 
 Temporal reasoning is used to order events and determine specifically when an attack was launched, and by which networking event. 
 We categorized these models into three different sections: languages used for the security analysis of a communication protocol, languages used to implement a form of access control for an information system and finally languages used to describe the infrastructure enforcing the security services.
 
-\paragraph{Communication protocol analysis}
+\subsubsection{Communication protocol analysis}
 In computer networks, confidentiality and authentication of the communications are among the most important properties to measure and protect.
 In~\cite{CSP-Schneider1996}, messages exchanged between users are described and characterized by a set of security properties.
 The author uses the Communicating Sequential Processes (CSP) algebra to represent the different actors involved in a network communication, including a potential attacker. 
@@ -21,7 +21,7 @@ This is true in current networks, where the heterogeneity of the infrastructure 
 Security properties are defined as logical predicates combined with temporal operators such as: always, sometimes in the past, \etc
 The evaluation of a protocol's security is performed using the AVISPA tool~\cite{avispa}, in which model checking techniques are used to determine the potential vulnerabilities existing in the protocol.
 
-\paragraph{Access Control based languages}
+\subsubsection{Access Control based languages}
 A common way to describe networking systems is by representing the interactions between the users with Access Control Lists (ACL).
 ACLs can be seen as a set of rules that will either allow or deny the right to perform a specific action, like letting a specific flow go through a firewall for instance.
 Representing authorizations depends on the level of abstraction desired.
@@ -45,7 +45,7 @@ The work presented in~\cite{Cuppens} converts high level policies into practical
 Finally, OrBAC offers a conflict resolution module in charge of detecting conflicts between high level policies and may propose modifications to solve them.
 ACLs benefit from this formalism as users can now functionally describe their organization while it simplifies the configuration and maintenance of low level resources.
 
-\paragraph{Infrastructure based languages}
+\subsubsection{Infrastructure based languages}
 In the previous sections we looked at formal models in general systems, and the details of the underlying infrastructure were not always either clear or even studied. We now consider languages where the infrastructure contributed to their design.
 
 M2D2~\cite{M2D2-Morin2002} is a specification language used to correlate alerts raised by Intrusion Detection Systems (IDS) inside an Information System (IS).
@@ -103,7 +103,7 @@ The \textbf{T}emporality column represents whether or not temporal reasoning is 
 \label{tab:fm-summary}
 \end{table}
 
-\subsubsection{Summary}
+\subsection{Summary}
 We have presented a broad security overview of the Live VM migration process and the formal languages used to describe the security of a network infrastructure.
 
 Traditional hypervisors have been extensively studied, and the use of the migration process has been used not only for maintenance purposes but to tackle security issues existing in virtualization infrastructures.

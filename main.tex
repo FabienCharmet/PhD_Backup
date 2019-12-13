@@ -37,12 +37,16 @@
 % Extra depth for titles
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
-\setcounter{tocdepth}{3}
-\usepackage[nottoc,numbib]{tocbibind}
+\setcounter{tocdepth}{8}
+\usepackage[nottoc]{tocbibind}
+% \usepackage[style=alphabetic,citestyle=authoryear,doi=false]{biblatex}
 \usepackage{minted}
 \usepackage{epigraph}
 \usepackage{quotchap}
 \usepackage{setspace}
+
+% \AtEveryBibitem{\clearfield{doi}}
+% \AtEveryCitekey{\clearfield{doi}}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -61,7 +65,7 @@
 %  MARGIN
 \addtolength{\textwidth}{-0.4in}
 
-\newtcolorbox{myformula}{colback=block-gray,boxrule=0pt,boxsep=0pt,breakable,halign= flush left}
+\newtcolorbox{myformula}{colback=block-gray,boxrule=0pt,boxsep=0pt,breakable,halign= flush left,before skip=15pt, after skip=5pt}
 \definecolor{block-gray}{gray}{0.95}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -90,12 +94,16 @@
             \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
 
 % \renewenvironment{equation}{\color{black}}{}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem*{definition}{Definition}
+
 
 \title{\LARGE \bf Preservation of security properties during the migration of virtual networks in a SDN environment}
 
 \author{Fabien Charmet}
 
-
+% \addbibresource{references.bib} %Imports bibliography file
 \begin{document}
 \pagenumbering{roman}
 
@@ -106,15 +114,25 @@
 \begin{abstract}
 This thesis investigates the security of virtual network migration. Over the years, virtualization has been used to optimize physical resources and to support businesses' infrastructures. Virtualization consists in exposing a fraction of a resource for a user to operate. Virtual Machines are used to host business services like Web servers or a backup service. Network virtualization has not benefited from the same interest from researchers and the industry. The Software Defined Networking paradigm has introduced new possibilities to implement network virtualization and provide users with a flexible network, decoupled from the physical equipments. Virtual Networks are used to interconnect Virtual Machines and can be configured with specific routing policies or security protocols. In case of a failure of the resource, either accidental or intentional, the virtualization infrastructure will migrate the resource to maintain the service provided.
 
-The security of Virtual Machines and their migration is a well researched topic that has been widely in the past, while the study of network virtualization and especially their migration are only beginning the required consideration. The motivation of this research is to provide a description of the security of the virtual network migration process in the context of Software Defined Networking.
+The security of Virtual Machines and their migration is a well researched topic that has been widely in the past, while the study of network virtualization and especially the migration process only are at an early stage. The attack surface of network virtualization is similar in nature to the virtualization of legacy resources, and presents an additional aspect because of the use of Software Defined Networking.
+The motivation of this research is to investigate the security of the virtual network migration process in the context of Software Defined Networking. In order to do so, we first define the scope of the study and focus on the networking aspect of the migration. Then, we outline the threat model of the migration process and devise a detection mechanism against attacks in the virtualization infrastructure. Finally, we optimize the previous mechanism by optimizing the deployment of network monitoring resources for an optimal coverage.
 
-We propose to model the virtualization infrastructure and describe the security of the migration process using a first order temporal logic. We then use this logic with a theorem prover to verify if a security violation occurred during the migration of a network. This model is based on the assumption that the formal proof is computed using perfect monitoring. We alleviate this assumption by modeling a resource allocation problem. We use a Markov Decision Process to determine the optimal placement of monitoring resources in the infrastructure.
+In the first part of this thesis we propose a formal approach to describe the different aspects of the virtualization infrastructure. We use a first order formalism to model several security properties as a set of logical predicates. These predicates account for both physical and virtual elements of the virtualization infrastructure, and the data use by both end users and the infrastructure owner.
+An execution trace is generated during the migration of a virtual network, and will be used by a theorem prover to compute a formal proof to verify if a security violation occurred. The first order model is based on the assumption that the execution trace is generated using perfect monitoring. This implies that the proof is complete and that the networking monitoring is always done under optimal conditions.
+We alleviate this assumption by modeling a resource allocation problem to determine how the monitoring resources should be deployed and which network nodes provide the best coverage. We solve this problem using a Markov Decision Process, and determine a dynamic deployment of monitoring resources during the migration. We conclude our optimization with a proposition of a static deployment of the resources prior to the migration.
+
+
+
+% We propose to model the virtualization infrastructure and describe the security of the migration process using a first order temporal logic. We then use this logic with a theorem prover to verify if a security violation occurred during the migration of a network.  We use a Markov Decision Process to determine the optimal placement of monitoring resources in the infrastructure.
 
 
 \end{abstract}
 \newpage
-\section*{Dedication}
-I dedicate this work to my father, whom I miss very much.
+\textbf{\\[4.5in]}
+\begin{center}
+\textit{I dedicate this work to my father, whom I miss very much.}    
+\end{center}
+
 
 \newpage
 
@@ -129,14 +147,14 @@ As I finally reach the end of this long yet interesting journey, I realize I hav
 I would like to thank my PhD supervisor, Professor Abdallah M'Hamet, for his wisdom and his advice that made every interaction interesting.
 
 I also deeply thank Professor Gregory Blanc and Professor Christophe Kiennert, without whom this work 
-would never have been possible. Their remarks, their patience and their tremendous support helped me throughout this long path. They made me realize what matters during the PhD life and what it means to set high expectations for myself.
+would never have been possible. Their remarks, their patience and their tremendous support helped me throughout this long path. They made me realize what matters during the PhD life and what it means to set high expectations for myself. There are no words for the gratitude I have towards them.
 
 This whole opportunity would not have been possible without the trust of Professor Herv\'e Debar, who gave me a chance to become an Engineer and then a Doctor. I have had premium hands on experience on research and infrastructure deployment. I owe him all these years spent at T\'el\'ecom SudParis.
 
 I am grateful for the collaboration I had with Doctor Richard Waldinger at the Stanford Research Institute. His expertise in theorem proving and his remarks made this work possible. I enjoyed every moment of our collaboration.
 
 I have so many colleagues to thanks here, for the support and cheerfulness they brought in.
-Thank you Nesrine, Gamain, Miroslav, Stef, Seb, Christian, Olivier. I also wish good luck to Mariana, Antoine, Mus, Maria, Hadjer, who should cross this line one day or another.
+Thank you Nesrine, Khalifa, Gamain, Miroslav, Stef, Seb, Christian, Olivier and so many others. I also wish good luck to Mariana, Antoine, Mus, Maria, Hadjer, Aina, Souhah, who should cross this line one day or another.
 
 A big thank to all of my friends in no particular order: Guillaume, Jo, Thomas, Nico, Yoan, whose company made me laugh when I needed it the most. 
 
@@ -172,12 +190,12 @@ Both topics will outline the needs for a security study of the VN migration prob
 Lastly, the last topic considered here is related to the resource allocation problem in a network infrastructure, and we will present different formalism used in this context.
 This problem is studied to improve the applicability of a model to a real life environment.
 
-\subsection{Definitions}
+\section{Definitions}
 \label{sec:basic_def}
 \input{definitions.tex}
 
 \newpage
-\subsection{Network virtualization using SDN}
+\section{Network virtualization using SDN}
 
 Network virtualization has leveraged the use of SDN to provide a flexible abstraction layer to service providers. In this section, we first propose classification criteria for network hypervisors and then evaluate existing hypervisors based on this classification. We will then propose a reference architecture for network hypervisors implementing a secure network migration feature, based on existing solutions.
 
@@ -196,21 +214,21 @@ Network virtualization has leveraged the use of SDN to provide a flexible abstra
 \input{sota/sota-netvirt-sdn/existing_vnmigration.tex}
 
 \newpage
-\subsection{Network \& VM security}
+\section{Network \& VM security}
 
 We have presented in Sections~\ref{sec:existing-nhv} and~\ref{sec:sota-vnmigration} existing solutions for network virtualization and virtual network migration. We now delve into the security aspect of network virtualization, and the related security topics. The security of VN migration is a topic that has never been  studied yet, while the security of VM migration has been thoroughly investigated. The following sections cover two topics, namely the security of the Live VM migration process and existing formal models for network security.
 Existing formal models are useful to understand to which extend security in networks has been expressed but also it will help us to determine what has not beed modeled yet.
 
-\subsubsection{Security of VM migration}
+\subsection{Security of VM migration}
 
 \input{sota/sota-VM/attacking_vmmigration.tex}
 
-\subsubsection{Formal Models for network security}
+\subsection{Formal Models for network security}
 
 \input{sota/sota-FM/existing_formalmodels.tex}
 
 \newpage
-\subsection{Resource Allocation in networking infrastructures}
+\section{Resource Allocation in networking infrastructures}
 The resource allocation (RA) problem consists in determining the optimal way to spend limited resources in order to achieve maximum profit while satisfying a set of constraints.
 The VNE problem is a subclass of the RA problem, where the VNE component will determine the set of physical resources that will embed a virtual network, while maximizing the acceptance rate, \ie the ratio between accepted VN requests and total number of requests.
 The VNE problem is constrained by available resources, but there might be other constraints like security requirements or geographical positioning rules.
@@ -220,7 +238,7 @@ In this section, we consider two different formalisms used to solve the RA probl
 \input{sota/sota-RA/GT.tex}
 \input{sota/sota-RA/MDP.tex}
 
-\subsection{Conclusion}
+\section{Conclusion}
 \input{sota/sota-conclusion.tex}
 
 \newpage
@@ -228,37 +246,37 @@ In this section, we consider two different formalisms used to solve the RA probl
 \label{sec:formal_model}
 \input{model/model-introduction.tex}
 
-% \subsection{Methodology}
+% \section{Methodology}
 % \input{model/model-methodology.tex}
 
-\subsection{Assumptions}
+\section{Assumptions}
 \input{model/model-assumptions.tex}
 
-\subsection{Modeling physical and virtual networks}
+\section{Modeling physical and virtual networks}
 \input{model/model-networks.tex}
 
 \newpage
-\subsection{Modeling the migration of Virtual Networks}
+\section{Modeling the migration of Virtual Networks}
 \input{model/model-migration.tex}
 
 \newpage
-\subsection{Security properties applied to Virtual Network migration}
+\section{Security properties applied to Virtual Network migration}
 \input{model/model-security-properties.tex}
 
 \input{figures/virtualization-attack-surface.tex}
 \newpage
-\subsection{Attack model against the migration}
+\section{Threat model against the migration}
 \input{model/model-attack-model.tex}
 
-\subsection{Problem verification using a theorem prover}
+\section{Problem verification using a theorem prover}
 \input{model/model-snark.tex}
 
 \newpage
-\subsection{Use cases: Detection of security violations}
+\section{Use cases: Detection of security violations}
 \input{model/model-usecase.tex}
 
 \newpage
-\subsection{Conclusion}
+\section{Conclusion}
 \input{model/model-conclusion.tex}
 
 \newpage
@@ -275,8 +293,10 @@ In this section, we consider two different formalisms used to solve the RA probl
 \chapter{Conclusion}
 \input{conclusion.tex}
 \newpage
-\bibliography{references}{}
-\bibliographystyle{ieeetr}
+\FC{Don't forget to regenerate bibfile and change doi to optidoi}
+\bibliography{test}{}
+\bibliographystyle{alphaurl}
+% \printbibliography
 
 \newpage
 \begin{appendices}

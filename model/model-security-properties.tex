@@ -1,12 +1,12 @@
 \label{sec:security_prop}
-The modeling of the SDN virtualization environment is the first step towards the study of the migration process. The second step is to define which aspects if the process we want to observe.
+Modeling the SDN virtualization environment is a first step towards the study of the migration process. The second step is to define which aspects of the process we need to observe.
 
 In this section, we define the different security properties we consider during the migration of virtual networks.
-We propose several security properties: confidentiality, integrity, availability, usually referred to as CIA~\cite{ISO/IEC270012013}. We also introduce co-residency, a property related to the virtualization process.
-After providing a formal definition of each security property, we refine it into several properties related to the operation of SDN networks and virtualization. Each property concerns physical elements of the SDN infrastructure, and we provide similar properties for the virtual nodes and links when they exist. 
-% For the rest of this section, we note $E_n$ (respectively $E_l$) the underlying resources embedding virtual node $n$ (respectively virtual link $l$).
+We propose to model several security properties: confidentiality, integrity, availability, usually referred to as CIA~\cite{ISO/IEC270012013}. We also introduce co-residency, a property related to the virtualization process. This property represents how much two users share a common set of physical resources for the embedding of their Virtual Network.
+After providing a formal definition of each security property, we refine it into several properties related to the operation of SDN networks and virtualization. 
+Each property impacts physical elements of the SDN infrastructure, and we provide similar properties for the virtual nodes and links.
 
-\subsubsection{Confidentiality}
+\subsection{Confidentiality}
 \label{sec:prop-conf}
 Confidentiality is a characteristic related to information.
 To protect and preserve the confidentiality of information means to ensure that it is not made available or disclosed to unauthorized entities~\cite{ISO/IEC270012013}.
@@ -23,9 +23,8 @@ $ confidentiality(D) \Leftrightarrow \forall U,t~reads(U,D,t) \Rightarrow is\_da
 %\item $\overline{reads(U,D,t)}$ is the negation of $reads(U,D,t)$
 \end{itemize}
 Simply put, if at any time no user reads $D$ or every user reading $D$ is authorized to do so, then the confidentiality of $D$ is preserved.
-From a cryptographic perspective, ciphered data and plain text data are treated as the same regarding their confidentiality while in transit in the network.
-This implies that we make no assumption on whether the data has been ciphered by the sender before sending it to its recipient.
-Obviously, ciphered data is more secured than plain text data but this is not in the scope of this model.\\
+From a cryptographic perspective, we do not differentiate the confidentiality of ciphered data and plain text data, while the data is in transit in the network.
+Based on our definition, the confidentiality of data is violated if an unauthorized user has been able to read it, and the fact that the data has been ciphered by the sender does not invalidate the violation from our point of view.
 From this definition, we can describe several properties directly affecting the physical infrastructure or virtual networks.
 
 
@@ -68,15 +67,15 @@ $vlink\_confidentiality(l) \Leftrightarrow \bigwedge\limits_{N\in E_l} node\_con
 \end{myformula}
 
 \textbf{Property 2:} A physical path preserves confidentiality from end to end if all of its network elements preserve their own confidentiality.
-\newline \textbf{Formal definition:} Let $P$ be the physical path taken by the traffic, $L_P$ be the list of physical nodes composing $P$.
+\newline \textbf{Formal definition:} Let $P$ be the physical path taken by the traffic, $L_P$ be the set of physical nodes composing $P$.
 
 \begin{myformula}
-$path\_confidentiality(P) \Leftrightarrow \bigwedge\limits_{N \in L_P}node\_confidentiality(n)$
+$path\_confidentiality(P) \Leftrightarrow \bigwedge\limits_{N \in L_P}node\_confidentiality(N)$
 \end{myformula}
 
 % \textbf{Property 2b:} A virtual path preserves confidentiality from end to end if all of its virtual nodes and links preserve their own confidentiality.
-% \newline \textbf{Formal definition:} Let $P$ be the path taken by the traffic, $L_N$ be the list of virtual nodes composing $P$, and $L_L$ the list of virtual links composing $P$.
-% % and $L_{s}$ be the list of the links between each node of $P$.
+% \newline \textbf{Formal definition:} Let $P$ be the path taken by the traffic, $L_N$ be the set of virtual nodes composing $P$, and $L_L$ the set of virtual links composing $P$.
+% % and $L_{s}$ be the set of the links between each node of $P$.
 % \begin{myformula}
 % $vpath\_confidentiality(P) \Leftrightarrow \bigwedge\limits_{n \in L_N}vnode\_confidentiality(n) \wedge \bigwedge\limits_{l \in L_L}vlink\_confidentiality(l)$
 % \end{myformula}
@@ -99,7 +98,7 @@ $
 \item $conf\_of\_node(conf,N,t)$ is true if node $N$ is running configuration $conf$ at time $t$.
 \end{itemize}
 
-\subsubsection{Integrity}
+\subsection{Integrity}
 \label{sec:prop-int}
 Preserving the integrity of information means protecting the accuracy and completeness of the information and the methods that are used to process and manage it~\cite{ISO/IEC270012013}.
 We postulate that the meaning of accuracy and completeness in our context is equivalent to considering that information and processes have only been altered by an authorized user or not altered at all.
@@ -110,18 +109,21 @@ We use the following notations for the integrity property:
 
 \begin{itemize}
     \item $t_1$ and $t_2$ are dates
-    \item $D_{t_1}$ (resp. $D_{t_2}$) is the value of $D$ at date $t_1$ (resp. $t_2$)
-    \item $P_{t_1}$ (resp. $P_{t_2}$) is the value of $P$ at date $t_1$ (resp. $t_2$)
+    \item $D_{t_1}$ (resp. $D_{t_2}$) is the value of data $D$ at date $t_1$ (resp. $t_2$)
+    \item $P_{t_1}$ (resp. $P_{t_2}$) is the value of process $P$ at date $t_1$ (resp. $t_2$)
 \end{itemize}
 
 We define two predicates, $d\_integrity(D,ti)$ and $p\_integrity(P,D,ti)$, which represent  the integrity of the data $D$ itself and the integrity of the process $P$ used to manipulate $D$, over a time interval $ti$. 
 
-We also define two concepts:\\
-A data has been \textbf{legitimately processed} during a time interval if and only if it has been processed by the expected network nodes by the expected flow rules.\\
-Similarly, a process has been \textbf{legitimately modified} if and only if it has been modified by an authorized network hypervisor.\\
-Section~\ref{sec:mapping-model} proposes solutions to verify those concepts.
+We detail two notions related to the integrity property:
+\begin{itemize}
+    \item A data has been \textbf{legitimately processed} during a time interval if and only if it has been processed by the expected network nodes by the expected flow rules.
+    \item A process has been \textbf{legitimately modified} if and only if it has been modified by an authorized network hypervisor.
+\end{itemize}
 
-Therefore, if a data has not been legitimately processed , its integrity holds if it has not been modified in any other way (\eg Man-in-the-middle attack). 
+% Section~\ref{sec:mapping-model} proposes solutions to verify these concepts.
+
+Therefore, if a data has not been legitimately processed , its integrity holds if it has not been modified in any other way (\eg man-in-the-middle attack). 
 
 \begin{myformula}
 $d\_integrity(D,ti) \Leftrightarrow \forall t_1,t_2\in ti ~ \overline{processed(D, ti)} \Rightarrow 
@@ -136,7 +138,7 @@ $d\_integrity(D,ti) \Leftrightarrow \forall t_1,t_2\in ti ~ \overline{processed(
 
 \end{itemize}
 
-Similarly, if a process has not been legitimately modified, its integrity holds if it has not been modified in any other way (\eg Unauthorized flow rule modification). 
+Similarly, if a process has not been legitimately modified, its integrity holds if it has not been modified in any other way (\eg unauthorized flow rule modification). 
 
 \begin{myformula}
 $p\_integrity(P, ti) \Leftrightarrow \forall t_1,t_2 \in ti~ \overline{modified(P, ti)}\Rightarrow 
@@ -159,14 +161,14 @@ $node\_integrity(N) \Leftrightarrow \forall D,ti,P~p\_integrity(P,ti) \wedge d\_
 \end{myformula}
 
 \begin{itemize}
-\item $process\_of(P,N,ti)$ affects process $P$ to node $N$ during time interval ti.
+\item $process\_of(P,N,ti)$ assigns process $P$ to node $N$ during time interval ti.
 \item $is\_carrying(N,D,ti)$ is true if node $N$ is carrying data $D$ during time interval $ti$.
 \item $is\_node\_authorized(U,N,ti)$ is true if the user $U$ has the right to access network element $N$ during time interval $ti$.
 \end{itemize}
 
 \textbf{Property 1b:} The integrity of a virtual node is preserved if and only if the nodes embedding it preserve their integrity as well.
 \newline
-\textbf{Formal definition:} Let $n$ be a virtual node and $E_n$ the list of nodes embedding $n$.
+\textbf{Formal definition:} Let $n$ be a virtual node and $E_n$ the set of nodes embedding $n$.
 
 \begin{myformula}
 $vnode\_integrity(n) \Leftrightarrow \bigwedge\limits_{N \in E_n} node\_integrity(N)$
@@ -174,7 +176,7 @@ $vnode\_integrity(n) \Leftrightarrow \bigwedge\limits_{N \in E_n} node\_integrit
 
 \textbf{Property 1c:} The integrity of a virtual link is preserved if and only if the nodes embedding it preserve their integrity as well.
 \newline
-\textbf{Formal definition:} Let $l$ be a virtual link and $E_l$ the list of nodes embedding $l$.
+\textbf{Formal definition:} Let $l$ be a virtual link and $E_l$ the set of nodes embedding $l$.
 
 \begin{myformula}
 $vlink\_integrity(l) \Leftrightarrow \bigwedge\limits_{N \in E_l} node\_integrity(N)$
@@ -182,7 +184,7 @@ $vlink\_integrity(l) \Leftrightarrow \bigwedge\limits_{N \in E_l} node\_integrit
 
 
 \textbf{Property 2:} A path preserves integrity from end to end if all of its network elements preserve their own integrity.
-\newline \textbf{Formal definition:} Let $P$ be a path in the network and $L_P$ be the list of nodes composing $P$.
+\newline \textbf{Formal definition:} Let $P$ be a path in the network and $L_P$ be the set of nodes composing $P$.
 \newline
 
 \begin{myformula}
@@ -190,7 +192,7 @@ $path\_integrity(P) \Leftrightarrow \bigwedge\limits_{N \in L_P}integrity(N) $
 \end{myformula}
 
 % \textbf{Property 2b:} A virtual path preserves integrity from end to end if all its virtual nodes and links preserve their own integrity.
-% \newline \textbf{Formal definition:} Let $P$ be a virtual path, $L^P_N$ be the list of virtual nodes composing $P$ and $L_L$ be the list of virtual links composing $P$ .
+% \newline \textbf{Formal definition:} Let $P$ be a virtual path, $L^P_N$ be the set of virtual nodes composing $P$ and $L_L$ be the set of virtual links composing $P$ .
 % \newline
 
 % \begin{myformula}
@@ -215,7 +217,7 @@ $config\_integrity(conf,N) \Leftrightarrow~\forall ti,\exists~C,P
 \item $conf\_of\_node(conf, N,ti)$ is true if node $N$ is running configuration $conf$ during time interval $ti$.
 \end{itemize}
 
-\subsubsection{Availability}
+\subsection{Availability}
 \label{sec:prop-avail}
 An asset is available if it is accessible and usable when
 needed by an authorized entity~\cite{ISO/IEC270012013}.
@@ -270,7 +272,7 @@ $vlink\_availability(l) \Leftrightarrow \bigwedge\limits_{N \in E_l} node\_avail
 \end{myformula}
 
 \textbf{Property 2:} A path is available from end to end if all of its nodes are available.
-\newline \textbf{Formal definition:} Let $P$ be the path taken by the traffic, $L_P$ be the list of nodes composing $P$. 
+\newline \textbf{Formal definition:} Let $P$ be the path taken by the traffic, $L_P$ be the set of nodes composing $P$. 
 
 \begin{myformula}
 $path\_availability(P)\Leftrightarrow\bigwedge\limits_{N \in L_P}node\_availability(N)$
@@ -278,13 +280,13 @@ $path\_availability(P)\Leftrightarrow\bigwedge\limits_{N \in L_P}node\_availabil
 
 
 % \textbf{Property 2b:} A virtual path is available from end to end if all of its virtual nodes and virtual links are available as well.
-% \newline \textbf{Formal definition:} Let $P$ be a virtual path, $L^P_N$ be the list of virtual nodes composing $P$ and $L_L$ the list of the virtual links composing $P$.
+% \newline \textbf{Formal definition:} Let $P$ be a virtual path, $L^P_N$ be the set of virtual nodes composing $P$ and $L_L$ the set of the virtual links composing $P$.
 
 % \begin{myformula}
 % $vpath\_availability(P)\Leftrightarrow \bigwedge\limits_{n \in L^P_N}vnode\_availability(n) \wedge \bigwedge\limits_{l \in L_L}vlink\_availability(l)$
 % \end{myformula}
 
-% \subsubsection{Authenticity}
+% \subsection{Authenticity}
 % \label{sec:prop-auth}
 % Authenticity is a property or characteristic of an entity.
 % An entity is authentic if it is what it claims to be~\cite{ISO/IEC270012013}.
@@ -321,10 +323,10 @@ $path\_availability(P)\Leftrightarrow\bigwedge\limits_{N \in L_P}node\_availabil
 % %\FC{r is just the request, it's not under the scope for examination}
 
 
-\subsubsection{Co-Residency}
+\subsection{Co-Residency}
 \label{sec:prop-cores}
-The co-residency between two virtual networks represents how much they share common physical resources.
-Precisely, two virtual networks are co-residing together if they are embedded, partially or totally, on the same physical resources during the same time interval.
+The co-residency between two virtual networks represents how much common physical resources they share.
+Precisely, two virtual networks are co-residing together if they are embedded, partially or totally, in the same physical resources during the same time interval.
 We define co-residency with the following predicate:
 Let $V_1$ and $V_2$ be two virtual topologies belonging to different users, $P_1$ and $P_2$ two sets of physical resources and let $ti$ be a time interval.
 \begin{myformula}
@@ -341,18 +343,18 @@ Indeed, side channel attacks on Virtual Machines often rely on the co-residency 
 
 
 
-\subsubsection{Mapping formal predicates with SDN}
+\subsection{Mapping formal predicates with technical events}
 \label{sec:mapping-model}
 In the previous sections we have described the different properties we want to observe inside the SDN infrastructure.
-We propose a potential mapping between the formal predicates and the corresponding SDN events or situations.
+We propose a mapping between the formal predicates and the corresponding SDN events or other technical situations.
 
 
-\paragraph{Confidentiality}\textbf{\\}
+\subsubsection{Confidentiality}\textbf{\\}
 The confidentiality section introduces the following predicates:
 \begin{itemize}
 \item reads(U,D,t)
 \newline
-This predicate is true if a monitoring tool accesses traffic,  or if the traffic is forwarded to a virtual machine, owned by either a legitimate or malicious user.
+This predicate is true if a monitoring tool intercepts traffic, or if the traffic is forwarded to a virtual machine, owned by either a legitimate or malicious user. Inspecting flow rules in nodes determines that. 
 
 \item is\_data\_authorized(U,D,t)
 \newline
@@ -369,40 +371,40 @@ The logs of N can be exploited to verify the accesses made.
 It is important to note that installing flow rules on a node is not considered an access in the meaning of this predicate.
 
 \item is\_carrying(N,D,t)\\
-This predicate is verified by checking if the flow rules composing the path taken by data $D$ go through node $N$.
+This predicate is verified by checking if the flow rules composing the path taken by data D go through node N.
 
 \item is\_hypervisor\_of(C,N,t)\\
-This predicate is verified by the hypervisor.
+This predicate is verified by the hypervisor by checking if N has established a connection.
 
 \item is\_path(C,P,N,t)\\
-This predicate  is verified by the hypervisor.
+This predicate  is verified by the hypervisor by checking the network topology.
 
 \item conf\_of\_node(conf,N,t)\\
-This predicate  is verified by checking the flow rules of node $N$.
+This predicate  is verified by checking the flow rules of node N.
 
 \end{itemize}
 
-\paragraph{Integrity}\textbf{\\}
+\subsubsection{Integrity}\textbf{\\}
 The integrity section introduces the following predicates:
 \begin{itemize}
 
 \item processed(D,ti)
 \newline
 If D was not in transit during ti then the predicate holds true.
-Otherwise, the flow rules used to process D during ti is verified by the hypervisor, and D can be analyzed to see if it matches the expected results. (\ie no extra illegitimate manipulations have been performed).
+Otherwise, the flow rules used to process D during ti are verified by the hypervisor by querying network nodes, and D can be analyzed to see if it matches the expected results. (\ie no extra illegitimate manipulations have been performed).
 
 \item modified(P,ti)
 \newline
-The evolution of P implies legitimate modification of the corresponding flow rules, which can be monitored by the hypervisor. Any unexpected discrepancy will yield False for this predicate.
+The evolution of P implies legitimate modification of the corresponding flow rules, which can be monitored by the hypervisor. The hypervisor may store rules and legitimate requests sent to modify them. Any unexpected discrepancy will yield False for this predicate.
 
 \item is\_carrying(N,D,ti)\\
-This predicate is verified by checking if the flow rules composing the path taken by data $D$ go through node $N$.
+This predicate is verified by checking if the flow rules composing the path taken by data D go through node N.
 
 
 % \item deval(D,t)
 \item $D_{t}$
 \newline
-This is done by reading the value of D using a monitoring tool.
+This is done by reading the value of D using a network probe.
 
 \item $P_t$
 \newline
@@ -413,7 +415,7 @@ The process P can be monitored by querying the related flow rules
 The flow rules of node N can be queried to check if they matches process P.
 
 \item is\_node\_authorized(U,N,ti)\\
-This predicate is true if user U is authorized to access the physical node N.
+% This predicate is true if user U is authorized to access the physical node N.
 This is a typical use of Access Control.
 
 \item is\_hypervisor\_of(C,N,t)\\
@@ -423,18 +425,18 @@ This predicate is verified using the list of nodes connected to the hypervisor.
 This predicate  is verified by the hypervisor and its view of the physical topology.
 
 \item conf\_of\_node(conf,N,ti)\\
-This predicate  is verified by checking the flow rules of node $N$,
+This predicate  is verified by checking the flow rules of node N,
 
 \end{itemize}
 
-\paragraph{Availability}\textbf{\\}
+\subsubsection{Availability}\textbf{\\}
 The availability section introduces the following predicates:
 \begin{itemize}
 \item is\_accessible(U,A,ti)
-\\ This predicate is evaluated by regularly sending a keep-alive request to the node. SDN controllers already send such requests.
+\\ This predicate is evaluated by the SDN controller regularly sending a keep-alive request to the asset.
 
 \item is\_accessible(U,N,ti)
-\\ This predicate is evaluated by regularly sending a keep-alive request to the node. SDN controllers already send such requests.
+\\ This predicate is evaluated by the SDN controller regularly sending a keep-alive request to the node.
 
 
 \item is\_usable(U,A,ti)
@@ -442,7 +444,7 @@ The availability section introduces the following predicates:
 
 
 \item can\_process(N,ti)
-\\ OpenFlow switches provides statistics and primitives can show the amount of CPU power used.
+\\ OpenFlow switches provide performance statistics, and switches have primitives to show the amount of CPU power used.
 
 \item is\_node\_authorized(U,N,ti)\\
 This predicate is true if user U is authorized to access the physical node N.
@@ -452,7 +454,7 @@ This is a typical use of Access Control.
 This predicate is verified using Access Control as well.
 \end{itemize}
 
-% \paragraph{Authenticity}
+% \subsubsection{Authenticity}
 % The authenticity section introduces the following predicates:
 % \begin{itemize}
 
@@ -467,9 +469,9 @@ This predicate is verified using Access Control as well.
 % \end{itemize}
  
  
-\paragraph{Co-Residency}
+\subsubsection{Co-Residency}\textbf{\\}
 The Co-Residency section introduces the following predicate:
 
 \begin{itemize}
-    \item is\_embedding($P,V,ti$) is verified by the hypervisor. Alternatively, checking the corresponding flow rules of the nodes in $P$ verifies this predicate.
+    \item is\_embedding(P,V,ti) is verified by the hypervisor by checking the embedding he deployed. Alternatively, checking the corresponding flow rules of the nodes in P verifies this predicate.
 \end{itemize}

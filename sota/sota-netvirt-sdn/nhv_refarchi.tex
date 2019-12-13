@@ -1,4 +1,4 @@
-\subsubsection{Reference architecture of a network hypervisor}
+\subsection{Reference architecture of a network hypervisor}
 \label{sec:reference_archi}
 %\GB{a good start is the paper from Casado et al., published at PRESTO'10, where the idea of a network hypervisor is introduced. A quick introduction of network virtualization in general, and how SDN stands in this landscape, would be helpful. Please refer to the following website: \url{http://packetpushers.net/sdn-network-virtualization-hypervisors/}. I suggest to even go as far as to mention the state of the art of network virtualization: from VLANs and VPNs, to network slicing, to network hypervisors}
 A reference architecture is a template for the architecture of a software solution, and defines a vocabulary to compare existing implementations. 
@@ -29,7 +29,7 @@ The tenant level, where end-users can deploy their own applications, SDN control
 The hypervisor level, including all the components required to achieve network virtualization, present the tenant with an abstract view, and interact with the physical infrastructure.
 The lowest level includes all the networking equipments, like SDN-enabled switches and routers.
 
-\paragraph{Control Plane Abstraction}
+\subsubsection{Control Plane Abstraction}
 The Control Plane Abstraction component (CPAC) provides the tenants with an interface to interact with the rest of the virtualization layer.
 This component is essential to the functioning of a network hypervisor and is implemented in every hypervisor.
 When a tenant requests a virtual network, he describes his requirements in terms of virtual nodes, links, minimal bandwidth, security \etc This request is received by the CPAC that will transmit it to the VN Embedding component for further treatment.
@@ -39,7 +39,7 @@ The full control describes an hypervisor where the tenant can use its own applic
 
 
 
-\paragraph{Data Plane Abstraction}
+\subsubsection{Data Plane Abstraction}
 \label{sec:abstraction_comp}
 The Data Plane Abstraction Component (DPAC) abstracts the physical infrastructure to serve each tenant with their own topology and resources.
 Similarly to the CPAC, this component is essential and implemented in every hypervisor.
@@ -76,7 +76,7 @@ As presented for the node resources, link resources can be shared independently.
 For instance, depending on the usage of the resources desired by each tenant, big buffers can be used to limit packets drop or a low bandwidth to forward the packets.
 Another tenant may only requires a minimum bandwidth on each virtual link.
 
-\paragraph{Virtual Network Embedding Component}
+\subsubsection{Virtual Network Embedding Component}
 
 The Virtual Network Embedding Component (VNEC) is in charge of determining the optimal set of physical resources to embed a virtual network and to handle the case where a virtual network must be migrated due to failure of a switch or because of an attack on the system.
 
@@ -110,13 +110,13 @@ The VNEC will be notified by the monitoring component, and then recompute the ma
 There are cases where the tenant should be notified about the migration.
 For instance, depending on the Service Level Agreement (SLA) between a tenant and the infrastructure provider, the migration may not be feasible because the constraints cannot be satisfied by the current state of the infrastructure.
 
-\paragraph{Resource Isolation}
+\subsubsection{Resource Isolation}
 The resource isolation component (RIC) ensures tenants that they are served the amount of resources they have requested during their exploitation of their VN.
 It ensures that each tenant does not exceed the amount of resources they have been allocated.
 FlowVisor-based hypervisors~\cite{FlowVisor-Sherwood2009,ADVisor-Salvadori2012,VeRTIGO-Corin2012a,EnhancedFV-Min2012,SlicesIsolator-El-Azzab2011,DoubleFV-Yin2013} all implement bandwidth and CPU isolation, and some tackle advanced issues on resource sharing such as memory and interface isolation as summarized in Table~\ref{tab:existing-nhv}. One of the problems with implementing resource isolation is that the hypervisor relies on vendor specific implementations of these isolation features, which may lead to inconsistent behaviour of the hypervisor if the implementation varies between network equipments or if the feature is simply missing.
 
 
-\paragraph{Monitoring}
+\subsubsection{Monitoring}
 Monitoring the virtualization infrastructure serves two different purposes.
 The first one is to support the proper functioning of the hypervisor's operations and is implemented on every hypervisor. However, it can range from switch discovery (similarly to an SDN controller) to resource monitoring and failure detection.
 The second one is to serve the Security Component with data that will be used in detecting, preventing and mitigating attacks on VNs and the virtualization infrastructure.
@@ -134,7 +134,7 @@ This includes metrics about the resources used on each switch, information about
 \subparagraph{Configuration requests} An attacker may leverage vulnerabilities in switches or in the authentication scheme to deploy malicious configuration rules. These rules may alter the behavior of the networking equipments and may lead to a data exfiltration scenario or a Denial of Service.
 The Monitoring may forward configuration rules to the Security Component for detection purposes we describe in the next component.
 
-\paragraph{Security Component}
+\subsubsection{Security Component}
 The Security Component (SC) is in charge of detecting, preventing and mitigating attacks on the virtualization infrastructure. The SC relies on the monitoring of the infrastructure to collect useful data related to the security of the virtual networks and the physical equipments.
 The problem of the security inside a network hypervisor has only been partially studied~\cite{Costa2015}, but not in the context of the migration of virtual networks.
 % The SC can operate on several levels, namely detection, prevention and mitigation.
@@ -155,7 +155,7 @@ Depending on the type of attack, the mitigation can take several forms.
 In case of a DoS attack, the security component would rely on the VNEC to provide an adequate migration scheme but it can also improve the performance of the VNEC by leveraging security techniques to determine a better substrate, like heuristics to determine which physical nodes are less likely to be targeted. 
 % If the configuration of physical nodes has been altered, the redeployment of configuration rules could take into account the location of the attacker.
 
-\subsubsection{Workflows in the reference architecture}
+\subsection{Workflows in the reference architecture}
 In this section we describe the different information flows illustrated by Figure~\ref{fig:reference-archi-nh}.
 
 \circled{1} Tenant - CPAC: This flow is mainly composed of requests sent by the tenant and the view of the virtual network sent by the hypervisor. Additional traffic may include specific notifications (\eg security and performance alerts).
@@ -187,7 +187,7 @@ In this section we describe the different information flows illustrated by Figur
 \circled{14} DPAC - Infrastructure: This flow is composed of flow rules deployed by the DPAC on the physical nodes.
 % and networking messages sent by the infrastructure (\eg topology discovery, node failure \etc.).
 
-% \paragraph{Workflows}
+% \subsubsection{Workflows}
 % In this section, we describe how the different components interacts together.
 % There are several scenarios presented, initial deployment, migration.
 % %\FC{Add scenarios if needed}

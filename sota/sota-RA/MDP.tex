@@ -1,7 +1,7 @@
 \newpage
-\subsubsection{Markov Decision Processes}
+\subsection{Markov Decision Processes}
 
-\paragraph{Definitions}
+\subsubsection{Definitions}
 A Markov Decision Process~\cite{bellman1957} (MDP) is a mathematical model used to describe the interactions  an agent may have with a system.
 The system is described by the set of state it can be in, and when in a particular state the agent will choose an action to perform.
 Each action is associated to a potentially negative reward, considered as an incentive (or deterent) for the agent.
@@ -21,7 +21,7 @@ Formally, an MDP is defined by a 4-tuple $<S,A,P(s,s',a),R(s,a,s')>$ where:
 
 The aim of an MDP is to determine an optimal policy, defining for each possible state which action will maximize the reward gained by the user while accounting for the future consequences of an immediate choice.
 
-\paragraph{Solving an MDP}
+\subsubsection{Solving an MDP}
 % \label{sec:optimalpolicy}
 % Before determining the optimal policy for an MDP, we have to dive into the notion of reward of an MDP. Any action chosen in a specific state may reward the agent. However, the choice made now may also lead the agent to negative consequences that will not compensate for the immediate reward obtained. 
 % This kind of drawback is mitigated with the notion of a long term reward, called utility. The utility of a state is the immediate reward gained when entering this state plus the rewards that can be obtained from reachable states.
@@ -120,7 +120,7 @@ Q'(s_{t},a_{t}) = (1-\alpha) \cdot \underbrace{Q(s_{t},a_{t})}_{\text{old value}
 
 % \FC{DON'T FORGET TO CHANGE FIGURE TO EQUATION, STILL BUGGY}
 
-\paragraph{MDP-based Resource Allocation}
+\subsubsection{MDP-based Resource Allocation}
 \textbf{\newline}
 We consider here the use of MDPs in the context of the resource allocation problem.
 % We divide the following works into two categories, whether the MDP is used to process resource allocation requests or to directly allocate resources on an infrastructure.
@@ -182,7 +182,7 @@ Several scenarios are considered, open and closed-loops in the traffic as well a
 % The MDP is then solved using the Value Iteration algorithm, but this model requires to know beforehand the bandwidth model. 
 % These limitations can be overcome by using a Q-Learning function where the bandwidth map is unknown but instead the MDP will be trained.
 
-\paragraph{Summary}
+\subsubsection{Summary}
 The resource allocation problem has been investigated using two different formalisms, namely the Game Theory formalism and Markov Decision Processes.
 Game Theory accounts for the point of view of an attacker and a defender, allowing to extensively model the behavior of an attacker and his impact on the defended system.\\
 The MDP ends up being a one user optimization method but the description of the reward function and the transitions between states may reflect external interactions, which could represent the impact of an attacker.

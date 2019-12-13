@@ -1,7 +1,7 @@
 \label{sec:proving-theory}
 We present in this section specific aspects of first order logic theorem proving that will be used later on in this thesis. We will give a brief overview of the first order logic theory and we will then present the basics of theorem proving and several verification mechanisms.
 
-\paragraph{First order logic}
+\subsubsection{First order logic}
 The first order logic is a formal system describing a theory using declarative propositions, predicates and quantification.
 
 A declarative proposition, also referred to as a clause, is a set of terms  that may be connected together using logical operators.
@@ -26,7 +26,7 @@ Predicates are functions taking a set of terms (variables) as input and returnin
 
 For instance, we can define $P(A,B,C) = A \wedge (B \vee C)$, which would yield for the following example: $P(True,False,True)=True$.
 
-\paragraph{First order logic Theorem Proving}\textbf{\\}
+\subsubsection{First order logic Theorem Proving}\textbf{\\}
 The purpose of theorem proving is to determine if a set of clauses is satisfiable or unsatisfiable.
 A satisfiable clause that admits a solution that makes it true.
 An unsatisfiable clause is a clause that cannot be true no matter the values of its terms.
@@ -38,14 +38,14 @@ A rule of inference is a rule defining the deduction process, it takes a set of 
 We use \{clause 1, clause2, ..., clause n\} to define a set of n clauses.\\
 We use $\vdash$ to represent the result of the deduction from a set of clauses.
 
-\paragraph{Modus ponens and modus tollens}\textbf{\\}
+\subsubsection{Modus ponens and modus tollens}\textbf{\\}
 Modus ponens is a rule of inference using the affirmation in an implication to deduce the conclusion.
 Considering the simple example given previously, $P \Rightarrow Q$, if we assert that $P$ is true, then we use modus ponens to conclude that $Q$ is true as well. This is summarized as ``If P implies Q and P is true, then Q must be true" : $P \Rightarrow Q, P \vdash Q$.
 
 Similarly Modus tollens uses the negation in the consequence of an implication to deduce the conclusion.
 Considering $P \Rightarrow Q$, asserting that $Q$ is false, then $P$ must be false as well: $P \Rightarrow Q, \neg Q \vdash \neg P$.
 
-\paragraph{Resolution principle}\textbf{\\}
+\subsubsection{Resolution principle}\textbf{\\}
 The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield false. 
 
 For instance, $P \wedge \neg P$ is obviously unsatisfiable, \ie it is always False.
@@ -58,7 +58,7 @@ Consider the following clauses: $\{\neg P \vee Q,P \vee R\}$.\\
 The resolution principle returns the clause $Q \vee R$ as a resolvent of the previous propositions.
 
 
-\paragraph{Paramodulation}\textbf{\\}
+\subsubsection{Paramodulation}\textbf{\\}
 The paramodulation is an inference rule used to exploit the equality existing between terms and the occurrence of term in a proposition. The paramodulation can be seen as \textit{substitution in case of equality}.
 
 Consider the proposition $P(x) = true$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
@@ -67,7 +67,7 @@ Consider now the two propositions: $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\}$.\\
 Paramodulation deduces the proposition $P(y) \vee Q(y) \vee R(y)$.\\
 $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\} \vdash P(y) \vee Q(y) \vee R(y)$
 
-\paragraph{Rewriting rules}\textbf{\\}
+\subsubsection{Rewriting rules}\textbf{\\}
 Rewriting rules are used to replace an expression by another in a set of propositions.
 This is done to simplify the search space when applying inference rules~\cite{snark-Stickel2000}.
 

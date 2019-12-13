@@ -1,13 +1,13 @@
 The formal model and the different attacks we have described in the previous sections allow us to represent the security of the migration of virtual network. The security is defined in terms of predicates and equations, and can be evaluated using a theorem prover.
 In this section, we detail theoretical aspects of theorem proving, then, we will present the theorem prover used in our work, SNARK~\cite{snark-Stickel2000}.
 
-\subsubsection{Formal theory about theorem proving}
+\subsection{Formal theory about theorem proving}
 \input{model/model-theory.tex}
 
 
 
 
-\subsubsection{SNARK: A first order temporal logic theorem prover}
+\subsection{SNARK: A first order temporal logic theorem prover}
 \label{sec:proof-detects-violation}
 %Part of this effort is devoted to using automatic reasoning to establish that a network enforces confidentiality properties or to detect that such properties can be violated.
 In section~\ref{sec:proving-theory}, we have described several aspects of the first order logic theorem proving theory.
@@ -40,7 +40,7 @@ In general, there may be an infinity of answers to a query, but we rely on the t
 
 %\GB{most of the contents before describe how SNARK works in rather technical terms. Although interesting, it may be out of the scope of the paper to explain in such details how SNARK works. It should be summarized to highlight what are tehe most important features of SNARK formalizing and solving our migration problem. To that end, the illupstrative example below is what is expected from this paper}
 
-\subsubsection{Proving a simple violation with SNARK}
+\subsection{Proving a simple violation with SNARK}
 \label{sec:find-violation}
 The operation and formalism of SNARK will be illustrated in the context of a simple example.
 We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a virtual network.

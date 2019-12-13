@@ -1,9 +1,9 @@
 We make several assumptions related to the scope of our study and about certain technical specificities.
 
-\subsubsection{Predicates}
+\subsection{Predicates}
 We consider in our formal model that the execution trace is complete.
 This implies that all the information necessary to compute the proof is present in the trace and that there is no missing event or predicate.
-This assumption holds in our case because we have implemented a simulator to evaluate our scenario. However, this hypothesis does not hold in a real life environment, and we will treat this issue in the next chapter.
+This assumption holds in our case because we have implemented a simulator to evaluate our scenario. However, this assumption does not hold in a real life environment, and we will treat this issue in the next chapter.
 
 We consider that all the predicates related to determining whether a user is allowed to access a specific node or data are generated using traditional Access Control solutions.
 % There is no significant contribution to be made on this aspect.
@@ -12,26 +12,33 @@ We consider that all the predicates related to determining whether a user is all
 Similarly to the previous point, Access Control solutions are perfectly fit to handle accesses made by user to a node or a data.
 
 
-\subsubsection{Infrastructure}
-Physical links in the network infrastructure are considered to be exempt from performance issues and safe from a security perspective.
+\subsection{Infrastructure}
+\begin{itemize}
+    \item Physical links in the network infrastructure are considered to be exempt from performance issues and safe from a security perspective.
+\end{itemize}
+
 This supposes that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks, according to the following definitions:
 
-\textbf{Performance issues:} A network node may suffer from congestion, insufficient CPU power or memory shortage. 
+\textbf{Performance issues} 
+\begin{itemize}
+    \item A network node may suffer from congestion, insufficient CPU power or memory shortage. 
+\end{itemize} 
 
-\textbf{Security issues}: We assume that the hypervisor itself is safe and functions normally.
+\textbf{Security issues} 
+\begin{itemize}
+    \item We assume that the hypervisor itself is safe and functions normally.
+    \item A network node may be the victim of passive listening, man-in-the-middle or software vulnerabilities exploits.
+    \item We also make the assumption that a physical link will not suffer any form of physical degradation.
+\end{itemize}
 
-A network node may be the victim of passive listening, man-in-the-middle or software vulnerabilities exploits.
-
-We also make the assumption that a physical link will not suffer any form of physical degradation.
-
-Theses assumptions will restrict the scope of some security properties only to the physical nodes because of their inapplicability to physical links.
+These assumptions  restrict the scope of some security properties only to the physical nodes because of their inapplicability to physical links.
 
 We also assume that two physical equipments are connected via a single physical link. This assumption is used in the definition of a networking path connecting two nodes separated by several hops.
 
-\subsubsection{Virtualization}
+\subsection{Virtualization}
 The implementation of the virtualization layer depends on the solution considered.
-Each solution comes with its own identifiers, flow space and limitations on how the user may design his virtual network and with how much granularity he may install flow rules in his VN. Therefore, we exclude from our formal model the consideration of the technical specificities of the network hypervisor.
-We justify this choice that ultimately, the hypervisor will generate a set of flow rules that will be installed in the infrastructure and therefore these rules can be seen as the final representation of the formal predicates describing the embedding of the VN.
+Each solution comes with its own identifiers, flow space and limitations on how the user may design his virtual network and which fields and actions he may use to generate flow rules. Therefore, we exclude from our formal model the consideration of the technical specificities of the network hypervisor.
+We justify this choice by stating that ultimately, the hypervisor will generate a set of flow rules that will be installed in the infrastructure and therefore these rules can be seen as the final representation of the formal predicates describing the embedding of the VN.
 
 We also leave the VNE problem, \ie determining which set of physical resources should be the substrate of the virtual network, out of the scope of this thesis.
 

@@ -1,7 +1,7 @@
 In this section we take a closer look at the security of the live migration of VMs.
 We first detail the existing vulnerabilities and possible attacks, and then detail different security solutions, either using the migration process as a way to overcome security issues or to analyze and improve the security of the migration process itself.
 
-\paragraph{Attacking the VM migration process}
+\subsubsection{Attacking the VM migration process}
 Traditional hypervisors have been around for decades now, and the live migration of a virtual machine is a well known process. There has been several security surveys on the topic of VM hypervisors~\cite{Reuben2007,Rehman2013,Sahoo2010,Perez-Botero2013}, and on the security of Cloud environments~\cite{cloudenvironmentsecuritysurvey-fernandes2014}.
 Most of the security issues with VMs are related to the unlawful interactions between a VM and other VMs or the hypervisor.
 An attacker may exploit vulnerabilities in the hypervisor and force it to execute arbitrary code or access restricted memory zone.
@@ -48,7 +48,7 @@ Migration stalling attacks        & Denial of Service, Resource depletion     & 
 \label{tab:vm-attacksurface}
 \end{table}
 
-\paragraph{Protecting the VM migration process}
+\subsubsection{Protecting the VM migration process}
 The Moving Target Defense (MTD) paradigm is a technique used to limit the co-residency between an attacker and his victim, thus leading to a reduced attack surface for side channel attacks.
 Zhang~\etal introduce a Game Theory model~\cite{incentivemtd-Zhang2012} to represent the incentives a Cloud Provider has to migrate VMs in his infrastructure when opposed to an attacker who will benefit from the co-residency. Results outline that it is not necessary to permanently migrate all VMs and only a subset of them. In addition to this, the game can be extended to include cooperation between the legitimate users and the Cloud Provider.
 A similar approach using MTD against side channel attacks is presented in Nomad~\cite{nomad-Moon2015b}. Nomad is built on several assumptions: the attacker cannot be precisely located inside the infrastructure, can launch potentially unknown side channels attacks and can precisely target his victim. 
