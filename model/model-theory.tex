@@ -7,16 +7,16 @@ The first order logic is a formal system describing a theory using declarative p
 A declarative proposition, also referred to as a clause, is a set of terms  that may be connected together using logical operators.
 We illustrate this with the following example:
 
-$P \Rightarrow Q$ means "$P$ implies $Q$``. $P$ and $Q$ are the terms of the clause and $\Rightarrow$ is the logical operator representing implication.
+$P \Rightarrow Q$: $P$ and $Q$ are the terms of the clause and $\Rightarrow$ is the logical operator representing implication.
 
 The first order logic admits the following logical operators:
 
 \begin{itemize}
     \item $\forall$: The forall operator, $\forall x\in S$ means for all elements $x$ in set $S$.
     \item $\exists$: The exist operator, $\exists x\in S$ means there exist at least one $x$ in set $S$.
-    \item $\neg$: The negation operator, $\neg A$ means then logical negation of A, often noted $\overline{A}$.
-    \item $\wedge$: The conjunction operator, $A \wedge B$ means the logical arithmetic A AND B.
-    \item $\vee$: The disjunction operator, $A \vee B$ means the logical arithmetic A OR B.
+    \item $\neg$: The negation operator, $\neg A$ denotes then logical negation of A, often noted $\overline{A}$.
+    \item $\wedge$: The conjunction operator, $A \wedge B$ denotes the logical arithmetic operation A AND B.
+    \item $\vee$: The disjunction operator, $A \vee B$ denotes the logical arithmetic operation A OR B.
     \item brackets $( )$: Brackets are used to order the resolution of the logical proposition, similarly to traditional arithmetic.
     \item $\Rightarrow$: The implication operator, $A \Rightarrow B$ means A implies B.
     \item $\Leftrightarrow$: The bidirectional implication operator, $A \Leftrightarrow B$ means "A implies B`` AND "B implies A``.
@@ -24,9 +24,9 @@ The first order logic admits the following logical operators:
 
 Predicates are functions taking a set of terms (variables) as input and returning a binary value, True or False, as an output.
 
-For instance, we can define $P(A,B,C) = A \wedge (B \vee C)$, which would yield for the following example: $P(True,False,True)=True$.
+For instance, we can define $P(A,B,C) = A \wedge (B \vee C)$, which would yield True for the following example: $P(True,False,True)=True$.
 
-\subsubsection{First order logic Theorem Proving}\textbf{\\}
+\subsubsection{First order logic Theorem Proving}
 The purpose of theorem proving is to determine if a set of clauses is satisfiable or unsatisfiable.
 A satisfiable clause that admits a solution that makes it true.
 An unsatisfiable clause is a clause that cannot be true no matter the values of its terms.
@@ -38,14 +38,14 @@ A rule of inference is a rule defining the deduction process, it takes a set of 
 We use \{clause 1, clause2, ..., clause n\} to define a set of n clauses.\\
 We use $\vdash$ to represent the result of the deduction from a set of clauses.
 
-\subsubsection{Modus ponens and modus tollens}\textbf{\\}
+\subsubsection{Modus ponens and modus tollens}
 Modus ponens is a rule of inference using the affirmation in an implication to deduce the conclusion.
 Considering the simple example given previously, $P \Rightarrow Q$, if we assert that $P$ is true, then we use modus ponens to conclude that $Q$ is true as well. This is summarized as ``If P implies Q and P is true, then Q must be true" : $P \Rightarrow Q, P \vdash Q$.
 
 Similarly Modus tollens uses the negation in the consequence of an implication to deduce the conclusion.
 Considering $P \Rightarrow Q$, asserting that $Q$ is false, then $P$ must be false as well: $P \Rightarrow Q, \neg Q \vdash \neg P$.
 
-\subsubsection{Resolution principle}\textbf{\\}
+\subsubsection{Resolution principle}
 The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield false. 
 
 For instance, $P \wedge \neg P$ is obviously unsatisfiable, \ie it is always False.
@@ -57,8 +57,7 @@ We also refer the reader to the Method of Davis and Putnam and more specifically
 Consider the following clauses: $\{\neg P \vee Q,P \vee R\}$.\\
 The resolution principle returns the clause $Q \vee R$ as a resolvent of the previous propositions.
 
-
-\subsubsection{Paramodulation}\textbf{\\}
+\subsubsection{Paramodulation}
 The paramodulation is an inference rule used to exploit the equality existing between terms and the occurrence of term in a proposition. The paramodulation can be seen as \textit{substitution in case of equality}.
 
 Consider the proposition $P(x) = true$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
@@ -67,7 +66,7 @@ Consider now the two propositions: $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\}$.\\
 Paramodulation deduces the proposition $P(y) \vee Q(y) \vee R(y)$.\\
 $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\} \vdash P(y) \vee Q(y) \vee R(y)$
 
-\subsubsection{Rewriting rules}\textbf{\\}
+\subsubsection{Rewriting rules}
 Rewriting rules are used to replace an expression by another in a set of propositions.
 This is done to simplify the search space when applying inference rules~\cite{snark-Stickel2000}.
 

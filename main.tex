@@ -17,6 +17,7 @@
 \usepackage{color}
 \usepackage{xspace}
 \usepackage{parskip}
+\usepackage{afterpage}
 % \usepackage{refcount}
 \usepackage{paralist}
 \usepackage{authblk}
@@ -35,7 +36,7 @@
 \pgfplotsset{compat=1.15} 
 \usepgfplotslibrary{patchplots}
 % Extra depth for titles
-\usepackage{titlesec}
+\usepackage[compact]{titlesec}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{8}
 \usepackage[nottoc]{tocbibind}
@@ -260,7 +261,7 @@ In this section, we consider two different formalisms used to solve the RA probl
 \input{model/model-migration.tex}
 
 \newpage
-\section{Security properties applied to Virtual Network migration}
+\section{Security properties for Virtual Network migration}
 \input{model/model-security-properties.tex}
 
 \input{figures/virtualization-attack-surface.tex}

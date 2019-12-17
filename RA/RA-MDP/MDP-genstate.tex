@@ -1,18 +1,36 @@
-We describe in Algorithms~\ref{algo:genstate1},~\ref{algo:genstate2} and~\ref{algo:genstate3} how we generated the exhaustive set of states.
-We remind the reader that action $m_i$ deploys monitoring on node $i$, action $u_i$ removes monitoring from node $i$, finally action $d$ does nothing.
+We describe in Algorithm~\ref{algo:genstate1} how we generated the exhaustive set of states.
+We remind the reader that action $m_i$ deploys monitoring on node $i$, action $u_i$ removes monitoring from node $i$, and action $d$ does nothing.
+We also remind that when determining the target node $j$, the case $j==0$ in the code corresponds to the case where there is no attack launched.
 We also use the function $Select\_node$ presented in Algorithm~\ref{algo:iterative_algo} from Section~\ref{sec:model-migration}.
 
-
-\textbf{Algorithm~\ref{algo:genstate1}:}
-
-We generate the current state $s$ (line 3) and add it to the set of states $S$.\\
-If there are nodes to migrate, we migrate select the next one (line 6), migrate it (line 7) and remove it from the list of nodes to migrate (line 8).\\
-We check if there is no time left for the migration, and exit if so (lines 9-10).\\
-Then we calculate all possible transitions for action $d$.\\
-We change the $At$ if there is an attack (lines 12-13) or if there is no attack (lines 14-15).\\
+We generate the current state $s$ and add it to the set of states $S$ (lines 3-4) .
+If there are nodes to migrate (line 5), we migrate select the next one (line 6), migrate it (line 7) and remove it from the list of nodes to migrate (line 8).
+We check if there is no time left for the migration, and exit if so (lines 9-10).
+Then we calculate all possible transitions for action $d$.
+We change the $At$ if there is an attack (lines 12-13) or if there is no attack (lines 14-15).
 We then generate the destination state $s'$ (line 16).
-We compute the transiti r action $d$ (line 21).
+We compute the transition probabilities for action $d$ (lines 17-20) and the reward (line 21).
 Finally we start a new recursion (line 22).
+
+We loop over all the nodes to generate their monitoring and unmonitoring action (line 23).
+First we check if there is enough budget $b_c$ to monitor node $i$ (line 24).
+If so we check if it is already monitoring (line 25).
+If it is, we repeat the same process as done for action $d$ for the transition generation (lines 26-35).
+We assign a null reward for this action (line 36).
+We start a new recursion (line 37).
+If it is not, we add node $i$ to the set of monitoring nodes $Mo$ (line 39).
+Then we compute the transition as previously done (lines 40-49).
+We compute the reward for action $m_i$ (line 50) and start a new recursion (line 51).
+
+If there is not enough $b_c$ budget (line 54) we generate the destination state and compute the attacks and  transitions (lines 55-64).
+We assign a null reward (line 65) and start a new recursion (line 66).
+We then consider the action $u_i$ and check if node $i$ is monitoring the infrastructure (line 67). 
+We remove node $i$ from the set of monitoring nodes $Mo$ (line 68).
+We generate the destination state and compute the attacks and transitions (lines 69-78) and assign a reward (line 79).
+Then we start a new recursion (line 80).
+If node $i$ is not monitoring the infrastructure (line 81), we compute the destination state, attacks and transitions (lines 82-91).
+We assign a null reward (line 92) and start a new recursion (line 93).
+Finally, we start the generation of the states (line 94).
 
 \begin{algorithm}[htbp]
   \DontPrintSemicolon
@@ -25,8 +43,8 @@ Finally we start a new recursion (line 22).
   \SetKwProg{Fn}{Function}{:}{}
   \SetKwInOut{Input}{Input}
   \SetKwInOut{Output}{Output}
-  \Input{$nodes\_to\_migrate$ as the set of nodes to migrate}
-  \Output{$S$ as the set of states, $P$ as the transition matrix, $R$ as the reward matrix}
+  \Input{$nodes\_to\_migrate$ the set of nodes to migrate}
+  \Output{$S$ the set of states, $P$ the transition matrix, $R$ the reward matrix}
 % %   \tcc{Defining the structure of a transition and a reward}
 %   $\text{transition}$ = $<\text{src state}, \text{dst state},\text{action}, \text{proba}>$\;
 % %   \tcc{Defining the structure of a reward}
@@ -40,61 +58,22 @@ Finally we start a new recursion (line 22).
         $nodes\_to\_migrate \gets nodes\_to\_migrate \backslash{} NextNode $\;
     }
     \uIf{$b_f < c_f$}{exit()}
-      \tcc{Looping over the possible attacks}
+    %   \tcc{Looping over the possible attacks}
       \ForEach{$j$ in \{$0,..,n$\}}{
       \uIf{$j>0$}{$At' \gets At \cup j$}
        \uElse{$At' \gets At$}
+       $s' \gets State(b_f - c_f,b_c,Mi,Mo',At')$\;
             \uIf{$j==0$}{$P(s,d,s') \gets 1-\alpha$}
       \uElse{$P(s,d,s') \gets \Pi(j)$}
       $R(s,d,s') \gets compute\_reward(j,At')$\;
       Generate($b_f-c_f,b_c,Mi,Mo,At',j)$
       }
       }
-    }
-    \caption{Generating the MDP (1/3)} 
-    \label{algo:genstate1}
-    \end{algorithm}
-    
-   
-\textbf{Algorithm~\ref{algo:genstate2}:}\\
-We loop over all the nodes to generate their monitoring and unmonitoring action (line 25).\\
-First we check if there is enough budget $b_c$ to monitor node $i$ (line 26).\\
-If so we check if it is already monitoring (line 27).\\
-If it is, we repeat the same process as in Algorithm~\ref{algo:genstate1} for the transition generation (lines 27-37).\\
-We assign a null reward for this action (line 38).\\
-We start a new recursion (line 39).\\
-If it is not, we add node $i$ to the set of monitoring nodes $Mo$.\\
-Then we compute the transition as previously done (lines 42-51).\\
-We compute the reward for action $m_i$ (line 52) and start a new recursion (line 53).\\
-
-\textbf{Algorithm~\ref{algo:genstate3}:}\\
-If there is not enough $b_c$ budget (line 56) we generate the destination state and compute the attacks and  transitions (lines 57-66).\\
-We assign a null reward (line 67) and start a new recursion (line 68).\\
-We then consider the action $u_i$ and check if node $i$ is monitoring the infrastructure (line 69). \\
-We remove node $i$ from the set of monitoring nodes $Mo$ (line 70).\\
-We generate the destination state and compute the attacks and transitions (lines 71-80) and assign a reward (line 81).
-Then we start a new recursion (line 82).
-If node $i$ is not monitoring the infrastructure (line 83), we compute the destination state, attacks and transitions (lines 84-93).
-We assign a null reward (line 94) and start a new recursion (line 95).
-
-Finally, we start the generation of the states (line 96).
-
-% \SetNlSty{texttt}{(}{)}
-\begin{algorithm}[htbp]
-  \LinesNumbered
-\setcounter{AlgoLine}{22}
-% This is to restore vline mode if you did not take the package as \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
-  \SetAlgoVlined
-%This is to hide Begin keyword
-\SetKwBlock{Begin}{}{end}
-
-\Begin{
-\Begin{
-      \tcc{Looping over monitor and unmonitor acctions}
+            % \tcc{Looping over monitor and unmonitor actions}
       \ForEach{$i$ in \{$1,..,n$\}}{
-      \tcc{If there is enough budget to monitor}
+    %   \tcc{If there is enough budget to monitor}
       \uIf{$b_c > c^i_c$}{
-        \tcc{Is the node already monitored ?}
+        % \tcc{Is the node already monitored ?}
         \uIf{$i \in Mi$}{
         \ForEach{$j$ in \{$0,..,n$\}}{
             \uIf{$j>0$}{$At' \gets At \cup j$}
@@ -120,17 +99,66 @@ Finally, we start the generation of the states (line 96).
 }
         }
       }
-      }
-          }
+    }
+    \caption{Generating the MDP (1/3)} 
+    \label{algo:genstate1}
+    \end{algorithm}
+
+
+% \SetNlSty{texttt}{(}{)}
+% \refstepcounter{algorithm}
+
+% \begin{algorithm}[htbp]
+%   \LinesNumbered
+% \setcounter{AlgoLine}{22}
+% % This is to restore vline mode if you did not take the package as \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+%   \SetAlgoVlined
+% %This is to hide Begin keyword
+% \SetKwBlock{Begin}{}{end}
+
+% \Begin{
+% \Begin{
+%       \tcc{Looping over monitor and unmonitor actions}
+%       \ForEach{$i$ in \{$1,..,n$\}}{
+%       \tcc{If there is enough budget to monitor}
+%       \uIf{$b_c > c^i_c$}{
+%         \tcc{Is the node already monitored ?}
+%         \uIf{$i \in Mi$}{
+%         \ForEach{$j$ in \{$0,..,n$\}}{
+%             \uIf{$j>0$}{$At' \gets At \cup j$}
+%       \uElse{$At' \gets At$}
+%             $s' \gets State(b_f - c_f,b_c,Mi,Mo,At')$\;
+%             \uIf{$j==0$}{$P(s,m_i,s') \gets 1-\alpha$}
+%             \uElse{$P(s,m_i,s') \gets \Pi(j)$}
+%             $R(s,m_i,s') \gets 0$\;
+%             Generate($b_f-c_f,b_c,Mi,Mo,At',j$)\;
+%         }
+%         }
+%         \uElse{
+%             $Mo' \gets Mo \cup i$\;
+%             \ForEach{$j$ in \{$0,..,n$\}}{
+%                 \uIf{$j>0$}{$At' \gets At \cup j$}
+%                 \uElse{$At' \gets At$}
+%                 $s' \gets State(b_f - c_f,b_c - c^i_c,Mi,Mo',At')$\;
+%                 \uIf{$j==0$}{$P(s,m_i,s') \gets 1-\alpha$}
+%                 \uElse{$P(s,m_i,s') \gets \Pi(j)$}
+%                 $R(s,m_i,s') \gets compute\_reward(j,At')$\;
+%                 Generate($b_f-c_f,b_c- c^i_c,Mi,Mo',At',j$)\;
+%         }
+% }
+%         }
+%       }
+%       }
+%           }
       
-\caption{Generating the MDP (2/3)} 
-\label{algo:genstate2}
-\end{algorithm}
+% % \caption{Generating the MDP (2/3)} 
+% % \label{algo:genstate2}
+% \end{algorithm}
 
 % \SetNlSty{texttt}{(}{)}
 \begin{algorithm}[htbp]
   \LinesNumbered
-\setcounter{AlgoLine}{53}
+\setcounter{AlgoLine}{51}
 % This is to restore vline mode if you did not take the package as \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
   \SetAlgoVlined
 %This is to hide Begin keyword
@@ -138,7 +166,7 @@ Finally, we start the generation of the states (line 96).
 
 \Begin{
 \Begin{
-      \tcc{If there is not enough computational budget to monitor}
+    %   \tcc{If there is not enough computational budget to monitor}
       \uIf{$b_c < c^i_c$}{
         \ForEach{$j$ in \{$0,..,n$\}}{
             \uIf{$j>0$}{$At' \gets At \cup j$}
@@ -151,7 +179,7 @@ Finally, we start the generation of the states (line 96).
             Generate($b_f-c_f,b_c,Mi,Mo,At',j$)\;
         }
       }
-      \tcc{Is node $i$ monitoring the infrastructure }
+    %   \tcc{Is node $i$ monitoring the infrastructure }
        \uIf{$i \in Mo$}{
        $Mo' \gets Mo \backslash{} i$\;
        \ForEach{$j$ in \{$0,..,n$\}}{
@@ -165,7 +193,7 @@ Finally, we start the generation of the states (line 96).
         Generate($b_f-c_f,b_c+ c^i_c,Mi,Mo',At',j$)\;
         }
         \uElse{
-        \tcc{Is the node not monitored ?}
+        % \tcc{Is the node not monitored ?}
         \ForEach{$j$ in \{$0,..,n$\}}{
        \uIf{$j>0$}{$At' \gets At \cup j$}
        \uElse{$At' \gets At$}
@@ -184,8 +212,8 @@ Finally, we start the generation of the states (line 96).
 
 Generate($c^0_f,c^0_c,\emptyset,\emptyset,\emptyset,0$)\;
       
-\caption{Generating the MDP (3/3)} 
-\label{algo:genstate3}
+% \caption{Generating the MDP (3/3)} 
+% \label{algo:genstate3}
 \end{algorithm}
 
-
+% \newpage

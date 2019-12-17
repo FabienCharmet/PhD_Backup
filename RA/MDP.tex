@@ -1,6 +1,6 @@
-\subsection{Second approach: Markov Decision Process}
-We have considered the formalism of Game Theory as a method to solve the resource allocation problem, but the lack of flexibility and the complexity of determining the optimal solution make it inadequate for our problem. We consider here Markov Decision Processes (MDP).
-MDP is a formalism used to represent an agent and the actions he can choose to interact with a system. The general purpose of an MDP is to find the best action for each possible state of the system (\ie the optimal policy). Because a practical solution to this RA problem is a set of node supporting the monitoring of the infrastructure, we will develop a statistical analysis of the optimal policy and convert the dynamic answer of a MDP into a static \textit{a priori} deployment.
+\section{Second approach: Markov Decision Process}
+We have considered the formalism of Game Theory as a method to solve the resource allocation problem, but the lack of flexibility and the complexity of determining the equilibrium make it inadequate for our problem. We consider here Markov Decision Processes (MDP).
+MDP is a formalism used to represent an agent and the actions he can choose to interact with a system. The general purpose of an MDP is to find the best action for each possible state of the system (\ie the optimal policy). Because a practical solution to this RA problem is a set of nodes supporting the monitoring of the infrastructure, we will develop a statistical analysis of the optimal policy and convert the dynamic answer of a MDP into a static \textit{a priori} deployment.
 An experimental prototype is available on github\footnote{\label{github}\url{https://github.com/FabienCharmet/MDPRA}}.
 
 
@@ -8,28 +8,30 @@ An experimental prototype is available on github\footnote{\label{github}\url{htt
 
 \input{figures/migration_trigger.tex}
 
-\subsubsection{System assumptions}
+\subsection{System assumptions}
 \input{RA/RA-MDP/MDP-assumption.tex}
 
-\subsubsection{Attacker Model}
+\subsection{Attacker Model}
 \input{RA/RA-MDP/MDP-attackmodel.tex}
 
-\subsubsection{Modeling the RA problem with a MDP}
+\subsection{Modeling the RA problem with a MDP}
 \input{RA/RA-MDP/MDP-MDP.tex}
 
 \newpage
-\subsubsection{Generating the states of the MDP}
+\subsection{Generating the states of the MDP}
+% \thispagestyle{empty}
 \input{RA/RA-MDP/MDP-genstate.tex} 
 
+\FC{Don't forget to hide page number 117}
 \newpage
-\subsubsection{Use Cases}
+\subsection{Use Cases}
 \input{RA/RA-MDP/MDP-usecase.tex}
 
-\subsubsection{Determining the optimal monitoring nodes}
+\subsection{Determining the optimal monitoring nodes}
 \input{RA/RA-MDP/MDP-optimal-monitoring.tex}
 
-\subsubsection{Discussion}
+\subsection{Discussion}
 \input{RA/RA-MDP/MDP-discussion.tex}
 
-\subsubsection{Conclusion}
+\subsection{Conclusion}
 \input{RA/RA-MDP/MDP-conclusion.tex}

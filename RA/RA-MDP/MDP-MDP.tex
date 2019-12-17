@@ -1,12 +1,13 @@
 \label{sec:mdp-model}
 In this section, we describe our MDP addressing the problem of optimal defense resource allocation for virtual network migration.
 
-\paragraph{Model assumptions}\textbf{\\}
+\subsubsection{Model assumptions}
 \label{sec:mdp-model-assumption}
 
-\textbf{Monitoring}\textbf{\\}
+\textbf{Monitoring}
 \begin{itemize}
-    \item The deployment of the monitoring on the nodes impacts the infrastructure's performance. Based on the work of Ismail \etal~\cite{interdep-ismail2017}, we consider the monitoring cost  proportional to the intrinsic value of the nodes (\eg CPU time on a powerful machine is more expensive compared to a smaller one). 
+    \item The deployment of the monitoring on the nodes impacts the infrastructure's performance. 
+    % Based on the work of Ismail \etal~\cite{interdep-ismail2017}, we consider the monitoring cost  proportional to the intrinsic value of the nodes (\eg CPU time on a powerful machine is more expensive compared to a smaller one). 
     
     \item We consider the monitoring imperfect with a certain attack detection probability.
     Each node on the path of an attack has the same probability to detect it, \ie there is no node more efficient than another. 
@@ -24,12 +25,15 @@ In this section, we describe our MDP addressing the problem of optimal defense r
     \item The attacker's strategy for choosing which nodes he attacks is based on the information gathering he performs while attacking. The details of such activity is considered out of the scope of this thesis.
     Similar work on cloud environments for virtual machines colocation has been proposed in~\cite{getoffmucloud-Ristenpart2009, incentivemtd-Zhang2012}.
     Johnson \etal propose in~\cite{mitigateAPT-johnson2013} a real time metric that determines the node that is the most likely to be the next target of an attack.
+    
+    \item
     If the attacker was able to establish the full path then we consider that the global attack was successful.
+    A full path between the attacker and his victim's is connecting at least one physical node embedding the victim's VN to a virtual machine owned by the attacker. Such path is illustrated in Figure~\ref{fig:data-exfiltration-attack}.
 \end{itemize}
 
 
 
-\paragraph{States}
+\subsubsection{States}
 \label{sec:stateset}
 The states in the MDP represent the evolution of the infrastructure, \ie the progress of the migration, the remaining resources as well as the compromised nodes in the infrastructure.
 The defender has two different resources: $b_f$, the global amount of time the migration is going to take, and $b_c$ the global computational power available for the monitoring.
@@ -53,10 +57,10 @@ We describe the state of the system as the following tuple: $s=<b_f,b_c,Mi,Mo,At
 
 % We remind the reader that an absorbing state is a state where all actions transition back to itself.
 
-\paragraph{Actions}
+\subsubsection{Actions}
 \label{sec:actionset}
 The defender can either add monitoring on a particular node in the infrastructure, remove this monitoring, or choose to do nothing.
-The option of doing nothing prevents counter-productive options like forcing undesired actions (\eg unmonitoring a node that is not currently monitoring the infrastructure).
+The option of doing nothing prevents counter-productive options like forcing undesired actions (\eg removing monitoring from a node that is not currently monitoring the infrastructure).
 We note $m_j$ the action of setting up monitoring on node $j$. Similarly, we note $u_j$ the action of removing monitoring on node $j$.
 Finally we note $d$ the action of doing nothing.
 %\\With $n$ being the number of nodes in the infrastructure 
@@ -67,13 +71,14 @@ Finally we note $d$ the action of doing nothing.
 % \FC{The last node added to the path should be the node belonging to $\mathbb{Z}$ because otherwise exfiltrating data without the full path will raise a lot of unexpected $packet-in$ . This may not be an issue though}
 % We also assume he may construct the full path by connecting nodes one after another instead of randomly constructing the chain. 
 
-\paragraph{Cost of actions}
-Choosing an action impact both $b_f$ and $b_c$ resources. The action will maje the migration progress by one step.\\
-We note $c_f$ the time it takes to migrate one node, and based on the assumption made in Section~\ref{sec:mdp-system-hypotheses} we define it as equal for each action.
+\subsubsection{Cost of actions}
+Choosing an action impacts both $b_f$ and $b_c$ resources. The action will make the migration progress by one step.\\
+We note $c_f$ the time it takes to migrate one node, and based on the assumption made in Section~\ref{sec:mdp-system-hypotheses}, we define it as equal for each action.
 
-Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the financial value of the node, its computing capacities and its function inside the virtualization infrastructure. 
+Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the computational power of the node.
+% , its computing capacities and its function inside the virtualization infrastructure. 
 %We note $\{V_1,..,V_n\}, \forall i~V_i \in \mathbb{R}$ as the set of said values, one for each node. 
-Based on the work of Ismail~\etal~\cite{interdep-ismail2017} we consider that the cost of monitoring each node is not uniform and depends on its intrinsic value. We represent this by assigning a proportionality coefficient to each node.
+Based on the work of Ismail~\etal~\cite{interdep-ismail2017} we consider that the cost of deploying monitoring on each node is not uniform and depends on its intrinsic value. We represent this by assigning a proportionality coefficient to each node.
 We note this coefficient $k_{c}$, associated to $b_c$.
 Then we define the monitoring cost $c_c^j$ for node $j$ as : $\forall j \in \textbf{N},~ c_c^j = k_{c}  V_j$
 
@@ -86,11 +91,11 @@ We summarize $c_f$ and $c_c^j$ with:
   \end{cases}
 \end{equation}
 
-\paragraph{Probabilistic target determination}
+\subsubsection{Probabilistic target determination}
 \label{sec:target_proba}
 We consider the path taken by the attack as a set of nodes.
 % We name $L$ the set of paths inside the infrastructure. 
-We define $L_j$ the path leading the attacker to node $j$.
+We define $L_j$ the unique path leading the attacker to node $j$.
 We note $\textbf{W}$ the set of non compromised nodes that are currently hosting the migrated virtual network (\ie $\textbf{W} = Mi^s \cap \overline{At^s})$.
 Similarly, we note $\textbf{T}$ the set of non compromised nodes that are directly connected to a compromised node and are not part of $\textbf{W}$, \ie they are potential candidates for the path between attacker and victim. Alg.~\ref{algo:target} is computed at each state as the sets $\textbf{T}$ and $\textbf{W}$ are changing.
 % This implies that compromising a node in $\mathbb{T}$
@@ -104,11 +109,11 @@ Similarly, we note $\textbf{T}$ the set of non compromised nodes that are direct
  \ForEach{node $j$ in \{$1,..,n$\}}{
  \tcc{Is the node part of the embedding  and not already compromised ?}
   \uIf{$j \in $\textbf{W} and $Mi^s \cap At^s = \emptyset$}{
-   $q(j) = \alpha  \frac{3}{3|\textbf{W}| + |\textbf{T}|}$
+   $q(j) = \alpha  \frac{\beta}{\beta|\textbf{W}| + |\textbf{T}|}$
    }
   \tcc{Is the node part of the path to exfiltrate data ?}
   \uElseIf{$j \in $\textbf{T}} {
-   $q(j) = \alpha  \frac{1}{3|\textbf{W}| + |\textbf{T}|}$
+   $q(j) = \alpha  \frac{1}{\beta|\textbf{W}| + |\textbf{T}|}$
   }
   \Else{
   $q(j)=0$
@@ -119,11 +124,11 @@ Similarly, we note $\textbf{T}$ the set of non compromised nodes that are direct
 \end{algorithm}
 
 
-We note $q(j)$ the probability of node $j$ to be attacked as the combination of the probability for an attack to be launched (\ie $\alpha$) and the probability of node $j$ to be chosen among all the nodes in $\textbf{T}$ and $\textbf{W}$. We also use a coefficient (here 3) to give more weight to the nodes in $\textbf{W}$, referring to the assumption made in~\ref{sec:mdp-model-assumption}.
+We note $q(j)$ the probability of node $j$ to be attacked as the combination of the probability for an attack to be launched (\ie $\alpha$) and the probability of node $j$ to be chosen among all the nodes in $\textbf{T}$ and $\textbf{W}$. We also use a coefficient $\beta$ to give more weight to the nodes in $\textbf{W}$, referring to the assumption made in~\ref{sec:mdp-model-assumption}.
 Once a substrate node has been compromised, the attacker will finalize the exfiltration set-up by completing the path between his VM and the victim's network.
 
 
-\paragraph{Transitions}
+\subsubsection{Transitions}
 We describe the coherence of the MDP states with the following transition constraints:
 
 \begin{enumerate}
@@ -152,7 +157,7 @@ We define the state modifications once action $a \in A$ has been chosen.
 % \FC{I rewrote the definition of an attribute $s.b_c$ is the $b_c$ budget related to s, see section~\ref{sec:stateset}}
 \\
 \subparagraph*{\textbf{State modifications for action $m_i$}}
-when choosing action $m_i$ at state $s$, we compute the resources impact and set changes for state $s', \forall j \in \textbf{N}$. One time step is deducted from $b_f$, the cost of monitoring node $i$ is deducted from $b_c$. Node $i$ is added to the set of monitoring nodes $Mo$ and finally, in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
+When choosing action $m_i$ at state $s$, we compute the resources impact and set changes for state for every possible state $s'$. One time step is deducted from $b_f$, the cost of monitoring node $i$ is deducted from $b_c$. Node $i$ is added to the set of monitoring nodes $Mo$ and finally, in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
 
 \begin{equation}
   s \longrightarrow s' =\begin{cases}
@@ -164,7 +169,7 @@ when choosing action $m_i$ at state $s$, we compute the resources impact and set
 \end{equation}
 
 \subparagraph*{\textbf{State modifications for action $u_i$}}
-when choosing action $u_i$ at state $s$, we compute the resources impact and set changes for state $s', \forall j \in \textbf{N}$. One time step is deducted from $b_f$, monitoring node $i$ frees $c_c^i$ and is returned to resource $b_c$. Node $i$ is removed from the set of monitoring nodes $Mo$ and finally, in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
+When choosing action $u_i$ at state $s$, we compute the resources impact and set changes for state for every possible state $s'$. One time step is deducted from $b_f$, monitoring node $i$ frees $c_c^i$ and is returned to resource $b_c$. Node $i$ is removed from the set of monitoring nodes $Mo$ and finally, in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
 
 \begin{equation}
   s \longrightarrow s' =\begin{cases}
@@ -177,7 +182,7 @@ when choosing action $u_i$ at state $s$, we compute the resources impact and set
 % \FC{$ Mo(s) \backslash \{n\}$ means removing n from Mo(s)}
 
 \subparagraph*{\textbf{State modifications for action $d$}}
-when choosing action $d$ at state $s$, we compute the resources impact and set changes for state $s', \forall j \in \textbf{N}$. One time step is deducted from $b_f$ and in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
+When choosing action $d$ at state $s$, we compute the resources impact and set changes for state for every possible state $s'$. One time step is deducted from $b_f$ and in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
 \begin{equation}
   s \longrightarrow s' =\begin{cases}
     b_f^{s'} = b_f^s - c_f\\
@@ -208,7 +213,7 @@ We define the transition probability with $\alpha$ and $q(j)$ presented in Secti
         q(j)\text{ if node $j$ is attacked, cf. Algorithm~\ref{algo:target}}
     \end{cases}
 \end{equation}
-\paragraph{Rewards}
+\subsubsection{Rewards}
 
 The value of the reward for transitioning takes into account three criteria: the intrinsic value of the nodes, the overall progress of the attacker, and the probability of detecting an attack. The probability of an attack occurring is already accounted for in the transitions.
 % The reward represents is impacted whether there was an attack, and if it has been detected.
@@ -218,10 +223,10 @@ The value of the reward for transitioning takes into account three criteria: the
 If no attack was launched, the reward is based on the value of all the nodes in the infrastructure. 
 If an attack was launched, there are two cases: whether the attacker has reached his ultimate goal or not.
 If he has, we deduct the value of all the compromised nodes. If he has not, we only deduce the value of the attacked node.
-This differentiation comes from the fact that the attacker truly benefit from his attack once the full exfiltration path is established. Before that, the threat is focused on the next node to attack.
+This differentiation comes from the fact that the attacker truly benefits from his attack once the full exfiltration path is established. Before that, the threat is focused on the next node to attack.
 % \GB{please use equation environments and refrain from using inline equations.}
 %  note $(1-p)^{|L_j \cap Mo|}$ the probability of zero nodes detecting the attack on node j. 
-\\We note $\Pi(j)=1 - (1-p)^{|L_j \cap Mo|}$ as the probability of detecting the attack on node $j$ by at least one node .
+\\We note $\Pi(j)=1 - (1-p)^{|L_j \cap Mo|}$ as the probability of detecting the attack on node $j$ by at least one node. $|L_j \cap Mo|$ represents the number of nodes currently monitoring the infrastructure that will be on the path of the attack, thus the probability for every node not to detect the attack on node $j$ is $(1-p)^{|L_j \cap Mo|}$.
 \\
 Therefore, we define the following reward function: %, with $s' \in S'$ as in Section~\ref{sec:actionset} :
 \\
@@ -232,3 +237,5 @@ Therefore, we define the following reward function: %, with $s' \in S'$ as in Se
     \sum\limits_{i\in \textbf{N}} V_i - \overline{\Pi(j)}V_j \text{, if partial attack on node $j$}\\
   \end{cases}
 \end{equation}
+
+The definition of $R(s,a)$ includes the impact of action $a$ in the probability of detecting an attack, as $\Pi(j)$ depends on the monitoring set $Mo$ which is modified by $a$.
