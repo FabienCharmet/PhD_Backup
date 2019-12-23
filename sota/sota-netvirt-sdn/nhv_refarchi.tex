@@ -14,10 +14,10 @@ A network hypervisor should support the following operations:
 
 Casado~\etal propose a first formalization of a general purpose network hypervisor in~\cite{Netvirt_Definition-Casado2010}. They decouple the virtual network view from the physical infrastructure, and the network hypervisor enforces the mapping between the logical and physical planes.
 
-Authors illustrate the processing of incoming traffic by simultaneously representing it in the logical plane and in the physical plane.
-The logical plane will perform a lookup to determine the next logical node to forward the traffic to and then such decision will be transmitted to the physical plane where another lookup will be performed to determine what is the physical equivalent of the logical forwarding decision.
+The authors illustrate the processing of incoming traffic by simultaneously representing it in the logical plane and in the physical plane.
+The logical plane performs a lookup to determine the next logical node to forward the traffic to and then the decision is transmitted to the physical plane. There, another lookup is performed to determine what is the physical equivalent of the logical forwarding decision.
 
-The analysis of the different works presented in the previous section illustrates that this double lookup approach has not been considered to be a suitable solution for the virtual to physical mapping. The majority of existing hypervisors will either slice the physical network, or will maintain a mapping but it will be only used to translate flow rules from the virtual flowspace to the physical one. Casado~\etal's  implementation of a network hypervisor prototype does not seem to include regular loopups but only maintain a mapping like all the other related solutions.
+The analysis of the different works presented in the previous section illustrates that this double lookup approach has not been considered to be a suitable solution for the virtual to physical mapping. The majority of existing hypervisors either slices the physical network, or maintains a mapping between physical and virtual elements. However, this mapping is only used to translate flow rules from the virtual flowspace to the physical one. Casado~\etal's  implementation of a network hypervisor prototype does not seem to include regular lookups but only maintain a mapping like all the other related solutions.
 
 We propose the following reference architecture to highlight the important features that should be available for a secure network migration, and also to outline some shortcomings in existing solutions.
 
@@ -31,20 +31,22 @@ The lowest level includes all the networking equipments, like SDN-enabled switch
 
 \subsubsection{Control Plane Abstraction}
 The Control Plane Abstraction component (CPAC) provides the tenants with an interface to interact with the rest of the virtualization layer.
-This component is essential to the functioning of a network hypervisor and is implemented in every hypervisor.
+This component is an essential function for network virtualization and is implemented in every hypervisor.
 When a tenant requests a virtual network, he describes his requirements in terms of virtual nodes, links, minimal bandwidth, security \etc This request is received by the CPAC that will transmit it to the VN Embedding component for further treatment.
-CPAC also defines tenants' capacities to interact with their virtual network, which can be either hypervisor based control or full control.
-Hypervisor based control limits the capacities of the tenants by only exposing an API to interact with their slice in a specific manner. For instance, the tenant may only use the API of the hypervisor or must use a specific programming language to implement his applications for the hypervisor~\cite{CompositionalHypervisor-Jin2014,NetworkHypervisor-Huang2013}. 
-The full control describes an hypervisor where the tenant can use its own application or SDN controller to interact with his virtual network. This solution is implemented by either slicing the infrastructure or maintaining a mapping between virtual and physical resources, as presented in the previous section.
+The CPAC also defines tenants' capacities to interact with their virtual network, which can be either API-based control or full control.
+
+API-based control limits the capacities of the tenants by only exposing an API to interact with their slice in a specific manner. For instance, the tenant may only use the API of the hypervisor or must use a specific programming language to implement his applications for the hypervisor~\cite{CompositionalHypervisor-Jin2014,NetworkHypervisor-Huang2013}. 
+The full control describes an hypervisor where the tenant can use its own application or SDN controller to interact with his virtual network. This solution is implemented by either slicing the infrastructure or maintaining a mapping between virtual and physical resources, as presented in the Section~\ref{sec:basic_def}.
 
 
 
 \subsubsection{Data Plane Abstraction}
 \label{sec:abstraction_comp}
 The Data Plane Abstraction Component (DPAC) abstracts the physical infrastructure to serve each tenant with their own topology and resources.
-Similarly to the CPAC, this component is essential and implemented in every hypervisor.
-It maintains the mapping between logical and physical topology to translate logical decisions into physical one.
-It also makes sure the interactions of a tenant with its virtual network does not compromise the operations of other tenants. When a tenant deploys a new configuration in his network, like routing protocols, ACLs etc., the DPAC is in charge of translating the virtual parameters and values used by the tenant into the corresponding ones for the physical infrastructure.
+This component is also an essential function of network virtualization and is implemented in every existing hypervisor.
+It maintains the mapping between logical and physical topologies to translate logical decisions into physical ones.
+% \GB{poor expression: the below paragraph should be rewritten}
+It also makes sure that a tenant's operations on his Virtual Network does not interfere with the other tenants (\ie it maintains isolation between tenants). When a tenant deploys a new configuration in his network, such as routing protocols or ACLs, the DPAC is in charge of translating the virtual parameters and values used by the tenant into the corresponding ones for the physical infrastructure.
 
 In practice, the abstraction can be done for several resources:
 
@@ -53,40 +55,39 @@ The hypervisor decouples the logical topology required by the tenant from the ph
 Topology mapping can be either 1-to-1 or 1-to-many. 
 The first mapping corresponds to the case where one virtual node (resp. link) is embedded in one physical node (resp. link), similarly to FlowVisor~\cite{FlowVisor-Sherwood2009} where the physical infrastructure is sliced and a small portion of it is presented to each tenant.
 The second one embeds a single virtual node or link to multiple physical resources, as presented in~\cite{OpenVirteX-Al-Shabibi2014,VeRTIGO-Corin2012a}.
-A particular approach is when the tenant only requires one virtual node to interconnect his VMs, and does not want to bear the burden of maintaining physical equipments, or to enforce the routing \etc In the literature this approach is referred to as the ``Big Switch Abstraction".
+A particular approach is when the tenant only requires one virtual node to interconnect his VMs, and does not want to bear the burden of maintaining the configuration of each underlying node. In the literature, this approach is referred to as the ``Big Switch Abstraction".
 
 
 \subparagraph{\textbf{Flowspace}}\textbf{}\\
-The flowspace of a virtual network defines which header fields and the range of values in the flowspace that a tenant can use in his addressing and routing schemes, or if he can exploit the whole address range and other header fields.
-This includes MAC addresses, IP addresses, transport layer ports, VLAN ID etc.
-FlowVisor~\cite{FlowVisor-Sherwood2009} requires to share the flowspace among all tenants while other solutions like OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014} offer a full address space virtualization.
+% \GB{below sentence is too long: to be rewriten}
+The flowspace of a virtual network defines which header fields and the range of values in the flowspace that a tenant can use in his addressing and routing schemes. This includes MAC addresses, IP addresses, transport layer ports, VLAN IDs, \etc
+FlowVisor~\cite{FlowVisor-Sherwood2009} requires to share the flowspace among all tenants while other solutions, like OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}, offer a full address space virtualization.
 
 \subparagraph{\textbf{Node Resources}}\textbf{}\\
 The resources provided by a physical node are CPU power, and flow tables entries.
 These resources are dissociated because they serve two distinct goals.
-CPU provides computation power for incoming packets and defines the forwarding capacity.
+CPU provides computation power to process incoming packets and represents the forwarding capacity of the node.
 Flow tables store the rules each tenant had inserted in the node.
 Therefore one tenant can have high CPU percentage with a small flow table if the point is to switch multiple packets to a small set of sources and destination.
-The hypervisor level, including all the components required to achieve network virtualization, presents the tenant with an abstract view, and interacts with the physical infrastructure.
+% The hypervisor level\GB{what is it? the term ``level'' is new! at least, illustrate with a figure}, including all the components required to achieve network virtualization, presents the tenant with an abstract view, and interacts with the physical infrastructure.
 
 \subparagraph{\textbf{Link Resources}}\textbf{}\\
 We consider here the bandwidth and the buffer available to process packets.
 Abstracting the physical link resources is done by giving access to the bandwidth and the interfaces' buffers to the tenants.
-As presented for the node resources, link resources can be shared independently.
-For instance, depending on the usage of the resources desired by each tenant, big buffers can be used to limit packets drop or a low bandwidth to forward the packets.
-Another tenant may only requires a minimum bandwidth on each virtual link.
+As presented for the node resources, link resources can be allocated independently from one another.
+For instance, a tenant may request large buffers to limit packets drop while another tenant may only requires a minimum bandwidth on each virtual link.
 
 \subsubsection{Virtual Network Embedding Component}
 
 The Virtual Network Embedding Component (VNEC) is in charge of determining the optimal set of physical resources to embed a virtual network and to handle the case where a virtual network must be migrated due to failure of a switch or because of an attack on the system.
 
 \subparagraph{Virtual Network Embedding}
-The Virtual Network Embedding (VNE) is a resource allocation problem that can be solved using optimization techniques.
+Virtual Network Embedding (VNE) is a resource allocation problem that can be solved using optimization techniques.
 The use of a VNE algorithm to automatically deploy virtual networks is compulsory to avoid manual and impractical configuration operations.
 The VNEC interacts with the Resource Isolation Component to check available resources so it can determine whether or not to accept the virtual network creation request.
-The tenant's request is represented by a virtual network, and can include specific requirements such as minimum bandwidth, specific flow table  size, physical location constraints \etc 
+The tenant's request is represented by a virtual network, and can include specific requirements such as minimum bandwidth, specific flow table  size, physical location constraints, \etc 
 % When a tenant requests a virtual network, he describes his requirements in terms of virtual nodes, links, minimal bandwidth, security \etc 
-This request is received by the CPAC that will transmit it to the VN Embedding component for further treatment.
+This request is received by the CPAC that transmits it to the VNEC, to be processed.
 
 The tenant may also specify whether or not his virtual network should be migrated if needed, and if a degraded mode is accepted during the recovery of normal operations.
 The embedding of a virtual network can be constrained by the physical location of the underlying nodes.
@@ -104,30 +105,37 @@ Distributed network hypervisors or multi-cloud hypervisor may be subject to such
 % Security constraints include the availability of cryptography to cipher the communication end to end, the possibility to refuse to host a virtual network on the same physical substrate or even the same datacenter that another virtual network etc.
 
 \subparagraph{Virtual Network Migration}
-In order to answer to failures, attacks, and optimization issues, it is possible to migrate the virtual network on a different subset of physical resources. 
-Therefore, changes in the infrastructure, failure on a link or a switch, or over-consumption of network resources may require a change in the mapping between the VN and the physical resources.
+% \GB{pleas swap the first two sentences. they may need to be adapted}
+Changes in the infrastructure, failure on a link or a switch, or over-consumption of network resources may require a change in the mapping between the VN and the physical resources.
+Therefore, in order to address these issues, it is possible to migrate the virtual network on a different subset of physical resources. 
 The VNEC will be notified by the monitoring component, and then recompute the mapping of the topology with the physical infrastructure~\cite{VeRTIGO-Corin2012a,AutoSlice-Bozakov2012,CoVisor-Jin2015}.
-There are cases where the tenant should be notified about the migration.
-For instance, depending on the Service Level Agreement (SLA) between a tenant and the infrastructure provider, the migration may not be feasible because the constraints cannot be satisfied by the current state of the infrastructure.
+
+% There are cases where the tenant should be notified about the migration.  
+When a migration occurs, it might be necessary to notify the tenant about it.
+For instance, depending on the Service Level Agreement (SLA) between a tenant and the infrastructure provider, the migration may not be feasible because the constraints cannot be satisfied by the current state of the infrastructure. This would require further instructions from the tenant.
+
 
 \subsubsection{Resource Isolation}
-The resource isolation component (RIC) ensures tenants that they are served the amount of resources they have requested during their exploitation of their VN.
-It ensures that each tenant does not exceed the amount of resources they have been allocated.
+The resource isolation component (RIC) ensures that the tenants are served the amount of resources they have requested during the exploitation of their VN.
+% It ensures that each tenant does not exceed the amount of resources they have been allocated\GB{redundant with previous sentence}.
 FlowVisor-based hypervisors~\cite{FlowVisor-Sherwood2009,ADVisor-Salvadori2012,VeRTIGO-Corin2012a,EnhancedFV-Min2012,SlicesIsolator-El-Azzab2011,DoubleFV-Yin2013} all implement bandwidth and CPU isolation, and some tackle advanced issues on resource sharing such as memory and interface isolation as summarized in Table~\ref{tab:existing-nhv}. One of the problems with implementing resource isolation is that the hypervisor relies on vendor specific implementations of these isolation features, which may lead to inconsistent behaviour of the hypervisor if the implementation varies between network equipments or if the feature is simply missing.
 
 
 \subsubsection{Monitoring}
 Monitoring the virtualization infrastructure serves two different purposes.
 The first one is to support the proper functioning of the hypervisor's operations and is implemented on every hypervisor. However, it can range from switch discovery (similarly to an SDN controller) to resource monitoring and failure detection.
+% \GB{does not belong to monitoring per se. it relies on another type of protocol (discovery)}
 The second one is to serve the Security Component with data that will be used in detecting, preventing and mitigating attacks on VNs and the virtualization infrastructure.
 Very few solutions implement a monitoring component to support VN migration or detect attacks~\cite{VeRTIGO-Corin2012a,CoVisor-Jin2015,FlowN-Drutskoy2012,AutoSlice-Bozakov2012,NVP-Koponen2014,ONVisor-Han2018}.
 
 There are several types of information that may be monitored:
 
-\subparagraph{Tenant to hypervisor traffic} Requests and configuration commands sent by a tenant can impact the security of the virtualization infrastructure~\cite{You2014,Costa2015}. A malicious tenant may exploit vulnerable hypervisors by sending forged requests that will alter legitmate users' virtual networks. The monitoring module may forward the tenant's requests to the Security Component for further investigation.
+\subparagraph{Tenant to hypervisor traffic} Requests and configuration commands sent by a tenant can impact the security of the virtualization infrastructure~\cite{You2014,Costa2015}. A malicious tenant may exploit vulnerable hypervisors by sending forged requests that will alter legitimate users' virtual networks. The monitoring module may forward the tenant's requests to the Security Component for further investigation.
 
 \subparagraph{Management traffic} 
-The notifications sent by topology discovery protocols such as LLDP notify the hypervisor about the current state of the physical network. If a switch has a failure or becomes the target of an attack, the Security Component and the VNEC may be notified by the Monitoring. The VNEC can then trigger a migration to relocate the virtual network on a new physical substrate or the Security Component will raise an alert and trigger mitigation procedures.
+The notifications sent by topology discovery protocols such as LLDP inform the hypervisor about the current state of the physical network. If a switch fails or becomes the target of an attack, the Security Component and the VNEC may be notified by the Monitoring.
+% \GB{I would imagine that MON does not notify both SEC and VNEC, but that MON notifies SEC that notifies VNEC. especially if SEC has the responsibility to characterise whether an alert is indeed an attack or a false alarm}
+The VNEC can then trigger a migration to relocate the virtual network on a new physical substrate or the Security Component will raise an alert and trigger mitigation procedures.
 Management traffic also includes packets sent by and to physical equipments to ensure their proper operation.
 This includes metrics about the resources used on each switch, information about the switch configuration or the errors raised.
 
@@ -148,7 +156,7 @@ There is so far no proposition of an attack detection mechanism for network hype
 Prevention of attacks can be implemented by either limiting the attack surface accessible to an attacker or by preventing the attack to reach its destination. The limitation of the attack surface is proposed by CoVisor~\cite{CoVisor-Jin2015} where each tenant is limited in its ability to handle network traffic.
 NVP~\cite{NVP-Koponen2014} implements tunnels between virtual nodes to leverage tunnel encryption.
 ONVisor~\cite{ONVisor-Han2018} implements an access control module in charge of authenticating tenants applications and preventing them from interfering with other virtual networks.
-Prevention may also be enforced by deploying Virtual Network Functions~\cite{vnf} in the infrastructure. This aspect is not well exploited because it is strongly correlated to the ability of detecting attacks on the virtualization infrastructure, which is also not well investigated. 
+Prevention may also be enforced by deploying Virtual Network Functions~\cite{vnf} in the infrastructure. This aspect is not well exploited because attack detection on the virtualization infrastructure is not well investigated. 
 
 \subparagraph{Mitigation}
 Depending on the type of attack, the mitigation can take several forms. 
@@ -156,35 +164,36 @@ In case of a DoS attack, the security component would rely on the VNEC to provid
 % If the configuration of physical nodes has been altered, the redeployment of configuration rules could take into account the location of the attacker.
 
 \subsection{Workflows in the reference architecture}
+% \GB{I wonder why all flows are not bidirectional. if not, maybe the graph in Fig.~\ref{fig:reference-archi-nh} should be oriented}
 In this section we describe the different information flows illustrated by Figure~\ref{fig:reference-archi-nh}.
 
-\circled{1} Tenant - CPAC: This flow is mainly composed of requests sent by the tenant and the view of the virtual network sent by the hypervisor. Additional traffic may include specific notifications (\eg security and performance alerts).
+\circled{1} Tenant~$\leftrightarrow$~CPAC: This flow is mainly composed of requests sent by the tenant and the view of the virtual network sent by the hypervisor. Additional traffic may include specific notifications (\eg security and performance alerts).
 
-\circled{2} CPAC - VNEC: The CPAC transmits requests for new virtual networks to be deployed on the physical infrastructure, and the VNEC returns whether or not the request is accepted.
+\circled{2} CPAC~$\leftrightarrow$~VNEC: The CPAC transmits requests for new virtual networks to be deployed on the physical infrastructure, and the VNEC returns whether or not the request is accepted.
 
-\circled{3} CPAC - Monitoring: The CPAC forwards requests sent by the tenant to the monitoring module, for logging and security purposes. 
+\circled{3} CPAC~$\leftrightarrow$~Monitoring: The CPAC forwards requests sent by the tenant to the monitoring module, for logging and security purposes. 
 
-\circled{4} CPAC - DPAC: The CPAC forwards flow rules from the tenant to the DPAC that will translate virtual identifiers into the physical ones and deploy these rules on the physical infrastructure.
+\circled{4} CPAC~$\leftrightarrow$~DPAC: The CPAC forwards flow rules from the tenant to the DPAC that will translate virtual identifiers into the physical ones and deploy these rules on the physical infrastructure.
 
-\circled{5} Security - CPAC: The security component analyzes networking events and tenants requests and returns alerts.
+\circled{5} Security~$\leftrightarrow$~CPAC: The security component analyzes networking events and tenants requests and returns alerts.
 
-\circled{6} VNEC - RIC: The VNEC interacts with the RIC to ensure the availability of resources to compute the embedding of the requested virtual network.
+\circled{6} VNEC~$\leftrightarrow$~RIC: The VNEC interacts with the RIC to ensure the availability of resources to compute the embedding of the requested virtual network.
 
-\circled{7} Monitoring - VNEC: The monitoring component transmits to the VNEC a notification for migration in case of a failure in the infrastructure.
+\circled{7} Monitoring~$\leftrightarrow$~VNEC: The monitoring component transmits to the VNEC a notification for migration in case of a failure in the infrastructure.
 
-\circled{8} VNEC - DPAC: The VNEC transmits to the DPAC the flow rules corresponding to the virtual network that must be deployed in the infrastructure, whether it is a new request from the CPAC or a migration.
+\circled{8} VNEC~$\leftrightarrow$~DPAC: The VNEC transmits to the DPAC the flow rules corresponding to the virtual network that must be deployed in the infrastructure, whether it is a new request from the CPAC or a migration.
 
-\circled{9} Monitoring - Security: The monitoring forwards to the security component suspicious requests or networking events for further processing.
+\circled{9} Monitoring~$\leftrightarrow$~Security: The monitoring forwards to the security component suspicious requests or networking events for further processing.
 
-\circled{10} RIC - Monitoring: This flow is composed of performance metrics used by the RIC to verify the proper isolation of resources in the infrastructure.
+\circled{10} RIC~$\leftrightarrow$~Monitoring: This flow is composed of performance metrics used by the RIC to verify the proper isolation of resources in the infrastructure.
 
-\circled{11} RIC - DPAC: This flow represents the countermeasures sent by the RIC to the DPAC to ensure the proper isolation of resources in the infrastructure.
+\circled{11} RIC~$\leftrightarrow$~DPAC: This flow represents the countermeasures sent by the RIC to the DPAC to ensure the proper isolation of resources in the infrastructure.
 
-\circled{12} Monitoring - Infrastructure: This flow is composed of topology discovery messages, performance metrics and networking events collected in the infrastructure.
+\circled{12} Monitoring~$\leftrightarrow$~Infrastructure: This flow is composed of topology discovery messages, performance metrics and networking events collected in the infrastructure.
 
-\circled{13} DPAC - Security: The security component sends to the DPAC the counter-measures to be deployed in the infrastructure.
+\circled{13} DPAC~$\leftrightarrow$~Security: The security component sends to the DPAC the counter-measures to be deployed in the infrastructure.
 
-\circled{14} DPAC - Infrastructure: This flow is composed of flow rules deployed by the DPAC on the physical nodes.
+\circled{14} DPAC~$\leftrightarrow$~Infrastructure: This flow is composed of flow rules deployed by the DPAC on the physical nodes.
 % and networking messages sent by the infrastructure (\eg topology discovery, node failure \etc.).
 
 % \subsubsection{Workflows}
@@ -219,3 +228,6 @@ In this section we describe the different information flows illustrated by Figur
 % This request is transmitted to the RAC for verification.
 % If the request can be granted, the RAC will notify the VNI to deploy the resources.
 % Oherwise, an error should be raised and returned to the user.
+
+
+

@@ -3,9 +3,8 @@ We describe here the assumptions made about the infrastructure and the migration
 
 % \textbf{Migration}
 \begin{itemize}
-
     \item
-    The migration will deploy in the destination substrate all the flow rules necessary to operate the virtual network properly. We consider that the migration of the virtual nodes is sequential~\cite{Lime-Ghorbani2014}, thus all the nodes will be migrated one at a time.
+    The migration will deploy in the target physical substrate all the flow rules necessary to operate the virtual network properly. We consider that the migration of the virtual nodes is sequential~\cite{Lime-Ghorbani2014}, thus the nodes will be migrated one at a time.
     We suppose that both virtual network and physical infrastructure are static (\ie the topology does not change over time).
     
     \item All nodes in the original substrate have been fully compromised by the attacker and thus are not considered as candidates for the destination substrate.  
@@ -13,5 +12,9 @@ We describe here the assumptions made about the infrastructure and the migration
     Virtual machines are already subject to such attacks, as presented by Atya \etal in~\cite{stalling-atya2017,malicious-atya2017}.
 
     \item
-    We also assume that each node takes the same amount of time to migrate (\ie no node is longer to migrate in the infrastructure than another).
+    We also assume that migration time is uniform across all nodes (\ie no node is longer to migrate in the infrastructure than another).
+    
+    \item
+     We simplify the view of the virtual network by considering the physical nodes composing the embedding of the VN.
 \end{itemize}
+

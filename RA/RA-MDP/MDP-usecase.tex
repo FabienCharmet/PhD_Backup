@@ -1,8 +1,9 @@
 We have implemented several use cases to determine the optimal monitoring deployment.
-We migrate a virtual network composed of three virtual nodes, as depicted in Figure~\ref{fig:data-exfiltration-attack}.
-The embedding of the virtual nodes will be supported by the physical nodes 1, 2 and 3.
-Node 6 is the exfiltration point of the attacker, which means that the attacker will establish a path between node 6 and one of the nodes embedding the virtual network (\ie node 1,2 or 3).
+We migrate a virtual network where the target substrate will be supported by physical nodes 1, 2 and 3.
+Node 6 is the exfiltration point of the attacker, which means that the attacker will establish a path between node 6 and one of the nodes embedding the virtual network (\ie node 1,2 and/or 3).
+In order to make the generation of the MDP states computationally tractable, we set a constant impact performance on all nodes. We set the discount factor of the value iteration algorithm to 0.9, a common value for use cases found in the literature.
 We summarize these parameters in Table~\ref{tab:mdp-parameters}.
+We compute the optimal policy of each MDP using MDPToolbox~\cite{Chades2014}.
 
 \begin{table}[h]
 \centering
@@ -12,6 +13,7 @@ $\alpha$ & \multicolumn{2}{c|}{$\beta$} & Exfiltration point & $c_f$ & $\gamma$ 
 0.7      & \multicolumn{2}{c|}{3}       & Node 6             & 10    & 0.9      \\ \hline
 \multicolumn{6}{|c|}{$V_1=10,V_2=10,V_3=10,V_4=5,V_5=5,V_6=5$}                             \\ \hline
 % \multicolumn{6}{|c|}{[10,10,10,5,5,5]}                                          \\ \hline
+\multicolumn{6}{|c|}{$\forall j, c_c^j=10$}                             \\ \hline
 \multicolumn{6}{|l|}{Physical embedding: Nodes 1 - Node 2 - Node 3}             \\ \hline
 \multicolumn{6}{|c|}{Migration order: 1 $\rightarrow$ 2 $\rightarrow$ 3}                              \\ \hline
 \end{tabular}
@@ -19,7 +21,7 @@ $\alpha$ & \multicolumn{2}{c|}{$\beta$} & Exfiltration point & $c_f$ & $\gamma$ 
 \label{tab:mdp-parameters}
 \end{table}
 
-We propose to evaluate the MDP using three different topologies shown in Figure~\ref{fig:mdp-usecase-single}. The first topology is designed to be relatively balanced in terms of connections between nodes. The link between nodes 1 and 4 creates a path so each node can be reached by a single attacker in two steps.
+We propose to evaluate the MDP using three different physical topologies shown in Figure~\ref{fig:mdp-usecase-single}. The first topology is designed to be relatively balanced in terms of connections between nodes. The link between nodes 1 and 4 creates a path so each node can be reached by a single attacker in two steps.
 
 The second topology is fullmeshed and is intended to observe the monitoring strategy when the attacker only needs to compromise one node to be successful.
 
@@ -28,24 +30,40 @@ The second topology is fullmeshed and is intended to observe the monitoring stra
 \input{figures/mdp-usecase-topo.tex}
 
 We run the MDP using different budgets and detection probabilities.
+The time required to fully migrate the VN is $b_c=30$, but we explore use cases with a budget $b_c=40$ that gives more time for the attacker to compromise the infrastructure. We considered that the attacker exploits vulnerabilities that are not limited to the migration process, thus he may continue his attacks after the end of the migration. We discuss some implications and limitations of this hypothesis in Section~\ref{sec:mdp-discussion}.
+
 The ordering of the nodes impacts the result sets of Algorithm~\ref{algo:target}, thus which nodes may be attacked at each transition.
-We have extracted the monitoring set of each absorbing state, and evaluated the overall reward of each monitoring set.
-We define the reward of a monitoring set as the expected value of the reward of each corresponding absorbing state.
-The expected value uses the stationary distribution of the Markov Chain corresponding to the optimal policy.
 Details about the source node for attacks against the migration are summarized in Table~\ref{tab:mdp-attack-source}.
 
 \input{figures/mdp-attack-source.tex}
 
-\textbf{Scenario a) and b)\\}
+\textbf{Reward of the monitoring set\\}
+We have extracted the monitoring set of each absorbing state, and evaluated the overall reward of each monitoring set and each node individually.
+We define the reward of a monitoring set as the expected value of the reward of each corresponding absorbing state.
+The reward of an absorbing state is the sum of the expected value of each path from the initial state and leading to the absorbing state. Similarly, the reward of one node in the monitoring set is defined as the expected value of each absorbing state where the node is monitoring the infrastructure.
+We note the reward of a state or a node $R(State)$ or $R(Node)$ but this definition of a reward is different from the definition of the reward given in for a transition in an MDP.
+
+We illustrate these rewards in Figure~\ref{fig:absstate_reward}, where the initial state is $S_1$ and there are three absorbing states $S_4,S_5$ and $S_6$. Each state yields a reward $r_x$ with a transition probability $p_x$.
+State $S_5$ is reached by two paths thus its rewards is the sum of the reward given by each path.
+% The expected value uses the stationary distribution of the Markov Chain corresponding to the optimal policy.
+If $S_4$ and $S_6$ have the same monitoring set (\ie $Mo^{S_4} = Mo^{S_6}$), then $R(Mo^{S_4}) = R(Mo^{S_6}) = R(S_4) + R(S_6)$.
+\input{figures/absorbingstate_reward.tex}
+
+The reward of each monitoring node is computed the same way, by summing the expected value of each absorbing state containing the node.\\
+For example, if $Mo^{S_4} = Mo^{S_6} =\{2,4\}$ and $Mo^{S_5} = \{1,4\}$, then the reward of node 4 is computed as $R(N_4) = R(S_4) + R(S_5) + R(S_6)$. Indeed, node 4 belongs to the monitoring set of every absorbing state.
+
+
+
+\textbf{Balanced topology: Scenarios a) and b)\\}
 Based on the paths taken by attacks and the ordering of the migration, we categorize the nodes into three categories: source, intermediate and border nodes. Source nodes are the origins of attacks, intermediate nodes are going to be on the path of attacks targeting the border nodes. 
 The results are shown in Fig.~\ref{fig:mdp-result-topo1}.
 The scenario a) sets the source to node 6, nodes 4 and 5 as intermediate nodes and finally nodes 1,2 and 3 as border nodes.
-The scenario b) sets the source to nodes 3 and 6, nodes 1,4 as intermediate nodes and nodes 2 and 5 as border nodes.
+The scenario b) sets the source to nodes 3 and 6, nodes 1 and 4 as intermediate nodes and nodes 2 and 5 as border nodes.
 The first observation is that node 6 is globally the most rewarding node in both cases.
 This is explained as it is the source of most of the attacks, and the exfiltrated data are redirected there.
-In both scenarios the importance of nodes is separated according to the our categorization. 
+In both scenarios, the importance of nodes is separated according to our categorization. 
 This means that the nodes pertaining to the majority of attack paths are the most rewarded.
-This is observation is reinforced in scenario b) where nodes 4 and 5 are close to attack sources while nodes 1 and 2 are further away.
+This observation is reinforced in scenario b) where nodes 4 and 5 are close to attack sources while nodes 1 and 2 are further away.
 
 In both scenarios, the detection rate does not have a significant impact on the importance of nodes, as they remain ranked in the same order.
 In scenario a) results are stable from $p=0.6$ where node 6 overcomes node 4 in reward until $p=0.9$. All other nodes remain closely grouped, and no intermediate or border nodes is standing out.
@@ -58,24 +76,24 @@ Instead of unmonitoring nodes, the MDP chooses to do nothing to preserve the glo
 Unmonitoring actions are only chosen when the unmonitored node is not on the path of the next attacks, thus having the same impact as doing nothing. 
 This situation happens rarely, when the attacker launches a limited number of attacks on the infrastructure.
 
-\textbf{Scenarios c) and d) \\}
+\textbf{Fullmesh topology: Scenarios c) and d) \\}
 In these scenarios, the topology considered is fullmeshed, which means that each physical node is connected to every other node of the infrastructure. This topology has been chosen to minimize the impact of the routing on the detection path because the attacker is always connected to the target node.
 Results are shown in Fig.~\ref{fig:mdp-result-fullmesh}.
 
 We make two observations from the results of both scenarios.
-The first observation is that whether there is one or several attackers, the ordering of nodes based on their individual performance remains constant. This reinforce our conclusion that the routing of attacks has a real impact on the detection performance of each node.
-The second observation is that the most important nodes are the main source of attacks as well as the first node being migrated. While the first node is an obvious choice for attack detection, the second shows another aspect of the model which is target selection. Indeed, since node 1 is always migrated first, it is therefore the main target at the first transition of the MDP.
+The first observation is that whether there is one or several attackers, the ranking of nodes based on their individual performance remains constant. This reinforces our conclusion that the routing of attacks has a real impact on the detection performance of each node.
+The second observation is that the most important nodes are the main source of attacks as well as the first node being migrated. While the first target is an obvious choice for attack detection, the second target shows another aspect of the model which is target selection. Indeed, since node 1 is always migrated first, it is therefore the main target at the first transition of the MDP.
 
 % Finally, we have examined the different optimal policies for these scenarios, and observed that some corner cases have appeared.
-Overall, the fact that for each attack only the origin of the attack and the target node may contribute to the detection has generated a diverse solution state. 
+% Overall, the fact that for each attack only the origin of the attack and the target node may contribute to the detection has generated a diverse solution state. Simply put, 
 
-Each solution is composed of only two nodes. Because of the fullmesh aspect of the topology, it is complex to obtain a solution state 
-Indeed, depending on which node is targeted, there are only two nodes in the solution for the detection of the attack. and the fullmesh aspect of the topology makes it hard for those solution sets to overlap and give a better coverage.
+% Each solution is composed of only two nodes. Because of the fullmesh aspect of the topology, it is complex to obtain a solution state 
+% Indeed, depending on which node is targeted, there are only two nodes in the solution for the detection of the attack. and the fullmesh aspect of the topology makes it hard for those solution sets to overlap and give a better coverage.
 
-\textbf{Scenarios e) and f) \\}
-Using the same categorization as scenarios a) and b), we consider node 6 as a source node, node 2 as an intermediate node and nodes 1,3,4,5 as border nodes. Scenario f) transfers node 1 from a border node to a source node. Results are shown in Fig.~\ref{fig:mdp-result-topo2}.
+\textbf{Central topology: Scenarios e) and f) \\}
+Using the same categorization as scenarios a) and b), we consider node 6 as a source node, node 2 as an intermediate node and nodes 1, 3, 4 and 5 as border nodes. Scenario f) transfers node 1 from a border node to a source node. Results are shown in Fig.~\ref{fig:mdp-result-topo2}.
 
-In scenario e), the importance of each node depicted in Fig.~\ref{fig:mdp-result-topo2} reflect their role. Nodes 1,3,4 and 5 do not have much impact in the solution set, as they are not on the path of most of attacks. The attack source is still considered important to monitor and node 2 which acts as a ``bridge" between the two halves of the topology will belong to the path of a lot of attacks.
+In scenario e), the importance of each node depicted in Fig.~\ref{fig:mdp-result-topo2} reflects their role. Nodes 1, 3, 4 and 5 do not have much impact in the solution set, as they are not on the path of most of attacks. The attack source is still considered important to monitor and node 2 which acts as a ``bridge" between the two halves of the topology will belong to the path of a lot of attacks.
 
 Scenario f) highlights similar results. There are now two attack sources, nodes 1 and 6. Moreover, the geographical distribution of migrated nodes gives more importance to node 2 which becomes even more present on the attack paths, as shown in Table~\ref{tab:mdp-attack-source}. This scenario is also the only one in which the main source of attacks is not consistently the most important node for the monitoring.
 

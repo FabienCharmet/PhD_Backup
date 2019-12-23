@@ -1,7 +1,11 @@
 \newpage
 \subsection{Markov Decision Processes}
+% \GB{not intro on why MDP and no articulation with previous section}
+In this section we describe the formalism of a Markov Decision Process (MDP).
+While Game Theory models consider at least two players in a game looking to maximize their profit, an MDP represents a single agent interacting with a system and aiming at maximizing a reward. 
 
 \subsubsection{Definitions}
+% \GB{this paragraph is inconsistent with how you structured 2.5.1.1}
 A Markov Decision Process~\cite{bellman1957} (MDP) is a mathematical model used to describe the interactions  an agent may have with a system.
 The system is described by the set of state it can be in, and when in a particular state the agent will choose an action to perform.
 Each action is associated to a potentially negative reward, considered as an incentive (or deterent) for the agent.
@@ -9,8 +13,6 @@ However, the outcome of each action is probabilistic thus incurring a certain am
 Therefore, after choosing an action the system may transition towards one out of several states (or remain in the same state), according to a probability distribution.
 
 
-
-\textbf{\\}
 Formally, an MDP is defined by a 4-tuple $<S,A,P(s,s',a),R(s,a,s')>$ where:
 \begin{itemize}
     \item $S$ is a finite set of states
@@ -21,7 +23,8 @@ Formally, an MDP is defined by a 4-tuple $<S,A,P(s,s',a),R(s,a,s')>$ where:
 
 The aim of an MDP is to determine an optimal policy, defining for each possible state which action will maximize the reward gained by the user while accounting for the future consequences of an immediate choice.
 
-\subsubsection{Solving an MDP}
+\subsubsection{MDP resolution}
+% \GB{what about ``MDP resolution'' as a title?}
 % \label{sec:optimalpolicy}
 % Before determining the optimal policy for an MDP, we have to dive into the notion of reward of an MDP. Any action chosen in a specific state may reward the agent. However, the choice made now may also lead the agent to negative consequences that will not compensate for the immediate reward obtained. 
 % This kind of drawback is mitigated with the notion of a long term reward, called utility. The utility of a state is the immediate reward gained when entering this state plus the rewards that can be obtained from reachable states.
@@ -31,19 +34,19 @@ The solution of an MDP consists in determining the action that will maximize the
 
 \subparagraph{The Bellman equation}
 Bellman proposes in~\cite{bellman1957} an analysis of equations that will help determining the maximum expected reward in an MDP, expressed as non-linear equations. However he proves that they possess quasi-linear properties that allow him to solve these equations using methods only applicable to linear cases. 
-The Bellman equation shown in Equation~\eqref{eq:bellmaneq} lays the groundwork for solving MDPs using dynamic programming.
+The Bellman equation shown in \eqref{eq:bellmaneq} lays the groundwork for solving MDPs using dynamic programming.
 This equation states that the optimal utility $V(s)$ expected from a state $s$ is the sum of the reward obtained when entering state $s$ and the expected discounted sum of probable utilities of the neighbours of $s$. The uncertainty of obtaining a reward in the future makes it less attractive than an immediate reward, $\gamma$ is the discount factor for the future reward.
 
 \begin{equation}
-V(s) = \max\limits_a \left \{R(s,a) + \gamma   \sum\limits_{s'} P(s,a,s')V(s') \right \}
+V(s) = \max\limits_a \left \{\sum\limits_{s'}P(s,a,s')[R(s,a,s') + \gamma    V(s')  ] \right \}
 \label{eq:bellmaneq}
 \end{equation}
 
 
-
-\textbf{Vocabulary and notation clarifications}\\
-$R(s,a,s')$ is sometimes simplified to $R(s,a)$ in the literature.\\
-The term value is sometimes used interchangeably with utility.
+% \GB{below paragraph is a disgrace. tie the notation remark to the Equation (1) and mention earlier that utility is also known as value}
+% \textbf{Vocabulary and notation clarifications}\\
+% $R(s,a,s')$ is sometimes simplified to $R(s,a)$ in the literature.\\
+% The term value is sometimes used interchangeably with utility.
 
 
 
@@ -56,20 +59,22 @@ We detail those algorithms hereafter.
 
 
 \subparagraph{Value Iteration Algorithm}\textbf{\\}
+% \GB{notation of reward is inconsistent between steps 2 and 4}
 This algorithm~\cite{bellman1957} takes an iterative approach to determine the value of each state in the MDP with the Bellman equation.
 Value Iteration works as follows:
 \begin{enumerate}
     \item Initialize a value vector $V_0(s)=0,~\forall s\in S$
-    \item Determine the utility of each state iteratively\\{$V_{k+1}(s) = \max\limits_a \left \{ P(s,a,s')[R(s,a,s') + \gamma \sum\limits_{s'}V_k(s')] \right \}$}
+    \item Determine the utility of each state iteratively\\{$V_{k+1}(s) = \max\limits_a \left \{\sum\limits_{s'} P(s,a,s')[R(s,a,s') + \gamma V_k(s')] \right \}$}
     \item Repeat step 2 until $V_{k}(s)$ converges
-    \item Compute the optimal policy $\pi(s)$\\$\pi(s) = \argmax\limits_a \left \{P(s,a,s')[R(s,a) + \gamma \sum\limits_{s'}V(s')] \right \}$
+    \item Compute the optimal policy $\pi(s)$\\$\pi(s) = \argmax\limits_a \left \{\sum\limits_{s'}P(s,a,s')[R(s,a,s') + \gamma V(s')] \right \}$
 \end{enumerate}
 
 % \FC{Don't forget misplacement of "The computational complexity etc.}
 % \newpage
 \subparagraph{Policy Iteration Algorithm}\textbf{\\}
 Similarly to the previous algorithm, the Policy Iteration algorithm~\cite{policyiteration} works iteratively but directly determines the optimal policy instead of the value of the states.
-Policy Iteration works as follows:
+Policy Iteration can be described as follows:
+% \GB{line 4, you mention U(s). is it not V(s)?}
 \begin{enumerate}
     \item Initialize a value vector and a policy vector $~\forall s\in S,\pi(s)=a\in A,~V(s)=0$
     \item Evaluate the policy
@@ -77,9 +82,9 @@ Policy Iteration works as follows:
             \Repeat{$\Delta < \Theta$ (a small positive number)}{
                 $\Delta = 0$\\
                 \ForEach{$s\in S$}{
-                    $temp = U(s)$\\
+                    $temp = V(s)$\\
                     \tcc{Compute utility}
-                    $V(s) = P(s,a,s')[R(s,a,s') + \gamma \sum_{s'}V(s')]$\\
+                    $V(s) =\sum\limits_{s'} P(s,a,s')[R(s,a,s') + \gamma V(s')]$\\
                     $\Delta = max(\Delta,|temp-V(s)|)$
                 }
             \tcc{Repeat until convergence of the utility}
@@ -104,14 +109,15 @@ Policy Iteration works as follows:
 
 
 The computational complexity of both algorithms is studied in~\cite{mdpcomplexity}.
-Results show that MDPs can be solved in a polynomial time, but existing solutions are barely exploiting the structure specificities of an MDP. Simply put, MDPs are solved like any other optimization problem.
+Results show that MDPs can be solved in a polynomial time for both algorithm, but existing solutions are barely exploiting the structure specificities of an MDP. Simply put, MDPs are solved like any other optimization problem.
 
 \subparagraph{Q-Learning}
-The Q-Learning algorithm~\cite{qlearning} is used when the MDP does not provide an explicit definition of its model (\ie transitions and/or rewards).
+The Q-Learning algorithm~\cite{qlearning} is used when the MDP does not provide an explicit definition of its model (\ie transitions and/or rewards definitions are unknown).
 The agent only knows what state he is in, and upon choosing an action the agent will receive a reward for transitioning from state $s_t$ to $s_{t+1}$.
 The Q function defines the \textit{quality} of action $a$ at state $s_t$.
 Similarly to the Value Iteration algorithm, updating the Q function starts with an arbitrary initialization and will be gradually updated as time passes (See Equation~\eqref{eq:updatingq}).
 
+% \GB{please comment Eq. (2)}
 \begin{equation}\label{eq:updatingq}
 Q'(s_{t},a_{t}) = (1-\alpha) \cdot \underbrace{Q(s_{t},a_{t})}_{\text{old value}} + \underbrace{\alpha}_{\text{learning rate}} \cdot  \overbrace{\bigg( \underbrace{r(s_t,s_{t+1})}_{\text{observed reward}} + \underbrace{\gamma \max_{a}Q(s_{t+1}, a)}_{\text{optimal discounted value}} \bigg) }^{\text{learned value}}
 \end{equation}
@@ -135,20 +141,20 @@ Table~\ref{tab:MDP-summary} summarizes the surveyed works.
 % Extensive evaluations using real life use cases are performed and results are compared with a set of well known heuristics.
 
 Using an MDP to allocate security services to cloud users is studied in~\cite{Liang2011}.
-Authors start by describing the security services provided by the cloud, and the underlying RA problem.
-They consider that the arrival of security services requests follow a Poisson law, and the system will either accept or reject the request. Formally speaking, authors use a Semi MDP (SMDP) which is an extension of traditional MDP that include asynchronous events from outside the system and continuous time (in opposition to the discrete time approach of an MDP).
-The states of the MDP represent the number of security services currently served to the users. In addition to requests arrival events, the departure of users (incurring a freeing of the resources) is also modeled as an event. The reward function is based on the cost of occupation of the cloud resources by the security services compensated by the revenues generated. 
+The authors start by describing the security services provided by the cloud, and the underlying RA problem.
+They consider that the arrival of security services requests follow a Poisson law, and the system will either accept or reject the request. Formally speaking, the authors use a Semi MDP (SMDP) which is an extension of traditional MDP that include asynchronous events from outside the system and continuous time (in opposition to the discrete time approach of an MDP).
+The states of the MDP represent the number of security services currently served to the users. In addition to requests arrival events, the departure of users (incurring a freeing of the resources) is also modeled as an event. The reward function substracts the cost of occupation of the cloud resources by the security services to the revenues generated by allocating resources to users. 
 From this resource allocation model the blocking probability is derived, \ie which class of service is most likely to be rejecting requests from users. Extensive numerical evaluations are performed to determine optimal revenues under different request arrival rates.
 
-RA problems become even more relevant in environment with limited resources.
+RA problems become even more relevant in environments with scarce resources.
 Allocating the right amount of resources in mobile Cloud networks will improve the user experience and failing to deliver will hurt the business model.
-Such approach is considered in~\cite{Liang2012} where authors use an MDP to handle resource transfer between mobile cloud domains. Each cloud domain composing the network can host a certain amount of services using its own resources. 
+Such approach is considered in~\cite{Liang2012} where the authors use an MDP to handle resource transfer between mobile cloud domains. Each cloud domain composing the network can host a certain amount of services using its own resources. 
 This work also uses the SMDP model because the request arrival formalism is well defined.
-Arrival requests are handled by the receiving domain but when the domain's capacities are exceeded, it will transfer the service request to adjacent domains and will determine which one is best suited to accept the request.
+Arrival requests are handled by the receiving domain but when the domain's capacities are exceeded, service request are transferred to adjacent domains and determines which one is best suited to accept the request.
 The state of a cloud domain is characterized by the number of services it is supporting and the type of request it receives.
 The actions available are accepting, rejecting or transferring the request.
 The reward system is based on the price paid by the user, the potential cost to transfer the service to an adjacent domain, but also the resources consumed to process the requests. 
-This work proposes a more detailed resource consumption model compared to~\cite{Liang2011}.
+This work proposes a more detailed resource consumption model in comparison to~\cite{Liang2011}.
 
 % \subparagraph{Resource allocation optimization}
 % \textbf{\\}
@@ -157,9 +163,9 @@ Autonomic management in server clusters requires to minimize the number of human
 However, providing such automated management requires to be able to choose the optimal configuration when needed.
 This is an approach typically based on Q-Learning because the evolution of the system is not completely formalized.
 The global aim is to allocate servers to trading applications that will maximize the SLA revenues, \ie the business value.
-Authors state that doing a live training of the model will lead to performance issues and do an offline training using typical queuing model. The MDP will be trained offline using a previously collected dataset (states) and this training will be completed with a queuing model that provides management decisions as the initial policy (actions).
+The authors state that doing a live training of the model leads to performance issues. Therefore, they prefer an offline training using typical queuing model. The MDP is trained offline using a previously collected dataset (states) and this training is completed with a queuing model that provides management decisions as the initial policy (actions).
 The evaluation of the work is done on a realistic data-center prototype, hosting a trading application. 
-Several scenarios are considered, open and closed-loops in the traffic as well as the delay incurred by allocating resources.
+Several scenarios are considered: open and closed-loops in the traffic as well as the delay incurred by allocating resources.
 
 % Wang~\etal propose in~\cite{Wang2013} a resource allocation solution for CPU requests in cloud environments.
 % They divide the problem into two sub-problems: configuring the voltage and frequency of each core to optimize request treatment and providing an optimal request dispatching solution that maximize the revenue generated while accounting for several parameters.
@@ -181,23 +187,24 @@ Several scenarios are considered, open and closed-loops in the traffic as well a
 % The MDP is then solved using the Value Iteration algorithm, but this model requires to know beforehand the bandwidth model. 
 % These limitations can be overcome by using a Q-Learning function where the bandwidth map is unknown but instead the MDP will be trained.
 
-\subsubsection{Summary}
+\subsection{Summary}
+% \GB{since it is a subsection of SoTA on MDP, this summary should only consider MDPs at first and only compare to GT at the end or in the main conclusion (2.6). please rewrite}
 The resource allocation problem has been investigated using two different formalisms, namely the Game Theory formalism and Markov Decision Processes.
 Game Theory accounts for the point of view of an attacker and a defender, allowing to extensively model the behavior of an attacker and his impact on the defended system.\\
 The MDP ends up being a one user optimization method but the description of the reward function and the transitions between states may reflect external interactions, which could represent the impact of an attacker.
 A strong advantage of MDPs over game theory models lies in the flexibility of the formalism to describe the available actions.
 
-
+% \GB{Table~\ref{tab:MDP-summary} lacks the type of MDP (e.g., semi) and the reward}
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
 \begin{table}[h]
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-Reference          & States                      & Actions                         & Summary                                         \\ \hline
-\cite{Liang2011}   & Consumed resources          & Acceptation/Refusal of requests & Security services allocation in the cloud       \\ \hline
-\cite{Liang2012}   & Number of services deployed & Accept/Reject/Transfer requests & Service allocation in mobile cloud networks     \\ \hline
-\cite{Tesauro2006} & Available servers           & Allocation decision             & Offline training of an MDP using queuing models \\ \hline
+Reference                           & States                      & Actions                         & Reward                            & Summary                                         \\ \hline
+Liang~\etal~\cite{Liang2011}   & Number of security services & Acceptation/Refusal of requests & \multirow{3}{*}{Financial profit} & Security services allocation in the cloud       \\ \cline{1-3} \cline{5-5} 
+Liang~\etal~\cite{Liang2012}   & Number of services deployed & Accept/Reject/Transfer requests &                                   & Service allocation in mobile cloud networks     \\ \cline{1-3} \cline{5-5} 
+Tesauro~\etal~\cite{Tesauro2006} & Available servers           & Allocation decision             &                                   & Offline training of an MDP using queuing models \\ \hline
 \end{tabular}%
 }
 \caption{Summary of RA solutions using MDP}

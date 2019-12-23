@@ -1,20 +1,22 @@
-In this thesis we aim at modeling the security of the virtual network migration process in a SDN environment.
-We also aim at making this model to be usable in real life use cases by analyzing how strong assumptions made about the model are, and by proposing alternatives when needed.
+% \GB{the first part of the conclusion seems unstructured and fails to go back to original requirements to explain the defining choices of the thesis, i.e., considering GT and MDP for RA. please rewrite}
+In this thesis we aim at modeling the security of the Virtual Network migration process in an SDN environment.
+We also aim at making this model usable in real-life use cases by alleviating some assumptions made in the model, and by proposing an optimization of the resources deployed to detect attacks on the Virtual Network migration process.
 
-SDN Virtual network migration has proven to be a topic where much work is left to be done from a security perspective.
+SDN Virtual Network migration has not been investigated from a security perspective.
 Existing network hypervisors have yet to make the migration a default feature, let alone doing so with security considerations.
 Formal languages dedicated to security often provide enough expressiveness to model a computer network, different components related to its security vulnerabilities, and potential existing countermeasures.
-However, SDN has rarely been modeled and its associated security properties have never been at all.
+However, While SDN has been modeled, its associated security properties have yet to be described using a formal approach.
 
 We have also emphasized on the security aspects of live Virtual Machine migration, as this process is widely used in the industry to provide uninterrupted service to end users. 
-The attack surface of the virtual network migration process is very similar to the one exploited in the different works about Virtual Machines. This attack surface is also augmented by the security issues and challenges introduced by SDN. Nevertheless, the surface of a formal study of the VN migration process is barely scratched, and the security aspects are out of the scope of existing VN migration solutions.
+% \GB{below paragraph is too colloquial and pompous}
+The attack surface of the Virtual Network migration process is very similar to the one exploited in the different works about Virtual Machines. This attack surface is augmented by the security issues and challenges introduced by SDN. Nevertheless, the formal study of the VN migration process is rarely investigated, and the security aspects are out of the scope of existing VN migration solutions.
 
-We surveyed the Resource Allocation problem from two different perspectives. The first one considers the attacker and the defender, \ie Game Theory, while the second one, \ie MDPs, only consider the defender's side to solve the problem.
-The Game Theory formalism remains difficult to exploit for a realistic use case because of its inadequacy to model a security problem without denaturing it with too many assumptions~\cite{Kiennert2018}. \\
-Markov Decision Processes have rarely been used for resource allocation problem in a security context. The formal solution of an MDP is the set of optimal choices the defender should make when facing every possible situation. Therefore, to provide an answer to the resource allocation problem the solution must be adapted to represent which network nodes should be monitoring the infrastructure.
+We surveyed the Resource Allocation problem considering two different formalisms. These formalisms have a different approach regarding the nature of agents interacting with a network infrastructure. The first one considers the attacker and the defender, \ie Game Theory, while the second one, \ie MDPs, only consider the defender's side to solve the problem.
+The Game Theory formalism remains difficult to exploit for a realistic use case because of its inadequacy to model a security problem without denaturing it with too many assumptions~\cite{Kiennert2018}.
+Markov Decision Processes have rarely been used for resource allocation problem in a security context. The formal solution of an MDP is the set of optimal choices the defender should make when facing every possible situation. Therefore, to provide an answer to the resource allocation problem, the solution must be adapted to propose a static representation of the resources allocated inside the network infrastructure.
 
-In the following chapters we propose the design of a formal model about the VN migration process and its security. We also describe security properties using a first order logic formalism.
-This model will introduce the security of SDN virtualization from a formal point of view, and may serve as the basis for extended definitions of security properties and for the implementation of practical use cases including property verification.
+In the following chapters, we propose the design of a formal model of the VN migration process and its security. We describe security properties using a first order logic formalism.
+This model introduces the security of SDN virtualization from a formal point of view, and proposes practical use cases to verify if the security has been maintained during the migration of a Virtual Network.
 
-Additionally, we will propose to model a Resource Allocation problem, where we want to optimize the distribution of limited monitoring resources over the physical infrastructure.
+Additionally, we propose to model a Resource Allocation problem, where we want to optimize the distribution of limited monitoring resources over the physical infrastructure.
 The application of MDPs to this problem shows that other security problems may be represented with it, and it may not be limited to resource allocation. We expect that complex attacker models may be described and evaluated using this formalism.

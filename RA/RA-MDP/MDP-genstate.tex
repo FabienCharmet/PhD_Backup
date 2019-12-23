@@ -3,27 +3,32 @@ We remind the reader that action $m_i$ deploys monitoring on node $i$, action $u
 We also remind that when determining the target node $j$, the case $j==0$ in the code corresponds to the case where there is no attack launched.
 We also use the function $Select\_node$ presented in Algorithm~\ref{algo:iterative_algo} from Section~\ref{sec:model-migration}.
 
+\paragraph{Initialization}
 We generate the current state $s$ and add it to the set of states $S$ (lines 3-4) .
-If there are nodes to migrate (line 5), we migrate select the next one (line 6), migrate it (line 7) and remove it from the list of nodes to migrate (line 8).
+If there are nodes to migrate (line 5), we select the next one (line 6), migrate it (line 7) and remove it from the list of nodes to migrate (line 8).
 We check if there is no time left for the migration, and exit if so (lines 9-10).
-Then we calculate all possible transitions for action $d$.
-We change the $At$ if there is an attack (lines 12-13) or if there is no attack (lines 14-15).
+
+\paragraph{Processing the action of doing nothing}
+We calculate all possible transitions for action $d$.
+We modify the $At$ set if there is an attack (lines 12-13) or in case of no attack (lines 14-15).
 We then generate the destination state $s'$ (line 16).
 We compute the transition probabilities for action $d$ (lines 17-20) and the reward (line 21).
 Finally we start a new recursion (line 22).
 
+\paragraph{Processing the actions of monitoring}
 We loop over all the nodes to generate their monitoring and unmonitoring action (line 23).
-First we check if there is enough budget $b_c$ to monitor node $i$ (line 24).
-If so we check if it is already monitoring (line 25).
+First, we check if there is enough budget $b_c$ to monitor node $i$ (line 24).
+If so, we check if it is already monitoring (line 25).
 If it is, we repeat the same process as done for action $d$ for the transition generation (lines 26-35).
 We assign a null reward for this action (line 36).
 We start a new recursion (line 37).
-If it is not, we add node $i$ to the set of monitoring nodes $Mo$ (line 39).
+If node $i$ is not monitoring, we add it to the set of monitoring nodes $Mo$ (line 39).
 Then we compute the transition as previously done (lines 40-49).
 We compute the reward for action $m_i$ (line 50) and start a new recursion (line 51).
-
-If there is not enough $b_c$ budget (line 54) we generate the destination state and compute the attacks and  transitions (lines 55-64).
+If there is not enough $b_c$ budget (line 54), we generate the destination state and compute the attacks and  transitions (lines 55-64).
 We assign a null reward (line 65) and start a new recursion (line 66).
+
+\paragraph{Processing the actions of unmonitoring}
 We then consider the action $u_i$ and check if node $i$ is monitoring the infrastructure (line 67). 
 We remove node $i$ from the set of monitoring nodes $Mo$ (line 68).
 We generate the destination state and compute the attacks and transitions (lines 69-78) and assign a reward (line 79).

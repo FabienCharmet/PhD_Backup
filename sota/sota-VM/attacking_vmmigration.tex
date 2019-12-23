@@ -1,9 +1,10 @@
-In this section we take a closer look at the security of the live migration of VMs.
+In this section, we take a closer look at the security of the live migration of VMs.
 We first detail the existing vulnerabilities and possible attacks, and then detail different security solutions, either using the migration process as a way to overcome security issues or to analyze and improve the security of the migration process itself.
 
 \subsubsection{Attacking the VM migration process}
 Traditional hypervisors have been around for decades now, and the live migration of a virtual machine is a well known process. There has been several security surveys on the topic of VM hypervisors~\cite{Reuben2007,Rehman2013,Sahoo2010,Perez-Botero2013}, and on the security of Cloud environments~\cite{cloudenvironmentsecuritysurvey-fernandes2014}.
 Most of the security issues with VMs are related to the unlawful interactions between a VM and other VMs or the hypervisor.
+% GB{too many ``or''s: please rewrite}.
 An attacker may exploit vulnerabilities in the hypervisor and force it to execute arbitrary code or access restricted memory zone.
 Another type of attack consists in corrupting the resource scheduler of the hypervisor, thus preventing other users to get the allocated resources they required.
 
@@ -11,15 +12,15 @@ We will focus here on the attacks that can impact the live migration of a VM.
 Oberheide~\etal proposed in~\cite{empirical-oberheide2008} several attack classes that will affect the migration of VMs: attacks on the control plane, the data plane and the migration module.
 Attacks are summarized in Table~\ref{tab:vm-attacksurface}.
 
-Attacks impacting the control plane can be divided into two categories: resource exhaustion and hypervisor spoofing. The attacker is triggering an unlawful migration to either move a VM toward an unsecured physical location or to overload the local hypervisor and preventing a legitimate user to be served with his due resources.
+Attacks impacting the control plane can be divided into two categories: resource exhaustion and hypervisor spoofing. Resource exhaustion corresponds to the case where the attacker is triggering an unlawful migration to either move a VM toward a non-secure physical location or to deplete the hypervisor's resources.
 
-The second attack class is Fake Resource Advertising. This kind of attacks are particularly efficient in systems where the migration is automated, because the generation of fake servers inside the topology can make the hypervisor trigger migration of VM on resources that do not exist.
+The second attack class is Fake Resource Advertising and relies on hypervisor spoofing. This kind of attacks are particularly efficient in systems where the migration is automated, because the generation of fake servers inside the topology can make the hypervisor trigger migration of VM on resources that do not exist.
 
 Attacking the data plane during the live migration can take two forms: passively exfiltrating sensitive information or actively altering the traffic during the migration.
 In the first case, the attack results in a loss of confidentiality for the stolen data and it might be exploited later on to launch other attacks on the VM.
-In the second case, altering the traffic can either create a Denial-of-Service because the VM virtual disk has been compromised, or in a potentially even more harmful scenario the VM keeps running but under a compromised state, as the memory of the VM has been altered by the attack.
+In the second case, altering the traffic can either create a Denial-of-Service because the VM virtual disk has been compromised, or in a potentially even more harmful scenario, the VM keeps running but under a compromised state, as the memory of the VM has been altered by the attack.
 
-The VM migration module can also be attacked to allow an attacker to have his VM share the same physical server as his victim's VM. Stalling the migration is studied in~\cite{stalling-atya2017} where the attacker prevents his victim's VMs and his VM from being separated so he can completely corrupting the memory pages of the victim's VM. It is shown that maintaining the co-residency between the VMs allows an attacker to use side channels attacks that will have a bigger impact on the victim.
+The VM migration module can also be attacked to allow an attacker to have his VM share the same physical server as his victim's VM. Stalling the migration is studied in~\cite{stalling-atya2017} where the attacker prevents the victim's VM and his own VM from being separated so he can completely corrupt the memory pages of the victim's VM. It is shown that maintaining the co-residency between the VMs allows an attacker to use side-channel attacks that will have a bigger impact on the victim.
 % A presentation on these side channel attacks is detailed in~\cite{malicious-atya2017}.
 
 % Please add the following required packages to your document preamble:
@@ -33,7 +34,7 @@ Attack                     & Methodology                                        
 \multicolumn{3}{|c|}{\textbf{Control Plane}}                                                                                                                                 \\ \hline
 Incoming migration         & \multirow{2}{*}{Resource exhaustion}                                                    & Co-residency of the victim with the attacker \\ \cline{1-1} \cline{3-3} 
 Outcoming migration        &                                                                                         & Overload of the hypervisor                   \\ \hline
-Fake resource advertising & Hypervisor spoofing                                                                     & Unifying heterogeneous SDN applications      \\ \hline
+Fake resource advertising & Hypervisor spoofing                                                                     & Faulty deployment of virtual networks      \\ \hline
 \multicolumn{3}{|c|}{\textbf{Data Plane}}                                                                                                                                    \\ \hline
 Passive Snooping           & Network probe                                                                           & Information leakage                          \\ \hline
 Active manipulation        & Network man-in-the-middle                                                               & Data corruption                              \\ \hline
@@ -50,8 +51,8 @@ Migration stalling attacks        & Denial of Service, Resource depletion     & 
 
 \subsubsection{Protecting the VM migration process}
 The Moving Target Defense (MTD) paradigm is a technique used to limit the co-residency between an attacker and his victim, thus leading to a reduced attack surface for side channel attacks.
-Zhang~\etal introduce a Game Theory model~\cite{incentivemtd-Zhang2012} to represent the incentives a Cloud Provider has to migrate VMs in his infrastructure when opposed to an attacker who will benefit from the co-residency. Results outline that it is not necessary to permanently migrate all VMs and only a subset of them. In addition to this, the game can be extended to include cooperation between the legitimate users and the Cloud Provider.
-A similar approach using MTD against side channel attacks is presented in Nomad~\cite{nomad-Moon2015b}. Nomad is built on several assumptions: the attacker cannot be precisely located inside the infrastructure, can launch potentially unknown side channels attacks and can precisely target his victim. 
+Zhang~\etal introduce a Game Theory model~\cite{incentivemtd-Zhang2012} to represent the incentives a Cloud Provider has to migrate VMs in his infrastructure when opposed to an attacker who will benefit from the co-residency. Results outline that it is not necessary to permanently migrate all VMs but only a subset of them. In addition to this, the game can be extended to include cooperation between the legitimate users and the Cloud Provider.
+A similar approach using MTD against side-channel attacks is presented in Nomad~\cite{nomad-Moon2015b}. Nomad is built on several assumptions: the attacker cannot be precisely located inside the infrastructure, can launch potentially unknown side channels attacks and can precisely target his victim. 
 The migration process proposed in Nomad provides tenants with an API to describe a set of constraints on their VM that has to be respected throughout the migration.
 Nomad provides a scalable VM placement algorithm, a framework that does not require to modify the OS, the hardware or the hypervisor, other than the migration algorithms.
 The protection of the migration traffic by making it indistinguishable from regular network traffic using noise generation is studied in~\cite{stealth-Achleitner2017a}. Even if encryption is applied to the migration traffic, an attacker located inside the infrastructure may still distinguish migration traffic from the regular one. Indeed, migration traffic can easily be characterized as a set of data bursts through the network. The proposed solution uses a traffic generator to implement a white noise that will dynamically adapt to the traffic generated by the migration. This method will make the migration traffic look like a constant flow of indistinguishable data.

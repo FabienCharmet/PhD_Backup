@@ -71,21 +71,21 @@ The main limitation encountered here is that the choice of all players must be r
 
 \textbf{Stochastic games:} Modeling the evolution of a system based on the choices made by players is an interesting formalism for our problem. We can consider the evolution of the infrastructure as the migration process goes on, as well as the progress of the attacker to exfiltrate the data. 
 
-The costs of the strategies are different for the attacker and the defender, thus making the game a non zero-sum stochastic game. Non zero sum stochastic games with imperfect information turn out to be widely complex to solve, and to the best of our knowledge there is no algorithm that can be used as a support for the resolution for a network security problem. 
+The costs of the strategies are different for the attacker and the defender, thus making the game a non zero-sum stochastic game. Non zero sum stochastic games with imperfect information turn out to be widely complex to solve, and to the best of our knowledge there is no algorithm that can be used as a support for the resolution of a network security problem. 
 
 Additionally, considering a zero-sum stochastic game would make the computation of the equilibrium tractable but at the expense of the game's realism.
 We prefer to consider the formalism of Markov Decision Processes (MDP), which have a similar nature to stochastic games. MDPs are more flexible because a single agent is interacting with the system, and the perfect information aspect of game theory is not relevant in this context. 
 
 
 \subsection{Discussion}
-We have reviewed several types of games in this section, where each type has its own share of limitations regarding our problem. Another aspect that we have not detailed before is the acceptable granularity of actions for the players. Indeed, the vast majority of work we have surveyed in Chapter~\ref{sec:sota} limit the players to a binary choice: attacking/defending or doing nothing. This reduced number of choices leaves us with the interrogation of whether we are allowed to define precise strategies for a security game, or if each strategy must be significantly different from every other~\cite{Kiennert2018}. 
+We have reviewed several types of games in this section, where each type has its own share of limitations regarding our problem. Another aspect that we have not detailed before is the acceptable granularity of actions for the players. Indeed, the vast majority of work we have surveyed in Chapter~\ref{sec:sota} limit the players to a binary choice: attacking/defending or doing nothing. This reduced number of choices leaves us with the concern of whether we are allowed to define precise strategies for a security game, or if each strategy must be significantly different from every other~\cite{Kiennert2018}. 
 This also raises the question of the validity of the complete information hypothesis.
-This assumption is common in network security games, which may not be realistic in practical scenarios.
+This assumption is common in network security games, which may not be realistic in real-ife scenarios.
 While an attacker will expect monitoring counter-measures in the infrastructure, it is not trivial to assume that the attacker knows about the specificity of the counter-measures deployed in the infrastructure, especially if their nature deviate from standard IDS solutions (\eg decoys and Moving Target Defense).
 % Finally, depending on the type of game chosen, the realism of the modeling is also heavily impacted because of the assumptions made about the system to protect.
 % as well as the arbitrary choices made for the costs and rewards.
 % In the state of the art, the values chosen in the utility functions rarely are evaluated using a real life methodology, especially on the attacker side where the literature is very scarce. 
-This leaves us with the question: "Is the game we have formulated coherent and realistic with current real life use cases ?". 
+This leaves us with the question: ``Is the game we have formulated coherent and realistic with current real-life use cases ?". 
 
 We conclude this section with the observation that Game Theory does not offer enough flexibility to model our problem. In the next chapter, we explore the use of Markov Decision Processes and illustrate how this formalism can be used to include the consequences of attacks in the strategy of the defender.
 

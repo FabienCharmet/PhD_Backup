@@ -5,3 +5,7 @@ We also provided an experimental prototype for the MDP generation, solving and r
 Results show that we can determine which nodes provide the best security with regard to current attacks, as well as how the dynamic aspect of the optimal policy can be translated into an \textit{a priori} deployment of the monitoring resources on the nodes.
 When the attacker can launch attacks from several sources, the impact of the nodes on the monitoring is much more differentiated and gives a better understanding of their role in the infrastructure.
 We also run the simulations on several network topologies to evaluate the impact of the attack routing on the optimal solution. Result shows that a fullmesh topology is more complex to defend because of the multitude of attack paths.
+
+% Markov Decision Processes are rarely used for a resource allocation problem in a security context.
+We advocate that the flexibility of the formalism can be leveraged to solve maintenance planning problems, where the system administrator has to deploy corrective updates in the infrastructure. Each node may not be available for updates due to operational needs and the MDP could be used to determine when it becomes critical from a security point of view to force the update of the node.
+

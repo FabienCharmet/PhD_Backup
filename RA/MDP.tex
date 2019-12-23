@@ -1,14 +1,19 @@
 \section{Second approach: Markov Decision Process}
 We have considered the formalism of Game Theory as a method to solve the resource allocation problem, but the lack of flexibility and the complexity of determining the equilibrium make it inadequate for our problem. We consider here Markov Decision Processes (MDP).
-MDP is a formalism used to represent an agent and the actions he can choose to interact with a system. The general purpose of an MDP is to find the best action for each possible state of the system (\ie the optimal policy). Because a practical solution to this RA problem is a set of nodes supporting the monitoring of the infrastructure, we will develop a statistical analysis of the optimal policy and convert the dynamic answer of a MDP into a static \textit{a priori} deployment.
+MDP is a formalism used to make the optimal choices when interacting with a system. We intend to use it to determine the best allocation of monitoring resources to detect attacks in the infrastructure. Because a practical solution to this RA problem is a set of nodes supporting the monitoring of the infrastructure, we develop a statistical analysis of the optimal policy and convert the dynamic answer of an MDP into a static \textit{a priori} deployment.
 An experimental prototype is available on github\footnote{\label{github}\url{https://github.com/FabienCharmet/MDPRA}}.
+
+
+\textbf{Vocabulary precision}    In this chapter the expression ``migrating a node" means deploying configuration rules in a physical node.
+
+
 
 
 % \input{RA/RA-MDP/MDP-Requirements.tex}
 
 \input{figures/migration_trigger.tex}
 
-\subsection{System assumptions}
+\subsection{Infrastructure assumptions}
 \input{RA/RA-MDP/MDP-assumption.tex}
 
 \subsection{Attacker Model}
