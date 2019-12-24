@@ -23,7 +23,7 @@ $\alpha$ & \multicolumn{2}{c|}{$\beta$} & Exfiltration point & $c_f$ & $\gamma$ 
 
 We propose to evaluate the MDP using three different physical topologies shown in Figure~\ref{fig:mdp-usecase-single}. The first topology is designed to be relatively balanced in terms of connections between nodes. The link between nodes 1 and 4 creates a path so each node can be reached by a single attacker in two steps.
 
-The second topology is fullmeshed and is intended to observe the monitoring strategy when the attacker only needs to compromise one node to be successful.
+The second topology is full-meshed and is intended to observe the monitoring strategy when the attacker only needs to compromise one node to be successful.
 
  The last topology defines a central communication point, here node 2. This node should be of prime interest in the solution because it is on the path of every attack in the network.
 
@@ -39,17 +39,17 @@ Details about the source node for attacks against the migration are summarized i
 
 \textbf{Reward of the monitoring set\\}
 We have extracted the monitoring set of each absorbing state, and evaluated the overall reward of each monitoring set and each node individually.
-We define the reward of a monitoring set as the expected value of the reward of each corresponding absorbing state.
-The reward of an absorbing state is the sum of the expected value of each path from the initial state and leading to the absorbing state. Similarly, the reward of one node in the monitoring set is defined as the expected value of each absorbing state where the node is monitoring the infrastructure.
+We define the reward of a monitoring set as the sum of the reward of each corresponding absorbing state.
+The reward of an absorbing state is the sum of the weighted reward of each path from the initial state and leading to the absorbing state. Similarly, the reward of one node in the monitoring set is defined as the weighted reward of each absorbing state where the node is monitoring the infrastructure.
 We note the reward of a state or a node $R(State)$ or $R(Node)$ but this definition of a reward is different from the definition of the reward given in for a transition in an MDP.
 
 We illustrate these rewards in Figure~\ref{fig:absstate_reward}, where the initial state is $S_1$ and there are three absorbing states $S_4,S_5$ and $S_6$. Each state yields a reward $r_x$ with a transition probability $p_x$.
 State $S_5$ is reached by two paths thus its rewards is the sum of the reward given by each path.
-% The expected value uses the stationary distribution of the Markov Chain corresponding to the optimal policy.
+% The weighted reward uses the stationary distribution of the Markov Chain corresponding to the optimal policy.
 If $S_4$ and $S_6$ have the same monitoring set (\ie $Mo^{S_4} = Mo^{S_6}$), then $R(Mo^{S_4}) = R(Mo^{S_6}) = R(S_4) + R(S_6)$.
 \input{figures/absorbingstate_reward.tex}
 
-The reward of each monitoring node is computed the same way, by summing the expected value of each absorbing state containing the node.\\
+The reward of each monitoring node is computed the same way, by summing the weighted reward of each absorbing state containing the node.\\
 For example, if $Mo^{S_4} = Mo^{S_6} =\{2,4\}$ and $Mo^{S_5} = \{1,4\}$, then the reward of node 4 is computed as $R(N_4) = R(S_4) + R(S_5) + R(S_6)$. Indeed, node 4 belongs to the monitoring set of every absorbing state.
 
 
@@ -76,8 +76,8 @@ Instead of unmonitoring nodes, the MDP chooses to do nothing to preserve the glo
 Unmonitoring actions are only chosen when the unmonitored node is not on the path of the next attacks, thus having the same impact as doing nothing. 
 This situation happens rarely, when the attacker launches a limited number of attacks on the infrastructure.
 
-\textbf{Fullmesh topology: Scenarios c) and d) \\}
-In these scenarios, the topology considered is fullmeshed, which means that each physical node is connected to every other node of the infrastructure. This topology has been chosen to minimize the impact of the routing on the detection path because the attacker is always connected to the target node.
+\textbf{Full-mesh topology: Scenarios c) and d) \\}
+In these scenarios, the topology considered is full-meshed, which means that each physical node is connected to every other node of the infrastructure. This topology has been chosen to minimize the impact of the routing on the detection path because the attacker is always connected to the target node.
 Results are shown in Fig.~\ref{fig:mdp-result-fullmesh}.
 
 We make two observations from the results of both scenarios.

@@ -63,21 +63,21 @@ Two types of information are used by tenants of the virtualization infrastructur
 \item \textbf{the flowspace} is the set of header parameters the tenant can use when deploying flow rules to configure his Virtual Network (see Figure~\ref{fig:matching-fields}). The hypervisor may restrict the use of certain headers because the virtualization already uses them as internal identifiers. For instance, the VLAN PCP field is sometimes used for this purpose.
 \end{inparaenum}
 
-\textbf{Abstractions of the physical infrastructure}\GB{can't you use the paragraph command?}
-Abstracting the physical infrastructure to the tenant can be done in two different ways, by slicing the physical infrastructure or by mapping the Virtual Network with the related physical resources.
-% or by providing an API to the tenant.\\
-\textbf{A slice}~\cite{FlowVisor-Sherwood2009} is the set of physical resources allocated to a Virtual Network.
+\paragraph{Abstractions of the physical infrastructure}
+Abstracting the physical infrastructure to the tenant can be done in three different ways, by slicing the physical infrastructure, by mapping the Virtual Network with the related physical resources or by providing an API to the tenant.
+\begin{itemize}
+    \item \textbf{A slice}~\cite{FlowVisor-Sherwood2009} is the set of physical resources allocated to a Virtual Network.
 Slicing the physical infrastructure consists in allocating only a subset of the infrastructure to the tenant while hiding the rest of the network equipments.
 The hypervisor gives the tenant a direct access to the network nodes composing the slice, and the flow rules installed by the tenant will be rewritten to only match the flow space he has been allocated.
-
 The term slice is also found in the literature to describe the subdivision of a single physical resource. For instance, a slice can be a subdivision of a physical node corresponding to a specific tenant.
 
-\textbf{Mapping} the Virtual Network with the physical infrastructure is an approach differing from network slicing by presenting an arbitrary network to the tenant while maintaining a mapping between the virtual elements used by the tenant and the physical resources they correspond to.
+\item \textbf{Mapping} the Virtual Network with the physical infrastructure is an approach differing from network slicing by presenting an arbitrary network to the tenant while maintaining a mapping between the virtual elements used by the tenant and the physical resources they correspond to.
 Similarly to slicing, when a tenant will interact with his Virtual Network, the hypervisor will be tasked to translate the identifiers and parameters used in the Virtual Network into the corresponding ones from the physical infrastructure.
 
 % \GB{API sounds like an added layer on top of slicing or mapping based abstraction}
-\textbf{Providing} an API to the tenant allows the network hypervisor to have a better control over the capacities a tenant has on his Virtual Network. This extra abstraction layer can be used to limit the interactions of a tenant with his own Virtual Network or to alleviate existing limitations a tenant has to deploy network applications on top of his Virtual Network. 
+\item \textbf{Providing} an API to the tenant allows the network hypervisor to have a better control over the capacities a tenant has on his Virtual Network. This extra abstraction layer can be used to limit the interactions of a tenant with his own Virtual Network or to alleviate existing limitations a tenant has to deploy network applications on top of his Virtual Network. 
 
+\end{itemize}
 
 \input{figures/vne.tex}
 
