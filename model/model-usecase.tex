@@ -148,14 +148,14 @@ The attacker is located in the network infrastructure and can render physical no
 Therefore, the $conf\_integrity$ property is not respected anymore.
 
 We implement in SNARK the $conf\_integrity$ property, as depicted in Listing~\ref{lst:conf-integrity-definition}.\\
-Lines 1-3 define the equivalence between the $conf\_integrity$ property and the other predicates.\\
-Line 4 defines a logical AND between the following predicates:\\
-Line 5 defines \textit{?t.t-int}, a time interval as the intersection of all the time intervals expressed in the following predicates.\\
-Line 11 assigns controller \textit{?c.controller} to node \textit{?n.node}.\\
-Line 14 defines \textit{?p.path} as the path between \textit{?c.controller} and \textit{?n.node}.\\
-Line 17 assigns configuration \textit{?d.data} to node \textit{?n.node}.\\
-Line 20 represents preservation of the integrity of configuration data \textit{?d.data}.\\
-Note that we modeled the implication ($\Rightarrow$) defined in Section~\ref{sec:security_prop} as a logical conjunction.\\
+Lines 1-3 define the equivalence between the $conf\_integrity$ property and the other predicates.
+Line 4 defines a logical AND between the following predicates:
+Line 5 defines \textit{?t.t-int}, a time interval as the intersection of all the time intervals expressed in the following predicates.
+Line 11 assigns controller \textit{?c.controller} to node \textit{?n.node}.
+Line 14 defines \textit{?p.path} as the path between \textit{?c.controller} and \textit{?n.node}.
+Line 17 assigns configuration \textit{?d.data} to node \textit{?n.node}.
+Line 20 represents preservation of the integrity of configuration data \textit{?d.data}.
+Note that we modeled the implication ($\Rightarrow$) defined in Section~\ref{sec:security_prop} as a logical conjunction.
 Line 23 ensures that \textit{?t.t-int} is not empty.
 
 \begin{lstlisting}[caption=SNARK definition of the configuration integrity., label=lst:conf-integrity-definition,captionpos=b] 

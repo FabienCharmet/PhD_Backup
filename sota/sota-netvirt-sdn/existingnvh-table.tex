@@ -5,23 +5,23 @@
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Reference}                                                       & \textbf{Abstraction} & \textbf{Migration} & \textbf{Tenant identification}                                                                     & \textbf{Resource Isolation} \\ \hline
-Sherwood~\etal~FlowVisor~\cite{FlowVisor-Sherwood2009}                         & Slicing     & No        & Flowspace                                                                                 & CPU/BW             \\ \hline
-Min~\etal~Enhanced FlowVisor~\cite{EnhancedFV-Min2012}                    & Slicing     & No        & VLAN PCP field                                                                            & CPU/BW             \\ \hline
-El Azzab~\etal~Slices Isolator~\cite{SlicesIsolator-El-Azzab2011}              & Slicing     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     \\ \hline
-Jin~\etal~Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} & API         & No        & N/A                                                                                       & N/A                \\ \hline
-Huang~\etal~Network Hypervisor~\cite{NetworkHypervisor-Huang2013}           & API         & No        & IP Adress                                                                                 & N/A                \\ \hline
-Salvadori~\etal~ADVisor~\cite{ADVisor-Salvadori2012}                            & Mapping     & No        & \begin{tabular}[c]{@{}l@{}}VLAND ID\\ MPLS labes\\ 802.1ad multiple vlan tag\end{tabular} & CPU/BW             \\ \hline
-Yin~\etal~Double FV~\cite{DoubleFV-Yin2013}                               & Mapping     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     \\ \hline
-Yu~\etal~WhiteVisor~\cite{whitevisor-Yu2019}                             & Mapping     & No        & VLAN ID                                                                                   & N/A                \\ \hline
-Han~\etal~ONVisor~\cite{ONVisor-Han2018}                                  & Mapping     & No        & Encapsulation                                                                             & N/A                \\ \hline
-Al Shabibi~\etal~OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}                     & Mapping     & No        & IP + MAC fields                                                                           & N/A                \\ \hline
-Li~\etal~SR-PVX~\cite{PVX-Li2017}                                        & Mapping     & No        & Encapsulation                                                                             & BW                 \\ \hline
-Corin~\etal~VeRTIGO~\cite{VeRTIGO-Corin2012a}                               & Mapping     & Yes       & Full header sequence                                                                      & CPU/BW             \\ \hline
-Jin~\etal~CoVisor~\cite{CoVisor-Jin2015}                                  & Mapping     & Yes       & N/A                                                                                       & N/A                \\ \hline
-Drutskoy~\etal~FlowN~\cite{FlowN-Drutskoy2012}                                 & Mapping     & Yes       & Encapsulation                                                                             & BW                 \\ \hline
-Bozakov~\etal~AutoSlice~\cite{AutoSlice-Bozakov2012,AutoSlice2-Bozakov2014}   & Mapping     & Yes       & Encapsulation                                                                             & BW                 \\ \hline
-Koponen~\etal~NVP~\cite{NVP-Koponen2014}                                      & Mapping     & Yes       & Software switches                                                                         & N/A                \\ \hline
-Yang~\etal~LiteVisor~\cite{Litevisor-Yang2018}                             & Mapping     & Yes       & \begin{tabular}[c]{@{}l@{}}IP Header\\ VxLAN ID\end{tabular}                              & N/A                \\ \hline
+Sherwood~-~FlowVisor~\cite{FlowVisor-Sherwood2009}                         & Slicing     & No        & Flowspace                                                                                 & CPU/BW             \\ \hline
+Min~-~Enhanced FlowVisor~\cite{EnhancedFV-Min2012}                    & Slicing     & No        & VLAN PCP field                                                                            & CPU/BW             \\ \hline
+El-Azzab~-~Slices Isolator~\cite{SlicesIsolator-El-Azzab2011}              & Slicing     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     \\ \hline
+Jin~-~Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} & API         & No        & N/A                                                                                       & N/A                \\ \hline
+Huang~-~Network Hypervisor~\cite{NetworkHypervisor-Huang2013}           & API         & No        & IP Adress                                                                                 & N/A                \\ \hline
+Salvadori~-~ADVisor~\cite{ADVisor-Salvadori2012}                            & Mapping     & No        & \begin{tabular}[c]{@{}l@{}}VLAND ID\\ MPLS labes\\ 802.1ad multiple vlan tag\end{tabular} & CPU/BW             \\ \hline
+Yin~-~Double FV~\cite{DoubleFV-Yin2013}                               & Mapping     & No        & Flowspace                                                                                 & CPU/BW/Int/Mem     \\ \hline
+Yu~-~WhiteVisor~\cite{whitevisor-Yu2019}                             & Mapping     & No        & VLAN ID                                                                                   & N/A                \\ \hline
+Han~-~ONVisor~\cite{ONVisor-Han2018}                                  & Mapping     & No        & Encapsulation                                                                             & N/A                \\ \hline
+Al Shabibi~-~OpenVirteX~\cite{OpenVirteX-Al-Shabibi2014}                     & Mapping     & No        & IP + MAC fields                                                                           & N/A                \\ \hline
+Li~-~SR-PVX~\cite{PVX-Li2017}                                        & Mapping     & No        & Encapsulation                                                                             & BW                 \\ \hline
+Corin~-~VeRTIGO~\cite{VeRTIGO-Corin2012a}                               & Mapping     & Yes       & Full header sequence                                                                      & CPU/BW             \\ \hline
+Jin~-~CoVisor~\cite{CoVisor-Jin2015}                                  & Mapping     & Yes       & N/A                                                                                       & N/A                \\ \hline
+Drutskoy~-~FlowN~\cite{FlowN-Drutskoy2012}                                 & Mapping     & Yes       & Encapsulation                                                                             & BW                 \\ \hline
+Bozakov~-~AutoSlice~\cite{AutoSlice-Bozakov2012,AutoSlice2-Bozakov2014}   & Mapping     & Yes       & Encapsulation                                                                             & BW                 \\ \hline
+Koponen~-~NVP~\cite{NVP-Koponen2014}                                      & Mapping     & Yes       & Software switches                                                                         & N/A                \\ \hline
+Yang~-~LiteVisor~\cite{Litevisor-Yang2018}                             & Mapping     & Yes       & \begin{tabular}[c]{@{}l@{}}IP Header\\ VxLAN ID\end{tabular}                              & N/A                \\ \hline
 \end{tabular}%
 }
 \caption{Summary of existing hypervisors}

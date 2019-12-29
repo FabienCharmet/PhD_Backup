@@ -11,6 +11,7 @@
 \usepackage{listings}
 \usepackage{lastpage}
 \usepackage{fancyhdr}
+\usepackage[Lenny]{fncychap}
 \usepackage[most]{tcolorbox}
 \usepackage{graphicx}
 \usepackage{subcaption}
@@ -45,10 +46,6 @@
 \usepackage{epigraph}
 \usepackage{quotchap}
 \usepackage{setspace}
-\usepackage[subpreambles=true]{standalone}
-% \AtEveryBibitem{\clearfield{doi}}
-% \AtEveryCitekey{\clearfield{doi}}
-
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true, %set true if you want colored links
@@ -86,7 +83,7 @@
 \newcommand\GB[1]{\myremark{GB}{#1}}
 \newcommand\CK[1]{\myremark{CK}{#1}}
 \newcommand\FC[1]{\myremark{FC}{#1}}
-\newcommand\RW[1]{\myremark{RW}{#1}}
+% \newcommand\RW[1]{\myremark{RW}{#1}}
 
 \newcommand{\etc}{etc.\xspace}
 \newcommand{\ie}{i.e.,\xspace}
@@ -108,7 +105,7 @@
 
 
 
-\title{\LARGE \bf Preservation of security properties during the migration of virtual networks in a SDN environment}
+\title{\LARGE \bf Security characterization of SDN virtual network migration:\\ Formal Approach and Resource Optimization}
 
 \author{Fabien Charmet}
 
@@ -120,22 +117,42 @@
 %Header-Make sure you update this information!!!!
 % \noindent
 \maketitle
-\begin{abstract}
+\chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 \pagenumbering{roman}
-This thesis investigates the security of virtual network migration. Over the years, virtualization has been used to optimize physical resources and to support businesses' infrastructures. Virtualization consists in exposing a fraction of a resource for a user to operate. Virtual Machines are used to host business services like Web servers or a backup service. Network virtualization has not benefited from the same interest from researchers and the industry. The Software Defined Networking paradigm has introduced new possibilities to implement network virtualization and provide users with a flexible network, decoupled from the physical equipments. Virtual Networks are used to interconnect Virtual Machines and can be configured with specific routing policies or security protocols. In case of a failure of the resource, either accidental or intentional, the virtualization infrastructure will migrate the resource to maintain the service provided.
+This thesis investigates the security of virtual network migration. Over the years, virtualization has been used to optimize physical resources and to support businesses’ infrastructure. Virtualization consists in exposing a fraction of a resource for a user to operate. Virtual Machines are used to host business services like web servers or a backup service. Network virtualization has not benefited from the same interest from researchers and the industry. The Software Defined Networking paradigm has introduced new possibilities to implement network virtualization and provide users with a flexible network, decoupled from the physical equipment. Virtual Networks are used to interconnect Virtual Machines and can be configured with specific routing policies or security protocols. In case of a failure of the resource, either accidental or intentional, the virtualization infrastructure will migrate the resource to maintain the service provided.
 
-The security of Virtual Machines and their migration is a well researched topic that has been widely in the past, while the study of network virtualization and especially the migration process only are at an early stage. The attack surface of network virtualization is similar in nature to the virtualization of legacy resources, and presents an additional aspect because of the use of Software Defined Networking.
+The security of Virtual Machines and their migration is a well-researched topic that has been widely in the past, while the study of network virtualization and especially the migration process only are at an early stage. The attack surface of network virtualization is similar in nature to the virtualization of legacy resources, and presents an additional aspect because of the use of Software Defined Networking.
 The motivation of this research is to investigate the security of the virtual network migration process in the context of Software Defined Networking. In order to do so, we first define the scope of the study and focus on the networking aspect of the migration. Then, we outline the threat model of the migration process and devise a detection mechanism against attacks in the virtualization infrastructure. Finally, we optimize the previous mechanism by optimizing the deployment of network monitoring resources for an optimal coverage.
-
+    
 In the first part of this thesis we propose a formal approach to describe the different aspects of the virtualization infrastructure. We use a first order formalism to model several security properties as a set of logical predicates. These predicates account for both physical and virtual elements of the virtualization infrastructure, and the data use by both end users and the infrastructure owner.
 An execution trace is generated during the migration of a virtual network, and will be used by a theorem prover to compute a formal proof to verify if a security violation occurred. The first order model is based on the assumption that the execution trace is generated using perfect monitoring. This implies that the proof is complete and that the networking monitoring is always done under optimal conditions.
 We alleviate this assumption by modeling a resource allocation problem to determine how the monitoring resources should be deployed and which network nodes provide the best coverage. We solve this problem using a Markov Decision Process, and determine a dynamic deployment of monitoring resources during the migration. We conclude our optimization with a proposition of a static deployment of the resources prior to the migration.
 % We propose to model the virtualization infrastructure and describe the security of the migration process using a first order temporal logic. We then use this logic with a theorem prover to verify if a security violation occurred during the migration of a network.  We use a Markov Decision Process to determine the optimal placement of monitoring resources in the infrastructure.
-\end{abstract}
+
+\setcounter{page}{2}
+\begin{savequote}
+--Do not worry about your difficulties in mathematics, I can assure you that mine are all greater.
+\qauthor{Albert Einstein}
+\end{savequote}
+\chapter*{R\'esum\'e}
+\addcontentsline{toc}{chapter}{R\'esum\'e}
+Cette th\`{e}se explore la s\'{e}curit\'{e} de la migration de r\'{e}seaux virtuels. Au cours des ann\'{e}es, la virtualisation a \'{e}t\'{e} utilis\'{e}e pour optimiser l'usage des ressources informatiques et pour supporter les infrastructures des entreprises. La virtualisation consiste \`{a} allouer une partie des ressources d'une machine physique \`{a} un utilisateur (sous la forme d'une machine virtuelle) pour qu'il puisse l'exploiter. Les machines virtuelles sont utilis\'{e}es pour h\'{e}berger des services op\'{e}rationnels comme un serveur internet ou une base de donn\'{e}es. La virtualisation des r\'{e}seaux n'a pas profit\'{e} du m\^{e}me int\'{e}r\^{e}t de la part des chercheurs et des acteurs industriels. Le paradigme du Software Defined Networking a introduit de nouvelles possibilit\'{e}s pour impl\'{e}menter la virtualisation r\'{e}seau et fournir aux utilisateurs une solution flexible pour leurs besoins m\'{e}tiers. Les r\'{e}seaux virtuels sont utilis\'{e}s pour interconnecter des machines virtuelles, et ils peuvent \^{e}tre configur\'{e}s avec des r\`{e}gles de routages ou des protocoles de s\'{e}curit\'{e} sp\'{e}cifiques. Dans l'\'{e}ventualit\'{e} o\`{u} un \'{e}quipement r\'{e}seau tomberait en panne ou sous le coup d'une attaque informatique, le syst\`{e}me d'hypervision va migrer les ressources afin de pr\'{e}server la disponibilit\'{e} des services utilisateurs.
+
+La s\'{e}curit\'{e} des machines virtuelles et de leur migration est un domaine de recherche qui a \'{e}t\'{e} grandement explor\'{e} par le pass\'{e}, tandis que la virtualisation r\'{e}seau et plus sp\'{e}cifiquement la migration de r\'{e}seaux virtuels restent encore des domaines de recherche assez jeune et o\`{u} beaucoup reste \`{a} faire. La surface d'attaque de la virtualisation r\'{e}seau est similaire en nature \`{a} celle de la virtualisation traditionnelle, mais elle pr\'{e}sente un aspect suppl\'{e}mentaire d\^{u} \`{a} l'usage du paradigme du Software Defined Networking. La motivation de notre travail est d'\'{e}tudier la s\'{e}curit\'{e} du processus de migration des r\'{e}seaux virtuels, dans le contexte du Software Defined Networking. Nous proposons d'atteindre cet objectif en trois phases. Tout d'abord, nous d\'{e}finissons le p\'{e}rim\`{e}tre de cette \'{e}tude, et nous concentrons sur l'aspect r\'{e}seau de la migration. Ensuite, nous d\'{e}crivons le mod\`{e}le d'attaquant afin de compromettre la migration des r\'{e}seaux et nous concevons un m\'{e}canisme de d\'{e}tection contre les attaques envers l'infrastructure de virtualisation. Enfin, nous am\'{e}liorons le m\'{e}canisme de d\'{e}fense en optimisant le d\'{e}ploiement des ressources de d\'{e}tection afin d'obtenir une couverture optimale de l'infrastructure. 
+
+Dans la premi\`{e}re partie de cette th\`{e}se, nous proposons une approche formelle pour d\'{e}crire les diff\'{e}rents composants de l'infrastructure de virtualisation.
+Nous utilisons un formalisme de logique du premier ordre pour d\'{e}crire diff\'{e}rentes propri\'{e}t\'{e}s de s\'{e}curit\'{e} sous la forme de pr\'{e}dicats bool\'{e}ens. 
+Cette mod\'{e}lisation inclut la repr\'{e}sentation des donn\'{e}es des utilisateurs finaux ainsi que l'infrastructure de virtualisation.
+Une trace d'ex\'{e}cution est g\'{e}n\'{e}r\'{e}e pendant la migration d'un r\'{e}seau virtuel, et est ensuite utilis\'{e}e par un prouveur de th\'{e}or\`{e}me afin de v\'{e}rifier formellement si la s\'{e}curit\'{e} de la migration a \'{e}t\'{e} respect\'{e}e. Le mod\`{e}le formel est bas\'{e} sur la supposition que la trace d'ex\'{e}cution est g\'{e}n\'{e}r\'{e}e par un outil de supervision exempt de tout d\'{e}faut. Ceci implique que la preuve formelle est compl\`{e}te et que la supervision r\'{e}seau est toujours r\'{e}alis\'{e}e dans des conditions optimales. Nous levons cette hypoth\`{e}se en mod\'{e}lisant un probl\`{e}me d'allocation de ressources afin de d\'{e}terminer quels \'{e}quipements r\'{e}seau devraient \^{e}tre charg\'{e}s de la d\'{e}tection d'attaques pour une couverture optimale. Nous r\'{e}solvons ce probl\`{e}me en utilisant un processus de d\'{e}cision markovien et d\'{e}terminons un d\'{e}ploiement dynamique des ressources pendant la migration. Nous concluons notre optimisation en proposant un d\'{e}ploiement statique des ressources, en amont de toute migration.
+
+
+
+
+
 
 \chapter*{}
-\setcounter{page}{3}
+\setcounter{page}{4}
 \addcontentsline{toc}{chapter}{Dedication}
 \thispagestyle{empty}
 
@@ -154,27 +171,27 @@ We alleviate this assumption by modeling a resource allocation problem to determ
 
 As I finally reach the end of this long yet interesting journey, I realize I have so many people to thank.
 
-I would like to thank my PhD supervisor, Prof. Abdallah M'Hamet, for his wisdom and his advice that made every interaction interesting.
+I would like to thank my PhD supervisor, \textbf{Prof. Abdallah M'Hamet}, for his wisdom and his advice that made every interaction interesting.
 
-I also deeply thank Prof. Gregory Blanc and Prof. Christophe Kiennert, without whom this work 
+I also deeply thank \textbf{Prof. Gregory Blanc} and \textbf{Prof. Christophe Kiennert}, without whom this work 
 would never have been possible. Their remarks, their patience and their tremendous support helped me throughout this long path. They made me realize what matters during the PhD life and what it means to set high expectations for myself. There are no words for the gratitude I have towards them.
 
-I thank Prof. Val\'erie Viet Triem Tong and Prof. Ahmed Meddahi who reviewed my thesis and provided me with valuable remarks to improve it. 
+I thank \textbf{Prof. Viet Triem Tong} and \textbf{Prof. Meddahi} who reviewed my thesis and provided me with valuable remarks to improve it, and thanks to \textbf{Prof. Chrisment}, \textbf{Prof. Neves} and \textbf{Prof. Leneutre} for attending my defence.
 
-This whole opportunity would not have been possible without the trust of Prof. Herv\'e Debar, who gave me a chance to become an Engineer and then a Doctor. I have had premium hands on experience on research and infrastructure deployment. I owe him all these years spent at T\'el\'ecom SudParis.
+This whole opportunity would not have been possible without the trust of \textbf{Prof. Herv\'e Debar}, who gave me a chance to become an Engineer and then a Doctor. I have had premium hands on experience on research and infrastructure deployment. I owe him all these years spent at T\'el\'ecom SudParis.
 
-I am grateful for the collaboration I had with Doctor Richard Waldinger at the Stanford Research Institute. His expertise in theorem proving and his remarks made this work possible. I enjoyed every moment of our collaboration.
+I am grateful for the collaboration I had with \textbf{Dr. Richard Waldinger} at the Stanford Research Institute. His expertise in theorem proving and his remarks made this work possible. I enjoyed every moment of our collaboration.
 
 I have so many colleagues to thank here, for the support and cheerfulness they brought in along the way.
-Thank you Nesrine, Khalifa, Gamain, Miroslav, Stef, Seb, Christian, Olivier and so many others. I also wish good luck to Mariana, Antoine, Mus, Maria, Hadjer, Aina, Souhah, who should cross this line one day or another.
+Thank you \textbf{Nesrine}, \textbf{Khalifa}, \textbf{Gamain}, \textbf{Miroslav}, \textbf{Stef}, \textbf{Seb}, \textbf{Christian}, \textbf{Olivier} and so many others. I also wish good luck to \textbf{Mariana}, \textbf{Antoine}, \textbf{Mus}, \textbf{Maria}, \textbf{Hadjer}, \textbf{Aina}, \textbf{Souhah}, who should cross this line one day or another.
 
-A big thank to all of my friends, in no particular order: Guillaume, Jo, Thomas, Nico, Yoan, Chan, Etienne, whose company made me laugh when I needed it the most. 
+A big thank to all of my friends, in no particular order: \textbf{Guillaume}, \textbf{Jo}, \textbf{Thomas}, \textbf{Nico}, \textbf{Yoan}, \textbf{Chan}, \textbf{Etienne}, whose company made me laugh when I needed it the most. 
 
-I am grateful towards Vanessa, who lifted me up through music and who has been an extraordinary piano teacher. I only wish to meet her expectations towards me.
+I am grateful towards \textbf{Vanessa Sanfilippo}, who lifted me up through music and who has been an extraordinary piano teacher. I only wish to meet her expectations towards me.
 
 A very special mention to my family, which went through thick and thin with me, and to whom my love is unconditional. 
 
-Finally, there are three persons I have to thank for their incredible work during my PhD: Francoise Abad, Sandra Gchweinder and Zahia Zendagui. They made every single day run smoothly.
+Finally, there are three persons I have to thank for their incredible work during my PhD: \textbf{Francoise Abad}, \textbf{Sandra Gchweinder} and \textbf{Zahia Zendagui}. They make every single day run smoothly.
 
 All mistakes are mine, enjoy your reading !
 
@@ -207,7 +224,8 @@ All mistakes are mine, enjoy your reading !
 In this section, we provide a literature review of the different topics studied in this thesis.
 First of all, we start by defining the different networking and virtualization concepts considered in this thesis.
 Secondly, we examine the existing network hypervisors, and detail them under the scope of network migration with regard to the type of abstraction they provide.
-Thirdly, we will investigate the security of the Virtual Network migration, namely by considering the attack surface of a similar problem, Live Virtual Machine migration, as well as the formal models used to express security properties in a computer network.
+Thirdly, we consider works that investigate the Virtual Network migration process, with regard to the purpose of the migration, whether it is for performance optimization, technical limitations evaluation or for a formal study of the process.
+Fourthly, we will investigate the security of the Virtual Network migration, namely by considering the attack surface of a similar problem, Live Virtual Machine migration, as well as the formal models used to express security properties in a computer network.
 Both topics will outline the needs for a security study of the VN migration problem.
 Lastly, the last topic considered here is related to the resource allocation problem in a network infrastructure, and we will present different formalism used in this context.
 This problem is studied to improve the applicability of a model to a real life environment.
@@ -307,7 +325,7 @@ In this section, we consider two different formalisms used to solve the RA probl
 --Premature optimization is the root of all evil.”
 \qauthor{Donald Ervin Knuth}
 \end{savequote}
-\chapter{Optimizing resource allocation of monitoring resources}
+\chapter{Optimizing monitoring resource allocation}
 \label{sec:RAprob}
 \input{RA/RA-motivation.tex}
 
@@ -337,14 +355,14 @@ In this section, we consider two different formalisms used to solve the RA probl
 \bibliographystyle{alphaurl}
 % \printbibliography
 
-\newpage
-\begin{appendices}
-\input{appendixes/glossary.tex}
-\newpage
-% \input{appendixes/snark-code.tex}
-\newpage
-\input{appendixes/notations.tex}
-\end{appendices}
+% \newpage
+% \begin{appendices}
+% \input{appendixes/glossary.tex}
+% \newpage
+% % \input{appendixes/snark-code.tex}
+% \newpage
+% \input{appendixes/notations.tex}
+% \end{appendices}
 
 
 \end{document}
