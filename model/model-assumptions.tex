@@ -1,23 +1,29 @@
 We make several assumptions related to the scope of our study and about certain technical specificities.
 
 \subsection{Predicates}
-We consider in our formal model that the execution trace is complete.
-This implies that all the information necessary to compute the proof is present in the trace and that there is no missing event or predicate.
+
+\begin{itemize}
+    \item The formal execution trace is complete.
+    
+    This implies that all the information necessary to compute the proof is present in the trace and that there is no missing event or predicate.
 This assumption holds in our case because we have implemented a simulator to evaluate our scenario. However, this assumption does not hold in a real life environment, and we will treat this issue in the next chapter.
 
-We consider that all the predicates related to determining whether a user is allowed to access a specific node or data are generated using traditional Access Control solutions.
-% There is no significant contribution to be made on this aspect.
-
-% When a user accesses a node or a data, we do not differentiate the type of access being made, whether it was physical or remote.
-Similarly to the previous point, Access Control solutions are perfectly fit to handle accesses made by user to a node or a data.
+    \item Predicates related to determining whether a user is allowed to access a specific node or data are generated using traditional Access Control solutions.
+    
+    \item Accesses made by a user to a node or a piece of data are handled by existing Access Control solutions.
+    
+\end{itemize}
 
 
 \subsection{Infrastructure}
 \begin{itemize}
     \item Physical links in the network infrastructure are considered to be exempt from performance issues and safe from a security perspective.
+    
+    This supposes that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks
 \end{itemize}
 
-This supposes that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks, according to the following definitions:
+\newpage
+The scope of this assumption uses the following definitions:
 
 \textbf{Performance issues} 
 \begin{itemize}

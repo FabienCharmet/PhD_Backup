@@ -82,7 +82,6 @@ $path\_confidentiality(P) \Leftrightarrow \bigwedge\limits_{N \in L_P}node\_conf
 
 \textbf{Property 3:} A node's configuration remains confidential during a migration if the employed communication channel respects the confidentiality of the communication.
 \newline \textbf{Formal definition:} Let $N$ be a node, $P$ a path, $conf$ be the configuration to be pushed, $C$ be an hypervisor.
-\newline
 
 \begin{myformula}
 $config\_confidentiality(conf,N) \Leftrightarrow~\forall t,~\exists~C,P, 
@@ -185,7 +184,6 @@ $vlink\_integrity(l) \Leftrightarrow \bigwedge\limits_{N \in E_l} node\_integrit
 
 \textbf{Property 2:} A path preserves integrity from end to end if all of its network elements preserve their own integrity.
 \newline \textbf{Formal definition:} Let $P$ be a path in the network and $L_P$ be the set of nodes composing $P$.
-\newline
 
 \begin{myformula}
 $path\_integrity(P) \Leftrightarrow \bigwedge\limits_{N \in L_P}integrity(N) $
@@ -201,7 +199,7 @@ $path\_integrity(P) \Leftrightarrow \bigwedge\limits_{N \in L_P}integrity(N) $
 
 \textbf{Property 3:} A node's configuration maintains its integrity during a migration if it is not altered during the installation from the hypervisor to the node.
 \newline \textbf{Formal definition:} Let $N$ be a node, $conf$ be the configuration data to be pushed on node $N$, $C$ be a network hypervisor.
-\newline
+
 %\RW{ i proposed a replacement but i still have questions about it:  $confidentiality(conf,N) \Leftrightarrow \exists C,P~ confidentiality(C) \wedge confidentiality(P) \wedge confidentiality(N) \wedge is\_controller\_of(C,N)$}
 %\RW{needs quantifiers for C U P N.  also, the formula does not constrain these to have anything to do with conf it seems that to define a confidentiality-preserving migration requires mentioning time.  the network is confidential after the migration if it was confidential before.  }
 
@@ -225,7 +223,6 @@ needed by an authorized entity~\cite{ISO/IEC270012013}.
 We can define the predicate $availability(A)$ representing the availability of asset $A$.
 \newline
 Let $A$ be an asset, $U$ a user and $ti$ a time interval.
-\newline
 %\RW{why would availability be discussed without specifying a time?  it seems unlikely that an asset is always useable.}
 %\FC{In the same way we consider confidentiality and integrity, as long availability is preserved we don't need time, but we need to pinpoint the time intervals related to the violation if needed.}
 

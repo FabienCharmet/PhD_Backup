@@ -9,53 +9,60 @@ In order to exfiltrate the network traffic of his victim, the attacker will comp
 
 We make several hypotheses regarding the capacities and resources of an attacker:
 \paragraph{Hypotheses}
-\begin{enumerate}
+\begin{itemize}
     \item The attacker can modify the configuration of network nodes.
-    \item The attacker is able to exfiltrate data from his victim's VN.
-    \item The attacker only targets one VN during the attack.
-    \item The attacker can collect information to determine which nodes to target.
-    \item The attacker owns several VMs in the infrastructure.
-    \item There may be several attack sources in the infrastructure
-    \item A node will always be attacked by the same source.
-    \item The attacker only attacks one node at a time.
-    \item An attacker needs a certain amount of time to complete his attack.
-    \item The attacker only targets nodes contributing to construct the exfiltration path
     
-\end{enumerate}
-
-\paragraph{Hypotheses justifications}
-We precise here the technical and modeling context that the previous hypotheses are based on.
-
-\begin{enumerate}
-    \item Modifying a node's configuration has been proven  possible in~\cite{Taxonomy_Hizver2015, Bokani2015, attain-Ujcich2017}.Precisely, the attacker is able to spoof the identity of the network hypervisor, and thus is able to inject malicious flow rules inside the nodes to create the data exfiltration path. 
+    Modifying a node's configuration has been proven  possible in~\cite{Taxonomy_Hizver2015, Bokani2015, attain-Ujcich2017}.Precisely, the attacker is able to spoof the identity of the network hypervisor, and thus is able to inject malicious flow rules inside the nodes to create the data exfiltration path. 
     However, he is not able to be designated as the original network hypervisor in the nodes' configurations. 
     This can be explained because it requires advanced configuration privileges. Moreover, a physical node missing from the legitimate hypervisor's topology view is easily detectable, in comparison to malicious flow rules injected inside the physical nodes.
     
-    \item The exfiltration of data from the network only requires a Virtual Machine to forward the traffic to.
+    \item The attacker is able to exfiltrate data from his victim's VN.
     
-    \item The attacker has performed enough information gathering to determine which VN is the most profitable to attack.
+    The exfiltration of data from the network only requires a Virtual Machine to forward the traffic to.
     
-    \item The attacker has been able to determine which nodes to attack to trigger the migration thanks to prior scanning and information gathering. 
+    \item The attacker only targets one VN during the attack.
+    
+     The attacker has performed enough information gathering to determine which VN is the most profitable to attack.
+     
+    
+    \item The attacker can collect information to determine which nodes to target.
+    
+    The attacker has been able to determine which nodes to attack to trigger the migration thanks to prior scanning and information gathering. 
     Nevertheless, he has no exact knowledge about which nodes will be selected as the destination substrate and he will discover it by doing further scanning and fingerprinting  while he is attacking the infrastructure.  
     We can find a description of such techniques in~\cite{Hong2015,Sphinx-Dhawan2015}.
     This information gathering is out of scope of this thesis.
     
-    \item Owning several VMs in the infrastructure only incurs a small financial cost in any existing virtualization environment.
-    % \item The attacker is not limited to
+    \item The attacker owns several VMs in the infrastructure.
     
-    \item The attacker owns several VMs in the infrastructure and may leverage vulnerabilities in multiple locations.
+     Owning several VMs in the infrastructure only incurs a small financial cost in any existing virtualization environment.
+ 
     
-    \item Because of the short time interval considered for the migration, we suppose that the attack will always take the same path (\ie no change in the flow rules for routing the attack).
+    \item There may be several attack sources in the infrastructure.
+    
+    The attacker owns several VMs in the infrastructure and may leverage vulnerabilities in multiple locations.
+    
+    \item A node will always be attacked by the same source.
+    
+    Because of the short time interval considered for the migration, we suppose that the attack will always take the same path (\ie no change in the flow rules for routing the attack).
     Additionally, the attacker defines at the beginning the source of each attack for each node and does not deviate from this afterwards.
     Th path of the attack will be considered to determine the global detection probability of the attack.
     
-    \item We make this assumption for the consistency with the assumption that the migration process itself is sequential~\cite{Lime-Ghorbani2014}.
+    \item The attacker only attacks one node at a time.
     
-    \item Because the attacker targets one node at a time, it will take several steps to completely establish the full path to exfiltrate data. 
+    We make this assumption for the consistency with the assumption that the migration process itself is sequential~\cite{Lime-Ghorbani2014}.
     
-    \item Even if the attacker may target all nodes in the infrastructure, he has no incentives to attack nodes that will not be part of the path to exfiltrate data from his victim's network. We consider that the attacker will choose his targets using the strategy from Section~\ref{sec:target_proba}.
+    
+    \item An attacker needs a certain amount of time to complete his attack.
+    
+    Because the attacker targets one node at a time, it will take several steps to completely establish the full path to exfiltrate data. 
+    
+    \item The attacker only targets nodes contributing to construct the exfiltration path.
+    
+     Even if the attacker may target all nodes in the infrastructure, he has no incentives to attack nodes that will not be part of the path to exfiltrate data from his victim's network. We consider that the attacker will choose his targets using the strategy from Section~\ref{sec:target_proba}.
     From the point of view of the defender, it is impossible to accurately know which node will be attacked.
-\end{enumerate}
+    
+\end{itemize}
+
 
 
 

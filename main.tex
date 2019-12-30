@@ -65,7 +65,7 @@
 %  MARGIN
 \addtolength{\textwidth}{-0.4in}
 
-\newtcolorbox{myformula}{colback=block-gray,boxrule=0pt,boxsep=0pt,breakable,halign= flush left,before skip=15pt, after skip=5pt}
+\newtcolorbox{myformula}{colback=block-gray,boxrule=0pt,boxsep=0pt,breakable,halign= flush left,before skip=10pt, after skip=20pt}
 \definecolor{block-gray}{gray}{0.95}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -97,12 +97,6 @@
 \usepackage{amsthm}
 \theoremstyle{definition}
 \newtheorem*{definition}{Definition}
-
-
-
-
-
-
 
 
 \title{\LARGE \bf Security characterization of SDN virtual network migration:\\ Formal Approach and Resource Optimization}
@@ -294,6 +288,7 @@ In this section, we consider two different formalisms used to solve the RA probl
 \section{Assumptions}
 \input{model/model-assumptions.tex}
 
+\newpage
 \section{Modeling physical and virtual networks}
 \input{model/model-networks.tex}
 
@@ -350,9 +345,14 @@ In this section, we consider two different formalisms used to solve the RA probl
 \textbf{Fabien Charmet}, Richard Waldinger, Gregory Blanc, Christophe Kiennert, Khalifa Toumi (2017). Preserving confidentiality during the migration of virtual SDN topologies: A formal approach. \textit{IEEE 16th International Symposium on Network Computing and Applications}
 
 \newpage
-\FC{Don't forget to regenerate bibfile and change doi to optidoi}
+\input{appendixes/glossary.tex}
+
+\newpage
+% \FC{Don't forget to regenerate bibfile and change doi to optidoi}
 \bibliography{test}{}
 \bibliographystyle{alphaurl}
+
+
 % \printbibliography
 
 % \newpage
