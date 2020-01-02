@@ -94,12 +94,11 @@ We highlight in this section the emerging research issues based on the existing 
     \item \textbf{Optimization} The verification mechanism proposed with the formal model relies on the assumption that the detection of attacks is exempt from any imperfection. This assumption cannot be satisfied in a real life scenario, and we need to compensate this assumption by improving the detection capacities of our system.
     In order to do so, we have to propose an optimization scheme for the placement of monitoring resources.
     % The application of a formal model to a concrete operational scenario involves several practical requirements. The realism of the model depends on the gap between the theoretical assumptions made during the modeling process and the practical requirements and limitations of the scenario. Optimizing the implementation of the formal model will improve its usability.
-    We further study this topic in Section~\ref{sec:RAprob}\GB{last sentence is useless as you will introduce the organization later}.
+    % We further study this topic in Section~\ref{sec:RAprob}\GB{last sentence is useless as you will introduce the organization later}.
     
     
 \end{itemize}
 
-\newpage
 \section{Contributions}
 We make the following contributions in this thesis:
 
@@ -107,7 +106,7 @@ We make the following contributions in this thesis:
     \item We propose a formal model to describe the migration of Virtual Networks and to detect violations of security properties during the migration process.
     Our model describes operational aspects of SDN virtualization, encompasses the migration process and provides a set of security properties related to this process. We translate our model into a LISP representation to be used by a theorem prover to verify the security of the migration. We choose SNARK~\cite{snark-Stickel2000}, a first order logical theorem prover using temporal reasoning to determine the validity of the different security properties throughout the migration. The proof computed by SNARK is also used to determine precisely the cause of the security violation.
     
-    \item  We propose a resource allocation problem aimed at determining the optimal placement of monitoring resources to detect attacks on the migration process. Indeed, our first contribution outlines limitations of the formal model and how proofs are computed. We relax the hypothesis that the monitoring of the migration is perfect. We solve this resource allocation problem by investigating different formalisms to model the security of migration process\GB{it is not anymore the migration process you try to faithfully model but attacks against it and the monitoring of these attacks}. We explore their advantages and limitations, and come up with a solution using Markov Decision Processes. Finally, we adapt the dynamic solution computed by a Markov Decision Process into a static monitoring resource deployment, to enable the deployment of security prior to any migration.
+    \item  We propose a resource allocation problem aimed at determining the optimal placement of monitoring resources to detect attacks on the migration process. Indeed, our first contribution outlines limitations of the formal model and how proofs are computed. We relax the hypothesis that the monitoring of the migration is perfect. We solve this resource allocation problem by investigating different formalisms to model attacks against the migration process and the corresponding detection capacities. We explore their advantages and limitations, and come up with a solution using Markov Decision Processes. Finally, we adapt the dynamic solution computed by a Markov Decision Process into a static monitoring resource deployment, to enable the deployment of security prior to any migration.
 \end{itemize}
 
 % We have highlighted in the literature the different lacks from a research perspective and we have provided an extended list of security properties covering different aspects of the migration, the information that is impacted because of it, as well as the specific aspect of Virtual Network colocation, \ie co-residency. These properties are articulated around the description of the physical infrastructure and how Virtual Networks are supported by it.
