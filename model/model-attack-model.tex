@@ -14,7 +14,7 @@ Figure~\ref{fig:attack-surface} positions four different attackers: the insider 
 The insider is an attacker located inside the VN that is going to be migrated.
 It can be a malicious user able to control a virtual node and deploy incorrect flow rules.
 The collocated user is another user of the virtualization platform.
-He can use his own virtual network in the infrastructure.
+He can use his own Virtual Network in the infrastructure.
 The provider is the owner of the physical infrastructure.
 He has access to the SDN switches embedding the virtual topologies.
 The outsider is a malicious user outside the SDN environment.
@@ -71,7 +71,7 @@ This assumption comes from the fact that we aim to detect the transition between
 
     \item \textbf{No outsider attacker: } We assume that an attacker residing outside the virtualization infrastructure and not using the virtualization service has little to no attack surface on the infrastructure.
 Most interfaces to interact with any component of the system are limited in visibility from the outside world.
-For instance, the DPAC provides an interface for end users to interact with their virtual network, and there is no openly identified weaknesses for an outsider to use (\ie the hypervisor will reject commands from unauthorized/unidentified users).
+For instance, the DPAC provides an interface for end users to interact with their Virtual Network, and there is no openly identified weaknesses for an outsider to use (\ie the hypervisor will reject commands from unauthorized/unidentified users).
 Similarly, the CPAC provides an interface between the hypervisor and the physical nodes, and there is no functional use for this component to be interfaced directly with the outside world.
 \end{itemize}
 
@@ -148,7 +148,7 @@ This attack impacts the following security property:
 In this scenario, the attacker is a  user  gaining access to another　collocated user's confidential traffic.\\
 \textbf{Hypotheses}
 \begin{itemize}
-    \item \textbf{Collocated attacker:} The attacker owns a virtual network in the infrastructure.
+    \item \textbf{Collocated attacker:} The attacker owns a Virtual Network in the infrastructure.
     \item \textbf{Migration trigger:} The attacker can trigger the migration of the victim's VN.
     \item \textbf{Embedding knowledge:} The attacker has an approximate knowledge of the new substrate network.
     \item \textbf{Writing rights:} The attacker can install specific flow rules inside a node.
@@ -157,7 +157,7 @@ In this scenario, the attacker is a  user  gaining access to another　collocate
 
 \textbf{Attack methodology}\textbf{\\}
 In order to gain access to confidential data, the attacker generates instability in the infrastructure. Typically, generating lots of requests between nodes and users will create enough disruption to force the migration.
-Then, he will use his knowledge of the embedding of the virtual network to target specific nodes.
+Then, he will use his knowledge of the embedding of the Virtual Network to target specific nodes.
 Deploying probes in the network or attacking on a large scale the infrastructure could lead the virtualization layer to a particular deployment. Co-residency-based attacks and vulnerabilities are exploited in several cases~\cite{malicious-atya2017,nomad-Moon2015b,getoffmucloud-Ristenpart2009,stalling-atya2017}.
 An attacker uses time-based attacks to verify the co-residency with his victim and then the attacker will compromise the confidential data by redirecting it from the victim's VN towards a malicious host belonging to him.
 Such attacks rely on deploying specific flow rules on a set of physical nodes that will copy the confidential traffic and route it towards the attacker.

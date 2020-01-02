@@ -1,4 +1,4 @@
-The formal model and the different attacks we have described in the previous sections allow us to represent the security of the migration of virtual network. The security is defined in terms of predicates and equations, and can be evaluated using a theorem prover.
+The formal model and the different attacks we have described in the previous sections allow us to represent the security of the migration of Virtual Network. The security is defined in terms of predicates and equations, and can be evaluated using a theorem prover.
 In this section, we detail theoretical aspects of theorem proving, then, we will present the theorem prover used in our work, SNARK~\cite{snark-Stickel2000}.
 
 \subsection{First order logic theorem proving}
@@ -41,7 +41,7 @@ In general, there may be an infinity of answers to a query, but we rely on the t
 \subsection{Proving a simple violation with SNARK}
 \label{sec:find-violation}
 The operation and formalism of SNARK will be illustrated in the context of a simple example.
-We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a virtual network.
+We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a Virtual Network.
 This example makes a simple assumption regarding the possibility of reading a piece of data in the network. If the data is carried by a node during a certain time interval, then it can be read via the nodes connected to it, directly or via a path of nodes, during a subset of this time interval.
 This assumption alleviate the unnecessary burden of modeling the actual routing performed by network nodes and will instead focus on the configuration installed in the nodes.
 Rather than presenting the axioms of the theory in advance, we will introduce them as they are required in the proof.
@@ -214,7 +214,7 @@ This tells us that a violation can occur if \verb'user-2' reads \verb'data-1' al
 This is possible because \verb'data-1' is at \verb'node-a' during the larger time interval 
 \verb'(time-i time-a time-c)'.
 
-% It is also possible to use SNARK to establish that confidentiality is maintained in a particular virtual network.  
+% It is also possible to use SNARK to establish that confidentiality is maintained in a particular Virtual Network.  
 % For instance, if we pose the \textit{confidentiality list conjecture}
 % \begin{verbatim}
 %  (and

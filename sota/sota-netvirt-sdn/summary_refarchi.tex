@@ -5,10 +5,10 @@ Both DPAC and CPAC are implemented in every hypervisor, as they are essential fo
 The control over the VN exposed by the CPAC is either hypervisor based (HB) or full control (FC).
 % Openflow~\cite{Openflow-McKeown2008} is the main implementation for the DPAC as it is a standard supported by the industry and is widely studied.
 Maintaining a mapping between physical and virtual resources in the DPAC has become a main goal since arbitrary topologies often come with flowspace virtualization, thus giving tenants a lot of flexibility.
-Only Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} does not properly virtualize the dataplane and interacts with it using OpenFlow~\cite{Openflow-McKeown2008}.
-In a similar way, the VNE algorithm greatly simplifies the administration of virtual networks and thus has been integrated since early prototypes.
+Only Compositional Hypervisor~\cite{CompositionalHypervisor-Jin2014} does not properly virtualize the dataplane\GB{often found in two words in your manuscript.} and interacts with it using OpenFlow~\cite{Openflow-McKeown2008}.
+In a similar way, the VNE algorithm greatly simplifies the administration of Virtual Networks and thus has been integrated since early prototypes.
 While FlowVisor provides CPU and bandwidth (BW) isolation, only Slices Isolator~\cite{SlicesIsolator-El-Azzab2011} and Double FlowVisor~\cite{DoubleFV-Yin2013} extend this isolation to the physical network interfaces (Int) of a switch as well as the memory (Mem).
 We observe that few solutions have implemented an advanced monitoring module (\ie monitoring more than Discovery Protocols Notifications).
-In addition to that, network hypervisors rarely implement the migration of virtual networks, which leaves several opportunities for researchers.
+In addition to that, network hypervisors rarely implement the migration of Virtual Networks, which leaves several opportunities for researchers.
 
 

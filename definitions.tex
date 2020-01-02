@@ -1,12 +1,12 @@
-In this section we will present the different network concepts and paradigms that will be explored throughout this thesis.
-Specifically, we will detail the Software Defined Networking paradigm, and the network virtualization techniques that have emerged from it.
+In this section, we present the different network concepts and paradigms that will be explored throughout this thesis.
+Specifically, we detail the Software Defined Networking paradigm, and the network virtualization techniques that have emerged from it.
 
 \subsection{Software Defined Networking}
 
 Traditional networks are complex and difficult to operate~\cite{complexnetworks}, due to their heterogeneity and lack of interoperability. The network administrator is often tasked to configure each network element individually, and has to either do it manually or use low-level vendor specific scripts to deploy the configuration. The impossibility to aggregate these tasks into a unified workflow becomes more and more problematic as network infrastructures grow.
 
 To overcome these aspects, a new networking paradigm has been proposed, namely Software Defined Networking (SDN).
-The SDN paradigm consists in decoupling the control plane and the data plane.
+The SDN paradigm consists in decoupling the control plane and the data plane\GB{insert a small description between parentheses, e.g., ``the (physical) network infrastructure''}.
 The control plane is in charge of deciding how the network traffic should be processed upon entering the SDN infrastructure.
 This task is performed by a centralized component called the ``SDN controller'' which lies between the end user's SDN applications and the physical infrastructure, as depicted in Figure~\ref{fig:SDN-archi}. Instead of considering network traffic as individual packets, SDN aggregates packets into flows that are described by a matching pattern (filter) and every packet belonging to the flow will be processed identically. 
 
@@ -17,9 +17,9 @@ For instance, an application can prioritize how each customer's traffic should b
 Another example is a firewall that is configured to drop all the packets from the internet to a specific part of the infrastructure.
 Applications can interact with the SDN controller via the Northbound API.
 Usually, SDN controllers implement a REST API for these interactions~\cite{onos-Berde2014a,opendaylight,floodlight}.
-OpenFlow~\cite{Openflow-McKeown2008} (OF) is considered the standard implementation of the Southbound Interface, with numerous vendors supporting it in their products.
-OpenFlow provides enables the communication with network equipments and the installation of specific configurations using a match-action formalism.
-Figure~\ref{fig:matching-fields} summarizes the different OF header fields a flow can be matched against.
+OpenFlow~\cite{Openflow-McKeown2008} (OF) is considered the standard implementation of the SouthBound Interface\GB{please give a short definition of the SBI, e.g. ``the control channel between the SDNC and the data plane''}, with numerous vendors supporting it in their products.
+OpenFlow enables the communication with network equipments and the installation of specific configurations using a match-action formalism.
+Figure~\ref{fig:matching-fields} summarizes the different OF header fields a flow can be matched against\GB{what is notable about some of them. If you are not commenting the figure, then it is not useful to be displayed. Or just push it to the appendices.}.
 % \GB{you may want to comment on these header fields and provide a few examples of actions}.
 
 \begin{figure}[h]
@@ -31,13 +31,14 @@ Figure~\ref{fig:matching-fields} summarizes the different OF header fields a flo
 
 \subsection{Network Virtualization using SDN}
 \label{def:netvirt}
+\GB{you need to specify that you will mostly deal with OF-flavored SDN}
 
 For decades, hypervisors have enabled the sharing and isolation of physical resources among several virtual machines.
 Multiple users can run their own operating system simultaneously over a single physical machine.
-On the other hand, early virtualization of the network was implemented with VLANs, MPLS and Virtual Routing and Forwarding (VRF) primitives, all of which were limited in terms of programmability and adaptability. The emergence of SDN and its flexibility for the design of network applications has been leveraged to give the network resource a novel virtualization solution.
+On the other hand, early virtualization of the network was implemented with VLANs, MPLS and Virtual Routing and Forwarding (VRF) primitives, all of which were limited in terms of programmability and adaptability. The emergence of SDN and its flexibility for the design of network applications has been leveraged to give the network resource a novel virtualization solution\GB{not very informative sentence per se. we do not know how or what.}.
 
 Figure~\ref{fig:virt-archi} illustrates the differences between a classic SDN environment and an SDN virtualization infrastructure. In Figure~\ref{fig:virt-archi} (a), different applications are deployed on the SDN controller and impact the whole physical network.
-In Figure~\ref{fig:virt-archi} (b), the network hypervisor abstracts the view of the physical infrastructure into Virtual Networks to the end users (also referred to as tenants).
+In Figure~\ref{fig:virt-archi} (b), the network hypervisor abstracts the view of the physical infrastructure into Virtual Networks to be presented to the end users (also referred to as tenants).
 Each tenant will be able to deploy his applications on his own Virtual Network, that will in turn only impact the physical resources associated to it.
 The network hypervisor can be seen as an improved controller, as it allows multiple users to interact with the network infrastructure, while maintaining the isolation between them.
 % \GB{Well, I can push and retrieve flow entries from switches with an SDN controller too}. 
@@ -66,8 +67,12 @@ Two types of information are used by tenants of the virtualization infrastructur
 \paragraph{Abstractions of the physical infrastructure}
 Abstracting the physical infrastructure to the tenant can be done in three different ways, by slicing the physical infrastructure, by mapping the Virtual Network with the related physical resources or by providing an API to the tenant.
 \begin{itemize}
-    \item \textbf{A slice}~\cite{FlowVisor-Sherwood2009} is the set of physical resources allocated to a Virtual Network.
-Slicing the physical infrastructure consists in allocating only a subset of the infrastructure to the tenant while hiding the rest of the network equipments.
+    \item 
+    %\textbf{A slice}~\cite{FlowVisor-Sherwood2009} is the set of physical resources allocated to a Virtual Network.
+\textbf{Slicing} the physical infrastructure
+\cite{FlowVisor-Sherwood2009}
+consists in allocating only a subset of the infrastructure to the tenant while hiding the rest of the network equipments.
+The result is a set of physical resources allocated to the tenant's Virtual Network.
 The hypervisor gives the tenant a direct access to the network nodes composing the slice, and the flow rules installed by the tenant will be rewritten to only match the flow space he has been allocated.
 The term slice is also found in the literature to describe the subdivision of a single physical resource. For instance, a slice can be a subdivision of a physical node corresponding to a specific tenant.
 
@@ -75,7 +80,7 @@ The term slice is also found in the literature to describe the subdivision of a 
 Similarly to slicing, when a tenant will interact with his Virtual Network, the hypervisor will be tasked to translate the identifiers and parameters used in the Virtual Network into the corresponding ones from the physical infrastructure.
 
 % \GB{API sounds like an added layer on top of slicing or mapping based abstraction}
-\item \textbf{Providing} an API to the tenant allows the network hypervisor to have a better control over the capacities a tenant has on his Virtual Network. This extra abstraction layer can be used to limit the interactions of a tenant with his own Virtual Network or to alleviate existing limitations a tenant has to deploy network applications on top of his Virtual Network. 
+\item \textbf{Providing} an API to the tenant allows the network hypervisor to have a better control over the capacities a tenant has on his Virtual Network. This additional abstraction layer can be used to limit the interactions of a tenant with his own Virtual Network or to alleviate existing limitations a tenant has to deploy network applications on top of his Virtual Network. 
 
 \end{itemize}
 
@@ -83,12 +88,12 @@ Similarly to slicing, when a tenant will interact with his Virtual Network, the 
 
 \subsection{Virtual Network Migration}
 The migration of a Virtual Network is a maintenance process used to change the embedding of the Virtual Network. 
-This correspond to the allocation of a set of physical resources to partially or totally replace the original embedding of the Virtual Network.
+This corresponds to the allocation of a set of physical resources to partially or totally replace the original embedding of the Virtual Network.
 There are various reasons to migrate a Virtual Network: requests acceptance ratio optimization, resource failure, attacks on the infrastructure, etc.
 Reallocating resources to a Virtual Network is done to improve the general acceptance ratio of Virtual Networks in the infrastructure.
-In the event of a physical failure or an launching resource depletion attacks, the physical resources cannot support the operation of the Virtual Networks and the migration is necessary to maintain the availability of the service provided to the customer.
+In the event of a physical failure or when launching resource depletion attacks, the physical resources cannot support the operation of the Virtual Networks and the migration is necessary to maintain the availability of the service provided to the customer.
 
-In an SDN virtualization environment, the migration of a Virtual Network consists in computing new OF rules and install them in the newly allocated physical resources. Additionally, the hypervisor also update its internal view of the different Virtual Networks and their embedding in the physical infrastructure.
+In an SDN virtualization environment, the migration of a Virtual Network consists in computing new OF rules and install them in the newly allocated physical resources. Additionally, the hypervisor also updates its internal view of the different Virtual Networks and their embedding in the physical infrastructure.
 We do not consider here the internal aspect of the migration in the network hypervisor, which corresponds to updating the different information about the topology, the allocation requirements and other mechanisms that are specific to the implementation of each network hypervisor.
 
 From a network perspective, the migration process can be summarized by the following steps:

@@ -1,12 +1,12 @@
 
 \label{sec:thesis_conclusion}
-Network virtualization offers new service possibilities, in which a tenant can define his own network to interconnect virtual machines to operate his business. The tenant may request specific resources or define constraints for his virtual network, \eg minimum bandwidth, geographical location of the physical substrate, security requirements for the network traffic, \etc
+Network virtualization offers new service possibilities, in which a tenant can define his own network to interconnect virtual machines to operate his business. The tenant may request specific resources or define constraints for his Virtual Network, \eg minimum bandwidth, geographical location of the physical substrate, security requirements for the network traffic, \etc
 Virtual Network migration is a process used by an infrastructure provider to ensure a certain level of service availability for the user.
 This common maintenance operation may occur due to a physical failure of a network equipment or because the network is under an ongoing attack.
 
 Existing literature presents an extensive security study of Virtual Machines and of the related migration process, evaluating existing migration solutions and considering different types of attackers. We advocated that the virtualization of the network resource is subject to a similar attack surface because of the nature of the virtualization mechanism. This similarity still stands for the migration process itself, and despite the scarce literature on the topic, consequences on data security violations remain an important matter (\eg data breaches of personal information).
 
-In this thesis, we investigated the security of the migration of a virtual network in an SDN environment. 
+In this thesis, we investigated the security of the migration of a Virtual Network in an SDN environment. 
 We sought to answer three questions regarding this matter:
 
 \begin{itemize}
@@ -21,14 +21,14 @@ This approach is based on the hypothesis that it is possible to detect every att
 We proposed to alleviate this hypothesis to enable the model to be used in a realistic environment, and we formulated a resource allocation problem to do so.
 
 The first contribution presents a formal model to characterize the security of the migration process. We considered several security properties and described them using a temporal first order logic. Traditional properties like Confidentiality, Integrity and Availability are modeled in the context of an SDN infrastructure.
-% , and we presented a novel property to model the colocation ratio between virtual network users: the co-residency. 
+% , and we presented a novel property to model the colocation ratio between Virtual Network users: the co-residency. 
 % Co-residency is a security metric we recommend should be monitored to restrict the attack surface between two end users.
 We implemented our model in LISP, using the theorem prover SNARK.
 The proof computed with SNARK can be used to determine which event caused the security violation and when it happened.
 % We considered an attacker capable of rendering part of the network infrastructure unavailable and capable of accessing or modifying sensitive information.
 % Results show that the attack is detected by the theorem prover and when it occured.
 
-Related work on formal languages for network security provides several models of networks and interactions between different actors in a communication. The absence of models for network virtualization, the virtual network migration process and the related security introduce a gap with previous works that we filled with our model. 
+Related work on formal languages for network security provides several models of networks and interactions between different actors in a communication. The absence of models for network virtualization, the Virtual Network migration process and the related security introduce a gap with previous works that we filled with our model. 
 
 The second contribution investigates two different approaches we have envisioned to solve the resource allocation problem. The first approach consists in modeling the problem using Game Theory as it allows to explicitly model both the attacker and the defender. The second approach uses a Markov Decision Process to determine the optimal set of network nodes to monitor the infrastructure. This formalism is efficient for planning and decision making problem.
 
@@ -45,13 +45,13 @@ Our contribution illustrates the capacities of MDP to simulate the behaviour of 
 We also adapted the dynamic solution provided by the MDP into an \textit{a priori} deployment strategy of monitoring resources. This strategy is more realistic as it consists in deploying security resources prior to any migration instead of adapting the allocation every time a migration occurs.
 % , comparatively to the game we proposed.
 
-The focus of our study was centered around the physical infrastructure and the embedding of virtual networks on top of it.
+The focus of our study was centered around the physical infrastructure and the embedding of Virtual Networks on top of it.
 % We have illustrated the exploitation of the migration process using several existing network attacks.
 There are two main security aspects that have been left out of this study, namely the interactions between the tenant and the hypervisor, as well as the security of the internal components of the network hypervisor. These aspects are not related to network security, but they belong to the fields of cryptography and secure development.
 
 Additionally, the focus of the resource allocation problem was set on the defender's point of view, by transferring the impact of the attacker's capacities on transitions and rewards. This aspect may not be suited for other types of attacks that could be more complex, for instance when the attack on one node is multi-staged.
 
-The migration of virtual networks was a challenging research topic from a security perspective, because of the recent advances in networking techniques and the lack of specific formalisms and related solutions. We proposed a model in this thesis that sought to be the first step towards advanced evaluation models. We also focused on the applicability of this model and problem resolution tools to be usable in a real life environment. From this starting point, we envision several research leads that can be explored to complete this work on different aspects.
+The migration of Virtual Networks was a challenging research topic from a security perspective, because of the recent advances in networking techniques and the lack of specific formalisms and related solutions. We proposed a model in this thesis that sought to be the first step towards advanced evaluation models. We also focused on the applicability of this model and problem resolution tools to be usable in a real life environment. From this starting point, we envision several research leads that can be explored to complete this work on different aspects.
 
 \textbf{Perspectives for future work}
 
@@ -60,7 +60,7 @@ We outline several research perspectives among different topics:
 \textbf{Extending the formal model}
 \begin{itemize}
     \item 
-    The model we have developed in this thesis describes the traditional security properties considered in a computer system. We adapted the co-residency between Virtual Machines and proposed a definition for the co-residency of Virtual Networks, based on the physical substrate they share. This property can be exploited by monitoring the number of migrations happening in the infrastructure, and determine which end users' networks are regularly migrated. Co-residency can be defined as a threshold to prevent two Virtual Networks from excessively sharing the same physical substrate. This has been previously highlighted as a potential sign of a malicious behaviour. Characterizing co-residency through statistical analysis of user requests and migration events allow to model user profiles that can be exploited for security purposes. For instance, the network hypervisor can implement virtual network migration to reduce the co-residency between users, thus limiting the existing attack surface~\cite{nomad-Moon2015b,malicious-atya2017}.
+    The model we have developed in this thesis describes the traditional security properties considered in a computer system. We adapted the co-residency between Virtual Machines and proposed a definition for the co-residency of Virtual Networks, based on the physical substrate they share. This property can be exploited by monitoring the number of migrations happening in the infrastructure, and determine which end users' networks are regularly migrated. Co-residency can be defined as a threshold to prevent two Virtual Networks from excessively sharing the same physical substrate. This has been previously highlighted as a potential sign of a malicious behaviour. Characterizing co-residency through statistical analysis of user requests and migration events allow to model user profiles that can be exploited for security purposes. For instance, the network hypervisor can implement Virtual Network migration to reduce the co-residency between users, thus limiting the existing attack surface~\cite{nomad-Moon2015b,malicious-atya2017}.
 % , similarly to the works presented in~\cite{nomad-Moon2015b,malicious-atya2017}.
 
     \item 
@@ -71,14 +71,14 @@ We outline several research perspectives among different topics:
 % The migration traffic can be combined with noise to make the migration process undetectable. Investigating the behavior of network nodes as well as characterizing the network traffic with a statistical model may serve as a basis for the definition of a stealth property related to the network migration process. 
 
     \item 
-    Regarding the characterization of the security properties, implementing secure-by-design migration primitives becomes the second step toward a secured migration process. These primitives describe how the virtual network configuration is deployed inside the physical infrastructure, and propose specific metrics and probes to be used in the generation of the execution trace. Obvious cryptographic protocols will partly answer the confidentiality aspect but these may not be applicable everywhere and other properties (\eg availability, co-residency) are not fit for this solution. We envision a migration scheduling algorithm as a counter measure to the information collection capacities of the attacker considered in the threat model of this thesis. Based on the supposed location of the attacker in the infrastructure, flow rules may be deployed using specific paths or even the new destination substrate of the virtual network may be computed using these information. 
+    Regarding the characterization of the security properties, implementing secure-by-design migration primitives becomes the second step toward a secured migration process. These primitives describe how the Virtual Network configuration is deployed inside the physical infrastructure, and propose specific metrics and probes to be used in the generation of the execution trace. Obvious cryptographic protocols will partly answer the confidentiality aspect but these may not be applicable everywhere and other properties (\eg availability, co-residency) are not fit for this solution. We envision a migration scheduling algorithm as a counter measure to the information collection capacities of the attacker considered in the threat model of this thesis. Based on the supposed location of the attacker in the infrastructure, flow rules may be deployed using specific paths or even the new destination substrate of the Virtual Network may be computed using these information. 
     
 \end{itemize}
 
 \textbf{Extending the MDP model}
 \begin{itemize}
     \item 
-    The resource allocation problem was modeled to consider the migration of only one virtual network at a time. While this assumption holds because the attacker is targeting a single user, it is weakened when several virtual networks are migrated simultaneously. Introducing uncertainty about the potential targets in the algorithm makes it more difficult to determine the optimal monitoring nodes. A solution to this problem is to construct a graph representing the embedding of each virtual network, and to remove tenants from the graph when an attack has not impacted the substrate of his virtual network. Pruning and weighting techniques are evaluated in~\cite{pruning-secu}.
+    The resource allocation problem was modeled to consider the migration of only one Virtual Network at a time. While this assumption holds because the attacker is targeting a single user, it is weakened when several Virtual Networks are migrated simultaneously. Introducing uncertainty about the potential targets in the algorithm makes it more difficult to determine the optimal monitoring nodes. A solution to this problem is to construct a graph representing the embedding of each Virtual Network, and to remove tenants from the graph when an attack has not impacted the substrate of his Virtual Network. Pruning and weighting techniques are evaluated in~\cite{pruning-secu}.
 
     \item 
     As we have previously highlighted, the attack surface considered in this thesis focused on preventing unlawful manipulation or access to sensitive traffic or network equipments. Some network hypervisors focused on resource isolation, to maintain a fair use between users. A potential way to compromise the migration process is to throttle it by attacking the physical network (data plane) and/or the communication channel between tenants and the hypervisor (control plane). We propose to secure the control plane by implementing a resource allocation scheme to protect the communication channel between tenants and the hypervisor. We propose to secure the data plane by designing an adaptive migration algorithm that can recompute the VN embedding as the migration goes on in case the destination substrate has been compromized during the migration. 

@@ -43,10 +43,10 @@ We also assume that two physical equipments are connected via a single physical 
 
 \subsection{Virtualization}
 The implementation of the virtualization layer depends on the solution considered.
-Each solution comes with its own identifiers, flow space and limitations on how the user may design his virtual network and which fields and actions he may use to generate flow rules. Therefore, we exclude from our formal model the consideration of the technical specificities of the network hypervisor.
+Each solution comes with its own identifiers, flow space and limitations on how the user may design his Virtual Network and which fields and actions he may use to generate flow rules. Therefore, we exclude from our formal model the consideration of the technical specificities of the network hypervisor.
 We justify this choice by stating that ultimately, the hypervisor will generate a set of flow rules that will be installed in the infrastructure and therefore these rules can be seen as the final representation of the formal predicates describing the embedding of the VN.
 
-We also leave the VNE problem, \ie determining which set of physical resources should be the substrate of the virtual network, out of the scope of this thesis.
+We also leave the VNE problem, \ie determining which set of physical resources should be the substrate of the Virtual Network, out of the scope of this thesis.
 
 Some migration solutions and survivable VNE algorithms consider path splitting to provide robustness to the infrastructure.
 We exclude this specificity from the model and limit the embedding of a virtual link to a single set of physical nodes.

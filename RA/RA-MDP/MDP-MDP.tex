@@ -1,5 +1,5 @@
 \label{sec:mdp-model}
-In this section, we describe our MDP addressing the problem of optimal defense resource allocation for virtual network migration.
+In this section, we describe our MDP addressing the problem of optimal defense resource allocation for Virtual Network migration.
 
 \subsubsection{Model assumptions}
 \label{sec:mdp-model-assumption}
@@ -103,7 +103,7 @@ We summarize $c_f$ and $c_c^j$ with:
 We consider the path taken by the attack as a set of nodes.
 % We name $L$ the set of paths inside the infrastructure. 
 We define $L_j$ the unique path leading the attacker to node $j$.
-We note $\textbf{W}$ the set of non compromised nodes that are currently hosting the migrated virtual network (\ie $\textbf{W} = Mi^s \cap \overline{At^s})$.
+We note $\textbf{W}$ the set of non compromised nodes that are currently hosting the migrated Virtual Network (\ie $\textbf{W} = Mi^s \cap \overline{At^s})$.
 Similarly, we note $\textbf{T}$ the set of non compromised nodes that are directly connected to a compromised node and are not part of $\textbf{W}$, \ie they are potential candidates for the path between attacker and victim. Alg.~\ref{algo:target} is computed at each state as the sets $\textbf{T}$ and $\textbf{W}$ are changing.
 % This implies that compromising a node in $\mathbb{T}$
 % \FC{Add algorithm for function q to determine targets}

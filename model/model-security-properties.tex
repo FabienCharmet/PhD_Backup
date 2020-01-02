@@ -1,7 +1,7 @@
 \label{sec:security_prop}
 Modeling the SDN virtualization environment is a first step towards the study of the migration process. The second step is to define which aspects of the process we need to observe.
 
-In this section, we define the different security properties we consider during the migration of virtual networks.
+In this section, we define the different security properties we consider during the migration of Virtual Networks.
 We propose to model several security properties: confidentiality, integrity, availability, usually referred to as CIA~\cite{ISO/IEC270012013}. We also introduce co-residency, a property related to the virtualization process. This property represents how much two users share a common set of physical resources for the embedding of their Virtual Network.
 After providing a formal definition of each security property, we refine it into several properties related to the operation of SDN networks and virtualization. 
 Each property impacts physical elements of the SDN infrastructure, and we provide similar properties for the virtual nodes and links.
@@ -25,7 +25,7 @@ $ confidentiality(D) \Leftrightarrow \forall U,t~reads(U,D,t) \Rightarrow is\_da
 Simply put, if at any time no user reads $D$ or every user reading $D$ is authorized to do so, then the confidentiality of $D$ is preserved.
 From a cryptographic perspective, we do not differentiate the confidentiality of ciphered data and plain text data, while the data is in transit in the network.
 Based on our definition, the confidentiality of data is violated if an unauthorized user has been able to read it, and the fact that the data has been ciphered by the sender does not invalidate the violation from our point of view.
-From this definition, we can describe several properties directly affecting the physical infrastructure or virtual networks.
+From this definition, we can describe several properties directly affecting the physical infrastructure or Virtual Networks.
 
 
 % Give names instead of numbers 1, 2?
@@ -322,8 +322,8 @@ $path\_availability(P)\Leftrightarrow\bigwedge\limits_{N \in L_P}node\_availabil
 
 \subsection{Co-Residency}
 \label{sec:prop-cores}
-The co-residency between two virtual networks represents how much common physical resources they share.
-Precisely, two virtual networks are co-residing together if they are embedded, partially or totally, in the same physical resources during the same time interval.
+The co-residency between two Virtual Networks represents how much common physical resources they share.
+Precisely, two Virtual Networks are co-residing together if they are embedded, partially or totally, in the same physical resources during the same time interval.
 We define co-residency with the following predicate:
 Let $V_1$ and $V_2$ be two virtual topologies belonging to different users, $P_1$ and $P_2$ two sets of physical resources and let $ti$ be a time interval.
 \begin{myformula}
@@ -331,7 +331,7 @@ $coresidency(V_1,V_2,ti) \Leftrightarrow \exists P_1,P_2$~s.t.~$P_1 \cap P_2~\ne
 \end{myformula}
 
 \begin{itemize}
-    \item $is\_embedding(P,V,t_i)$ is true if the physical set of resources $P$ embeds the virtual network $V$ during time interval $t_i$.
+    \item $is\_embedding(P,V,t_i)$ is true if the physical set of resources $P$ embeds the Virtual Network $V$ during time interval $t_i$.
 \end{itemize}
 
 Co-residency is a property slightly different from the others because it is not directly related to security.

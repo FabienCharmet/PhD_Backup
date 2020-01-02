@@ -1,11 +1,11 @@
 \label{sec:model-network}
-We describe here the predicates used to represent the physical network and how virtual networks are embedded on it.
+We describe here the predicates used to represent the physical network and how Virtual Networks are embedded on it.
 
 % For an eased reading of the rest of this section, we define some variable names:
 
 % \begin{itemize}
 %     \item \textbf{hname} is the unique identifier of a network hypervisor
-%     \item \textbf{vnet} is the unique identifier of a virtual network
+%     \item \textbf{vnet} is the unique identifier of a Virtual Network
 %     \item \textbf{pnode\_name} is the unique identifier of a physical node
 %     \item \textbf{plink\_name} is the unique identifier of a physical link
 %     \item \textbf{ppath\_name} is the unique identifier of a physical path
@@ -105,26 +105,26 @@ In this figure, the hypervisor is directly connected to all the nodes of the inf
 
 
 
-\subsection{Virtual network modeling}
-We extend the previous predicates with the modeling of the virtual network and how the VN is embedded on top of a set of physical resources.
+\subsection{Virtual Network modeling}
+We extend the previous predicates with the modeling of the Virtual Network and how the VN is embedded on top of a set of physical resources.
 
 \begin{myformula}
 virtual\_network(\textbf{vnet\_name1},\textbf{ti1})
 \end{myformula}
 
-This predicate declares the existence of a virtual network \textbf{vnet\_name1} during time interval \textbf{ti1}.
+This predicate declares the existence of a Virtual Network \textbf{vnet\_name1} during time interval \textbf{ti1}.
 
 \begin{myformula}
 virtual\_node(\textbf{vnode\_name1},\textbf{vnet\_name1},\textbf{ti})
 \end{myformula}
 
-This predicate declares the existence of a virtual node \textbf{vnode\_name1} belonging to virtual network \textbf{vnet\_name1} during time interval \textbf{ti1}.
+This predicate declares the existence of a virtual node \textbf{vnode\_name1} belonging to Virtual Network \textbf{vnet\_name1} during time interval \textbf{ti1}.
 
 \begin{myformula}
 virtual\_link(\textbf{vlink\_name1},\textbf{vnode\_name1},\textbf{vnode\_name2},\textbf{vnet\_name1},\textbf{ti1})
 \end{myformula}
 
-This predicate declares the existence of a virtual link \textbf{vnode\_link1} between nodes \textbf{vnode\_name1} and \textbf{vnode\_name2} belonging to virtual network \textbf{vnet\_name1} during time interval \textbf{ti1}.
+This predicate declares the existence of a virtual link \textbf{vnode\_link1} between nodes \textbf{vnode\_name1} and \textbf{vnode\_name2} belonging to Virtual Network \textbf{vnet\_name1} during time interval \textbf{ti1}.
 
 % virtual\_path(\textbf{vpath\_name1},\textbf{vnode\_name1},\textbf{vnode\_name2},\textbf{ti1})
 
@@ -153,7 +153,7 @@ This predicate assigns physical link \textbf{plink\_name1} to the embedding of v
 We highlight that a virtual link is a succession of physical links, therefore we do not model its embedding using a single physical node.
 
 
-\subsection{Example of modeling physical and virtual networks}
+\subsection{Example of modeling physical and Virtual Networks}
 
 We consider the example depicted in Fig.~\ref{fig:VNE-example-model}.
 Because there is no failure in the system nor any attack, we use a single time interval \textbf{ti1} to represent the duration of the predicates.
@@ -163,7 +163,7 @@ Because there is no failure in the system nor any attack, we use a single time i
 The current infrastructure gives the following formal declaration:
 
 \begin{myformula}
-/* Defining virtual networks */\\
+/* Defining Virtual Networks */\\
 virtual\_network(vSDN1,ti1)\\
 virtual\_network(vSDN2,ti1)\\
 \textbf{\\}

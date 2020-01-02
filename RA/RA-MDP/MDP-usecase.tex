@@ -1,6 +1,6 @@
 We have implemented several use cases to determine the optimal monitoring deployment.
-We migrate a virtual network where the target substrate will be supported by physical nodes 1, 2 and 3.
-Node 6 is the exfiltration point of the attacker, which means that the attacker will establish a path between node 6 and one of the nodes embedding the virtual network (\ie node 1, node 2 and/or node 3).
+We migrate a Virtual Network where the target substrate will be supported by physical nodes 1, 2 and 3.
+Node 6 is the exfiltration point of the attacker, which means that the attacker will establish a path between node 6 and one of the nodes embedding the Virtual Network (\ie node 1, node 2 and/or node 3).
 In order to make the generation of the MDP states computationally tractable, we set a constant impact performance on all nodes. We set the discount factor of the value iteration algorithm to 0.9, a common value for use cases found in the literature.
 We summarize these parameters in Table~\ref{tab:mdp-parameters}.
 We compute the optimal policy of each MDP using MDPToolbox~\cite{Chades2014}.

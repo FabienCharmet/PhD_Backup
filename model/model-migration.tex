@@ -1,5 +1,5 @@
 \label{sec:model-migration}
-In an SDN virtualization infrastructure, the virtual networks are operated by installing flow rules in the underlying physical network.
+In an SDN virtualization infrastructure, the Virtual Networks are operated by installing flow rules in the underlying physical network.
 In the event of a migration, for maintenance purposes or because of an attack, the flow rules will be redeployed on a different physical substrate.
 
 We remind the reader that we limit our study of the migration process to its networking aspect, thus we are not considering the internal specificities of the hypervisors.
@@ -14,7 +14,7 @@ Similarly, a virtual node is the end point of several flow rules.
 Therefore, a virtual node can be seen as a collection of flow rules describing the end point of several virtual links on one physical node, SDN-wise.
 
 We include in this work the possibility to describe a one-to-many mapping between a virtual node and a physical node.
-Figure~\ref{fig:1tomany} (from VeRTIGO~\cite{VeRTIGO-Corin2012a}) depicts the 1-to-many mapping between virtual and physical elements. Here, the virtual network is composed of three virtual nodes embedded by physical nodes B, C and G.
+Figure~\ref{fig:1tomany} (from VeRTIGO~\cite{VeRTIGO-Corin2012a}) depicts the 1-to-many mapping between virtual and physical elements. Here, the Virtual Network is composed of three virtual nodes embedded by physical nodes B, C and G.
 The virtual link connecting virtual nodes between B and G is seen as a single link while actually there are physical nodes D and E and the corresponding physical links supporting the embedding.
 Thus, one virtual link is mapped to many physical resources.
 
@@ -22,11 +22,11 @@ Thus, one virtual link is mapped to many physical resources.
 We describe two migration algorithms in the following subsections, a naive algorithm~\cite{Lime-Ghorbani2014} and a more elaborate one~\cite{vnm-lo2013}. 
 The ordering of the selection of nodes and links for the migration is studied in~\cite{vnm-lo2013}. 
 We consider this to be out of scope of this thesis and we chose a naive ordering for the implementation of the migration algorithms.
-We propose our version of the naive algorithm (see Algorithm~\ref{algo:move_algo}) where during the migration phase, both VNs (old and new) will coexist to maintain the availability of the virtual network.
+We propose our version of the naive algorithm (see Algorithm~\ref{algo:move_algo}) where during the migration phase, both VNs (old and new) will coexist to maintain the availability of the Virtual Network.
 
 
 These algorithms use different functions to migrate the topology: create\_link, delete\_link, create\_node, delete\_node and embed. 
-Each function will be associated to predicates representing the state of the virtual network during the migration.
+Each function will be associated to predicates representing the state of the Virtual Network during the migration.
 We explain what each function does, SDN-wise:
 
 \begin{itemize}
@@ -46,7 +46,7 @@ We explain what each function does, SDN-wise:
 An intuitive migration algorithm is described in~\cite{Lime-Ghorbani2014}. 
 This algorithm aims at migrating the resources all at once.
 However, during the migration phase, the VNs are not operational as both are shutdown.
-We propose our version of this algorithm (see Algorithm~\ref{algo:move_algo}) where during the migration phase, both VNs (old and new) will coexist to maintain the availability of the virtual network.The underlying aspect of the coexistence of both old and new VNs requires to redirect new incoming flows through the newly migrated VN instead of the old one.
+We propose our version of this algorithm (see Algorithm~\ref{algo:move_algo}) where during the migration phase, both VNs (old and new) will coexist to maintain the availability of the Virtual Network.The underlying aspect of the coexistence of both old and new VNs requires to redirect new incoming flows through the newly migrated VN instead of the old one.
 This is handled by setting specific priorities for the flow rules corresponding to the VN.
 We leave this aspect out of the scope of this thesis, and refer the reader to~\cite{Lime-Ghorbani2014}.
 
@@ -54,13 +54,13 @@ First (line 3) we initialize $new\_topology$ as the migrated topology. Then, for
 Then (line 6) we instantiate the new virtual node and add the information to $new\_topology$.
 We repeat the process for the virtual links (lines 7-9).
 Then we remove the flow rules related to the old virtual nodes from the original substrate (lines 10-11) and from the old virtual links (lines 12-13).
-The virtual network is now completely migrated.
+The Virtual Network is now completely migrated.
 
 
 
 
 \begin{algorithm}[ht]
-\textbf{Input: }$topology$ as the virtual network to be migrated\\
+\textbf{Input: }$topology$ as the Virtual Network to be migrated\\
 \textbf{Output: } $new\_topology$ as the migrated topology\\
 % \State $nodes \gets List\_of\_nodes(topology)$
 $new\_topology \gets \emptyset$\\
@@ -107,7 +107,7 @@ We detail the functions used in the following algorithm:
 \end{itemize}
 
 \begin{algorithm}[ht]
-\textbf{Input: }$topology$ as the virtual network\\
+\textbf{Input: }$topology$ as the Virtual Network\\
 \textbf{Output: } $new\_topology$ as the migrated topology\\
  $remaining\_nodes \gets list\_of\_nodes(topology)$\\
  $migrated\_nodes \gets \emptyset$\\

@@ -1,21 +1,21 @@
 \subsection{Classification criteria}
-We study existing network hypervisors through the prism of virtual network migration.
-The scope is restricted to general purpose platforms and equipments to provide the network virtualization service. Therefore, hypervisors using specific technologies such as WiFi, radio frequencies or optical fiber. are out of the scope of this work.
+We study existing network hypervisors through the prism of Virtual Network migration.
+The scope is restricted to general purpose platforms and equipments to provide the network virtualization service. Therefore, hypervisors using specific technologies, such as WiFi, radio frequencies or optical fiber, are out of the scope of this work.
 
 % \GB{please rewrite the below paragraph}
 We categorize existing hypervisors based on the type of abstraction used to present Virtual Networks to the tenants, and whether or not the Virtual Network migration process is implemented in the considered hypervisor.
 
 \begin{itemize}
-\item \textbf{Abstracting the physical infrastructure}
-The first criterion used to classify existing hypervisors is concerned with how the virtual network is presented to the tenant. We have presented in Section~\ref{def:netvirt} the possible abstractions: slicing the infrastructure, mapping each Virtual Network with their allocated physical resources, or exposing a specific API to the tenant.
+\item \textbf{Physical infrastructure abstraction}
+The first criterion used to classify existing hypervisors deals with how the Virtual Network is presented to the tenant. We have presented, in Section~\ref{def:netvirt}, the possible abstraction approaches: slicing the infrastructure, mapping each Virtual Network with their allocated physical resources, or exposing a specific API to the tenant.
 
-\item \textbf{Migrating virtual networks}
-The second criterion we consider is whether or not the network hypervisor has implemented the migration of a virtual network in case of a physical failure or an attack on the infrastructure.
+\item \textbf{Virtual Network migration mechanism}
+The second criterion we consider is whether or not the network hypervisor has implemented the migration of a Virtual Network in case of a physical failure or an attack on the infrastructure.
 
 \item \textbf{Tenant identification}
-An important aspect of the virtualization is how the network hypervisor implements the identification of each tenant in the infrastructure, to determine how to process the network traffic.
+An important aspect of the virtualization is how the network hypervisor implements the identification of each tenant in the infrastructure, to determine how to process their network traffic.
 
-\item \textbf{Resource Isolation}
+\item \textbf{Resource isolation}
 The network hypervisor enforces isolation between the different tenants.
 This isolation ensures that each tenant is served with the required amount of resources.
 \end{itemize}
