@@ -29,13 +29,13 @@ The defender can choose among three different strategies:\\
 
 \subsection{Attacker}
 The attacker will compromise the migration to gain access to his victim's sensitive data.
-The attack is done by installing flow rules in specific nodes that will allow him to duplicate the victim's traffic towards one of his virtual machines, as depicted in Fig.~\ref{fig:data-exfiltration-attack}. 
+The attack is done by installing flow rules in specific nodes that will allow him to duplicate the victim's traffic towards one of his Virtual Machines, as depicted in Fig.~\ref{fig:data-exfiltration-attack}. 
 The attacker will compromise several nodes in order to establish a path between his victim's VN and one of his VMs.
 He will then use the compromised nodes to duplicate the victim's network traffic and redirect it towards his VM.
 The attack is considered complete when all the nodes establishing the full unauthorized path have been compromised.
 
 \textbf{Location: } The attacker has compromised one node in the infrastructure.\\
-\textbf{Attacker's resources: } The attacker owns virtual machines in the infrastructure.\\
+\textbf{Attacker's resources: } The attacker owns Virtual Machines in the infrastructure.\\
 \textbf{Attacker's capacities: } The attacker can scan or attack any node in the infrastructure.\\
 \textbf{Attacker's victim knowledge: } The attacker can identify the flow rules belonging to his victim.\\
 \textbf{Attacker's infrastructure knowledge: } The attacker has the view of the whole physical infrastructure.\\

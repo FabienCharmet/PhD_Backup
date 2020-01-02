@@ -1,6 +1,6 @@
 
 \label{sec:thesis_conclusion}
-Network virtualization offers new service possibilities, in which a tenant can define his own network to interconnect virtual machines to operate his business. The tenant may request specific resources or define constraints for his Virtual Network, \eg minimum bandwidth, geographical location of the physical substrate, security requirements for the network traffic, \etc
+Network virtualization offers new service possibilities, in which a tenant can define his own network to interconnect Virtual Machines to operate his business. The tenant may request specific resources or define constraints for his Virtual Network, \eg minimum bandwidth, geographical location of the physical substrate, security requirements for the network traffic, \etc
 Virtual Network migration is a process used by an infrastructure provider to ensure a certain level of service availability for the user.
 This common maintenance operation may occur due to a physical failure of a network equipment or because the network is under an ongoing attack.
 
@@ -84,7 +84,7 @@ We outline several research perspectives among different topics:
     As we have previously highlighted, the attack surface considered in this thesis focused on preventing unlawful manipulation or access to sensitive traffic or network equipments. Some network hypervisors focused on resource isolation, to maintain a fair use between users. A potential way to compromise the migration process is to throttle it by attacking the physical network (data plane) and/or the communication channel between tenants and the hypervisor (control plane). We propose to secure the control plane by implementing a resource allocation scheme to protect the communication channel between tenants and the hypervisor. We propose to secure the data plane by designing an adaptive migration algorithm that can recompute the VN embedding as the migration goes on in case the destination substrate has been compromized during the migration. 
 
     \item 
-    The complexity incurred by the number of states generated to compute the optimal policy of a Markov Decision Process represents a computationally heavy problem for the implementation of our work inside a Cloud infrastructure composed of thousands of network nodes, virtual machines and tenants. We may investigate this aspect by proposing the clustering of the infrastructure into small kernels and apply our MDP resolution on each kernel. Then, we would propose a combining technique that would tie kernels together. A similar idea is investigated in~\cite{POMDP-clustering}.
+    The complexity incurred by the number of states generated to compute the optimal policy of a Markov Decision Process represents a computationally heavy problem for the implementation of our work inside a Cloud infrastructure composed of thousands of network nodes, Virtual Machines and tenants. We may investigate this aspect by proposing the clustering of the infrastructure into small kernels and apply our MDP resolution on each kernel. Then, we would propose a combining technique that would tie kernels together. A similar idea is investigated in~\cite{POMDP-clustering}.
 
     \item 
     We may consider Partially Observable Markov Decision Processes (POMDP) to extend the impact of network attacks.

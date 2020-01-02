@@ -2,7 +2,7 @@ In this section, we take a closer look at the security of the live migration of 
 We first detail the existing vulnerabilities and possible attacks, and then detail different security solutions, either using the migration process as a way to overcome security issues or to analyze and improve the security of the migration process itself.
 
 \subsubsection{Attacking the VM migration process}
-Traditional hypervisors have been around for decades now, and the live migration of a virtual machine is a well known process. There has been several security surveys on the topic of VM hypervisors~\cite{Reuben2007,Rehman2013,Sahoo2010,Perez-Botero2013}, and on the security of Cloud environments~\cite{cloudenvironmentsecuritysurvey-fernandes2014}.
+Traditional hypervisors have been around for decades now, and the live migration of a Virtual Machine is a well known process. There has been several security surveys on the topic of VM hypervisors~\cite{Reuben2007,Rehman2013,Sahoo2010,Perez-Botero2013}, and on the security of Cloud environments~\cite{cloudenvironmentsecuritysurvey-fernandes2014}.
 Most of the security issues with VMs are related to the unlawful interactions between a VM and other VMs or the hypervisor\GB{Confusing: you cannot write a sentence with A AND B OR C. Please either use proper punctuation or split the sentence, or rewrite it altogther.}.
 % GB{too many ``or''s: please rewrite}.
 An attacker may exploit vulnerabilities in the hypervisor and force it to execute arbitrary code or access restricted memory zone.
