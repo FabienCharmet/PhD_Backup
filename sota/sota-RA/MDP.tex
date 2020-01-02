@@ -1,14 +1,14 @@
 \newpage
 \subsection{Markov Decision Processes}
 % \GB{not intro on why MDP and no articulation with previous section}
-In this section we describe the formalism of a Markov Decision Process (MDP).
+In this section, we describe the formalism of a Markov Decision Process (MDP).
 While Game Theory models consider at least two players in a game looking to maximize their profit, an MDP represents a single agent interacting with a system and aiming at maximizing a reward. 
 
 \subsubsection{Definitions}
 % \GB{this paragraph is inconsistent with how you structured 2.5.1.1}
 A Markov Decision Process~\cite{bellman1957} (MDP) is a mathematical model used to describe the interactions  an agent may have with a system.
-The system is described by the set of state it can be in, and when in a particular state the agent will choose an action to perform.
-Each action is associated to a potentially negative reward, considered as an incentive (or deterent) for the agent.
+The system is described by the set of state it can be in, and when in a particular state the agent will choose an action to perform\GB{too long and confusing: please split the sentence.}.
+Each action is associated to a potentially negative reward, considered as an incentive (or deterrent) for the agent.
 However, the outcome of each action is probabilistic thus incurring a certain amount of uncertainty about how the system will evolve.
 Therefore, after choosing an action the system may transition towards one out of several states (or remain in the same state), according to a probability distribution.
 
@@ -33,7 +33,7 @@ The aim of an MDP is to determine an optimal policy, defining for each possible 
 The solution of an MDP consists in determining the action that will maximize the utility function for every possible state.
 
 \subparagraph{The Bellman equation}
-Bellman proposes in~\cite{bellman1957} an analysis of equations that will help determining the maximum expected reward in an MDP, expressed as non-linear equations. However he proves that they possess quasi-linear properties that allow him to solve these equations using methods only applicable to linear cases. 
+Bellman proposes in~\cite{bellman1957} an analysis of equations that will help determining the maximum expected reward in an MDP, expressed as non-linear equations. However, he proves that they possess quasi-linear properties that allow him to solve these equations using methods only applicable to linear cases. 
 The Bellman equation shown in \eqref{eq:bellmaneq} lays the groundwork for solving MDPs using dynamic programming.
 This equation states that the optimal utility $V(s)$ expected from a state $s$ is the sum of the reward obtained when entering state $s$ and the expected discounted sum of probable utilities of the neighbours of $s$. The uncertainty of obtaining a reward in the future makes it less attractive than an immediate reward, $\gamma$ is the discount factor for the future reward.
 
@@ -91,6 +91,7 @@ Policy Iteration can be described as follows:
             }
         \end{algorithm}\newpage
     \item Improve policy
+    \GB{should \textbf{foreach} starts at line 2 in the below algorithm?}
     \begin{algorithm}
         stable-policy = True
         \ForEach{$s\in S$}{
@@ -109,11 +110,11 @@ Policy Iteration can be described as follows:
 
 
 The computational complexity of both algorithms is studied in~\cite{mdpcomplexity}.
-Results show that MDPs can be solved in a polynomial time for both algorithm, but existing solutions are barely exploiting the structure specificities of an MDP. Simply put, MDPs are solved like any other optimization problem.
+Results show that MDPs can be solved in a polynomial time for both algorithms, but existing solutions are barely exploiting the structure specificities of an MDP. Simply put, MDPs are solved like any other optimization problem.
 
 \subparagraph{Q-Learning}
 The Q-Learning algorithm~\cite{qlearning} is used when the MDP does not provide an explicit definition of its model (\ie transitions and/or rewards definitions are unknown).
-The agent only knows what state he is in, and upon choosing an action the agent will receive a reward for transitioning from state $s_t$ to $s_{t+1}$.
+The agent only knows what state he is in, and upon choosing an action, the agent receives a reward for transitioning from state $s_t$ to $s_{t+1}$.
 The Q function defines the \textit{quality} of action $a$ at state $s_t$.
 Similarly to the Value Iteration algorithm, updating the Q function starts with an arbitrary initialization and will be gradually updated as time passes (See Equation~\eqref{eq:updatingq}).
 
@@ -143,11 +144,11 @@ Using an MDP to allocate security services to cloud users is studied in~\cite{Li
 The authors start by describing the security services provided by the cloud, and the underlying RA problem.
 They consider that the arrival of security services requests follow a Poisson law, and the system will either accept or reject the request. Formally speaking, the authors use a Semi MDP (SMDP) which is an extension of traditional MDP that include asynchronous events from outside the system and continuous time (in opposition to the discrete time approach of an MDP).
 The states of the MDP represent the number of security services currently served to the users. In addition to requests arrival events, the departure of users (incurring a freeing of the resources) is also modeled as an event. The reward function substracts the cost of occupation of the cloud resources by the security services to the revenues generated by allocating resources to users. 
-From this resource allocation model the blocking probability is derived, \ie which class of service is most likely to be rejecting requests from users. Extensive numerical evaluations are performed to determine optimal revenues under different request arrival rates.
+From this resource allocation model, the blocking probability is derived, \ie which class of service is most likely to be rejecting requests from users. Extensive numerical evaluations are performed to determine optimal revenues under different request arrival rates.
 
 RA problems become even more relevant in environments with scarce resources.
 Allocating the right amount of resources in mobile Cloud networks will improve the user experience and failing to deliver will hurt the business model.
-Such approach is considered in~\cite{Liang2012} where the authors use an MDP to handle resource transfer between mobile cloud domains. Each cloud domain composing the network can host a certain amount of services using its own resources. 
+Such approach is considered in~\cite{Liang2012} where the authors use an MDP to handle resource transfer between mobile cloud domains. Each cloud domain composing the network can host a certain amount of services using its own resources\GB{sentence is too long and confusing: please split it.}. 
 This work also uses the SMDP model because the request arrival formalism is well defined.
 Arrival requests are handled by the receiving domain but when the domain's capacities are exceeded, service request are transferred to adjacent domains and determines which one is best suited to accept the request.
 The state of a cloud domain is characterized by the number of services it is supporting and the type of request it receives.
@@ -188,10 +189,10 @@ Several scenarios are considered: open and closed-loops in the traffic as well a
 
 \subsection{Summary}
 % \GB{since it is a subsection of SoTA on MDP, this summary should only consider MDPs at first and only compare to GT at the end or in the main conclusion (2.6). please rewrite}
-The resource allocation problem has been investigated using two different formalisms, namely the Game Theory formalism and Markov Decision Processes.
-Game Theory accounts for the point of view of an attacker and a defender, allowing to extensively model the behavior of an attacker and his impact on the defended system.\\
+The resource allocation problem has been investigated using two\GB{but not limited to these two approaches...} different formalisms, namely the Game Theory formalism and Markov Decision Processes.
+Game Theory accounts for the point of view of an attacker and a defender, allowing to extensively model the behavior of an attacker and his impact on the defended system.
 The MDP ends up being a one user optimization method but the description of the reward function and the transitions between states may reflect external interactions, which could represent the impact of an attacker.
-A strong advantage of MDPs over game theory models lies in the flexibility of the formalism to describe the available actions.
+A strong advantage\GB{if there is already an obvious advantage of using MDP over GT in RA, was it worth investigating?} of MDPs over Game Theory models lies in the flexibility of the formalism to describe the available actions.
 
 % \GB{Table~\ref{tab:MDP-summary} lacks the type of MDP (e.g., semi) and the reward}
 % Please add the following required packages to your document preamble:

@@ -2,20 +2,20 @@ Formal models for network security cover a broad range of topics and application
 We consider here the models providing an algebra to represent, to a certain extent, various network security properties. 
 We also focus on whether or not a form of temporal logic is used to support the reasoning about security properties.
 Temporal reasoning is used to order events and determine specifically when an attack was launched, and by which networking event. 
-We categorized these models into three different sections: languages used for the security analysis of a communication protocol, languages used to implement a form of access control for an information system and finally languages used to describe the infrastructure enforcing the security services.
+We categorized these models into three different sections: languages used for the security analysis of a communication protocol, languages used to implement a form of access control for an information system, and finally, languages used to describe the infrastructure enforcing the security services.
 
 \subsubsection{Communication protocol analysis}
 In computer networks, confidentiality and authentication of the communications are among the most important properties to measure and protect.
 In~\cite{CSP-Schneider1996}, messages exchanged between users are described and characterized by a set of security properties.
 The author uses the Communicating Sequential Processes (CSP) algebra to represent the different actors involved in a network communication, including a potential attacker. 
-Considering the formalism of CSP, the system will be described with the events it can perform and by the traces it generates (\ie the different sequences of events carried out by the system).
+Considering the formalism of CSP, the system is described by the events it can perform and the traces it generates (\ie the different sequences of events carried out by the system).
 In a communication system, messages can be sent and received by users.
 Therefore, the definition of the confidentiality of a message is maintained if this message was only received by his intended recipient and no one else.
 % CSP has been proven effective for the analysis of communication protocol where the messages exchanged between different users generate a trace of network events, while each message can be ciphered using encryption keys.
 
 The security analysis of communication protocols heavily relies on the expressiveness of the language used to describe it and how the attacker's capacities are defined. HLPSL~\cite{HLPSL-Chevalier2004} is a protocol specification language used to model the temporal interactions between users in a communication network. Using temporal logic, HLPSL describes the interactions between users not in terms of messages exchanged to achieve the communication but rather describes the role(s) of each user. Such roles may then be combined into composite roles when a protocol involves sub-protocols.
 The definition of a role is a set of variables, either shared between roles or only known to one role.
-Then, each role includes a set of states, and the conditions that must be met to transition from one state to another. Transition conditions include messages to be sent or received or if a specific information has been received using a particular ciphering key.
+Then, each role includes a set of states, and the conditions that must be met to transition from one state to another. Transition conditions include messages to be sent or received or if a specific information has been received using a particular ciphering key\GB{sentence too long and confusing. Please split it}.
 HLPSL proposes a modular definition of an attacker, where his capacities would not be identical over the whole system.
 This is true in current networks, where the heterogeneity of the infrastructure may expose different vulnerabilities.
 Security properties are defined as logical predicates combined with temporal operators such as: always, sometimes in the past, \etc
@@ -25,11 +25,11 @@ The evaluation of a protocol's security is performed using the AVISPA tool~\cite
 A common way to describe networking systems is by representing the interactions between the users with Access Control Lists (ACL).
 ACLs can be seen as a set of rules that will either allow or deny the right to perform a specific action, like letting a specific flow go through a firewall for instance.
 Representing authorizations depends on the level of abstraction desired.
-For instance, Matousek~\etal proposed in~\cite{Matousek2008} an ACL model at the network level, where router configurations are converted into ACLs which are then represented using a specific data structure to provide conjunction/disjunction capacities to the model (\ie combining several configurations together).
+For instance, Matousek~\etal proposed, in~\cite{Matousek2008}, an ACL model at the network level, where router configurations are converted into ACLs which are then represented using a specific data structure to provide conjunction/disjunction capacities to the model (\ie combining several configurations together).
 The main contribution of the paper is to provide an automated analysis of the network state while considering the changes in the topology (\ie link failure) as well as the security rules in place.
 The analysis determines if a specific flow (referred to as property) will be let through the system considering the configuration in place. They illustrate this with the example of a web traffic flow from a host to a Web server, and determine that, in case of a link failure, this flow will now be dropped because of existing filtering rules.
 
-MulVal~\cite{mulval-Ou2013} extends the notion of ACL analysis by modeling attacks on the system. First of all, the model uses the Common Vulnerabilities and Exposures (CVE) to describe the vulnerabilities in the infrastructure. This approach is different from~\cite{Matousek2008} because CVE impacts workstations, services and (mis)configuration. The security aspect is no longer limited only to Layer 3\&4 filtering.
+MulVal~\cite{mulval-Ou2013} extends the notion of ACL analysis by modeling attacks on the system. First of all, the model uses the Common Vulnerabilities and Exposures (CVE) to describe the vulnerabilities in the infrastructure. This approach is different from~\cite{Matousek2008} because CVE impacts workstations, services and (mis)configuration. The security aspect is no longer limited only to Layers 3 and 4 filtering.
 With the use of CVE comes the definition of attacks on the system and how they are performed.
 Instead of converting each CVE into a specific attack, MulVal leverages the language's formalism to define broader attacks.
 Therefore, each time a vulnerability is discovered, it will most likely fall under an already existing attack, thus minimizing configuration time.
@@ -40,8 +40,8 @@ They illustrate this by implementing an attack on a Web Server and using the rig
 Going one step higher in the abstraction level, OrBAC~\cite{orbac} describes Access Control policies at the organization level. Simply put, an organisation is an entity, in which a role (\ie a group of users) will be given a permission to do a specific activity (\ie a set of actions) on a view (\ie a set of objects) in a certain context (\ie under certain conditions).
 % OrBAC also uses the notion of contexts~\cite{context-orbac} which represents the conditions that must be met to authorize (or prevent) a user to perform a specific task.
 Security policies include permission, prohibition or obligation to perform an activity.
-The OrBAC model defines security policies using a set of logical predicates. These predicates will then be used to represent the permissions granted to the user.
-The work presented in~\cite{Cuppens} converts high level policies into practical firewall configurations. Thanks to the possibility to precisely distribute permissions to the users, it is possible to use OrBac in a ``white list" mode, even though firewalls may be configured with prohibitions (\ie dropping packets by default as the last rule.
+The OrBAC model defines security policies using a set of logical predicates. These predicates are then used to represent the permissions granted to the user.
+The work presented in~\cite{Cuppens} converts high level policies into practical firewall configurations. Thanks to the possibility to precisely distribute permissions to the users, it is possible to use OrBac in a ``white list" mode, even though firewalls may be configured with prohibitions\GB{I am unfamiliar with the term ``prohibition'' used for firewalls. What you describe in parentheses is actually a white list.} (\ie dropping packets by default as the last rule).
 Finally, OrBAC offers a conflict resolution module in charge of detecting conflicts between high level policies and may propose modifications to solve them.
 ACLs benefit from this formalism as users can now functionally describe their organization while it simplifies the configuration and maintenance of low level resources.
 
@@ -53,13 +53,13 @@ M2D2 describes four types of information required to do the correlation: charact
 The IS is characterized by its topology (connections between network equipments and hosts), and by the products installed on hosts (\eg OS, software,  etc.)
 The definition of a vulnerability in M2D2 corresponds to a specific configuration on a host, i.e., the set of the different products installed.
 If a subset of this configuration corresponds to a vulnerable configuration described in a CVE, then the host is subject to this specific vulnerability.
-The security tools are IDS located either on a host or in the network (HIDS and NIDS) and are used to generate events based on their capacity to detect vulnerabilities.
+The security tools are IDS located either on a host (HIDS) or in the network (NIDS) and are used to generate events based on their capacity to detect vulnerabilities.
 They are given a detection range, which means one specific IDS may not detect certain vulnerabilities or attacks because they do not fall under its scope of scrutiny. 
 % (\eg activated signature on a misuse IDS).
 
 Events generated by IDSs are either scans, when a vulnerability is discovered, or an alert when an attacker is currently trying to exploit a vulnerability.
 M2D2 contributes to alert aggregation on three different aspects: single host aggregation, target identification and false positives detection.
-Single host aggregation regroups the alerts generated by the HIDS and the alerts generated by the NIDS that are targeting this host.
+Single host aggregation regroups the alerts generated by the HIDS and the alerts generated by the NIDS that are targeting a specific host.
 Identifying targets vulnerable to a specific ongoing attack works by extracting the vulnerability exploited from the alert, then retrieving the associated configuration and determining if this vulnerable configuration is a subset in the configuration of each host in the IS.
 Detecting false positives generated by IDSs works by first aggregating the alerts similar to the one considered.
 The set of IDSs which have generated these alerts is now compared with the set of IDSs which are deemed able to actually detect the attack (based on their detection range).
@@ -112,7 +112,7 @@ We note that the migration process extends the attack surface of the hypervisor 
 Additionally, the migration of VM across SDN networks has been investigated~\cite{Datacenters2014,Lin2013,Ibn-Khedher2015} but this approach lacks a security perspective and thus should be considered as well.
 
 Numerous languages are used to describe network communications and the physical infrastructure supporting them. While model checking is a common accepted technique to verify that certain properties are verified under a specific model, the use of temporal reasoning remains limited to specific contexts.
-The use of CVE for the description provides numerous advantages, such as a common knowledge database, the wide range of properties available and the precision available to describe the impacts of a security violation.
+The use of CVE for the description provides numerous advantages, such as a common knowledge database, the wide range of properties available and the precision available to describe the impacts of a security violation\GB{too long and confusing: please split the sentence.}.
 Additionally, the description of security properties and their formalization is sometimes limited to a binary view, whether it is verified or not. The expressiveness of languages could benefit from quantifiers to represent a form of tolerance in the verification.
 The analysis determines if a specific flow (referred to as property) will be let through the system considering the configuration in place. They illustrate this with the example of a web traffic flow from a host to a Web server, and determine that, in case of a link failure, this flow will now be dropped because of existing filtering rules.
 
