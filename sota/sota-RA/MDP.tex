@@ -1,4 +1,4 @@
-\newpage
+% \newpage
 \subsection{Markov Decision Processes}
 % \GB{not intro on why MDP and no articulation with previous section}
 In this section, we describe the formalism of a Markov Decision Process (MDP).
@@ -7,7 +7,7 @@ While Game Theory models consider at least two players in a game looking to maxi
 \subsubsection{Definitions}
 % \GB{this paragraph is inconsistent with how you structured 2.5.1.1}
 A Markov Decision Process~\cite{bellman1957} (MDP) is a mathematical model used to describe the interactions  an agent may have with a system.
-The system is described by the set of state it can be in, and when in a particular state the agent will choose an action to perform\GB{too long and confusing: please split the sentence.}.
+The system is described by the set of state it can be in, and by the actions an agent can choose to perform.
 Each action is associated to a potentially negative reward, considered as an incentive (or deterrent) for the agent.
 However, the outcome of each action is probabilistic thus incurring a certain amount of uncertainty about how the system will evolve.
 Therefore, after choosing an action the system may transition towards one out of several states (or remain in the same state), according to a probability distribution.
@@ -91,9 +91,9 @@ Policy Iteration can be described as follows:
             }
         \end{algorithm}\newpage
     \item Improve policy
-    \GB{should \textbf{foreach} starts at line 2 in the below algorithm?}
+    % \GB{should \textbf{foreach} starts at line 2 in the below algorithm?}
     \begin{algorithm}
-        stable-policy = True
+        stable-policy = True\\
         \ForEach{$s\in S$}{
             $temp = \pi(s)$\\
             \tcc{Compute new policy}
@@ -148,9 +148,9 @@ From this resource allocation model, the blocking probability is derived, \ie wh
 
 RA problems become even more relevant in environments with scarce resources.
 Allocating the right amount of resources in mobile Cloud networks will improve the user experience and failing to deliver will hurt the business model.
-Such approach is considered in~\cite{Liang2012} where the authors use an MDP to handle resource transfer between mobile cloud domains. Each cloud domain composing the network can host a certain amount of services using its own resources\GB{sentence is too long and confusing: please split it.}. 
+Such approach is considered in~\cite{Liang2012} where the authors use an MDP to handle resource transfer between mobile cloud domains. Each cloud domain composing the network can host a certain amount of services, using its own resources. 
 This work also uses the SMDP model because the request arrival formalism is well defined.
-Arrival requests are handled by the receiving domain but when the domain's capacities are exceeded, service request are transferred to adjacent domains and determines which one is best suited to accept the request.
+Arrival requests are handled by the receiving domain. When the domain's capacities are exceeded, the service request is transferred to adjacent domains to determine which one is best suited to accept it.
 The state of a cloud domain is characterized by the number of services it is supporting and the type of request it receives.
 The actions available are accepting, rejecting or transferring the request.
 The reward system is based on the price paid by the user, the potential cost to transfer the service to an adjacent domain, but also the resources consumed to process the requests. 
@@ -189,10 +189,11 @@ Several scenarios are considered: open and closed-loops in the traffic as well a
 
 \subsection{Summary}
 % \GB{since it is a subsection of SoTA on MDP, this summary should only consider MDPs at first and only compare to GT at the end or in the main conclusion (2.6). please rewrite}
-The resource allocation problem has been investigated using two\GB{but not limited to these two approaches...} different formalisms, namely the Game Theory formalism and Markov Decision Processes.
-Game Theory accounts for the point of view of an attacker and a defender, allowing to extensively model the behavior of an attacker and his impact on the defended system.
+We limited the study of the resource allocation problem has been investigated to two different formalisms, namely the Game Theory formalism and Markov Decision Processes.
+% These approaches 
+Game Theory accounts for the point of view of an attacker and a defender, allowing to extensively model the behavior of an attacker and his impact on the defended system, compared to the MDP.
 The MDP ends up being a one user optimization method but the description of the reward function and the transitions between states may reflect external interactions, which could represent the impact of an attacker.
-A strong advantage\GB{if there is already an obvious advantage of using MDP over GT in RA, was it worth investigating?} of MDPs over Game Theory models lies in the flexibility of the formalism to describe the available actions.
+An advantage of MDPs over Game Theory models lies in the flexibility of the formalism to describe the available actions.
 
 % \GB{Table~\ref{tab:MDP-summary} lacks the type of MDP (e.g., semi) and the reward}
 % Please add the following required packages to your document preamble:

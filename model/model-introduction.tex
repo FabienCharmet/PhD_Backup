@@ -2,12 +2,12 @@ The state of the art highlights numerous challenges related to the use of SDN fo
 The migration of Virtual Networks has also been an important research topic, as the availability of a Virtual Network is as crucial as the availability of a Virtual Machine.
 However, and this is where the gap between VM migration and VN migration lies, the security of the former has been extensively studied while the latter is yet to be explored.
 
-We propose to study the security of the migration process from a formal perspective.
+We propose to study the security of the migration process from a formal perspective. This field has never been investigated before, and a formal approach will outline a first scope of study as well as a set of definitions that can be extended in a future work.
 The scope of this work is to provide a formal proof of the security during the migration, which can be later used to reconstruct the serie of events that lead to the security breach. We exclude a real-time computation of the proof with regard to this requirement.
 
-The different models presented in Section~\ref{sec:sota} are based on legacy networks.
+The different models presented in Chapter~\ref{sec:sota} are concerned with legacy networks.
 One important challenge is to consider the specificities of the SDN paradigm in the design of the formal model.
-The security approach of existing models is either too high level (ACL based languages~\cite{orbac,mulval-Ou2013}) or very technical (CVE based security description like M2D2~\cite{M2D2-Morin2002}).
+Also, the security approach of existing models is either too high level (ACL based languages~\cite{orbac,mulval-Ou2013}) or very technical (CVE based security description like M2D2~\cite{M2D2-Morin2002}).
 We need an intermediate positioning where a formal approach can be articulated with the particularities of the SDN paradigm.
 
 First, we propose several definitions for the following security properties: confidentiality, integrity, availability 

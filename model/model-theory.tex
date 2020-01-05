@@ -18,8 +18,8 @@ The first order logic admits the following logical operators:
     \item $\wedge$: The conjunction operator, $A \wedge B$ denotes the logical arithmetic operation A AND B.
     \item $\vee$: The disjunction operator, $A \vee B$ denotes the logical arithmetic operation A OR B.
     \item brackets $( )$: Brackets are used to order the resolution of the logical proposition, similarly to traditional arithmetic.
-    \item $\Rightarrow$: The implication operator, $A \Rightarrow B$ means A implies B.
-    \item $\Leftrightarrow$: The bidirectional implication operator, $A \Leftrightarrow B$ means "A implies B`` AND "B implies A``.
+    \item $\Rightarrow$: The implication operator, $A \Rightarrow B$ means ``A implies B''.
+    \item $\Leftrightarrow$: The bidirectional implication operator, $A \Leftrightarrow B$ means ``A implies B AND B implies A''.
 \end{itemize}
 
 Predicates are functions taking a set of terms (variables) as input and returning a binary value, True or False, as an output.
@@ -28,27 +28,27 @@ For instance, we can define $P(A,B,C) = A \wedge (B \vee C)$, which would yield 
 
 \subsubsection{First order logic Theorem Proving}
 The purpose of theorem proving is to determine if a set of clauses is satisfiable or unsatisfiable.
-A satisfiable clause that admits a solution that makes it true.
-An unsatisfiable clause is a clause that cannot be true no matter the values of its terms.
+A satisfiable clause admits a solution that makes it True.
+An unsatisfiable clause is a clause that cannot be True no matter the values of its terms.
 The theorem prover will apply inference rules on the original set of clauses and try to reach another set of clauses where the satisfiability can be determined.
 
 We will now present some rules of inference used for first order logic theorem proving.
-A rule of inference is a rule defining the deduction process, it takes a set of propositions as input and returns a proposition which is a conclusion drawn from the input propositions.
+A rule of inference is a rule defining the deduction process: it takes a set of propositions as input and returns a proposition which is a conclusion drawn from the input propositions.
 
-We use \{clause 1, clause2, ..., clause n\} to define a set of n clauses.\\
+We use \{clause 1, clause2, ..., clause n\} to define a set of n clauses.
 We use $\vdash$ to represent the result of the deduction from a set of clauses.
 
 \subsubsection{Modus ponens and modus tollens}
 Modus ponens is a rule of inference using the affirmation in an implication to deduce the conclusion.
-Considering the simple example given previously, $P \Rightarrow Q$, if we assert that $P$ is true, then we use modus ponens to conclude that $Q$ is true as well. This is summarized as ``If P implies Q and P is true, then Q must be true" : $P \Rightarrow Q, P \vdash Q$.
+Considering the simple example given previously, $P \Rightarrow Q$, if we assert that $P$ is True, then we use modus ponens to conclude that $Q$ is True as well. This is summarized as ``If P implies Q and P is True, then Q must be True" : $P \Rightarrow Q, P \vdash Q$.
 
 Similarly Modus tollens uses the negation in the consequence of an implication to deduce the conclusion.
-Considering $P \Rightarrow Q$, asserting that $Q$ is false, then $P$ must be false as well: $P \Rightarrow Q, \neg Q \vdash \neg P$.
+Considering $P \Rightarrow Q$, asserting that $Q$ is False, then $P$ must be False as well: $P \Rightarrow Q, \neg Q \vdash \neg P$.
 
 \subsubsection{Resolution principle}
-The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield false. 
-
+The resolution principle, shortened to resolution, is an inference rule satisfying the completeness property. Completeness implies that applying the resolution to an unsatisfiable clause will always yield False. 
 For instance, $P \wedge \neg P$ is obviously unsatisfiable, \ie it is always False.
+% \GB{so far you have using capitalized and non-capitalized versions of True and False. Please be consistent in your notation.}.
 
 The resolution principle uses substitution in a set of clauses to reach a conclusion.
 We consider the simple example presented in~\cite{snark-Stickel2000} and refer the reader to~\cite{symbolic-proof} for additional reading, more specifically on variable unification.
@@ -60,7 +60,7 @@ The resolution principle returns the clause $Q \vee R$ as a resolvent of the pre
 \subsubsection{Paramodulation}
 The paramodulation is an inference rule used to exploit the equality existing between terms and the occurrence of term in a proposition. The paramodulation can be seen as \textit{substitution in case of equality}.
 
-Consider the proposition $P(x) = true$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
+Consider the proposition $P(x) = True$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
 
 Consider now the two propositions: $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\}$.\\
 Paramodulation deduces the proposition $P(y) \vee Q(y) \vee R(y)$.\\
@@ -73,5 +73,5 @@ This is done to simplify the search space when applying inference rules~\cite{sn
 We illustrate this with a simple example:\\
 $\{P \Leftrightarrow Q \wedge R, P \vee T\}$ is rewritten as $Q \wedge R \vee T$. 
 
-The rewriting rule may be condition to replace the left hand side of an equivalence by the other, but may also apply substitutions to terms in the proposition only on one side of the proposition.
+The rewriting rule may be used to replace the left hand side of an equivalence by the other, but may also apply substitutions to terms in the proposition only on one side of the proposition.
 We also refer the reader to~\cite{snark-Stickel2000,symbolic-proof} for further explanations.

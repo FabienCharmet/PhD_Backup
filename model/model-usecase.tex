@@ -1,5 +1,5 @@
 \label{sec:model-usecase}
-In this section we describe, with our model, the information disclosure and migration alteration attacks detailed in Section~\ref{sec:model-attacks}.
+In this section, we describe, with our model, the information disclosure and migration alteration attacks detailed in Section~\ref{sec:model-attacks}.
 We prove the feasibility of detecting security violations with each attack, using the migration algorithms presented in Section~\ref{sec:model-migration}.
 We describe a virtual topology and verify that the initial setup is respecting the security properties previously defined.
 We do not include every single axiom used by SNARK for simplicity of reading.
@@ -9,21 +9,19 @@ We have implemented a simulator to generate the formal trace of the migration.
 This work includes the topology, the algorithms used, the attacks on the migration process and the different rights users have on the infrastructure.
 
 \subsection{Use case setup}
-We have set up a network topology with six nodes, as depicted in Figure~\ref{fig:usecase-topo}
-
+We have set up a network topology with six nodes, as depicted in Figure~\ref{fig:usecase-topo}.
 \input{figures/topology-usecase-model.tex}
-
-
 In addition to the topology, we name the time points of the different steps during the migration process based on the number of iterations (see Figure~\ref{fig:time-points}).
 We define the first two basic time points time-0 and time-1 to respectively represent the initial situation and the beginning of the migration process. The last time point varies, depending on the length of execution of the migration.
 
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
-\includegraphics[scale=0.5]{figures/time-points-evolution} 
+\includegraphics[scale=0.45]{figures/time-points-evolution} 
 \caption{Time points of the migration process.\label{fig:time-points}}
-\end{figure}
+\end{figure*}
 
+\newpage
 \subsection{Initial Situation}
 In this section, we consider the network topology prior to any migration.
 We solely have the axioms related to the Virtual Network, the corresponding users, and the data carried across the network.
@@ -61,8 +59,8 @@ We have a similar request in lines 11-18 for the configuration integrity propert
 
 We execute SNARK to find the proofs of these two questions.
 Lines 5 and 11 of Listing~\ref{lst:init-conf-a} hold the answers.
-We can establish from line 5 that data-1 has its confidentiality respected (and it is the only one used in our experiment).
-At line 11, we have proven that conf-1 is not compromised either (and it is the only one used as well).
+We can establish from line 5 that \verb'data-1' has its confidentiality respected (and it is the only one used in our experiment).
+At line 11, we have proven that \verb'conf-1' is not compromised either (and it is the only one used as well).
 % The same goes for all the other nodes of the topology, for the sake of brevity, these proofs have been omitted.
 %but we do not provide the print out in this paper.
 
@@ -92,7 +90,7 @@ The migration process starts and nodes and links are being migrated, one after a
 At some point during the migration, the attacker will start his attack to gain access to the data carried through the VN.
 This results into the generation of two predicates, one about the attacker reading the data, and the other about him not being authorized to do so. 
 When the migration process ends, the data has been compromised.
-In SNARK, the piece of data has been named data-1 and the migration ends at time point time-9.
+In SNARK, the piece of data has been named \verb'data-1' and the migration ends at time point \verb'time-9'.
 We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf-q}, specifying which terms we are looking for.
 Similarly to previous examples, lines 3-4 represent the violation of the confidentiality over a non-empty time interval.
 
@@ -121,7 +119,7 @@ Similarly to previous examples, lines 3-4 represent the violation of the confide
 \end{lstlisting}
 
 We can see that SNARK confirms the data confidentiality violation at line 12 from Listing~\ref{lst:not-data-conf-a}.
-Since the attack started during the migration (i.e after time point time-1), SNARK detects the beginning of the confidentiality violation at time point time-4.
+Since the attack started during the migration (i.e after time point \verb'time-1'), SNARK detects the beginning of the confidentiality violation at time point \verb'time-4'.
 Line 10 highlights that the attacker does not have the authorization to read the data.
 %\GB{could you point out directly which line you are referring to by labeling and referring to independent lines in the listing?}
 
@@ -147,16 +145,16 @@ The initial situation is similar to the previous scenario but we use the move-ba
 The attacker is located in the network infrastructure and can render physical nodes unavailable to trigger the migration process. He will then intercept and modify the configuration sent by the hypervisor. 
 Therefore, the $conf\_integrity$ property is not respected anymore.
 
-We implement in SNARK the $conf\_integrity$ property, as depicted in Listing~\ref{lst:conf-integrity-definition}.\\
+We implement in SNARK the $conf\_integrity$ property, as depicted in Listing~\ref{lst:conf-integrity-definition}.
 Lines 1-3 define the equivalence between the $conf\_integrity$ property and the other predicates.
 Line 4 defines a logical AND between the following predicates:
-Line 5 defines \textit{?t.t-int}, a time interval as the intersection of all the time intervals expressed in the following predicates.
-Line 11 assigns controller \textit{?c.controller} to node \textit{?n.node}.
-Line 14 defines \textit{?p.path} as the path between \textit{?c.controller} and \textit{?n.node}.
-Line 17 assigns configuration \textit{?d.data} to node \textit{?n.node}.
-Line 20 represents preservation of the integrity of configuration data \textit{?d.data}.
-Note that we modeled the implication ($\Rightarrow$) defined in Section~\ref{sec:security_prop} as a logical conjunction.
-Line 23 ensures that \textit{?t.t-int} is not empty.
+Line 5 defines \verb'?t.t-int', a time interval as the intersection of all the time intervals expressed in the following predicates;
+Line 11 assigns controller \verb'?c.controller' to node \verb'?n.node';
+Line 14 defines \verb'?p.path' as the path between \verb'?c.controller' and \verb'?n.node';
+Line 17 assigns configuration \verb'?d.data' to node \verb'?n.node';
+Line 20 represents preservation of the integrity of configuration data \verb'?d.data'.
+Note that we modeled the implication ($\Rightarrow$) defined in Section~\ref{sec:security_prop} as a logical conjunction;
+Line 23 ensures that \verb'?t.t-int' is not empty.
 
 \begin{lstlisting}[caption=SNARK definition of the configuration integrity., label=lst:conf-integrity-definition,captionpos=b] 
 (implied-by
@@ -186,7 +184,7 @@ Line 23 ensures that \textit{?t.t-int} is not empty.
 \end{lstlisting}
 
 We formulate in Listing~\ref{lst:not-conf-int-q} the question for SNARK.
-Line 1 represents the format of the answer, here we look for which configuration is being compromised. In lines 2-4 we search for the violation of the $conf\_integrity$ property over a non empty interval. Similarly to other questions, lines 5-8 represent parameters for SNARK to use in the resolution.
+Line 1 represents the format of the answer: here we look for which configuration is being compromised. In lines 2-4, we search for the violation of the $conf\_integrity$ property over a non empty interval. Similarly to other questions, lines 5-8 represent parameters for SNARK to use in the resolution.
 
 \begin{lstlisting}[caption=SNARK question to detect the configuration integrity violation., label=lst:not-conf-int-q,captionpos=b] 
    (find-all '(ans ?d.data ?t.time-interval)
@@ -199,8 +197,8 @@ Line 1 represents the format of the answer, here we look for which configuration
                      :print-derived :print)
 \end{lstlisting}
 
-The configuration integrity breach is then proven by SNARK in Listing~\ref{lst:not-conf-int-a} for conf-1 at line 8 between time points time-3 and time-4 .
-Similarly to the previous information disclosure scenario, the attack starts after the beginning of the migration process, as shown by the answer term starting at time-3.
+The configuration integrity breach is then proven by SNARK in Listing~\ref{lst:not-conf-int-a} for \verb'conf-1' at line 8 between time points \verb'time-3' and \verb'time-4' .
+Similarly to the previous information disclosure scenario, the attack starts after the beginning of the migration process, as shown by the answer term starting at \verb'time-3'.
 
 The proofs related to the other security properties are identical in essence, thus we do not include them here.
 % SNARK finds the beginning of the attack on node-a starting at time point time-3.

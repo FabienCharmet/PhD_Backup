@@ -3,7 +3,7 @@ Mutualizing these resources became a crucial research topic, that would pave the
 There are three main resources that have been virtualized over the past decades, namely computing power, storage and memory.
 These resources typically represent the basic constituents of a computer.
 Virtualization gained a lot of popularity, and led to the development of Cloud Computing, where computer infrastructures, business information and software applications would not be handled on site anymore but deployed instead at an external site, \ie the Cloud.
-Cloud Computing provides an interface for clients to operate their business, offers customization, and relieves them from the burden of the daily maintenance of the physical infrastructure. Recent advances in networking technologies have introduced 5G technologies, where Virtual Networks will be supported by multiple and heterogeneous technologies (\eg wireless and optical networks)\GB{no! 5G is not supported by wireless and optical networks. you may refer as a radio and optical infra, but it does not support 5G per se.}.
+Cloud Computing provides an interface for clients to operate their business, offers customization, and relieves them from the burden of the daily maintenance of the physical infrastructure. Recent advances in networking technologies have introduced 5G technologies, where Virtual Networks will be supported by multiple and heterogeneous technologies (\eg LTE and WiFi).
 
 In opposition to the different resources that have been efficiently virtualized so far, the network resource did not benefit from the same advances in virtualization.
 There are several network virtualization primitives that have existed for a long time now, such as VLAN, Virtual Routing and Forwarding (VRF) or MPLS tags. VLAN and MPLS tags provide a form of virtualization by adding identifiers to the network traffic and then use these identifiers to slice the physical network. VRF uses a different approach where the routing table of each physical equipment is divided into virtual routing tables to isolate the different users. Tunnels are then set up to connect the different virtual routing tables, usually with MPLS.
@@ -13,24 +13,25 @@ However, the Software Defined Networking (SDN) paradigm consisting in decoupling
 In the SDN paradigm, the network resources are abstracted into Virtual Networks by installing routing rules in the physical equipments. These rules will describe how the traffic should be processed. In addition, physical switches can allocate CPU power and minimum bandwidth to each Virtual Network.
 
 Concurrently to the development of Software Defined Networking, the evolution of Cloud Computing created a user-centric model where an individual can request fully functional software solutions, such as an e-commerce solution, a mail server or a file hosting service. The user is in charge of managing the service he ordered without having to manage the physical infrastructure.
-It is the responsibility of the Cloud provider to maintain the services and resources allocated to the end user.
-\GB{there is a lack of logical link between the two paragraphs}
+It is the responsibility of the Cloud provider to maintain the virtual resources allocated to the end user (\eg Virtual Machines and Virtual Networks).
 
-Network virtualization is complementary to machine virtualization, because the end user can requests Virtual Machines (VM) and services, that can be interfaced with his own Virtual Network. Additionally, he can deploy custom routing protocols, security mechanisms and specific applications. The abstraction of the network resource yields advantages similar to the ones of VMs , such as a reduction of deployment costs, an increased scalability of the system and an improved failure recovery.
+% \GB{there is a lack of logical link between the two paragraphs}
+
+Network virtualization is complementary to machine virtualization, because the end user can requests Virtual Machines (VM) and services, that can be interfaced with his own Virtual Network. Additionally, he can deploy custom routing protocols, security mechanisms and specific applications. The abstraction of the network resource yields advantages similar to the ones of VMs, such as a reduction of deployment costs, an increased scalability of the system and an improved failure recovery.
 
 Network resources, similarly to other physical resources can suffer from attacks and failures. A network switch can unexpectedly encounter a software error, a power outage, or an attacker may target the infrastructure to compromise the regular operations of the equipments. There are three types of countermeasure to these problems: detection, prevention and reaction. Detecting attacks or failure in the infrastructure relies on the monitoring resources that have been deployed prior to the incident. Prevention consists in deploying solutions prior to the occurrence of the problem, while reaction is used after an actual failure (or attack).
-\GB{what is the logical link between the two paragraphs?}
-In this thesis, we consider the specific case of Virtual Network migration.
+
+In this thesis, we study a reaction mechanism under the specific case of Virtual Network migration.
 The migration process consists in reallocating resources to support the Virtual Network.
 The configuration of the different elements of the Virtual Network will be deployed across the infrastructure to restore the service.
 
 Virtual Machine migration has proven to be an efficient answer to physical failures and attacks on the hypervisor, and has already been extensively studied. From a security perspective, an attacker can exploit vulnerabilities in the hypervisor to impact the performance of the migration, sometimes making it impossible to complete the migration, thus shutting down the VM.
-Virtual Network migration works with a similar environment, and presents a similar attack surface. We advocate that these similarities make the VN migration a worthy target to compromise.
+Virtual Network migration works with a similar environment, and presents a similar attack surface. We advocate that these similarities make the Virtual Network (VN) migration a worthy target to compromise.
 
 In this thesis, we investigate the security of the migration process, and seek to answer the following questions:
 
 \begin{itemize}
-    \item What is the security of the VN migration process?\GB{bad research question. I suggest ``How can we express/evaluate the security of the migration process?}
+    \item How can we express the security of the migration process?
     \item How can a security violation of the migration process be detected?
     \item How can the detection process be optimized?
 \end{itemize}
@@ -38,7 +39,7 @@ In this thesis, we investigate the security of the migration process, and seek t
 \section{Motivation}
 5G network architectures are meant to be flexible, scalable and adaptable to each user's needs.
 The user can request a Virtual Network using 5G technologies, which will be used to support the user's business operations. A Virtual Network may interconnect the different user's services, for instance web servers and databases. 
-The resources allocated to each user of the network have their own lifecycle, and may suffer failures or attacks targeting the infrastructure. These problems will disrupt the business' operations, and are solved by migrating the Virtual Network on a different set of physical resources.
+The resources allocated to each user of the network have their own life-cycle, and may suffer failures or attacks targeting the infrastructure. These problems will disrupt the business' operations, and are solved by migrating the Virtual Network on a different set of physical resources.
 
 The migration of a virtual SDN network consists in redeploying flow rules on network equipments, after a failure or an attack. These rules define how to process the user's traffic on the new equipments.
 The security of the migration process is relevant to both the user and the physical infrastructure since the configuration related to the Virtual Network as well as the user traffic are both impacted. 
@@ -52,9 +53,10 @@ With the trajectory taken by modern architectures, the dynamic migration of Virt
 The study and implementation of the Virtual Network migration process remains very scarce from either an academic or industrial point of view. This can be explained by the following reasons:
 
 \begin{itemize}
-    \item The technologies used to implement SDN based network virtualization are still at an early stage of industrial standardization. OpenFlow~\cite{Openflow-McKeown2008} is the first implementation of an API enabling SDN, developed in academia and supported by industry leaders who integrated it into their physical equipments. However, over the past couple of years, OpenFlow has shown limitations with regard to current networking operational needs\GB{citation needed}. Indeed, the design of a common interface to interact in a vendor-agnostic way with physical equipments (\ie OpenFlow\GB{it has been the only thing you've been speaking of}) has highlighted a new problem: the limitations of the packet forwarding capacities of each OpenFlow-enabled network equipment\GB{it sounds this issues is SDN-based not necessarily OpenFlow related}. 
+    \item The technologies used to implement SDN based network virtualization are still at an early stage of industrial standardization. OpenFlow~\cite{Openflow-McKeown2008} is the first implementation of an API enabling SDN, developed in academia and supported by industry leaders who integrated it into their physical equipments. However, over the past couple of years, OpenFlow has shown limitations with regard to current networking operational needs~\cite{openflowlim}. Indeed, the design of a common interface to interact in a vendor-agnostic way with physical equipments has highlighted a new problem: the limitations of the packet forwarding capacities of each OpenFlow-enabled network equipment.
+    % \GB{it sounds this issues is SDN-based not necessarily OpenFlow related}. 
     
-    \item These limitations are summarized into a new paradigm\GB{this does not mean anything}: the programmability of the data plane.
+    \item These limitations led to the design of a new paradigm: the programmability of the data plane.
     This paradigm proposes to let the user define how networking protocols should be implemented in the physical equipments, instead of relying on fixed primitives decided by the vendor during the design of the equipment. A popular example of this paradigm is P4~\cite{P4}.
     This approach dates back to 2013, thus is at an early stage from the industrial point of view, similarly to OpenFlow.
     The lack of maturity of OpenFlow combined to the rise of P4 may hinder the implementation of the Virtual Network migration process, until both reach a sufficient maturity level to be exploitable in the industry.
@@ -76,17 +78,17 @@ We advocate that the lack of research material should not be considered as a suf
 
 The investigation of the security of the migration of Virtual Networks is not an easy task, as the only closely related work, LIME~\cite{Lime-Ghorbani2014}, focuses on the transparency of the migration. 
 We formulate two goals for this investigation.
-The first goal consists in formalizing the VN migration process and its security.
-\GB{you need to state how the two goals are related and please highlight this part (using bold font for example).}
-The second goal is to optimize the detection of attacks against the migration process. In this thesis we consider the Software Defined Networking paradigm and the related network virtualization as an application context. Further definitions of these concepts are given in Section~\ref{sec:basic_def}. 
+The first goal consists in formalizing the Virtual Network migration process and its security.
+\textbf{The model will be based on simplifying\GB{you are underselling it, I feel.}\FC{How would you word it ?} assumptions of the system. In order to maintain an acceptable realism in the modeling, we have to investigate the monitoring of the infrastructure.} 
+Therefore, the second goal is to optimize the detection of attacks against the migration process. In this thesis we consider the Software Defined Networking paradigm and the related network virtualization as an application context. Specifically, we will focus on OpenFlow-based SDN network hypervisors and Virtual Network migration. Further definitions of these concepts are given in Section~\ref{sec:basic_def}. 
 We depict some limitations of existing models through the literature review.
 
 
 \section{Research Issues}
-We highlight in this section the emerging research issues based on the existing limitations and the incentives to secure the migration process.
+We highlight in this section the emerging research issues based on the existing limitations and the incentives to secure the migration process. \CK{Le contenu de cette section est quasiment le meme que celui de la section suivante. C'est tres redondant selon moi}\FC{De ce que je comprends de la structure, ici tu poses les questions et après tu expliques comment les contributions répondent aux problèmes.}
 
 \begin{itemize}
-    \item \textbf{Formalization } The security of VN migration has never been formalized. While some aspects of the migration has been investigated, the characterization of different security properties is required in order to propose security verification mechanisms for the migration process.
+    \item \textbf{Formalization } The security of Virtual Network migration has never been formalized. While some aspects of the migration have been investigated, the characterization of different security properties is required in order to propose security verification mechanisms for the migration process.
     Finally, the formalization of the security has to propose a methodology to verify if the security has been respected throughout the migration of a Virtual Network. 
     % The capacity to formally express the problem using a fine grained language is crucial. The formal model should be able to represent the different properties and events occurring during the migration.
     % There are several aspects covered by the migration, the information migrated, the different actors concerned because of it and the threat model corresponding to the attacker.
@@ -123,7 +125,7 @@ This thesis is structured as follows:
 
 Chapter~\ref{sec:sota} introduces the different technical networking concepts investigated in this thesis. Then it reviews the existing literature, from network hypervisors and VN migration solutions, to the security of VM migration and network security models, and finally the resource allocation problem. We identify several gaps in the literature about the migration of Virtual Networks.
 Chapter~\ref{sec:formal_model} presents a formal model describing network virtualization. 
-First, it encompasses the description of the physical infrastructure and which resources are allocated to Virtual Networks. Then, we describe different security properties related to the virtualization and the migration of VNs.A mapping between formal predicates of the model and real life network events is subsequently proposed. We conclude the chapter by proving the feasibility of detecting a security violation in a real life use case.
-In Chapter~\ref{sec:RAprob}, we describe  the resource allocation problem used to optimize the monitoring of the infrastructure.
+First, it encompasses the description of the physical infrastructure and which resources are allocated to Virtual Networks. Then, we describe different security properties related to the virtualization and the migration of VNs. A mapping between formal predicates of the model and real life network events is subsequently proposed. We conclude the chapter by proving the feasibility of detecting a security violation in a real life use case.
+In Chapter~\ref{sec:RAprob}, we formulate a resource allocation problem to optimize the monitoring of the infrastructure.
 We present a Markov Decision Process (MDP) to determine which network nodes provide the best coverage to detect attacks during the migration of Virtual Networks.
 Finally, Chapter~\ref{sec:thesis_conclusion} provides an overview of the contributions and presents several research perspectives for future work.

@@ -3,7 +3,7 @@ We first detail the existing vulnerabilities and possible attacks, and then deta
 
 \subsubsection{Attacking the VM migration process}
 Traditional hypervisors have been around for decades now, and the live migration of a Virtual Machine is a well known process. There has been several security surveys on the topic of VM hypervisors~\cite{Reuben2007,Rehman2013,Sahoo2010,Perez-Botero2013}, and on the security of Cloud environments~\cite{cloudenvironmentsecuritysurvey-fernandes2014}.
-Most of the security issues with VMs are related to the unlawful interactions between a VM and other VMs or the hypervisor\GB{Confusing: you cannot write a sentence with A AND B OR C. Please either use proper punctuation or split the sentence, or rewrite it altogther.}.
+Most of the security issues with VMs are related to the unlawful interactions between a VM and other VMs or between a VM and the hypervisor.
 % GB{too many ``or''s: please rewrite}.
 An attacker may exploit vulnerabilities in the hypervisor and force it to execute arbitrary code or access restricted memory zone.
 Another type of attack consists in corrupting the resource scheduler of the hypervisor, thus preventing other users to get the allocated resources they required.
@@ -20,7 +20,7 @@ Attacking the data plane during the live migration can take two forms: passively
 In the first case, the attack results in a loss of confidentiality for the stolen data and it might be exploited later on to launch other attacks on the VM.
 In the second case, altering the traffic can either create a Denial-of-Service because the VM virtual disk has been compromised, or in a potentially even more harmful scenario, the VM keeps running but under a compromised state, as the memory of the VM has been altered by the attack.
 
-The VM migration module can also be attacked to allow an attacker's VM to share the same physical server as the victim's VM. Stalling the migration is studied in~\cite{stalling-atya2017} where the attacker prevents the victim's VM and his own VM from being separated so he can completely corrupt the memory pages of the victim's VM. It is shown that maintaining the co-residency between the VMs allows an attacker to use side-channel attacks that will have a bigger impact on the victim.
+The VM migration module can also be attacked to allow an attacker's VM to share the same physical server as the victim's VM. The co-residency of two VMs is defined as the use of the same hypervisor. Stalling the migration is studied in~\cite{stalling-atya2017} where the attacker prevents the victim's VM and his own VM from being separated (\ie maintaining the co-residency) so he can completely corrupt the memory pages of the victim's VM. It is shown that a prolonged co-residency between the VMs allows an attacker to use side-channel attacks that will have a bigger impact on the victim.
 % A presentation on these side channel attacks is detailed in~\cite{malicious-atya2017}.
 
 % Please add the following required packages to your document preamble:
@@ -51,7 +51,7 @@ Migration stalling attacks        & Denial of Service, Resource depletion     & 
 
 \subsubsection{Protecting the VM migration process}
 The Moving Target Defense (MTD) paradigm is a technique used to limit the co-residency between an attacker and his victim, thus leading to a reduced attack surface for side channel attacks.
-Zhang~\etal introduce a Game Theory model~\cite{incentivemtd-Zhang2012} to represent the incentives a Cloud Provider has to migrate VMs in his infrastructure when opposed to an attacker who will benefit from the co-residency. Results outline that it is not necessary to permanently migrate all VMs but only a subset of them. In addition to this, the game can be extended to include cooperation between the legitimate users and the Cloud Provider.
+Zhang~\etal introduce a model based on game theory~\cite{incentivemtd-Zhang2012} to represent the incentives a Cloud Provider has to migrate VMs in his infrastructure when opposed to an attacker who will benefit from the co-residency. Results outline that it is not necessary to permanently migrate all VMs but only a subset of them. In addition to this, the game can be extended to include cooperation between the legitimate users and the Cloud Provider.
 A similar approach using MTD against side-channel attacks is presented in Nomad~\cite{nomad-Moon2015b}. Nomad is built on several assumptions: 
 \begin{inparaenum}[i)]
 \item the attacker cannot be precisely located inside the infrastructure,

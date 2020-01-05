@@ -2,8 +2,9 @@
 Modeling the SDN virtualization environment is a first step towards the study of the migration process. The second step is to define which aspects of the process we need to observe.
 
 In this section, we define the different security properties we consider during the migration of Virtual Networks.
-We propose to model several security properties: confidentiality, integrity, availability, usually referred to as CIA~\cite{ISO/IEC270012013}. We also introduce co-residency, a property related to the virtualization process. This property represents how much two users share a common set of physical resources for the embedding of their Virtual Network.
-After providing a formal definition of each security property, we refine it into several properties related to the operation of SDN networks and virtualization. 
+We propose to model several security properties: confidentiality, integrity, availability, usually referred to as CIA~\cite{ISO/IEC270012013}. We also adapt the co-residency of Virtual Machines~\cite{stalling-atya2017} into a property related to the virtualization process. The co-residency of two Virtual Networks represents the amount %how much two users share a common set 
+of physical resources shared by two users for the embedding of their Virtual Network.
+After providing a formal definition of each security property, we refine them into several properties related to the operation of SDN networks and virtualization. 
 Each property impacts physical elements of the SDN infrastructure, and we provide similar properties for the virtual nodes and links.
 
 \subsection{Confidentiality}
@@ -100,7 +101,7 @@ $
 \subsection{Integrity}
 \label{sec:prop-int}
 Preserving the integrity of information means protecting the accuracy and completeness of the information and the methods that are used to process and manage it~\cite{ISO/IEC270012013}.
-We postulate that the meaning of accuracy and completeness in our context is equivalent to considering that information and processes have only been altered by an authorized user or not altered at all.
+We postulate that the meaning of accuracy and completeness in our context is equivalent to considering that information and processes have only been altered by an authorized user or not altered at all\GB{this is quite similar to confidentiality with the exception that access is replaced with processing}.\FC{Indeed but integrity uses the notion of process in its definition where confidentiality doesn't}\GB{but in the above definition, the emphasis is on altering the process, while I felt in later definitions that the focus was on the alterations made or not by the process to the data. Which is it?}\FC{Later properties focus on network elements, but do not leave the process out of the definition}
 We emphasize on the fact that the integrity property is evaluated over a period of time instead of being instantaneous.
 %\RW{unclear--why "therefore";  what are the temporal values of a piece of information? is that the result of eval at a given time?}\FC{Yes, the integrity of information means that it remains constant through time, unless processed, obviously}
 
@@ -116,16 +117,17 @@ We define two predicates, $d\_integrity(D,ti)$ and $p\_integrity(P,D,ti)$, which
 
 We detail two notions related to the integrity property:
 \begin{itemize}
-    \item A data has been \textbf{legitimately processed} during a time interval if and only if it has been processed by the expected network nodes by the expected flow rules.
+    \item A data has been \textbf{legitimately processed} during a time interval if and only if the network nodes processing it were supposed to (\ie no illegitimate node in the path) and that the flow rules of the nodes have not been illegitimately modified.
+    \GB{although it is unclear how you verify the ``expected'' property of flow rules, saying that they have been processed by these flow rules is sufficient. Because they sure are located at the ``expected network nodes''.}\FC{So I should leave it at that ?}\GB{I suggest to remove by the ``expected network nodes'' part. Still the ``expected'' needs to be clarified.}\FC{I rewrote the definition}
     \item A process has been \textbf{legitimately modified} if and only if it has been modified by an authorized network hypervisor.
 \end{itemize}
 
 % Section~\ref{sec:mapping-model} proposes solutions to verify these concepts.
 
-Therefore, if a data has not been legitimately processed , its integrity holds if it has not been modified in any other way (\eg man-in-the-middle attack). 
+Therefore, if a data has not been legitimately processed, its integrity holds if it has not been modified in any other way (\eg man-in-the-middle attack). 
 
 \begin{myformula}
-$d\_integrity(D,ti) \Leftrightarrow \forall t_1,t_2\in ti ~ \overline{processed(D, ti)} \Rightarrow 
+$d\_integrity(D,ti) \Leftrightarrow \forall t_1,t_2\in ti, ~ \overline{processed(D, ti)} \Rightarrow 
 ~D_{t_1}=D_{t_2}$ 
 \end{myformula}
 %\RW{I changed the formatting for clarity}
@@ -140,7 +142,7 @@ $d\_integrity(D,ti) \Leftrightarrow \forall t_1,t_2\in ti ~ \overline{processed(
 Similarly, if a process has not been legitimately modified, its integrity holds if it has not been modified in any other way (\eg unauthorized flow rule modification). 
 
 \begin{myformula}
-$p\_integrity(P, ti) \Leftrightarrow \forall t_1,t_2 \in ti~ \overline{modified(P, ti)}\Rightarrow 
+$p\_integrity(P, ti) \Leftrightarrow \forall t_1,t_2 \in ti,~ \overline{modified(P, ti)}\Rightarrow 
 ~P_{t_1}=P_{t_2}$
 \end{myformula}
 
@@ -322,16 +324,19 @@ $path\_availability(P)\Leftrightarrow\bigwedge\limits_{N \in L_P}node\_availabil
 
 \subsection{Co-Residency}
 \label{sec:prop-cores}
-The co-residency between two Virtual Networks represents how much common physical resources they share.
+The co-residency between two Virtual Networks represents 
+%how much common 
+the set of
+physical resources they share.
 Precisely, two Virtual Networks are co-residing together if they are embedded, partially or totally, in the same physical resources during the same time interval.
 We define co-residency with the following predicate:
-Let $V_1$ and $V_2$ be two virtual topologies belonging to different users, $P_1$ and $P_2$ two sets of physical resources and let $ti$ be a time interval.
+let $V_1$ and $V_2$ be two virtual topologies belonging to different users, $P_1$ and $P_2$ two sets of physical resources and let $ti$ be a time interval.
 \begin{myformula}
-$coresidency(V_1,V_2,ti) \Leftrightarrow \exists P_1,P_2$~s.t.~$P_1 \cap P_2~\neq~\emptyset, $\\ $is\_embedding(P_1,V_1,t_i) \wedge is\_embedding(P_2,V_2,t_i)$
+$coresidency(V_1,V_2,ti) \Leftrightarrow \exists P_1,P_2$~s.t.~$P_1 \cap P_2~\neq~\emptyset, $\\ $is\_embedding(P_1,V_1,ti) \wedge is\_embedding(P_2,V_2,ti)$
 \end{myformula}
 
 \begin{itemize}
-    \item $is\_embedding(P,V,t_i)$ is true if the physical set of resources $P$ embeds the Virtual Network $V$ during time interval $t_i$.
+    \item $is\_embedding(P,V,t_i)$ is true if the physical set of resources $P$ embeds the Virtual Network $V$ during time interval $ti$.
 \end{itemize}
 
 Co-residency is a property slightly different from the others because it is not directly related to security.
@@ -340,10 +345,11 @@ Indeed, side channel attacks on Virtual Machines often rely on the co-residency 
 
 
 
-\subsection{Mapping formal predicates with technical events}
+\subsection{Mapping formal predicates with network events and access control}
 \label{sec:mapping-model}
-In the previous sections we have described the different properties we want to observe inside the SDN infrastructure.
-We propose a mapping between the formal predicates and the corresponding SDN events or other technical situations.
+% \GB{why not use ``network'' instead of ``technical''?}\FC{Because of access control}\GB{well, it is ``network access control''.}
+In the previous sections, we have described the different properties we want to observe inside the SDN infrastructure.
+We propose a mapping between the formal predicates and the corresponding SDN events or other system events.
 
 
 \subsubsection{Confidentiality}
@@ -351,7 +357,7 @@ The confidentiality section introduces the following predicates:
 \begin{itemize}
 \item reads(U,D,t)
 \newline
-This predicate is true if a monitoring tool intercepts traffic, or if the traffic is forwarded to a Virtual Machine, owned by either a legitimate or malicious user. Inspecting flow rules in nodes determines that. 
+This predicate is true if a monitoring tool intercepts traffic, or if the traffic is forwarded to a Virtual Machine, owned by either a legitimate or malicious user. Inspecting flow rules in nodes determines where the data was forwarded.
 
 \item is\_data\_authorized(U,D,t)
 \newline
@@ -365,7 +371,7 @@ This is a typical use of Access Control.
 \newline
 This predicate is true if U logs in N using a CLI or use remote access to interact with N.
 The logs of N can be exploited to verify the accesses made.
-It is important to note that installing flow rules on a node is not considered an access in the meaning of this predicate.
+It is important to note that installing flow rules on a node is not considered an access in the sense of this predicate.
 
 \item is\_carrying(N,D,t)\\
 This predicate is verified by checking if the flow rules composing the path taken by data D go through node N.
@@ -388,11 +394,12 @@ The integrity section introduces the following predicates:
 \item processed(D,ti)
 \newline
 If D was not in transit during ti then the predicate holds true.
-Otherwise, the flow rules used to process D during ti are verified by the hypervisor by querying network nodes, and D can be analyzed to see if it matches the expected results. (\ie no extra illegitimate manipulations have been performed).
+Otherwise, the flow rules used to process D during ti are verified by the hypervisor by querying network nodes, and D can be compared with the expected results (\ie no extra illegitimate manipulations have been performed).
+% \GB{analysis is a stronger concept than what you are considering: either you do a comparison of a value or you compute a checksum.}.
 
 \item modified(P,ti)
 \newline
-The evolution of P implies legitimate modification of the corresponding flow rules, which can be monitored by the hypervisor. The hypervisor may store rules and legitimate requests sent to modify them. Any unexpected discrepancy will yield False for this predicate.
+The evolution of P implies legitimate modification of the corresponding flow rules, which can be monitored by the hypervisor. The hypervisor may store rules and legitimate requests sent to modify them. Any unexpected discrepancy will yield False for this predicate. Maintaining a memory of the process of each node can be done to detect discrepancies.
 
 \item is\_carrying(N,D,ti)\\
 This predicate is verified by checking if the flow rules composing the path taken by data D go through node N.
@@ -405,7 +412,7 @@ This is done by reading the value of D using a network probe.
 
 \item $P_t$
 \newline
-The process P can be monitored by querying the related flow rules
+The process P can be monitored by querying the related flow rules.
 
 \item proccess\_of(P,N,ti)
 \newline
@@ -470,5 +477,5 @@ This predicate is verified using Access Control as well.
 The Co-Residency section introduces the following predicate:
 
 \begin{itemize}
-    \item is\_embedding(P,V,ti) is verified by the hypervisor by checking the embedding he deployed. Alternatively, checking the corresponding flow rules of the nodes in P verifies this predicate.
+    \item is\_embedding(P,V,ti) is verified by the hypervisor by checking the deployed embedding. Alternatively, checking the corresponding flow rules of the nodes in P verifies this predicate.
 \end{itemize}

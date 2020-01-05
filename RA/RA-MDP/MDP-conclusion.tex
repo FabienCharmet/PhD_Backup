@@ -1,12 +1,12 @@
 \label{sec:mdp-conclusion}
 In this section, we investigated the Resource Allocation problem in a security context. Our objective was to determine which nodes of the infrastructure should be performing monitoring tasks to detect attacks against the migration process.
 we proposed a Markovian Decision Process to represent how an infrastructure provider can answer to this RA problem and what are the optimal choices.
-We introduced the attacker in the definition of the model, which is an novel approach from a security perspective. MDPs often are modeling only one agent to interact with the system, but the inclusion of an actor of a different nature is rarely considered.
+We introduced the attacker in the definition of the model, which is a novel approach from a security perspective. MDPs often are modeling only one agent to interact with the system, but the inclusion of an actor of a different nature is rarely considered\GB{so it is not novel, since already proposed.}.
 We also provided an experimental prototype for the MDP generation, solving and results analysis  (\url{https://github.com/FabienCharmet/MDPRA}).
 Results show that we can determine which nodes provide the best security with regard to current attacks, as well as how the dynamic aspect of the optimal policy can be translated into an \textit{a priori} deployment of the monitoring resources on the nodes.
 When the attacker can launch attacks from several sources, the impact of the nodes on the monitoring is much more differentiated and gives a better understanding of their role in the infrastructure.
-We also run the simulations on several network topologies to evaluate the impact of the attack routing on the optimal solution. Result shows that a full-mesh topology is more complex to defend because of the multitude of attack paths.
+We also run the simulations on several network topologies to evaluate the impact of the attack routing on the optimal solution. Results show that a full-mesh topology is more complex to defend because of the multitude of attack paths.
 % Markov Decision Processes are rarely used for a resource allocation problem in a security context.
 We advocate that the flexibility of the formalism can be leveraged to dynamically recompute the destination substrate while the migration is ongoing.
-Instead of deciding where to deploy the monitoring, the migration process would use the MDP to predict the target of the next attack and should recompute the embedding of the VN if the next virtual node will be embedded on a compromised physical node. The approach would give additional flexibility to the VNE algorithm and make it more secure.
+Instead of deciding where to deploy the monitoring, the migration process would use the MDP to predict the target of the next attack and should recompute the embedding of the VN if the next virtual node will be embedded on a compromised physical node. The approach would give additional flexibility to the VNE algorithm and make it more secure\GB{this becomes a Reinforcement Learning approach, right?}.
 

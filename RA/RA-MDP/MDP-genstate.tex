@@ -1,6 +1,6 @@
-We describe in Algorithm~\ref{algo:genstate1} how we generated the exhaustive set of states.
+We describe, in Algorithm~\ref{algo:genstate1}, how we generated the exhaustive set of states.
 We remind the reader that action $m_i$ deploys monitoring on node $i$, action $u_i$ removes monitoring from node $i$, and action $d$ does nothing.
-We also remind that when determining the target node $j$, the case $j==0$ in the code corresponds to the case where there is no attack launched.
+We also remind that, when determining the target node $j$, the case $j==0$ in the code corresponds to the case where there is no attack launched.
 We also use the function $Select\_node$ presented in Algorithm~\ref{algo:iterative_algo} from Section~\ref{sec:model-migration}.
 
 \paragraph{Initialization}
@@ -10,13 +10,13 @@ We check if there is no time left for the migration, and exit if so (lines 9-10)
 
 \paragraph{Processing the action of doing nothing}
 We calculate all possible transitions for action $d$.
-We modify the $At$ set if there is an attack (lines 12-13) or in case of no attack (lines 14-15).
+We modify the $At$ set if there is an attack by adding the targeted node (lines 12-13) or in case of no attack (lines 14-15).
 We then generate the destination state $s'$ (line 16).
 We compute the transition probabilities for action $d$ (lines 17-20) and the reward (line 21).
-Finally we start a new recursion (line 22).
+Finally, we start a new recursion (line 22).
 
 \paragraph{Processing the actions of monitoring}
-We loop over all the nodes to generate their monitoring and unmonitoring action (line 23).
+We loop over all the nodes to generate their monitoring and unmonitoring actions (line 23).
 First, we check if there is enough budget $b_c$ to monitor node $i$ (line 24).
 If so, we check if it is already monitoring (line 25).
 If it is, we repeat the same process as done for action $d$ for the transition generation (lines 26-35).

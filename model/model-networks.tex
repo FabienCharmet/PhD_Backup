@@ -6,12 +6,12 @@ We describe here the predicates used to represent the physical network and how V
 % \begin{itemize}
 %     \item \textbf{hname} is the unique identifier of a network hypervisor
 %     \item \textbf{vnet} is the unique identifier of a Virtual Network
-%     \item \textbf{pnode\_name} is the unique identifier of a physical node
-%     \item \textbf{plink\_name} is the unique identifier of a physical link
-%     \item \textbf{ppath\_name} is the unique identifier of a physical path
-%     \item \textbf{vnode\_name} is the unique identifier of a virtual node
-%     \item \textbf{vlink\_name} is the unique identifier of a virtual link
-%     % \item \textbf{vpath\_name} is the unique identifier of a virtual path
+%     \item \textbf{pnode} is the unique identifier of a physical node
+%     \item \textbf{plink} is the unique identifier of a physical link
+%     \item \textbf{ppath} is the unique identifier of a physical path
+%     \item \textbf{vnode} is the unique identifier of a virtual node
+%     \item \textbf{vlink} is the unique identifier of a virtual link
+%     % \item \textbf{vpath} is the unique identifier of a virtual path
 %     \item \textbf{ti} is the unique identifier of a time interval.
 % \end{itemize}
 
@@ -21,54 +21,58 @@ We describe here the predicates used to represent the physical network and how V
 
 
 The physical network is composed of nodes and links. We define the following temporal predicates:
+
+The following predicate declares the existence of a physical node named
+\textbf{pnode1} during time interval \textbf{ti1}.
 \begin{myformula}
-physical\_node(\textbf{pnode\_name1},\textbf{ti1})
+physical\_node(\textbf{pnode1},\textbf{ti1})
 \end{myformula}
 
-This predicate declares the existence of a physical node named \textbf{pnode\_name1} during time interval \textbf{ti1}.
+The following predicate declares the existence of a physical link named \textbf{plink1}, linking physical node \textbf{pnode1} (or hypervisor \textbf{h1}) with \textbf{pnode2}, during time interval \textbf{ti1}.
 \begin{myformula}
-physical\_link(\textbf{plink\_name1},\textbf{hname1}$\vert$\textbf{pnode\_name1},\textbf{pnode\_name2},\textbf{ti1})
+physical\_link(\textbf{plink1},\textbf{h1}$\vert$\textbf{pnode1},\textbf{pnode2},\textbf{ti1})
 \end{myformula}
 
-This predicate declares the existence of a physical link named \textbf{plink\_name1}, linking physical node \textbf{pnode\_name1} (or hypervisor \textbf{hname1}) with \textbf{pnode\_name2}, during time interval \textbf{ti1}.
-
+The following predicate declares the existence of a physical path named \textbf{ppath1} connecting \textbf{pnode1} (or hypervisor \textbf{h1}) with \textbf{pnode2}, during time interval \textbf{ti1}. 
 \begin{myformula}
-physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1}$\vert$\textbf{hname1},\textbf{pnode\_name2},\textbf{ti1})
+physical\_path(\textbf{ppath1},\textbf{pnode1}$\vert$\textbf{h1},\textbf{pnode2},\textbf{ti1})
 \end{myformula}
 
-This predicate declares the existence of a physical path named \textbf{ppath\_name1} connecting \textbf{pnode\_name1} (or hypervisor \textbf{hname1}) with \textbf{pnode\_name2}, during time interval \textbf{ti1}. 
 
-Similarly to a physical link connecting two nodes, a physical path represent the set of nodes and links establishing the connection between two end points that may be separated by several physical nodes and links.
+Similarly to a physical link connecting two nodes, a physical path represents the set of nodes and links establishing the connection between two end points that may be separated by several physical nodes and links.
+% \FC{Paths are only physical, as they represent the path between a node and the hypervisor. Without this notion you have to rethink the whole path properties defined later on, because the attacker has to be on the path of the communication to be able to intercept/attack it.}
 The case of a physical path directly connecting two nodes (or a node and a hypervisor) is allowed.
+
+Paths can be used to represent the connection between nodes and their hypervisor.
+The attacker will then compromise this path to launch attacks on the migration process, as shown in the next sections. Paths will also be used to determine the probability of detecting an attack depending on the monitoring set up in the infrastructure.
 
 A physical path is given a unique identifier and is associated with a set of physical links. 
 This choice of modeling allows to have several different paths to connect two nodes. 
 We represent this association with a predicate:
 
+The following predicates associates physical link \textbf{plink1} to physical path \textbf{ppath1} during time \textbf{ti1}.
 \begin{myformula}
-part\_of\_ppath(\textbf{ppath\_name1},\textbf{plink\_name1},\textbf{ti1})
+part\_of\_ppath(\textbf{ppath1},\textbf{plink1},\textbf{ti1})
 \end{myformula}
 
 
-This predicates associates physical link \textbf{plink\_name1} to physical path \textbf{ppath\_name1} during time \textbf{ti1}.
-
-We illustrate physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3},\textbf{ti1}) with an example.\\
-We declare 3 nodes: \textbf{pnode\_name1}, \textbf{pnode\_name2}, \textbf{pnode\_name3}.\\
-We connect \textbf{pnode\_name1} to \textbf{pnode\_name2} and \textbf{pnode\_name2} to \textbf{pnode\_name3}.\\
-Then we assign both links to a path connecting \textbf{pnode\_name1} to \textbf{pnode\_name3}
+We illustrate physical\_path(\textbf{ppath1},\textbf{pnode1},\textbf{pnode3},\textbf{ti1}) with an example.\\
+We declare 3 nodes: \textbf{pnode1}, \textbf{pnode2}, \textbf{pnode3}.\\
+We connect \textbf{pnode1} to \textbf{pnode2} and \textbf{pnode2} to \textbf{pnode3}.\\
+Then we assign both links to a path connecting \textbf{pnode1} to \textbf{pnode3}
 
 \begin{myformula}
-physical\_node(\textbf{pnode\_name1},\textbf{ti1})\\
-physical\_node(\textbf{pnode\_name2},\textbf{ti1})\\
-physical\_node(\textbf{pnode\_name3},\textbf{ti1})\\
-physical\_link(\textbf{plink\_name1},\textbf{pnode\_name1},\textbf{pnode\_name2},\textbf{ti1})\\
-physical\_link(\textbf{plink\_name2},\textbf{pnode\_name2},\textbf{pnode\_name3},\textbf{ti1})\\
-physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3},\textbf{ti1})\\
-part\_of\_ppath(\textbf{ppath\_name1},\textbf{plink\_name1},\textbf{ti1})\\
-part\_of\_ppath(\textbf{ppath\_name1},\textbf{plink\_name2},\textbf{ti1})
+physical\_node(\textbf{pnode1},\textbf{ti1})\\
+physical\_node(\textbf{pnode2},\textbf{ti1})\\
+physical\_node(\textbf{pnode3},\textbf{ti1})\\
+physical\_link(\textbf{plink1},\textbf{pnode1},\textbf{pnode2},\textbf{ti1})\\
+physical\_link(\textbf{plink2},\textbf{pnode2},\textbf{pnode3},\textbf{ti1})\\
+physical\_path(\textbf{ppath1},\textbf{pnode1},\textbf{pnode3},\textbf{ti1})\\
+part\_of\_ppath(\textbf{ppath1},\textbf{plink1},\textbf{ti1})\\
+part\_of\_ppath(\textbf{ppath1},\textbf{plink2},\textbf{ti1})
 \end{myformula}
 
-Therefore physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pnode\_name3},\textbf{ti1}) holds \textbf{true} because the part\_of\_ppath predicates build a valid path between the two end points, \eg the predicates form a transitive relation. 
+Therefore physical\_path(\textbf{ppath1},\textbf{pnode1},\textbf{pnode3},\textbf{ti1}) holds \textbf{true} because the part\_of\_ppath predicates build a valid path between the two end points, \eg here, the predicates form a transitive relation. 
 
 % \textbf{Precisions on the use of time intervals}
 
@@ -87,70 +91,68 @@ Therefore physical\_path(\textbf{ppath\_name1},\textbf{pnode\_name1},\textbf{pno
 \subsection{Network Hypervisor modeling}
 The network hypervisor is connected to the different physical nodes, administrates them, and  installs flow rules.
 
+The following predicate declares the existence of the hypervisor \textbf{h1} during time interval \textbf{ti1}.
 \begin{myformula}
-hypervisor(\textbf{hname1},\textbf{ti1})
+hypervisor(\textbf{h1},\textbf{ti1})
 \end{myformula}
 
-This predicate declares the existence of the hypervisor \textbf{hname1} during time interval \textbf{ti1}.
 
+The following predicate assigns hypervisor \textbf{h1} to the physical node \textbf{pnode1}, and sets \textbf{ppath1} as the physical path between them during time interval \textbf{ti1}.
 \begin{myformula}
-hypervisor\_of(\textbf{hname1},\textbf{pnode\_name1},\textbf{ppath\_name1},\textbf{ti1})
+hypervisor\_of(\textbf{h1},\textbf{pnode1},\textbf{ppath1},\textbf{ti1})
 \end{myformula}
-
-This predicate assigns hypervisor \textbf{hname1} to the physical node \textbf{pnode\_name1}, and sets \textbf{ppath\_name1} as the physical path between them during time interval \textbf{ti1}.
 
 The network hypervisor establishes a communication with the nodes in the infrastructure using physical paths.
-These paths are illustrated by the "Hypervisor - Switch links`` as depicted in Figure~\ref{fig:VNE-example-model}.
+These paths are illustrated by the  blue arrows depicted in Figure~\ref{fig:VNE-example-model}.
 In this figure, the hypervisor is directly connected to all the nodes of the infrastructure.
 
-
-
 \subsection{Virtual Network modeling}
-We extend the previous predicates with the modeling of the Virtual Network and how the VN is embedded on top of a set of physical resources.
+We extend the physical predicates with the modeling of the Virtual Network.
 
+The following predicate declares the existence of a Virtual Network \textbf{vnet1} during time interval \textbf{ti1}.
 \begin{myformula}
-virtual\_network(\textbf{vnet\_name1},\textbf{ti1})
+virtual\_network(\textbf{vnet1},\textbf{ti1})
 \end{myformula}
 
-This predicate declares the existence of a Virtual Network \textbf{vnet\_name1} during time interval \textbf{ti1}.
 
+The following predicate declares the existence of a virtual node \textbf{vnode1} belonging to Virtual Network \textbf{vnet1} during time interval \textbf{ti1}.
 \begin{myformula}
-virtual\_node(\textbf{vnode\_name1},\textbf{vnet\_name1},\textbf{ti})
+virtual\_node(\textbf{vnode1},\textbf{vnet1},\textbf{ti})
 \end{myformula}
 
-This predicate declares the existence of a virtual node \textbf{vnode\_name1} belonging to Virtual Network \textbf{vnet\_name1} during time interval \textbf{ti1}.
 
+The following predicate declares the existence of a virtual link \textbf{vlink1} between nodes \textbf{vnode1} and \textbf{vnode2} belonging to Virtual Network \textbf{vnet1} during time interval \textbf{ti1}.
 \begin{myformula}
-virtual\_link(\textbf{vlink\_name1},\textbf{vnode\_name1},\textbf{vnode\_name2},\textbf{vnet\_name1},\textbf{ti1})
+virtual\_link(\textbf{vlink1},\textbf{vnode1},\textbf{vnode2},\textbf{vnet1},\textbf{ti1})
 \end{myformula}
 
-This predicate declares the existence of a virtual link \textbf{vnode\_link1} between nodes \textbf{vnode\_name1} and \textbf{vnode\_name2} belonging to Virtual Network \textbf{vnet\_name1} during time interval \textbf{ti1}.
 
-% virtual\_path(\textbf{vpath\_name1},\textbf{vnode\_name1},\textbf{vnode\_name2},\textbf{ti1})
+% virtual\_path(\textbf{vpath1},\textbf{vnode1},\textbf{vnode2},\textbf{ti1})
 
 \subsection{Embedding modeling}
 Each virtual element, node or link, is embedded on a set of physical resources (\ie 1-to-many mapping).
 Therefore, there can be one or more predicates used to describe the embedding of a virtual element.
 
+The following predicate assigns physical node \textbf{pnode1} to the embedding of virtual node \textbf{vnode1} during time interval \textbf{ti1}.
 \begin{myformula}
-node\_embedding(\textbf{vnode\_name1},\textbf{pnode\_name1},\textbf{ti1})
+node\_embedding(\textbf{vnode1},\textbf{pnode1},\textbf{ti1})
 \end{myformula}
 
-This predicate assigns physical node \textbf{pnode\_name1} to the embedding of virtual node \textbf{vnode\_name1} during time interval \textbf{ti1}.
 
+
+The following predicate assigns physical link \textbf{plink1} to the embedding of virtual node \mbox{\textbf{vnode1}} during time interval \textbf{ti1}.
 \begin{myformula}
-node\_embedding(\textbf{vnode\_name1},\textbf{plink\_name1},\textbf{ti1})
+node\_embedding(\textbf{vnode1},\textbf{plink1},\textbf{ti1})
 \end{myformula}
 
-This predicate assigns physical link \textbf{plink\_name1} to the embedding of virtual node \mbox{\textbf{vnode\_name1}} during time interval \textbf{ti1}.
 
+The following predicate assigns physical link \textbf{plink1} to the embedding of virtual link \textbf{vlink1} during time interval \textbf{ti1}.
 \begin{myformula}
-link\_embedding(\textbf{vlink\_name1},\textbf{plink\_name1},\textbf{ti1})
+link\_embedding(\textbf{vlink1},\textbf{plink1},\textbf{ti1})
 \end{myformula}
 
-This predicate assigns physical link \textbf{plink\_name1} to the embedding of virtual link \textbf{vlink\_name1} during time interval \textbf{ti1}.
 
-We highlight that a virtual link is a succession of physical links, therefore we do not model its embedding using a single physical node.
+We highlight that a virtual link is embedded in at least one physical link, therefore we do not model its embedding using a single physical node.
 
 
 \subsection{Example of modeling physical and Virtual Networks}
@@ -195,23 +197,23 @@ physical\_link(plink5,P4,P5,ti1)\\
 physical\_link(plink6,P4,P6,ti1)\\
 \textbf{\\}
 /* Defining the hypervisor*/\\
-hypervisor(hname1,ti1)\\
+hypervisor(h1,ti1)\\
 \textbf{\\}
 /* Defining the physical path connecting the physical nodes to the hypervisor */\\
-physical\_path(ppath1,P1,hname1,ti1)\\
-physical\_path(ppath2,P2,hname1,ti1)\\
-physical\_path(ppath3,P3,hname1,ti1)\\
-physical\_path(ppath4,P4,hname1,ti1)\\
-physical\_path(ppath5,P5,hname1,ti1)\\
-physical\_path(ppath6,P6,hname1,ti1)\\
+physical\_path(ppath1,P1,h1,ti1)\\
+physical\_path(ppath2,P2,h1,ti1)\\
+physical\_path(ppath3,P3,h1,ti1)\\
+physical\_path(ppath4,P4,h1,ti1)\\
+physical\_path(ppath5,P5,h1,ti1)\\
+physical\_path(ppath6,P6,h1,ti1)\\
 \textbf{\\}
 /* Assigning the hypervisor to each physical node */\\
-hypervisor\_of(hname1,P1,ppath1,ti1)\\
-hypervisor\_of(hname1,P2,ppath2,ti1)\\
-hypervisor\_of(hname1,P3,ppath3,ti1)\\
-hypervisor\_of(hname1,P4,ppath4,ti1)\\
-hypervisor\_of(hname1,P5,ppath5,ti1)\\
-hypervisor\_of(hname1,P6,ppath6,ti1)\\
+hypervisor\_of(h1,P1,ppath1,ti1)\\
+hypervisor\_of(h1,P2,ppath2,ti1)\\
+hypervisor\_of(h1,P3,ppath3,ti1)\\
+hypervisor\_of(h1,P4,ppath4,ti1)\\
+hypervisor\_of(h1,P5,ppath5,ti1)\\
+hypervisor\_of(h1,P6,ppath6,ti1)\\
 \textbf{\\}
 /* Defining the embedding of virtual elements in physical ones */\\
 node\_embedding(V1,P1,ti1)\\
@@ -226,3 +228,5 @@ link\_embedding(vlink3,plink2,ti1)\\
 link\_embedding(vlink3,plink4,ti1)\\
 link\_embedding(vlink4,plink5,ti1)
 \end{myformula}
+% \GB{I do not get why vlink3 is not mapped to a path instead. Or you should get rid of this path concept and only keep list of links.}
+% \FC{Paths are only physical, as they represent the path between a node and the hypervisor. Without this notion you have to rethink the whole path properties defined later on, because the attacker has to be on the path of the communication to be able to intercept/attack it.}\GB{OK. So please explain it this way so that it is more explicit to the reader.}

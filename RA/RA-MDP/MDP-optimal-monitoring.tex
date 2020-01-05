@@ -26,8 +26,8 @@ Results for all scenarios are summarized in Table~\ref{tab:mdp-usecase-optiset}.
 \textbf{Scenarios a) and b)\\}
 We note that nodes 4 and 6 are always chosen in the monitoring.
 Node 1 also often appears as a good candidate for a fourth node if it is not already chosen third.
-With $p=0.7$ we observe that third and fourth nodes do not coincide between (30, 30) and (40, 40) budgets.
-This suggests that combining nodes 2 and 3 increases their individual performance, (\ie nodes 2 and 3 perform better than nodes 1 and 2 or 1 and 3).
+With $p=0.7$, we observe that third and fourth nodes do not coincide between (30, 30) and (40, 40) budgets.
+This suggests that combining nodes 2 and 3 increases their individual performance, \ie nodes 2 and 3 perform better than nodes 1 and 2 or 1 and 3.
 We suppose this is because node 1 is surrounded by nodes 2 and 3 in the topology.
 % This is explained because other budgets impact the individual importance of each node.
 
@@ -36,7 +36,7 @@ One notable result is in scenario c) for $p=0.5,  (b_f,b_c) = (40,40)$ where the
 
 
 \textbf{Scenarios e) and f)}\\
-There is one  notable result, in scenario e) for $p=0.7,  (b_f,b_c) = (40,40)$ where the optimal monitoring set is \{2, 6\} which could also have two extra nodes supporting the monitoring. In opposition to the counter-intuitive result of scenario c), we are here considering a higher detection percentage. Moreover, the nodes considered in this solution set are the nodes that see most of the attacks, one being the source of all attacks, and the other being part of the migrated Virtual Network and communicating with almost all the other nodes in the infrastructure. The analysis of the optimal policy of this use case shows that part of the counter intuitive result is caused by removing either node 3 or 4 from the monitoring, which is understandable because it would not contribute to the detection of the remaining attacks. Removing monitoring becomes equivalent to the action of doing nothing, with the unintended and unexpected upside of reducing the performance impact on the infrastructure.
-The other part of the counter intuitive result (not shown in Table~\ref{tab:mdp-usecase-optiset}) is due to removing node 6, the source of attacks from the monitoring. It is worth noting that this particular case represents a negligible portion of the solution space, and most of the counter intuitive results are due to the previous explanation. Considering that node 6 is removed at a point where the consequences of attacks will be minimal, removing the monitoring at this point was deemed equivalent to the ``do nothing" action by the MDP.
+There is one  notable result, in scenario e) for $p=0.7,  (b_f,b_c) = (40,40)$ where the optimal monitoring set is \{2, 6\} which could also have two extra nodes supporting the monitoring. In opposition to the counter-intuitive result of scenario c), we are here considering a higher detection percentage. Moreover, the nodes considered in this solution set are the nodes that observe most of the attacks, one being the source of all attacks, and the other being part of the migrated Virtual Network and communicating with almost all the other nodes in the infrastructure. The analysis of the optimal policy of this use case shows that part of the counter intuitive result is caused by removing either node 3 or 4 from the monitoring, which is understandable because it would not contribute to the detection of the remaining attacks. Removing monitoring becomes equivalent to the action of doing nothing, with the unintended and unexpected upside of reducing the performance impact on the infrastructure.
+The other part of the counter intuitive result (not shown in Table~\ref{tab:mdp-usecase-optiset}) is due to removing node 6, the source of attacks from the monitoring. It is worth noting that this particular case represents a negligible portion of the solution space, and most of the counter intuitive results are due to the previous explanation. Considering that node 6 is removed at a point where the consequences of attacks will be minimal, it was deemed equivalent to the ``do nothing" action by the MDP.
 
 

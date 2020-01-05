@@ -8,7 +8,7 @@ In this section, we detail theoretical aspects of theorem proving, then, we will
 \subsection{SNARK: A first order temporal logic theorem prover}
 \label{sec:proof-detects-violation}
 %Part of this effort is devoted to using automatic reasoning to establish that a network enforces confidentiality properties or to detect that such properties can be violated.
-In section~\ref{sec:proving-theory}, we have described several aspects of the first order logic theorem proving theory.
+In Section~\ref{sec:proving-theory}, we have described several aspects of the first order logic theorem proving theory.
 In this section we  present a first-order theorem prover that will be used to detect the violation of the security properties.
 We use the Stanford Research Institute's open-source first-order reasoner SNARK~\cite{snark-Stickel2000}.
 
@@ -43,7 +43,7 @@ In general, there may be an infinity of answers to a query, but we rely on the t
 The operation and formalism of SNARK will be illustrated in the context of a simple example.
 We are given an axiomatic theory of the domain of network confidentiality, and we use SNARK to detect a confidentiality violation during the migration of a Virtual Network.
 This example makes a simple assumption regarding the possibility of reading a piece of data in the network. If the data is carried by a node during a certain time interval, then it can be read via the nodes connected to it, directly or via a path of nodes, during a subset of this time interval.
-This assumption alleviate the unnecessary burden of modeling the actual routing performed by network nodes and will instead focus on the configuration installed in the nodes.
+This assumption alleviates the unnecessary burden of modeling the actual routing performed by network nodes and will instead focus on the configuration installed in the nodes.
 Rather than presenting the axioms of the theory in advance, we will introduce them as they are required in the proof.
 
 Note that SNARK adopts a LISP-like notation for expressions; thus, we write \verb'(P A B)' rather than \verb'P(A, B)'. 
@@ -194,7 +194,8 @@ The relation \verb'(path-link ?n1.node ?n2.node ?p.path ?t.t-int)' is defined as
      ))
 \end{lstlisting}
 
-We establish that nodes \verb'?x.node ?z.node' (line 3) are forming a path if they are indirectly connected via a third node \verb'?y.node'. We assert the existence of a direct connection for nodes \verb'?x.node' and \verb'?z.node' using \verb'setlink0' assertion (lines 12-13) and recursively construct the rest of the path towards \verb'?z.node' by using the relation \verb'path-link' again (lines 14-16).
+We establish that nodes \verb'?x.node'
+and \verb'?z.node' (line 3) are forming a path if they are indirectly connected via a third node \verb'?y.node'. We assert the existence of a direct connection for nodes \verb'?x.node' and \verb'?z.node' using \verb'setlink0' assertion (lines 12-13) and recursively construct the rest of the path towards \verb'?z.node' by using the relation \verb'path-link' again (lines 14-16).
 
 We are given axioms that assert that \verb'node-a' is linked to \verb'node-b', and \verb'node-b' is linked to \verb'node-c', during the time interval \verb'(time-i time-b time-c)'. We are also given that \verb'data-1' is at \verb'node-a' during the same time interval 
 \verb'(time-i time-b time-c)' and that \verb'user-2' reads \verb'data-1' at \verb'node-c' during the larger time interval \verb'(time-i time-a time-c)'.  

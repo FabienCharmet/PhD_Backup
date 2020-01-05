@@ -3,27 +3,30 @@ We make several assumptions related to the scope of our study and about certain 
 \subsection{Predicates}
 
 \begin{itemize}
-    \item The formal execution trace is complete.
+    \item \textsl{The formal execution trace is complete}.
     
     This implies that all the information necessary to compute the proof is present in the trace and that there is no missing event or predicate.
 This assumption holds in our case because we have implemented a simulator to evaluate our scenario. However, this assumption does not hold in a real life environment, and we will treat this issue in the next chapter.
 
     \item Predicates related to determining whether a user is allowed to access a specific node or data are generated using traditional Access Control solutions.
     
-    \item Accesses made by a user to a node or a piece of data are handled by existing Access Control solutions.
-    
+    % \item Accesses made by a user to a node or a piece of data are handled by existing Access Control solutions.
+    % \GB{the last two assumptions are not very distinguishable. You may keep only either one but not both.}
 \end{itemize}
 
 
 \subsection{Infrastructure}
 \begin{itemize}
+
+    \item Two physical equipments are connected via a single physical link. This assumption is used in the definition of a networking path connecting two nodes separated by several hops.
+
     \item Physical links in the network infrastructure are considered to be exempt from performance issues and safe from a security perspective.
     
-    This supposes that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks
+    This supposes that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks.
 \end{itemize}
 
 \newpage
-The scope of this assumption uses the following definitions:
+The following assumptions define the scope of performance and security issues:
 
 \textbf{Performance issues} 
 \begin{itemize}
@@ -39,14 +42,31 @@ The scope of this assumption uses the following definitions:
 
 These assumptions  restrict the scope of some security properties only to the physical nodes because of their inapplicability to physical links.
 
-We also assume that two physical equipments are connected via a single physical link. This assumption is used in the definition of a networking path connecting two nodes separated by several hops.
+
 
 \subsection{Virtualization}
-The implementation of the virtualization layer depends on the solution considered.
-Each solution comes with its own identifiers, flow space and limitations on how the user may design his Virtual Network and which fields and actions he may use to generate flow rules. Therefore, we exclude from our formal model the consideration of the technical specificities of the network hypervisor.
-We justify this choice by stating that ultimately, the hypervisor will generate a set of flow rules that will be installed in the infrastructure and therefore these rules can be seen as the final representation of the formal predicates describing the embedding of the VN.
+% \GB{this subsection does not use an itemize environment like the previous two.}
 
-We also leave the VNE problem, \ie determining which set of physical resources should be the substrate of the Virtual Network, out of the scope of this thesis.
+\begin{itemize}
+    \item We do not consider in our formal model the technical specificities of the network hypervisor.
+    
+    Indeed, the implementation of the virtualization layer depends on the solution considered.
+    Each solution comes with its own identifiers, flow space and limitations on how the user may design his Virtual Network and which fields and actions he may use to generate flow rules. 
+    We justify this choice because we want our model to be agnostic to the technical solution used for network virtualization.
+    
+    \item The VNE problem is considered out of the scope of this thesis, as it is independent from the actual migration process. 
+    
+    We will suggest in Chapter~\ref{sec:thesis_conclusion} a research lead to make the migration process dynamic, so it can modify the destination substrate as the migration progresses. 
+    
+    \item We exclude path splitting from the model and limit the embedding of a virtual link to a single set of physical nodes.
+    
+    Some migration solutions and survivable VNE algorithms consider path splitting to provide robustness to the infrastructure.
 
-Some migration solutions and survivable VNE algorithms consider path splitting to provide robustness to the infrastructure.
-We exclude this specificity from the model and limit the embedding of a virtual link to a single set of physical nodes.
+
+    
+\end{itemize}
+
+
+
+
+

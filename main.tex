@@ -65,7 +65,7 @@
 %  MARGIN
 \addtolength{\textwidth}{-0.4in}
 
-\newtcolorbox{myformula}{colback=block-gray,boxrule=0pt,boxsep=0pt,breakable,halign= flush left,before skip=10pt, after skip=20pt}
+\newtcolorbox{myformula}{colback=block-gray,boxrule=0pt,boxsep=0pt,breakable,halign= flush left,before skip=5pt, after skip=20pt}
 \definecolor{block-gray}{gray}{0.95}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -80,8 +80,8 @@
          {\small$\blacktriangleright$\st{#2}$\blacktriangleleft$}
     }
 }
-\newcommand\GB[1]{\myremark{GB}{#1}}
-\newcommand\CK[1]{\myremark{CK}{#1}}
+\newcommand\GB[1]{\myremark{GBAA}{#1}}
+\newcommand\CK[1]{\myremark{CKAA}{#1}}
 \newcommand\FC[1]{\myremark{FC}{#1}}
 % \newcommand\RW[1]{\myremark{RW}{#1}}
 
@@ -116,10 +116,10 @@
 \pagenumbering{roman}
 This thesis investigates the security of Virtual Network migration. Over the years, virtualization has been used to optimize physical resources and to support businesses’ infrastructure. Virtualization consists in exposing a fraction of a resource for a user to operate. Virtual Machines are used to host business services like web servers or a backup service. Network virtualization has not benefited from the same interest from researchers and the industry. The Software Defined Networking paradigm has introduced new possibilities to implement network virtualization and provide users with a flexible network, decoupled from the physical equipment. Virtual Networks are used to interconnect Virtual Machines and can be configured with specific routing policies or security protocols. In case of a failure of the resource, either accidental or intentional, the virtualization infrastructure will migrate the resource to maintain the service provided.
 
-The security of Virtual Machines and their migration is a well-researched topic that has been widely in the past, while the study of network virtualization and especially the migration process only are at an early stage. The attack surface of network virtualization is similar in nature to the virtualization of legacy resources, and presents an additional aspect because of the use of Software Defined Networking.
-The motivation of this research is to investigate the security of the Virtual Network migration process in the context of Software Defined Networking. In order to do so, we first define the scope of the study and focus on the networking aspect of the migration. Then, we outline the threat model of the migration process and devise a detection mechanism against attacks in the virtualization infrastructure. Finally, we optimize the previous mechanism by optimizing the deployment of network monitoring resources for an optimal coverage.
+The security of Virtual Machines and their migration is a well-researched topic that has been widely investigated in the past, while the study of network virtualization and especially the migration process are only at an early stage. The attack surface of network virtualization is similar in nature to the virtualization of legacy resources, and presents an additional aspect because of the use of Software Defined Networking. Indeed, the decoupling of the data plane and the control plane introduces communications that can be intercepted and compromised.
+The motivation of this research is to investigate the security of the Virtual Network migration process in the context of Software Defined Networking. In order to do so, we first define the scope of the study and focus on the networking aspect of the migration. Then, we outline the threat model of the migration process and devise a detection mechanism against attacks in the virtualization infrastructure. Finally, we improve the previous mechanism by optimizing the deployment of network monitoring resources in the infrastructure.
     
-In the first part of this thesis we propose a formal approach to describe the different aspects of the virtualization infrastructure. We use a first order formalism to model several security properties as a set of logical predicates. These predicates account for both physical and virtual elements of the virtualization infrastructure, and the data use by both end users and the infrastructure owner.
+In the first part of this thesis we propose a formal model of the migration of Virtual Networks. We represent the physical infrastructure and the embedding of the virtual resources. We use a first order formalism to model several security properties as a set of logical predicates. These predicates account for both physical and virtual elements of the virtualization infrastructure, and the data use by both end users and the infrastructure owner.
 An execution trace is generated during the migration of a Virtual Network, and will be used by a theorem prover to compute a formal proof to verify if a security violation occurred. The first order model is based on the assumption that the execution trace is generated using perfect monitoring. This implies that the proof is complete and that the networking monitoring is always done under optimal conditions.
 We alleviate this assumption by modeling a resource allocation problem to determine how the monitoring resources should be deployed and which network nodes provide the best coverage. We solve this problem using a Markov Decision Process, and determine a dynamic deployment of monitoring resources during the migration. We conclude our optimization with a proposition of a static deployment of the resources prior to the migration.
 % We propose to model the virtualization infrastructure and describe the security of the migration process using a first order temporal logic. We then use this logic with a theorem prover to verify if a security violation occurred during the migration of a network.  We use a Markov Decision Process to determine the optimal placement of monitoring resources in the infrastructure.
@@ -133,7 +133,7 @@ We alleviate this assumption by modeling a resource allocation problem to determ
 \addcontentsline{toc}{chapter}{R\'esum\'e}
 Cette th\`{e}se explore la s\'{e}curit\'{e} de la migration de r\'{e}seaux virtuels. Au cours des ann\'{e}es, la virtualisation a \'{e}t\'{e} utilis\'{e}e pour optimiser l'usage des ressources informatiques et pour supporter les infrastructures des entreprises. La virtualisation consiste \`{a} allouer une partie des ressources d'une machine physique \`{a} un utilisateur (sous la forme d'une machine virtuelle) pour qu'il puisse l'exploiter. Les machines virtuelles sont utilis\'{e}es pour h\'{e}berger des services op\'{e}rationnels comme un serveur internet ou une base de donn\'{e}es. La virtualisation des r\'{e}seaux n'a pas profit\'{e} du m\^{e}me int\'{e}r\^{e}t de la part des chercheurs et des acteurs industriels. Le paradigme du Software Defined Networking a introduit de nouvelles possibilit\'{e}s pour impl\'{e}menter la virtualisation r\'{e}seau et fournir aux utilisateurs une solution flexible pour leurs besoins m\'{e}tiers. Les r\'{e}seaux virtuels sont utilis\'{e}s pour interconnecter des machines virtuelles, et ils peuvent \^{e}tre configur\'{e}s avec des r\`{e}gles de routages ou des protocoles de s\'{e}curit\'{e} sp\'{e}cifiques. Dans l'\'{e}ventualit\'{e} o\`{u} un \'{e}quipement r\'{e}seau tomberait en panne ou sous le coup d'une attaque informatique, le syst\`{e}me d'hypervision va migrer les ressources afin de pr\'{e}server la disponibilit\'{e} des services utilisateurs.
 
-La s\'{e}curit\'{e} des machines virtuelles et de leur migration est un domaine de recherche qui a \'{e}t\'{e} grandement explor\'{e} par le pass\'{e}, tandis que la virtualisation r\'{e}seau et plus sp\'{e}cifiquement la migration de r\'{e}seaux virtuels restent encore des domaines de recherche assez jeune et o\`{u} beaucoup reste \`{a} faire. La surface d'attaque de la virtualisation r\'{e}seau est similaire en nature \`{a} celle de la virtualisation traditionnelle, mais elle pr\'{e}sente un aspect suppl\'{e}mentaire d\^{u} \`{a} l'usage du paradigme du Software Defined Networking. La motivation de notre travail est d'\'{e}tudier la s\'{e}curit\'{e} du processus de migration des r\'{e}seaux virtuels, dans le contexte du Software Defined Networking. Nous proposons d'atteindre cet objectif en trois phases. Tout d'abord, nous d\'{e}finissons le p\'{e}rim\`{e}tre de cette \'{e}tude, et nous concentrons sur l'aspect r\'{e}seau de la migration. Ensuite, nous d\'{e}crivons le mod\`{e}le d'attaquant afin de compromettre la migration des r\'{e}seaux et nous concevons un m\'{e}canisme de d\'{e}tection contre les attaques envers l'infrastructure de virtualisation. Enfin, nous am\'{e}liorons le m\'{e}canisme de d\'{e}fense en optimisant le d\'{e}ploiement des ressources de d\'{e}tection afin d'obtenir une couverture optimale de l'infrastructure. 
+La s\'{e}curit\'{e} des machines virtuelles et de leur migration est un domaine de recherche qui a \'{e}t\'{e} grandement explor\'{e} par le pass\'{e}, tandis que la virtualisation r\'{e}seau et plus sp\'{e}cifiquement la migration de r\'{e}seaux virtuels restent encore des domaines de recherche assez jeune et o\`{u} beaucoup reste \`{a} faire. La surface d'attaque de la virtualisation r\'{e}seau est similaire en nature \`{a} celle de la virtualisation traditionnelle, mais elle pr\'{e}sente un aspect suppl\'{e}mentaire d\^{u} \`{a} l'usage du paradigme du Software Defined Networking. La motivation de notre travail est d'\'{e}tudier la s\'{e}curit\'{e} du processus de migration des r\'{e}seaux virtuels, dans le contexte du Software Defined Networking. Nous proposons d'atteindre cet objectif en trois phases. Tout d'abord, nous d\'{e}finissons le p\'{e}rim\`{e}tre de cette \'{e}tude, et nous concentrons sur l'aspect r\'{e}seau de la migration. Ensuite, nous d\'{e}crivons le mod\`{e}le d'attaquant, sa capacité à compromettre la migration des r\'{e}seaux et nous concevons un m\'{e}canisme de d\'{e}tection contre les attaques envers l'infrastructure de virtualisation. Enfin, nous am\'{e}liorons le m\'{e}canisme de d\'{e}fense en optimisant le d\'{e}ploiement des ressources de d\'{e}tection afin d'obtenir une couverture optimale de l'infrastructure. 
 
 Dans la premi\`{e}re partie de cette th\`{e}se, nous proposons une approche formelle pour d\'{e}crire les diff\'{e}rents composants de l'infrastructure de virtualisation.
 Nous utilisons un formalisme de logique du premier ordre pour d\'{e}crire diff\'{e}rentes propri\'{e}t\'{e}s de s\'{e}curit\'{e} sous la forme de pr\'{e}dicats bool\'{e}ens. 
@@ -179,7 +179,7 @@ I am grateful for the collaboration I had with \textbf{Dr. Richard Waldinger} at
 I have so many colleagues to thank here, for the support and cheerfulness they brought in along the way.
 Thank you \textbf{Nesrine}, \textbf{Khalifa}, \textbf{Gamain}, \textbf{Miroslav}, \textbf{Stef}, \textbf{Seb}, \textbf{Christian}, \textbf{Olivier} and so many others. I also wish good luck to \textbf{Mariana}, \textbf{Antoine}, \textbf{Mus}, \textbf{Maria}, \textbf{Hadjer}, \textbf{Aina}, \textbf{Souha}, who should cross this line one day or another.
 
-A big thank to all of my friends, in no particular order: \textbf{Guillaume}, \textbf{Jo}, \textbf{Thomas}, \textbf{Nico}, \textbf{Yoan}, \textbf{Chan}, \textbf{Etienne}, whose company made me laugh when I needed it the most. 
+A big thank to all of my friends, in no particular order: \textbf{Guillaume}, \textbf{Jo}, \textbf{Thomas}, \textbf{Libby}, \textbf{Nico}, \textbf{Yoan}, \textbf{Chan}, \textbf{Etienne}, whose company made me laugh when I needed it the most. 
 
 I am grateful towards \textbf{Vanessa Sanfilippo}, who lifted me up through music and who has been an extraordinary piano teacher. I only wish to meet her expectations towards me.
 
@@ -222,7 +222,8 @@ Thirdly, we consider works that investigate the Virtual Network migration proces
 Fourthly, we investigate the security of the Virtual Network migration, namely by considering the attack surface of a similar problem, Live Virtual Machine migration, as well as the formal models used to express security properties in a computer network.
 Both topics outline the needs for a security study of the VN migration problem.
 The last topic considered here is related to the resource allocation problem in a network infrastructure, and we present different formalisms used in this context.
-This problem is studied to improve the applicability of a model\GB{what model?} to a real life environment.
+The resource allocation problem is studied to alleviate simplifications used to model the VN migration process.
+% This problem is studied to improve the applicability of a model\GB{what model?} to a real life environment.
 
 \section{Definitions}
 \label{sec:basic_def}
@@ -250,7 +251,8 @@ Network virtualization has leveraged the use of SDN to provide a flexible abstra
 \section{Network \& VM security}
 
 We have presented, in Sections~\ref{sec:existing-nhv} and~\ref{sec:sota-vnmigration}, existing solutions for network virtualization and Virtual Network migration. We now delve into the security aspect of network virtualization, and the related security topics. The security of VN migration is a topic that has not been studied yet, while the security of VM migration has been thoroughly investigated. The following sections cover two topics, namely the security of the Live VM migration process and existing formal models for network security.
-Existing formal models are useful to understand to which extent security in networks has been expressed but also it will help us to determine what has not beed modeled yet\GB{maybe split the last sentence in two or more sentences because it is confusing, as is.}.
+Existing formal models are useful to understand to which extent security in networks has been expressed. Additionally, it will help us to determine what has not been modeled yet.
+% \GB{maybe split the last sentence in two or more sentences because it is confusing, as is.}.
 
 \subsection{Security of VM migration}
 
@@ -262,8 +264,8 @@ Existing formal models are useful to understand to which extent security in netw
 
 \section{Resource Allocation in networking infrastructures}
 The resource allocation (RA) problem consists in determining the optimal way to spend limited resources in order to achieve maximum profit while satisfying a set of constraints.
-The VNE problem is a subclass of the RA problem\GB{sorry I suggested this sentence, but the RA you wish to use is not about the VNE}, where the VNE component will determine the set of physical resources that will embed a Virtual Network, while maximizing the acceptance rate, \ie the ratio between accepted VN requests and total number of requests.
-The VNE problem is constrained by available resources, but there might be other constraints like security requirements or geographical positioning rules.
+% The VNE problem is a subclass of the RA problem\GB{sorry I suggested this sentence, but the RA you wish to use is not about the VNE}, where the VNE component will determine the set of physical resources that will embed a Virtual Network, while maximizing the acceptance rate, \ie the ratio between accepted VN requests and total number of requests.
+% The VNE problem is constrained by available resources, but there might be other constraints like security requirements or geographical positioning rules.
 In this section, we consider two different formalisms used to solve the RA problem, namely Game Theory and Markov Decision Processes. 
 
 % \input{sota/sota-RA/LP.tex}
@@ -272,7 +274,7 @@ In this section, we consider two different formalisms used to solve the RA probl
 
 \begin{savequote}
 
---Formalism is music that people don’t understand at first hearing.
+--Formalism is music that people don't understand at first hearing.
 \qauthor{Boris Schwarz}
 \end{savequote}
 \section{General Conclusion}
@@ -293,7 +295,6 @@ In this section, we consider two different formalisms used to solve the RA probl
 \section{Modeling physical and Virtual Networks}
 \input{model/model-networks.tex}
 
-\newpage
 \section{Modeling the migration of Virtual Networks}
 \input{model/model-migration.tex}
 
@@ -327,7 +328,6 @@ In this section, we consider two different formalisms used to solve the RA probl
 
 \input{RA/GT.tex}
 
-\newpage
 \input{RA/MDP.tex}
 
 \newpage

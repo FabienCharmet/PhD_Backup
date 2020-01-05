@@ -1,25 +1,23 @@
 \section{Second approach: Markov Decision Process}
+% \GB{why is there a pagebreak before?}
 We have considered the formalism of Game Theory as a method to solve the resource allocation problem, but the lack of flexibility and the complexity of determining the equilibrium make it inadequate for our problem. We consider here Markov Decision Processes (MDP).
 MDP is a formalism used to make the optimal choices when interacting with a system. We intend to use it to determine the best allocation of monitoring resources to detect attacks in the infrastructure. Because a practical solution to this RA problem is a set of nodes supporting the monitoring of the infrastructure, we develop a statistical analysis of the optimal policy and convert the dynamic answer of an MDP into a static \textit{a priori} deployment.
 An experimental prototype is available on github\footnote{\label{github}\url{https://github.com/FabienCharmet/MDPRA}}.
 
 
-\textbf{Vocabulary precision}    In this chapter the expression ``migrating a node" means deploying configuration rules in a physical node.
-
-
-
 
 % \input{RA/RA-MDP/MDP-Requirements.tex}
+\input{figures/exfiltration.tex}
 
-\input{figures/migration_trigger.tex}
 
 \subsection{Infrastructure assumptions}
 \input{RA/RA-MDP/MDP-assumption.tex}
 
+\input{figures/migration_trigger.tex}
 \subsection{Attacker Model}
 \input{RA/RA-MDP/MDP-attackmodel.tex}
 
-\subsection{Modeling the RA problem with a MDP}
+\subsection{Modeling the RA problem with an MDP}
 \input{RA/RA-MDP/MDP-MDP.tex}
 
 \newpage
@@ -36,6 +34,7 @@ An experimental prototype is available on github\footnote{\label{github}\url{htt
 \input{RA/RA-MDP/MDP-optimal-monitoring.tex}
 
 \subsection{Discussion}
+\GB{you do not discuss the complexity limitation of your MDP. I think it is important and honest to point it out.}
 \input{RA/RA-MDP/MDP-discussion.tex}
 
 \section{General Conclusion}

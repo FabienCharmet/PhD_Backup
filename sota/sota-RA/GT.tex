@@ -2,7 +2,7 @@
 
 Game theory is a mathematical formalism used to represent the interactions between several agents (also known as players).
 The model is called a game, in which players have the possibility to choose an action and are rewarded based on their choice and the choice made by the other players.
-In this section, we start by defining some terms that will be used to describe the literature, and we also introduce how a game expressed with this formalism is solved. Finally, we review different games used to answer a resource allocation problem in a security context.
+In this section, we start by defining some terms that will be used to describe the literature, and we also introduce how a game expressed with this formalism is solved. Finally, we review different games used to solve a resource allocation problem in a security context.
 
 \subsubsection{Definitions}
 
@@ -14,7 +14,7 @@ In this section, we start by defining some terms that will be used to describe t
 
 \textbf{Complete information} describes a game where each player knows the strategies available to all other players as well as their payoff. The opposite is called an incomplete information game.
 
-\textbf{Cooperative games} are games where all players will collaborate to maximize their personal gain, in opposition to non-cooperative games where players only maximize their own benefit\GB{I think you just want to say they do not collaborate. Because it seems that in cooperative and non-cooperative games, players always seek to maximize their own gain.}.
+\textbf{Cooperative games} are games where all players will collaborate to maximize a common gain, in opposition to non-cooperative games where players only maximize their own benefit.
 
 \textbf{Zero-sum games} describe a situation where the gains obtained by some players equal the other players' losses.
 
@@ -40,7 +40,8 @@ In a two-player zero-sum game, each player attempts to minimize the maximum gain
 The Nash equilibrium is expressed with the minmax problem~\cite{minmax}.
 
 \subsubsection{Game Theory based Resource Allocation}
-Game Theory has been applied to network security in different ways (e.g., IDS configuration and optimization), as well as, to monitoring resource allocation problems. We will focus on the latter. We summarized the different works in Table~\ref{tab:sota-gt}\GB{the table still does not include information on resolution}.
+Game Theory has been applied to network security in different ways (e.g., IDS configuration and optimization), as well as, to monitoring resource allocation problems. We will focus on the latter. We summarized the different works in Table~\ref{tab:sota-gt}.
+% \GB{the table still does not include information on resolution}.
 
 %  \subsubsection{Static games}
  One of the first works using Game Theory applied to network security is presented by Kodialam~\etal in~\cite{MuraliKodialam2003}, where they model a link sampling for an attack detection problem.
@@ -105,15 +106,15 @@ Game Theory applied to network security has been surveyed in~\cite{Roy2010,Kienn
 % \usepackage{graphicx}
 \begin{table}[ht]
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{Reference}                               & \textbf{Type of game}       & \textbf{Summary}                                            \\ \hline
-Koadialam~-~\cite{MuraliKodialam2003},~Otrok~-~\cite{otrok1,otrok2} & Static game        & Link sampling allocation for IDS                 \\ \hline
-Agah~-~\cite{agah2004}                         & Static game        & Monitoring resource allocation in a sensor network \\ \hline
-Chen~-~\cite{Chen2009,interdep-ismail2017}      & Static game        & Resource allocation  in an infrastructure          \\ \hline
-Zhu~-~\cite{Zhu2009b}                         & Collaborative game & Trust management in untrusted environments         \\ \hline
-Sallhammar~-~\cite{sallhammar2005}                  & Stochastic game    & \multirow{2}{*}{Attack modeling for resource allocation}             \\ \cline{1-2}
-Nguyen~-~\cite{Nguyen2009}                       & Stochastic game    &                                                    \\ \hline
+\textbf{Reference}                                                  & \textbf{Type of game} & \textbf{Game Resolution} & \textbf{Summary}                                         \\ \hline
+Koadialam~-~\cite{MuraliKodialam2003},~Otrok~-~\cite{otrok1,otrok2} & Static game           & Minmax theorem           & Link sampling allocation for IDS                         \\ \hline
+Agah~-~\cite{agah2004}                                              & Static game           & Minmax theorem           & Monitoring resource allocation in a sensor network       \\ \hline
+Chen~-~\cite{Chen2009,interdep-ismail2017}                          & Static game           & Minmax theorem           & Resource allocation  in an infrastructure                \\ \hline
+Zhu~-~\cite{Zhu2009b}                                               & Collaborative game    & Iterative algorithm      & Trust management in untrusted environments               \\ \hline
+Sallhammar~-~\cite{sallhammar2005}                                  & Stochastic game       & Minmax theorem           & \multirow{2}{*}{Attack modeling for resource allocation} \\ \cline{1-3}
+Nguyen~-~\cite{Nguyen2009}                                          & Stochastic game       & Iterative algorithm      &                                                          \\ \hline
 \end{tabular}%
 }
 \caption{Summary of Game Theory for the RA problem}

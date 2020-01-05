@@ -4,21 +4,31 @@ We also aim at making this model usable in real-life use cases by alleviating so
 
 SDN Virtual Network migration has not been investigated from a security perspective.
 Existing network hypervisors have yet to make the migration a default feature, let alone doing so with security considerations.
-Formal languages dedicated to security often provide enough expressiveness to model a computer network, different components related to its security vulnerabilities, and potential existing countermeasures\GB{too long and confusing: please split the sentence}.
-However, while SDN has been modeled\GB{you want to model SDN-based Virtual Network migration}, its associated security properties have yet to be described using a formal approach.
+Formal languages dedicated to security often provide enough expressiveness to model a computer network. 
+For instance, describing the security vulnerabilities and their existing counter-measures.
+However, while SDN has been modeled, the VN migration process and its security properties have yet to be described using a formal approach.
 
 We have also emphasized on the security aspects of live Virtual Machine migration, as this process is widely used in the industry to provide uninterrupted service to end users. 
 % \GB{below paragraph is too colloquial and pompous}
 The attack surface of the Virtual Network migration process is very similar to the one exploited in the different works about Virtual Machines. This attack surface is augmented by the security issues and challenges introduced by SDN. Nevertheless, the formal study of the VN migration process is rarely investigated, and the security aspects are out of the scope of existing VN migration solutions.
 
-\GB{what is the link between teh below paragraph and the rest of the SoTA?}
-We surveyed the Resource Allocation problem considering two different formalisms. These formalisms have a different approach regarding the nature of agents interacting with a network infrastructure. The first one (\ie Game Theory) considers the attacker and the defender, while the second one (\ie MDP), only considers the defender's side to solve the problem.
+% \GB{what is the link between teh below paragraph and the rest of the SoTA?}
+% \FC{It is a summary of existing RA works with regard to our security context, it seems good to have it here}\GB{ok but you need an additional first sentence to explain why you did look at RA with respect to your researc scope.}
+
+The Resource Allocation problem has been studied to define the scope of the optimization research goal.
+We limited the survey to two different formalisms. These formalisms have a different approach regarding the nature of agents interacting with a network infrastructure. The first one (\ie Game Theory) considers the attacker and the defender, while the second one (\ie MDP), only considers the defender's side to solve the problem.
 The Game Theory formalism remains difficult to exploit for a realistic use case because of its inadequacy to model a security problem without denaturing it with too many assumptions~\cite{Kiennert2018}.
 Markov Decision Processes have rarely been used for resource allocation problem in a security context. The formal solution of an MDP is the set of optimal choices the defender should make when facing every possible situation. Therefore, to provide an answer to the resource allocation problem, the solution must be adapted to propose a static representation of the resources allocated inside the network infrastructure.
 
-\GB{to conclude your SoTA, you need to express how you are going to advance SoTA in order to reach the research goals of the Introduction. Please rewrite the following two paragraphs.}
-In the following chapters, we propose the design of a formal model of the VN migration process and its security. We describe security properties using a first order logic formalism.
-This model introduces the security of SDN virtualization from a formal point of view, and proposes practical use cases to verify if the security has been maintained during the migration of a Virtual Network.
+Existing models are limited to the representation of traditional networks.
+In the next chapters, we propose a model describing the virtualization of SDN networks. This will answer our first research goal: \textbf{Formalization}. The model will include a set of security properties that will be used to study the migration process . Traditional security properties such as Confidentiality, Integrity and Availability have been already modeled for network systems, and we will extend them for the migration process.
 
-Additionally, we propose to model a Resource Allocation problem, where we want to optimize the distribution of limited monitoring resources over the physical infrastructure.
-The application of MDPs to this problem shows that other security problems may be represented with it, and it may not be limited to resource allocation. We expect that complex attacker models may be described and evaluated using this formalism.
+Game Theory and Markov Decision Processes have been used for network resources allocation problem, but never in a SDN context. In order to reach the \textbf{Optimization} goal, we will investigate these formalisms to see if they can be applied to our problem. We will emphasize on MDPs because the flexibility of the formalism seems to be flexible enough to model the different aspects of our problem.
+
+% \GB{to conclude your SoTA, you need to express how you are going to advance SoTA in order to reach the research goals of the Introduction. Please rewrite the following two paragraphs.}\FC{I did but I did not really understand why it was not the case already}\GB{it is still not the case because I see no ``research goals'' and no mention of where the SoTA ended, and to where you make it progress.}
+% In this chapter, we have described several
+% In the following chapters, we model the VN migration process and its security to support the formalization of SDN virtual networks. We will use a first order logic formalism to detect security violation during the migration.
+% This model introduces the security of SDN virtualization from a formal point of view, and proposes practical use cases to verify if the security has been maintained during the migration of a Virtual Network.
+
+% Additionally, we propose to model a Resource Allocation problem  to optimize the distribution of limited monitoring resources over the physical infrastructure. This will be used to alleviate assumptions made about attack detection in the formal model.
+% The application of MDPs to this problem shows that other security problems may be represented with it, and it may not be limited to resource allocation. We expect that complex attacker models may be described and evaluated using this formalism.
