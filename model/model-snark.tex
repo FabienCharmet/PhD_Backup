@@ -12,15 +12,15 @@ In Section~\ref{sec:proving-theory}, we have described several aspects of the fi
 In this section we  present a first-order theorem prover that will be used to detect the violation of the security properties.
 We use the Stanford Research Institute's open-source first-order reasoner SNARK~\cite{snark-Stickel2000}.
 
-SNARK is fully automatic and uses machine-oriented inference rules, such as \textit{resolution} for general-purpose reasoning and \textit{paramodulation} and \textit{rewriting} for reasoning about equality.
+SNARK is fully automatic and uses machine-oriented inference rules, such as \textit{resolution} for general purpose reasoning and \textit{paramodulation} and \textit{rewriting} for reasoning about equality.
 It has special facilities
 %\GB{is listing all features supported by SNARK relevant in the paper?} 
 for accelerated reasoning about space and time; a sort mechanism for internalizing the reasoning about sorts or types; and an \textit{answer extraction} mechanism for constructing an answer to a query from a completed proof. 
 Although SNARK is ideally suited for our purpose and has been successfully used in other applications (\eg~\cite{AICPub2006:2015}), any other theorem prover with comparable features could be used.
 
-SNARK is a refutation procedure, \ie it looks for inconsistencies in a set of logical sentences. It begins with a theory, a set of axioms, \ie logical sentences that specify the basic properties of the subject domain. 
+SNARK is a refutation-based theorem prover, \ie it looks for inconsistencies in a set of logical sentences. It begins with a theory, a set of axioms, \ie logical sentences that specify the basic properties of the subject domain. 
 When trying to prove that a conjecture holds in the theory, it negates the conjecture, adds it to the set of axioms of the theory, and tries to find a contradiction in the resulting set. 
-For this purpose, it will apply inference rules, which deduce new sentences, and adds those to the set. The process continues until no further inferences are possible or until a contradiction is obtained \-—-- this shows that the negated conjecture is inconsistent with the axioms of the theory and, hence, that the conjecture itself is valid in the theory. 
+For this purpose, it will apply inference rules, which deduces new sentences, and adds those to the set. The process continues until no further inferences are possible or until a contradiction is obtained \-—-- this shows that the negated conjecture is inconsistent with the axioms of the theory and, hence, that the conjecture itself is valid in the theory. 
 Once the conjecture is proven, it is regarded as a theorem of the theory; before that, its validity is in question.
 The answer extraction mechanism, developed for program synthesis applications~\cite{Manna:1980:DAP:357084.357090}, associates with each sentence in the set an answer term, such that if the sentence can be falsified, the corresponding instance of the answer term will satisfy the original query. 
 When a contradiction is obtained, any instance of the contradictory sentence is false, and hence the corresponding answer term will always  be an answer to the query. 
@@ -31,7 +31,7 @@ The order in which inference rules are applied depends on a set of heuristic pri
 Weights can be assigned to symbols, which cause SNARK to focus attention on “lighter” sentences in its set. 
 Also, an ordering is applied to symbols, which cause SNARK to focus on particular parts of a sentence. 
 Typically, symbols will be replaced by other symbols that are smaller in the ordering. 
-Since first-order theorem proving is undecidable and the search can go on forever, we give SNARK a time limit on proving a given theorem. 
+Since first-order theorem proving is undecidable (Trakhtenbrot's theorem) \FC{apparemment c'est de notoriété commune que la logique du premier ordre est indécidable, apparemment on est pas sur une connaissance de niche} and the search can go on forever, we give SNARK a time limit on proving a given theorem. 
 This is set empirically \-—-- for the examples considered here, most of the theorems were proven in less than a second. The bigger use cases presented later took no more than 30 seconds.
 SNARK will automatically search for a series of proofs of a given conjecture, each yielding a different answer.
 In general, there may be an infinity of answers to a query, but we rely on the time limit mechanism to cut off the search.
@@ -90,7 +90,7 @@ A data confidentiality violation is defined in part by the following axiom:
     (non-empty ?t.t-int)))
 \end{lstlisting}
 
-In other words, the confidentiality violation can occur for a piece of data via a path of nodes during a time interval \verb'?t' if
+In other words, the confidentiality violation can occur for a piece of data via a path of nodes during a time interval \verb'?t' if all of the following conditions are met:
 %\GB{if all these conditions should hold together, I suggest to use the paraenum environment instead}
 \begin{itemize}
 \item the user can read the data via the path during a time interval \verb'?r' (lines 9-11)
@@ -99,7 +99,7 @@ In other words, the confidentiality violation can occur for a piece of data via 
 \item the time interval \verb'?t' is not empty (line 15)
 \end{itemize}
 
-Here  \verb't-pt' is the sort of time points, and \verb'(time-i ?t1.t-pt ?t2.t-pt)' is the time interval between the two time points \verb'?t1.t-pt' and \verb'?t2.t-pt'. If a user can read some data during one time interval and is not authorized to read that data during another time interval, a confidentiality violation can occur during the intersection of those two intervals, provided that the intersection is not empty.
+Here  \verb't-pt' is the sort of time points, and \verb'(time-i ?t1.t-pt ?t2.t-pt)' is the time interval between the two time points \verb'?t1.t-pt' and \verb'?t2.t-pt'. If a user can read some data during one time interval and is not authorized to read these data during another time interval, a confidentiality violation can occur during the intersection of those two intervals, provided that the intersection is not empty.
 
 Applying the resolution rule to the negated conjecture and the definition of a data confidentiality violation, and then simplifying, yields the following \textit{current proof step}, which is added to the set of consequences:
 
@@ -119,7 +119,7 @@ Applying the resolution rule to the negated conjecture and the definition of a d
             (time-i ?t1.t-pt ?t2.t-pt)))
     (not-before ?t1.t-pt ?t2.t-pt))
 \end{lstlisting}
-with associated answer term \verb' (ans ?u.user ?d.data ?p.path ?t.t-int)'.
+with the associated answer term \verb' (ans ?u.user ?d.data ?p.path ?t.t-int)'.
 This may be regarded as the negation of a goal to be established (line 2).
 % ; conditions in the sentence are implicitly negated.
 Thus, we are looking for a user who can read the data via a path of nodes but who is not authorized to do so (lines 7-11).
@@ -163,7 +163,7 @@ The relation \verb'reads-via-path' is defined in part by the axiom
 \end{lstlisting}
 
 The relation \verb'(path-link ?n1.node ?n2.node ?p.path ?t.t-int)' holds if, at time interval \verb'?t.t-int', there is a connected path \verb'?p.path' linking nodes \verb'?n1' and \verb'?n2'. 
-The axiom says that a user can read a piece of data via a path at a time interval \verb'?t.t-int' if
+The axiom says that a user can read a piece of data via a path at a time interval \verb'?t.t-int' if all of the following conditions are met:
 %\GB{if all these conditions should hold, I suggest to use the paraenum environment}
 \begin{itemize}
 \item the data is at one node during a time interval (lines 5-7)

@@ -1,0 +1,71 @@
+\chapter{Markov Decision Process}
+\label{sec:appendixmdp}
+\section{Value Iteration Algorithm}\textbf{\\}
+% \GB{notation of reward is inconsistent between steps 2 and 4}
+This algorithm~\cite{bellman1957} takes an iterative approach to determine the value of each state in the MDP with the Bellman equation.
+Value Iteration works as follows:
+\begin{enumerate}
+    \item Initialize a value vector $V_0(s)=0,~\forall s\in S$
+    \item Determine the utility of each state iteratively\\{$V_{k+1}(s) = \max\limits_a \left \{\sum\limits_{s'} P(s,a,s')[R(s,a,s') + \gamma V_k(s')] \right \}$}
+    \item Repeat step 2 until $V_{k}(s)$ converges
+    \item Compute the optimal policy $\pi(s)$\\$\pi(s) = \argmax\limits_a \left \{\sum\limits_{s'}P(s,a,s')[R(s,a,s') + \gamma V(s')] \right \}$
+\end{enumerate}
+
+% \FC{Don't forget misplacement of "The computational complexity etc.}
+% \newpage
+\section{Policy Iteration Algorithm}\textbf{\\}
+Similarly to the previous algorithm, the Policy Iteration algorithm~\cite{policyiteration} works iteratively but directly determines the optimal policy instead of the value of the states.
+Policy Iteration can be described as follows:
+% \GB{line 4, you mention U(s). is it not V(s)?}
+\begin{enumerate}
+    \item Initialize a value vector and a policy vector $~\forall s\in S,\pi(s)=a\in A,~V(s)=0$
+    \item Evaluate the policy
+        \begin{algorithm}
+            \Repeat{$\Delta < \Theta$ (a small positive number)}{
+                $\Delta = 0$\\
+                \ForEach{$s\in S$}{
+                    $temp = V(s)$\\
+                    \tcc{Compute utility}
+                    $V(s) =\sum\limits_{s'} P(s,a,s')[R(s,a,s') + \gamma V(s')]$\\
+                    $\Delta = max(\Delta,|temp-V(s)|)$
+                }
+            \tcc{Repeat until convergence of the utility}
+            }
+        \end{algorithm}
+        % \newpage
+    \item Improve policy
+    % \GB{should \textbf{foreach} starts at line 2 in the below algorithm?}
+    \begin{algorithm}
+        stable-policy = True\\
+        \ForEach{$s\in S$}{
+            $temp = \pi(s)$\\
+            \tcc{Compute new policy}
+            $\pi(s) = \argmax\limits_a \left \{ P(s,a,s')[R(s,a,s') + \gamma \sum\limits_{s'}V(s')] \right \}$\\
+            \tcc{Did the policy change ?}
+            \uIf{$temp \neq \pi(s)$}{stable-policy=False}
+        }
+        \uIf{stable-policy}{exit}
+        \tcc{If the policy changed recompute states values}
+        \uElse{goto Step 2}
+    \end{algorithm}
+\end{enumerate}
+
+
+
+The computational complexity of both algorithms is studied in~\cite{mdpcomplexity}.
+Results show that MDPs can be solved in a polynomial time for both algorithms, but existing solutions are barely exploiting the structure specificities of an MDP. Simply put, MDPs are solved like any other optimization problem.
+
+\section{Q-Learning}
+The Q-Learning algorithm~\cite{qlearning} is used when the MDP does not provide an explicit definition of its model (\ie transitions and/or rewards definitions are unknown).
+The agent only knows what state he is in, and upon choosing an action, the agent receives a reward for transitioning from state $s_t$ to $s_{t+1}$.
+The Q function defines the \textit{quality} of action $a$ at state $s_t$.
+Similarly to the Value Iteration algorithm, updating the Q function starts with an arbitrary initialization and will be gradually updated as time passes (See Equation~\eqref{eq:updatingq}).
+Q-Learning has been proven to converge under certain conditions on the learning rate~\cite{watkins1992q}.
+% \CK{Parler de la convergence}
+
+% \GB{please comment Eq. (2)}
+\begin{equation}\label{eq:updatingq}
+Q'(s_{t},a_{t}) = (1-\alpha) \cdot \underbrace{Q(s_{t},a_{t})}_{\text{old value}} + \underbrace{\alpha}_{\text{learning rate}} \cdot  \overbrace{\bigg( \underbrace{r(s_t,s_{t+1})}_{\text{observed reward}} + \underbrace{\gamma \max_{a}Q(s_{t+1}, a)}_{\text{optimal discounted value}} \bigg) }^{\text{learned value}}
+\end{equation}
+
+

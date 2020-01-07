@@ -3,10 +3,10 @@ We make several assumptions related to the scope of our study and about certain 
 \subsection{Predicates}
 
 \begin{itemize}
-    \item \textsl{The formal execution trace is complete}.
+    \item The formal execution trace is complete.
     
     This implies that all the information necessary to compute the proof is present in the trace and that there is no missing event or predicate.
-This assumption holds in our case because we have implemented a simulator to evaluate our scenario. However, this assumption does not hold in a real life environment, and we will treat this issue in the next chapter.
+    This assumption holds in our case because we have implemented a simulator to evaluate our scenario. However, this assumption does not hold in a real-life environment, and we will treat this issue in the next chapter.
 
     \item Predicates related to determining whether a user is allowed to access a specific node or data are generated using traditional Access Control solutions.
     
@@ -18,11 +18,11 @@ This assumption holds in our case because we have implemented a simulator to eva
 \subsection{Infrastructure}
 \begin{itemize}
 
-    \item Two physical equipments are connected via a single physical link. This assumption is used in the definition of a networking path connecting two nodes separated by several hops.
+    \item Two physical equipment are connected via a single physical link. This assumption is used in the definition of a networking path connecting two nodes separated by several hops.
 
     \item Physical links in the network infrastructure are considered to be exempt from performance issues and safe from a security perspective.
     
-    This supposes that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or be the target of attacks.
+    This supposes that from a practical point of view, only physical nodes in the infrastructure may experience performance issues or may be the target of attacks.
 \end{itemize}
 
 \newpage
@@ -35,12 +35,12 @@ The following assumptions define the scope of performance and security issues:
 
 \textbf{Security issues} 
 \begin{itemize}
-    \item We assume that the hypervisor itself is safe and functions normally.
+    \item The hypervisor itself is safe and functions normally.
     \item A network node may be the victim of passive listening, man-in-the-middle or software vulnerabilities exploits.
-    \item We also make the assumption that a physical link will not suffer any form of physical degradation.
+    \item A physical link will not suffer any form of physical degradation.
 \end{itemize}
 
-These assumptions  restrict the scope of some security properties only to the physical nodes because of their inapplicability to physical links.
+These assumptions restrict the scope of some security properties only to the physical nodes because of their inapplicability to physical links.
 
 
 
@@ -52,11 +52,11 @@ These assumptions  restrict the scope of some security properties only to the ph
     
     Indeed, the implementation of the virtualization layer depends on the solution considered.
     Each solution comes with its own identifiers, flow space and limitations on how the user may design his Virtual Network and which fields and actions he may use to generate flow rules. 
-    We justify this choice because we want our model to be agnostic to the technical solution used for network virtualization.
+    We justify this choice because we want our model to be agnostic about the technical solution used for network virtualization.
     
     \item The VNE problem is considered out of the scope of this thesis, as it is independent from the actual migration process. 
     
-    We will suggest in Chapter~\ref{sec:thesis_conclusion} a research lead to make the migration process dynamic, so it can modify the destination substrate as the migration progresses. 
+    We will suggest in Chapter~\ref{sec:thesis_conclusion} a research led to make the migration process dynamic, so it can modify the destination substrate as the migration progresses. 
     
     \item We exclude path splitting from the model and limit the embedding of a virtual link to a single set of physical nodes.
     

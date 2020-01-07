@@ -15,15 +15,18 @@ The attack surface of the Virtual Network migration process is very similar to t
 % \GB{what is the link between teh below paragraph and the rest of the SoTA?}
 % \FC{It is a summary of existing RA works with regard to our security context, it seems good to have it here}\GB{ok but you need an additional first sentence to explain why you did look at RA with respect to your researc scope.}
 
-The Resource Allocation problem has been studied to define the scope of the optimization research goal.
+% The Resource Allocation problem has been studied to define the scope of the optimization research goal 
+In Chapter~\ref{sec:thesis_introduction} we have defined a research goal to optimize our formal model. 
+We have studied the Resource Allocation problem to define the scope of this goal for a security problem.
+% \CK{Je ne comprends pas cette phrase}
 We limited the survey to two different formalisms. These formalisms have a different approach regarding the nature of agents interacting with a network infrastructure. The first one (\ie Game Theory) considers the attacker and the defender, while the second one (\ie MDP), only considers the defender's side to solve the problem.
 The Game Theory formalism remains difficult to exploit for a realistic use case because of its inadequacy to model a security problem without denaturing it with too many assumptions~\cite{Kiennert2018}.
 Markov Decision Processes have rarely been used for resource allocation problem in a security context. The formal solution of an MDP is the set of optimal choices the defender should make when facing every possible situation. Therefore, to provide an answer to the resource allocation problem, the solution must be adapted to propose a static representation of the resources allocated inside the network infrastructure.
 
 Existing models are limited to the representation of traditional networks.
-In the next chapters, we propose a model describing the virtualization of SDN networks. This will answer our first research goal: \textbf{Formalization}. The model will include a set of security properties that will be used to study the migration process . Traditional security properties such as Confidentiality, Integrity and Availability have been already modeled for network systems, and we will extend them for the migration process.
+In the next chapters, we propose a model describing the virtualization of SDN networks. This will answer our first research goal: \textbf{Formalization}. The model will include a set of security properties that will be used to study the migration process. Traditional security properties such as Confidentiality, Integrity and Availability have been already modeled for network systems, and we will extend them for the migration process.
 
-Game Theory and Markov Decision Processes have been used for network resources allocation problem, but never in a SDN context. In order to reach the \textbf{Optimization} goal, we will investigate these formalisms to see if they can be applied to our problem. We will emphasize on MDPs because the flexibility of the formalism seems to be flexible enough to model the different aspects of our problem.
+Game Theory and Markov Decision Processes have been used for network resources allocation problem, but never in an SDN context. In order to reach the \textbf{Optimization} goal, we will investigate these formalisms to see how they can be applied to our problem. We will emphasize on MDPs because the formalism seems flexible enough to model the different aspects of our problem.
 
 % \GB{to conclude your SoTA, you need to express how you are going to advance SoTA in order to reach the research goals of the Introduction. Please rewrite the following two paragraphs.}\FC{I did but I did not really understand why it was not the case already}\GB{it is still not the case because I see no ``research goals'' and no mention of where the SoTA ended, and to where you make it progress.}
 % In this chapter, we have described several

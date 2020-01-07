@@ -102,7 +102,7 @@ We detail the functions used in the following algorithm:
 %\GB{again, you are not providing an elaborate explanation with respect to the parameters.}.
 %\FC{Done}
 \begin{itemize}
-\item Select\_node selects the next node to be migrated.
+\item Select\_node($remaining\_nodes$) selects the next node to be migrated from the set of remaining nodes.
 \item exist\_link($node1,node2,topology$) returns True if there is a virtual link between $node1$ and $node2$ in $topology$.
 \item link($node1,node2,topology$) returns the identifier of the virtual link connecting $node1$ and $node2$ in $topology$.
 \end{itemize}

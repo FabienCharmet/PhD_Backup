@@ -1,9 +1,10 @@
 The state of the art highlights numerous challenges related to the use of SDN for the virtualization of network resources.
 The migration of Virtual Networks has also been an important research topic, as the availability of a Virtual Network is as crucial as the availability of a Virtual Machine.
-However, and this is where the gap between VM migration and VN migration lies, the security of the former has been extensively studied while the latter is yet to be explored.
+However, while the security of VM migration has been extensively studied, the security of VN migration is yet to be explored. 
+% \CK{syntaxiquement bancal, car "the former" et "the latter" font reference a ton incise "and this is where", alors que la phrase est censee pouvoir etre comprehensible meme si on enleve l'incise}
 
 We propose to study the security of the migration process from a formal perspective. This field has never been investigated before, and a formal approach will outline a first scope of study as well as a set of definitions that can be extended in a future work.
-The scope of this work is to provide a formal proof of the security during the migration, which can be later used to reconstruct the serie of events that lead to the security breach. We exclude a real-time computation of the proof with regard to this requirement.
+The scope of this work is to provide a formal proof of the security during the migration, which can be later used to reconstruct the series of events that led to the security breach. We exclude a real-time computation of the proof with regard to this requirement.
 
 The different models presented in Chapter~\ref{sec:sota} are concerned with legacy networks.
 One important challenge is to consider the specificities of the SDN paradigm in the design of the formal model.
@@ -11,7 +12,7 @@ Also, the security approach of existing models is either too high level (ACL bas
 We need an intermediate positioning where a formal approach can be articulated with the particularities of the SDN paradigm.
 
 First, we propose several definitions for the following security properties: confidentiality, integrity, availability 
-% , authenticity 
+%, authenticity 
 and co-residency, the latter being a property specifically related to the security of the virtualization infrastructure.
 These properties are expressed with first order logic predicates.
 
@@ -20,4 +21,5 @@ The collection of these events can be done using network monitoring tools.
 % Such events will then be converted into the corresponding formal predicates and will constitute an execution trace from the formal point of view.
 We implement a simulator for such purposes.
 
-Finally, the formal trace generated in the previous task is used by a theorem prover to construct a formal proof of the preservation, or the violation, of the security properties associated to the migration process. The theorem prover has to provide temporal reasoning facility as the migration process is seen as a chronological sequence of events that may ultimately lead to a security breach.
+Finally, the formal trace generated in the previous task is used by a theorem prover to construct a formal proof of the preservation, or the violation, of the security properties associated to the migration process. The theorem prover has to provide temporal reasoning facilities as the migration process is seen as a chronological sequence of events that may ultimately lead to a security breach.
+

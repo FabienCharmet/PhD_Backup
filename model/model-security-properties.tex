@@ -11,7 +11,7 @@ Each property impacts physical elements of the SDN infrastructure, and we provid
 \label{sec:prop-conf}
 Confidentiality is a characteristic related to information.
 To protect and preserve the confidentiality of information means to ensure that it is not made available or disclosed to unauthorized entities~\cite{ISO/IEC270012013}.
-Therefore, in network security, the confidentiality of a message in transit in the network is defined by the ability of an authorized  user to read data forwarded by an element of the network.
+Therefore, in network security, the confidentiality of a message in transit in the network is defined by the whether data is read by an authorized  user or not.
 Formally we can define a predicate $confidentiality(D)$ as follows:
 
 \begin{myformula}
@@ -124,7 +124,7 @@ We detail two notions related to the integrity property:
 
 % Section~\ref{sec:mapping-model} proposes solutions to verify these concepts.
 
-Therefore, if a data has not been legitimately processed, its integrity holds if it has not been modified in any other way (\eg man-in-the-middle attack). 
+Therefore, if a data has not been legitimately processed, its integrity holds if it has not been modified in any other way (\eg man-in-the-middle attack). In the following predicates $t_i$ describes a time interval while $t_1$ and $t_2$ are dates.
 
 \begin{myformula}
 $d\_integrity(D,ti) \Leftrightarrow \forall t_1,t_2\in ti, ~ \overline{processed(D, ti)} \Rightarrow 
@@ -155,17 +155,17 @@ $p\_integrity(P, ti) \Leftrightarrow \forall t_1,t_2 \in ti,~ \overline{modified
 
 \textbf{Property 1a:} The integrity of a network element is preserved if the data it carries and the process used to process it have their integrity preserved. 
 \newline
-\textbf{Formal definition:} Let $N$ be a network element, $D$ some data and $P$ a function modeling the process used by a network node on some data.
+\textbf{Formal definition:} Let $N$ be a network element, $D$ some data, $U$ a user and $P$ a function modeling the process used by a network node on some data.
 
 \begin{myformula}
-$node\_integrity(N) \Leftrightarrow \forall D,ti,P~p\_integrity(P,ti) \wedge d\_integrity(D,ti) \wedge process\_of(P,N,ti) \wedge is\_carrying(N,D,ti) \Rightarrow is\_node\_authorized(U,N,ti)$
+$node\_integrity(N) \Leftrightarrow \forall D,U,ti,P~p\_integrity(P,ti) \wedge d\_integrity(D,ti) \wedge process\_of(P,N,ti) \wedge is\_carrying(N,D,ti) \Rightarrow is\_node\_authorized(U,N,ti)$
 \end{myformula}
 
 \begin{itemize}
 \item $process\_of(P,N,ti)$ assigns process $P$ to node $N$ during time interval ti.
 \item $is\_carrying(N,D,ti)$ is true if node $N$ is carrying data $D$ during time interval $ti$.
 \item $is\_node\_authorized(U,N,ti)$ is true if the user $U$ has the right to access network element $N$ during time interval $ti$.
-\end{itemize}
+\end{itemize} \CK{Attention, U n'est pas introduit dans cette definition. Par ailleurs je ne comprends pas en quoi le fait d'avoir le droit d'acceder a un noeud a quelque chose a voir avec l'integrite des donnees (on peut avoir le droit d'acceder a un noeud mais ne pas avoir le droit de modifier les donnees)}\FC{L'idée est effectivement que l'accès est fait en ayant des droits de modification, qu'on soit autorisé à les avoir ou pas. Je n'ai pas envisagé le cas où l'utilisateur fait un access mais ne fait rien}
 
 \textbf{Property 1b:} The integrity of a virtual node is preserved if and only if the nodes embedding it preserve their integrity as well.
 \newline
@@ -357,7 +357,7 @@ The confidentiality section introduces the following predicates:
 \begin{itemize}
 \item reads(U,D,t)
 \newline
-This predicate is true if a monitoring tool intercepts traffic, or if the traffic is forwarded to a Virtual Machine, owned by either a legitimate or malicious user. Inspecting flow rules in nodes determines where the data was forwarded.
+This predicate is true if a monitoring tool intercepts traffic, or if the traffic is forwarded to a Virtual Machine, owned by either a legitimate or malicious user. Inspecting flow rules in nodes determines where the data were forwarded.
 
 \item is\_data\_authorized(U,D,t)
 \newline
@@ -414,7 +414,7 @@ This is done by reading the value of D using a network probe.
 \newline
 The process P can be monitored by querying the related flow rules.
 
-\item proccess\_of(P,N,ti)
+\item process\_of(P,N,ti)
 \newline
 The flow rules of node N can be queried to check if they matches process P.
 

@@ -1,7 +1,11 @@
-\section{Second approach: Markov Decision Process}
-% \GB{why is there a pagebreak before?}
-We have considered the formalism of Game Theory as a method to solve the resource allocation problem, but the lack of flexibility and the complexity of determining the equilibrium make it inadequate for our problem. We consider here Markov Decision Processes (MDP).
-MDP is a formalism used to make the optimal choices when interacting with a system. We intend to use it to determine the best allocation of monitoring resources to detect attacks in the infrastructure. Because a practical solution to this RA problem is a set of nodes supporting the monitoring of the infrastructure, we develop a statistical analysis of the optimal policy and convert the dynamic answer of an MDP into a static \textit{a priori} deployment.
+\section{Markov Decision Process for Resource Allocation}
+
+Markov Decision Processes are used to represent how a defender may choose network nodes to support the monitoring.
+While the attacker is not directly represented as an agent that will interact with the infrastructure, he can be represented in the definition of the states of the MDP and in the rewards obtained by the defender.
+In this chapter, we model the migration of a Virtual Network with an MDP and represent an attacker compromising the migration process.
+The solution of an MDP is a dynamic strategy that the defender should follow depending on the current state of the infrastructure (\ie the optimal policy).
+We intend to convert the dynamic aspect of this policy into an \textit{a priori} deployment of the monitoring resources (\ie deploying the resources prior to the migration of the Virtual Networks).
+While our MDP model could be applied to traditional networks, we have designed an attack model exploiting specificities of the SDN paradigm. 
 An experimental prototype is available on github\footnote{\label{github}\url{https://github.com/FabienCharmet/MDPRA}}.
 
 
@@ -34,7 +38,7 @@ An experimental prototype is available on github\footnote{\label{github}\url{htt
 \input{RA/RA-MDP/MDP-optimal-monitoring.tex}
 
 \subsection{Discussion}
-\GB{you do not discuss the complexity limitation of your MDP. I think it is important and honest to point it out.}
+% \GB{you do not discuss the complexity limitation of your MDP. I think it is important and honest to point it out.}
 \input{RA/RA-MDP/MDP-discussion.tex}
 
 \section{General Conclusion}

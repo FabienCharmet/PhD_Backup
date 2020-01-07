@@ -89,7 +89,7 @@ During the initial phase, only the legitimate user is active.
 The migration process starts and nodes and links are being migrated, one after another.
 At some point during the migration, the attacker will start his attack to gain access to the data carried through the VN.
 This results into the generation of two predicates, one about the attacker reading the data, and the other about him not being authorized to do so. 
-When the migration process ends, the data has been compromised.
+When the migration process ends, the data have been compromised.
 In SNARK, the piece of data has been named \verb'data-1' and the migration ends at time point \verb'time-9'.
 We formulate our question to SNARK at line 1 from Listing~\ref{lst:not-data-conf-q}, specifying which terms we are looking for.
 Similarly to previous examples, lines 3-4 represent the violation of the confidentiality over a non-empty time interval.
@@ -140,7 +140,7 @@ Line 10 highlights that the attacker does not have the authorization to read the
 
 
 \subsection{Migration alteration attack}
-Exploiting the physical nodes leverages other aspects of the security of the infrastructure.
+Exploiting the physical nodes leverages other aspects of the attack surface, \eg the communication channel between the hypervisor and the nodes.
 The initial situation is similar to the previous scenario but we use the move-based migration algorithm instead.
 The attacker is located in the network infrastructure and can render physical nodes unavailable to trigger the migration process. He will then intercept and modify the configuration sent by the hypervisor. 
 Therefore, the $conf\_integrity$ property is not respected anymore.
@@ -200,7 +200,7 @@ Line 1 represents the format of the answer: here we look for which configuration
 The configuration integrity breach is then proven by SNARK in Listing~\ref{lst:not-conf-int-a} for \verb'conf-1' at line 8 between time points \verb'time-3' and \verb'time-4' .
 Similarly to the previous information disclosure scenario, the attack starts after the beginning of the migration process, as shown by the answer term starting at \verb'time-3'.
 
-The proofs related to the other security properties are identical in essence, thus we do not include them here.
+The proofs related to the other security properties are identical in essence, thus we do not include them here. \CK{Est-ce que toutes les proprietes de securite ont ete vraiment testees ?}\FC{Pas chacune individuellement mais elles utilisent toutes les memes operateurs et symboles, donc on a le meme type de modelisation}
 % SNARK finds the beginning of the attack on node-a starting at time point time-3.
 %\GB{again, please provide line numbers for the reviewer to ``see something''}
 

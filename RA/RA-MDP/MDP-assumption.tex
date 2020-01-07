@@ -11,14 +11,14 @@ We describe here the assumptions made about the infrastructure and the migration
     We suppose that both Virtual Network and physical infrastructure are static (\ie the topology does not change over time).
     
     \item All nodes in the original substrate have been fully compromised by the attacker and thus are not considered as candidates for the destination substrate.  
-    This assumption is reinforced by the fact that forcing all the resources to be reallocated could be leveraged by the attacker in an attempt to have the target Virtual Network relocated closer to his Virtual Machines.
-    Virtual Machines are already subject to such attacks, as presented by Atya \etal in~\cite{stalling-atya2017,malicious-atya2017}.
+    This assumption is reinforced by the fact that forcing all the resources to be reallocated could be leveraged by the attacker in an attempt to have more nodes of the target Virtual Network relocated closer to his Virtual Machines (\ie co-residency).
+    Virtual Machines are already subject to such co-residency attacks, as presented by Atya \etal in~\cite{stalling-atya2017,malicious-atya2017}.
 
     \item
-    We also assume that migration time is uniform across all nodes (\ie no node takes longer to migrate in the infrastructure than another).
+    We also assume that the migration time is uniform across all nodes (\ie no node takes longer to migrate in the infrastructure than another).
     
     \item
      We consider the Virtual Network equivalent to the physical nodes composing its embedding.
-     This assumption is used to represent how nodes will be migrated and on which node flow rules will be installed. 
+     This assumption is used to represent how nodes will be migrated and on which physical node flow rules will be installed. 
 \end{itemize}
 

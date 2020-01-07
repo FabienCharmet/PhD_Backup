@@ -33,7 +33,7 @@ The following predicate declares the existence of a physical link named \textbf{
 physical\_link(\textbf{plink1},\textbf{h1}$\vert$\textbf{pnode1},\textbf{pnode2},\textbf{ti1})
 \end{myformula}
 
-The following predicate declares the existence of a physical path named \textbf{ppath1} connecting \textbf{pnode1} (or hypervisor \textbf{h1}) with \textbf{pnode2}, during time interval \textbf{ti1}. 
+The following predicate declares the existence of a physical path named \textbf{ppath1} connecting \textbf{pnode1} (or hypervisor \textbf{h1}) with \textbf{pnode2} \CK{(or hypervisor h2)?}\FC{non le ou est exprimé juste entre h1 et pnode1}, during time interval \textbf{ti1}. 
 \begin{myformula}
 physical\_path(\textbf{ppath1},\textbf{pnode1}$\vert$\textbf{h1},\textbf{pnode2},\textbf{ti1})
 \end{myformula}
@@ -50,7 +50,7 @@ A physical path is given a unique identifier and is associated with a set of phy
 This choice of modeling allows to have several different paths to connect two nodes. 
 We represent this association with a predicate:
 
-The following predicates associates physical link \textbf{plink1} to physical path \textbf{ppath1} during time \textbf{ti1}.
+The following predicates associates physical link \textbf{plink1} to physical path \textbf{ppath1} during time interval \textbf{ti1}.
 \begin{myformula}
 part\_of\_ppath(\textbf{ppath1},\textbf{plink1},\textbf{ti1})
 \end{myformula}

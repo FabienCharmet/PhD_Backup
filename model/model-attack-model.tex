@@ -1,6 +1,6 @@
 \label{sec:attacker-model}
 The migration of a VN instantiates new virtual nodes and links.
-Thus, based on  the migration functions we introduced in Section~\ref{sec:model-migration} and the predicates we have defined in Section~\ref{sec:security_prop}, we will describe the different components of a threat against the migration process using the following syntax
+Thus, based on the migration functions we introduced in Section~\ref{sec:model-migration} and the predicates we have defined in Section~\ref{sec:security_prop}, we describe the different components of a threat against the migration process using the following format
 %\GB{terms?}
 %\FC{The syntax is the combination of terms}
 : Attacker - Action - Target.
@@ -71,8 +71,9 @@ This assumption comes from the fact that we aim to detect the transition between
 
     \item \textbf{No outsider attacker: } We assume that an attacker residing outside the virtualization infrastructure and not using the virtualization service has little to no attack surface on the infrastructure.
 Most interfaces to interact with any component of the system are limited in visibility from the outside world.
-For instance, the DPAC provides an interface for end users to interact with their Virtual Network, and there is no openly identified weaknesses for an outsider to use (\ie the hypervisor will reject commands from unauthorized/unidentified users).
-Similarly, the CPAC provides an interface between the hypervisor and the physical nodes, and there is no functional use for this component to be interfaced directly with the outside world.
+For instance, the CPAC provides an interface for end users to interact with their Virtual Network, and there is no openly identified weaknesses for an outsider to use (\ie the hypervisor will reject commands from unauthorized/unidentified users).
+Similarly, the DPAC provides an interface between the hypervisor and the physical nodes, and there is no functional use for this component to be interfaced directly with the outside world. 
+% \CK{J'avais compris l'inverse sur DPAC/CPAC, peux-tu reverifier ?}
 \end{itemize}
 
 In the previous sections, we have defined the different attackers, as well as the malevolent actions and the possible targets in the virtualization infrastructure. 
@@ -122,7 +123,7 @@ This attack becomes the necessary first step of all of the following attacks.
 % \textbf{Location:} The attacker is located either inside the physical infrastructure or is a malicious user of the virtualization service.\\
 \begin{itemize}
     \item \textbf{Information gathering:} The attacker has collected information about his victim, and how to precisely target network equipments.
-The information collection process is considered out of scope of this work.
+The information collection process is considered out of the scope of this work.
     \item \textbf{Traffic generation:} The attacker can generate enough traffic to cause a service disruption.
 DoS attacks like ICMP flood or DNS amplification are used to deplete network resources in the infrastructure.
 \end{itemize}
@@ -177,7 +178,7 @@ The confidentiality of the nodes is not impacted because the attacker did not ac
     
     \item The \textbf{availability} of specific nodes in the infrastructure has been impacted to force the migration.
     
-    \item The \textbf{co-residency} between both victim and attacker VNs has been set up for the attacker to successfully exfiltrate the victim's data.
+    % \item The \textbf{co-residency} between both victim and attacker VNs has been set up for the attacker to successfully exfiltrate the victim's data. \CK{Est-ce vraiment un impact ou plutot un prerequis pour que l'attaque fonctionne ?}\FC{Le prérequis impacte quand même la propriété non ?} \CK{On parle de l'impact de l'attaque ici, c'est hors sujet}
 \end{itemize}
 
 \subsubsection{Migration alteration}
@@ -200,8 +201,8 @@ Once the hypervisor sends the different flow rules, the attacker will modify the
 This attack impacts the following security properties:
 \begin{itemize}
     \item The \textbf{availability} of specific nodes in the infrastructure has been impacted to force the migration.
-    \item The \textbf{confidentiality} of the configuration data that has been modified by the attacker.
-    The confidentiality of the nodes is not impacted for the same reasons described in the previous attack.
+    \item The \textbf{confidentiality} of the configuration data that have been modified by the attacker.
+    The confidentiality of the nodes is not impacted for the same reasons as those described in the previous attack.
     \item The \textbf{integrity} of the node and its configuration have been compromised.
 
 

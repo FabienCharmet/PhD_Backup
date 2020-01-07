@@ -12,7 +12,7 @@ In this section, we describe our MDP addressing the problem of optimal defense r
     % Based on the work of Ismail \etal~\cite{interdep-ismail2017}, we consider the monitoring cost  proportional to the intrinsic value of the nodes (\eg CPU time on a powerful machine is more expensive compared to a smaller one).
     
     \item We consider the monitoring imperfect with a certain attack detection probability.
-    Each node on the path of an attack has the same probability to detect it, \ie there is no node more efficient than another. 
+    The probability of detecting an attack is uniform across all nodes, \ie there is no node more efficient than another. 
 \end{itemize}
 
 
@@ -21,7 +21,7 @@ In this section, we describe our MDP addressing the problem of optimal defense r
 % \GB{one of the main assumptions is therefore that the attack path is in the substrate}
 % \FC{The attack path is from attacker to target node. However, the other path, the path used to exfiltrate data will be in the substrate obviously. I will differentiate these two types of paths}
 \begin{itemize}
-    \item  Physical nodes embedding the VN are more likely to be attacked than other nodes used to construct the exfiltration path.
+    \item  Physical nodes belonging to the destination substrate are more likely to be attacked than other nodes used to construct the exfiltration path. 
     
     During the migration, the attacker targets nodes to construct the path to exfiltrate data from the victim's VN.
     Embedding nodes are more important since at least one embedding node must be part of the path leading to the exfiltration point.
@@ -29,13 +29,13 @@ In this section, we describe our MDP addressing the problem of optimal defense r
     \item The attacker's strategy for choosing which nodes he attacks is based on the information gathering he performs while attacking. 
     
     The details of such activity is considered out of the scope of this thesis.
-    Similar work on cloud environments for Virtual Machines colocation has been proposed in~\cite{getoffmucloud-Ristenpart2009, incentivemtd-Zhang2012}.
+    Similar work on Cloud environments for Virtual Machines colocation has been proposed in~\cite{getoffmucloud-Ristenpart2009, incentivemtd-Zhang2012}.
     Johnson \etal propose in~\cite{mitigateAPT-johnson2013} a real time metric that determines the node that is the most likely to be the next target of an attack.
     
     \item
     If the attacker was able to establish the full path, then we consider that the global attack was successful.
     
-    A full path between the attacker and his victim's is connecting at least one physical node embedding the victim's VN to a Virtual Machine owned by the attacker. Such path is illustrated in Figure~\ref{fig:data-exfiltration-attack}.
+    A full path between the attacker and his victim is connecting at least one physical node embedding the victim's VN to a Virtual Machine owned by the attacker. Such path is illustrated in Figure~\ref{fig:data-exfiltration-attack}.
 \end{itemize}
 
 
@@ -51,12 +51,12 @@ This represents the amount of resources that can be spent to perform monitoring 
 % \GB{is $b_c = 0$ a halt condition?}\FC{No, monitoring actions are just not available, and choosing them only cost budget with no reward}.
 
 %GB redundancy detected, so I commented out the following lines
-We describe the state of the system as the following tuple: $s=<b_f,b_c,Mi,Mo,At>$:
+We describe the state of the system as the following tuple: $s=<b_f^s,b_c^s,Mi^s,Mo^s,At^s>$: 
 \begin{itemize}
     \item $n$: The number of nodes in the infrastructure.
     \item $\textbf{N} = \{1,..,n\}$ is the set of nodes in the infrastructure.
     \item $Mi^s \subset \textbf{N} $ is the set of currently migrated nodes for state $s\in S$.
-    \item $Mo^s \subset \textbf{N}$ is the set of currently monitored nodes for state $s\in S$.
+    \item $Mo^s \subset \textbf{N}$ is the set of currently monitoring nodes for state $s\in S$.
     \item $At^s \subset \textbf{N}$ is the set of compromised nodes for state $s \in S$.
     \item $b_f^s$ is the time left before the end of the migration at state $s$.
     \item $b_c^s$ is the remaining computational power at state $s$.
@@ -67,7 +67,7 @@ We describe the state of the system as the following tuple: $s=<b_f,b_c,Mi,Mo,At
 \subsubsection{Actions}
 \label{sec:actionset}
 The defender can either add monitoring on a particular node in the infrastructure, remove this monitoring, or choose to do nothing.
-The option of doing nothing prevents counter-productive options like forcing undesired actions (\eg removing monitoring from a node that is not currently monitoring the infrastructure).
+The option of doing nothing prevents counter-productive options like forcing undesired actions (\eg removing monitoring from a node that is not currently monitoring the infrastructure) \CK{N'est-ce pas une action incoherente en l'occurence ?}\FC{justement, une action incoherente a une recompense nulle et donc il faut avoir la possibilite de ne rien faire qui est recompensee normalement}.
 We note $m_j$ the action of setting up monitoring on node $j$. Similarly, we note $u_j$ the action of removing monitoring on node $j$.
 Finally we note $d$ the action of doing nothing.
 %\\With $n$ being the number of nodes in the infrastructure 
@@ -82,21 +82,36 @@ Finally we note $d$ the action of doing nothing.
 Choosing an action impacts both $b_f$ and $b_c$ resources. The action will make the migration progress by one step.
 We note $c_f$ the time it takes to migrate one node, and based on the assumption made in Section~\ref{sec:mdp-system-hypotheses}, we define it as constant for each action.
 
-Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the financial value of the node.
-% , its computing capacities and its function inside the virtualization infrastructure. 
-%We note $\{V_1,..,V_n\}, \forall i~V_i \in \mathbb{R}$ as the set of said values, one for each node. 
-Based on the work of Ismail~\etal~\cite{interdep-ismail2017}, we consider that the cost of deploying monitoring on each node is not uniform and depends on its intrinsic value. We represent this by assigning a proportionality coefficient to each node.
-We note this coefficient $k^j_{c}$, associated to $b_c$ and node $j$.
-Then we define the monitoring cost $c_c^j$ for node $j$ as : $\forall j \in \textbf{N},~ c_c^j = k^j_{c}  V_j$
+Similarly, we note $c_c$ the performance impact of a node monitoring the infrastructure. We made the assumption in Section~\ref{sec:mdp-system-hypotheses} that the detection probability was uniform across all nodes. Therefore, we consider the performance impact on each node to be uniform as well.
 
-We summarize $c_f$ and $c_c^j$ with:
+% We summarize $c_f$ and $c_c$ with:
 
-\begin{equation}
-  \begin{cases}
-    c_f\text{ is a constant}\\
-   \forall j \in \textbf{N},~ c_c^j = k^j_{c}  V_j 
-  \end{cases}
-\end{equation}
+% \begin{equation}
+%   \begin{cases}
+%     c_f\text{ is a constant}\\
+%     c_c\text{ is a constant}\\
+%   \end{cases}
+% \end{equation}
+
+% \subsubsection{Cost of actions}
+% Choosing an action impacts both $b_f$ and $b_c$ resources. The action will make the migration progress by one step.
+% We note $c_f$ the time it takes to migrate one node, and based on the assumption made in Section~\ref{sec:mdp-system-hypotheses}, we define it as constant for each action.
+
+% Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the financial value of the node.
+% % , its computing capacities and its function inside the virtualization infrastructure. 
+% %We note $\{V_1,..,V_n\}, \forall i~V_i \in \mathbb{R}$ as the set of said values, one for each node. 
+% Based on the work of Ismail~\etal~\cite{interdep-ismail2017}, we consider that the cost of deploying monitoring on each node is not uniform and depends on its intrinsic value. We represent this by assigning a proportionality coefficient to each node.
+% We note this coefficient $k^j_{c}$, associated to $b_c$ and node $j$.
+% Then we define the monitoring cost $c_c^j$ for node $j$ as : $\forall j \in \textbf{N},~ c_c^j = k^j_{c}  V_j$ \CK{ca devrait etre $k_c$, car si ton coefficient de proportionnalite depend de j, tu triches et ca n'a plus beaucoup de sens (ca revient au contraire a pouvoir moduler l'importance de Vj selon les noeuds, donc a rendre $c_c^j$ independant de Vj). Par contre si tu changes, ce n'est plus coherent avec ton application numerique.}\FC{Je vois, c'est effectivement $k_c$ dans NCA. Est-ce que l'on garde le coefficient de proportionnalite ou bien passer sur un truc constant. Les deux options se valent.}
+
+% We summarize $c_f$ and $c_c^j$ with:
+
+% \begin{equation}
+%   \begin{cases}
+%     c_f\text{ is a constant}\\
+%   \forall j \in \textbf{N},~ c_c^j = k^j_{c}  V_j 
+%   \end{cases}
+% \end{equation}
 
 \subsubsection{Probabilistic target determination}
 \label{sec:target_proba}
@@ -149,7 +164,7 @@ We describe the coherence of the MDP states with the following transition constr
     \label{cond:c4}
     \item If there is an action too expensive for $b_f$, it will consume the remaining $b_f$ without any reward.
     \label{cond:c5}
-    \item Choosing an action twice (\ie monitoring a node already monitored) only consumes time ($b_f$) with no reward.
+    \item Choosing an action twice (\ie monitoring a node already monitoring) only consumes time ($b_f$) with no reward.
     \label{cond:c6}
  \end{enumerate}
 
@@ -169,19 +184,19 @@ When choosing action $m_i$ at state $s$, we compute the resources impact and set
 \begin{equation}
   s \longrightarrow s' =\begin{cases}
     b_f^{s'} = b_f^s - c_f\\
-    b_c^{s'} = b_c^s - c_c^i\\
+    b_c^{s'} = b_c^s - c_c\\
     Mo^{s'} = Mo^s \cup \{i\}\\
     At^{s'} = At^s \cup \{j\} \text{~~if there is an attack}
   \end{cases}
 \end{equation}
 
 \subparagraph*{\textbf{State modifications for action $u_i$}}
-When choosing action $u_i$ at state $s$, we compute the resources impact and set changes for every possible state $s'$. One time step is deducted from $b_f$, monitoring node $i$ frees $c_c^i$ and is returned to resource $b_c$. Node $i$ is removed from the set of monitoring nodes $Mo$ and finally, in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
+When choosing action $u_i$ at state $s$, we compute the resources impact and set changes for every possible state $s'$. One time step is deducted from $b_f$, monitoring node $i$ frees $c_c$ and is returned to resource $b_c$. Node $i$ is removed from the set of monitoring nodes $Mo$ and finally, in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
 
 \begin{equation}
   s \longrightarrow s' =\begin{cases}
     b_f^{s'} = b_f^s - c_f\\
-    b_c^{s'} = b_c^s + c_c^i\\
+    b_c^{s'} = b_c^s + c_c\\
     Mo^{s'} = Mo^s \backslash\{i\}\\
     At^{s'} = At^s \cup \{j\}\text{~~if there is an attack}
   \end{cases}
@@ -222,6 +237,9 @@ We define the transition probability with $\alpha$ \GB{is this $\alpha$ the one 
 \end{equation}
 \subsubsection{Rewards}
 
+Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the financial value of the node.
+% , its computing capacities and its function inside the virtualization infrastructure. 
+%We note $\{V_1,..,V_n\}, \forall i~V_i \in \mathbb{R}$ as the set of said values, one for each node. 
 The value of the reward for transitioning takes into account three criteria: the intrinsic value of the nodes, the overall progress of the attacker, and the probability of detecting an attack. The probability of an attack occurring is already accounted for in the transitions.
 % The reward represents is impacted whether there was an attack, and if it has been detected.
 % In addition to that, an attack only targets one node.

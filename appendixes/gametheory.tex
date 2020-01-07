@@ -1,0 +1,36 @@
+\chapter{Game Theory}
+\label{sec:appendixgt}
+\section{Definitions}
+\textbf{Strategies} are the actions available to a player. Each player has his own strategies, that may differ from one player to another.
+
+\textbf{Utility function} is a function representing the overall gain (resp. loss) for a player.
+
+\textbf{Perfect information} describes a game where each player knows the full history of strategies played by other players. Otherwise the game is an imperfect information game.
+
+\textbf{Complete information} describes a game where each player knows the strategies available to all other players as well as their payoff. The opposite is called an incomplete information game.
+
+\textbf{Cooperative games} are games where all players will collaborate to maximize a common gain, in opposition to non-cooperative games where players only maximize their own benefit.
+
+\textbf{Zero-sum games} describe a situation where the gains obtained by some players equal the other players' losses.
+
+\textbf{Static games} are games where players choose their strategy simultaneously. These games are also often referred to as \textit{one-shot} games.
+
+\textbf{Sequential games} are games where players take turn to chose their action.
+
+\textbf{Stochastic games} are games describing a system progressing from a state to another based on the actions chosen by the players.
+
+\textbf{Security games} are two-player, non-cooperative games where an attacker attacks a system while an administrator defends it~\cite{book-gt}.
+
+\section{Game resolution}
+% \GB{what about ``Game resolution'' as a title?}
+We only consider here non-cooperative games, as attackers and defenders have globally opposite goals.
+Solving a game consists in determining the strategy that each player will choose to maximize his gain.
+
+There are two types of strategies, either pure or mixed.
+A pure strategy is determined deterministically by the player (\ie always making the same decision in a given situation).
+A mixed strategy is defined by assigning probability over each pure strategy (\eg equiprobability of choosing one strategy among all).
+
+One particularly interesting solution concept is the Nash Equilibrium~\cite{nasheq} which is a set of strategies from which no player has any incentive to unilaterally deviate. 
+In a two-players game, each player attempts to minimize the maximum gain of his opponent. 
+% \CK{C'est vrai aussi pour des jeux a deux joueurs a somme non nulle}
+The Nash equilibrium is expressed with the minmax problem~\cite{minmax}.

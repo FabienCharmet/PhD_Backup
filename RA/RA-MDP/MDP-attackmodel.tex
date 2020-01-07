@@ -1,10 +1,10 @@
 \label{sec:attack_model}
 
-Fig.~\ref{fig:trigger} depicts the evolution of the infrastructure after the attacker has rendered part of it unavailable. 
-At first, the Virtual Network is running on a healthy physical substrate; but once the attack is launched, the substrate becomes unavailable and the Virtual Network must be migrated quickly to reduce the end user's service interruption.
+Figure~\ref{fig:trigger} depicts the evolution of the infrastructure after the attacker has rendered part of it unavailable. 
+At first, the Virtual Network is running on a healthy physical substrate; but once the attack is launched, the substrate becomes unavailable and the Virtual Network must be migrated to reduce the end user's service interruption.
 
 \paragraph{Objectives}
-Figure~\ref{fig:data-exfiltration-attack} illustrates the attacker's objective.
+Figure~\ref{fig:data-exfiltration-attack} illustrates the attacker's objectives.
 In order to exfiltrate the network traffic of his victim, the attacker will compromise nodes in the infrastructure. The nodes he attacks will be used to create a path between the victim's network and an exfiltration point (\eg a Virtual Machine) owned by the attacker.
 
 We make several assumptions regarding the capacities and resources of the attacker:
@@ -14,15 +14,16 @@ We make several assumptions regarding the capacities and resources of the attack
     
     Modifying a node's configuration has been proven  possible in~\cite{Taxonomy_Hizver2015, Bokani2015, attain-Ujcich2017}. Precisely, the attacker is able to spoof the identity of the network hypervisor, and thus is able to inject malicious flow rules inside the nodes to create the data exfiltration path. 
     However, he is not able to be designated as the original network hypervisor in the nodes' configurations. 
-    This can be explained because it requires advanced configuration privileges. Moreover, a physical node missing from the legitimate hypervisor's topology view is easily detectable, in comparison to malicious flow rules injected inside the physical nodes.
+    This can be explained because it requires advanced configuration privileges. Moreover, a physical node missing from the legitimate hypervisor's topology view is easily detectable, in comparison to malicious flow rules being injected inside the physical nodes.
     
     \item The attacker is able to exfiltrate data from his victim's VN.
     
     The exfiltration of data from the network only requires a Virtual Machine to forward the traffic to.
     
-    \item The attacker only targets one VN during the attack.
+    \item The attacker only targets one VN during the attack. 
+    \CK{Est-ce que l'embedding sur un noeud du substrat d'arrivee a un impact sur la possibilite de l'attaquer ? Autrement dit, est-ce qu'un attaquant peut viser un noeud independamment du fait qu'il y ait eu migration sur ce noeud ?}\FC{Oui, car à partir du moment où le noeud est compromis il finira par exfilitrer la donnee sensible. Ca mettra juste un certain temps à être actif.}
     
-     The attacker has performed enough information gathering to determine which VN is the most profitable to attack.
+     The attacker has performed enough information gathering prior to launching his attacks  to determine which VN is the most profitable to attack.
      
     
     \item The attacker can collect information to determine which nodes to target.
@@ -39,26 +40,25 @@ We make several assumptions regarding the capacities and resources of the attack
     
     \item There may be several attack sources in the infrastructure.
     
-    The attacker owns several VMs in the infrastructure and may leverage vulnerabilities in multiple locations.
+    The attacker owns several VMs in the infrastructure and may leverage vulnerabilities in multiple network nodes.
     
     \item A node will always be attacked by the same source.
     
     Because of the short time interval considered for the migration, we suppose that the attack always takes the same path (\ie no change in the flow rules for routing the attack).
     Additionally, the attacker defines at the beginning the source of each attack for each node and does not deviate from this afterwards.
-    Th path of the attack is taken into consideration to determine the global detection probability of the attack.
+    The path of the attack is taken into consideration to determine the global detection probability of the attack.
     
     \item The attacker only attacks one node at a time.
     
     We make this assumption for the consistency with the assumption that the migration process itself is sequential~\cite{Lime-Ghorbani2014}.
     
-    
     \item An attacker needs a certain amount of time to complete his attack.
     
-    Because the attacker targets one node at a time, it will take several steps to completely establish the full path to exfiltrate data. 
+    Because the attacker targets one node at a time, it will take several steps to establish the full path to exfiltrate the victim's traffic. 
     
     \item The attacker only targets nodes contributing to construct the exfiltration path.
     
-     Even if the attacker may target all nodes in the infrastructure, he has no incentives to attack nodes that will not be part of the path to exfiltrate data from his victim's network. We consider that the attacker chooses his targets using the strategy from Section~\ref{sec:target_proba}.
+     Even if the attacker may target all nodes in the infrastructure, he has no incentive to attack nodes that will not be part of the path to exfiltrate data from his victim's network. We consider that the attacker chooses his targets using the strategy from Section~\ref{sec:target_proba}.
     From the point of view of the defender, it is impossible to accurately know which node will be attacked.
     
 \end{itemize}

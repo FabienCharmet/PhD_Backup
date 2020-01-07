@@ -9,15 +9,15 @@ We illustrate this with the following example:
 
 $P \Rightarrow Q$: $P$ and $Q$ are the terms of the clause and $\Rightarrow$ is the logical operator representing implication.
 
-The first order logic admits the following logical operators:
+The first order logic admits the following logical symbols:
 
 \begin{itemize}
-    \item $\forall$: The forall operator, $\forall x\in S$ means for all elements $x$ in set $S$.
-    \item $\exists$: The exist operator, $\exists x\in S$ means there exist at least one $x$ in set $S$.
+    \item $\forall$: The forall quantifier, $\forall x\in S$ means for all elements $x$ in set $S$. 
+    \item $\exists$: The exist quantifier, $\exists x\in S$ means there exist at least one $x$ in set $S$.
     \item $\neg$: The negation operator, $\neg A$ denotes then logical negation of A, often noted $\overline{A}$.
     \item $\wedge$: The conjunction operator, $A \wedge B$ denotes the logical arithmetic operation A AND B.
     \item $\vee$: The disjunction operator, $A \vee B$ denotes the logical arithmetic operation A OR B.
-    \item brackets $( )$: Brackets are used to order the resolution of the logical proposition, similarly to traditional arithmetic.
+    % \item brackets $( )$: Brackets are used to order the resolution of the logical proposition, similarly to traditional arithmetic. \CK{Me parait superflu, et ce n'est pas un operateur}
     \item $\Rightarrow$: The implication operator, $A \Rightarrow B$ means ``A implies B''.
     \item $\Leftrightarrow$: The bidirectional implication operator, $A \Leftrightarrow B$ means ``A implies B AND B implies A''.
 \end{itemize}
@@ -33,7 +33,8 @@ An unsatisfiable clause is a clause that cannot be True no matter the values of 
 The theorem prover will apply inference rules on the original set of clauses and try to reach another set of clauses where the satisfiability can be determined.
 
 We will now present some rules of inference used for first order logic theorem proving.
-A rule of inference is a rule defining the deduction process: it takes a set of propositions as input and returns a proposition which is a conclusion drawn from the input propositions.
+A rule of inference is a rule defining the deduction process: it takes a set of formulas as input and returns a formulas which is a conclusion drawn from the input formulas. 
+% \CK{Il me semble qu'il vaut mieux utiliser formule que proposition (une proposition est plus basique qu'une formule de la logique du premier ordre et ne peut pas avoir de variable par exemple)}
 
 We use \{clause 1, clause2, ..., clause n\} to define a set of n clauses.
 We use $\vdash$ to represent the result of the deduction from a set of clauses.
@@ -54,24 +55,25 @@ The resolution principle uses substitution in a set of clauses to reach a conclu
 We consider the simple example presented in~\cite{snark-Stickel2000} and refer the reader to~\cite{symbolic-proof} for additional reading, more specifically on variable unification.
 We also refer the reader to the Method of Davis and Putnam and more specifically on the One-Literal Rule.
 
-Consider the following clauses: $\{\neg P \vee Q,P \vee R\}$.\\
+Consider the following clauses: $\{\neg P \vee Q,P \vee R\}$ \CK{Pourquoi des accolades et pas des parentheses ?}\FC{Je viens de vérifier, ils utilisent ça dans~\cite{symbolic-proof}}.\\
 The resolution principle returns the clause $Q \vee R$ as a resolvent of the previous propositions.
 
 \subsubsection{Paramodulation}
-The paramodulation is an inference rule used to exploit the equality existing between terms and the occurrence of term in a proposition. The paramodulation can be seen as \textit{substitution in case of equality}.
+% \CK{Reprendre ce paragraphe sans utiliser proposition, mais plutôt formule}
+The paramodulation is an inference rule used to exploit the equality existing between terms and the occurrence of terms in a formula. The paramodulation can be seen as \textit{substitution in case of equality}.
 
-Consider the proposition $P(x) = True$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
+Consider the formula $P(x) = True$ and the quality $x=y$. Therefore, we can infer that $P(y)$ will also yield True.
 
-Consider now the two propositions: $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\}$.\\
-Paramodulation deduces the proposition $P(y) \vee Q(y) \vee R(y)$.\\
+Consider now the two formulas: $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\}$.\\
+Paramodulation deduces the formula $P(y) \vee Q(y) \vee R(y)$.\\
 $\{P(x) \vee Q(y)$, $(x = y) \vee R(y)\} \vdash P(y) \vee Q(y) \vee R(y)$
 
 \subsubsection{Rewriting rules}
-Rewriting rules are used to replace an expression by another in a set of propositions.
+Rewriting rules are used to replace an expression by another in a set of formulas.
 This is done to simplify the search space when applying inference rules~\cite{snark-Stickel2000}.
 
 We illustrate this with a simple example:\\
 $\{P \Leftrightarrow Q \wedge R, P \vee T\}$ is rewritten as $Q \wedge R \vee T$. 
 
-The rewriting rule may be used to replace the left hand side of an equivalence by the other, but may also apply substitutions to terms in the proposition only on one side of the proposition.
+The rewriting rule may be used to replace the left hand side of an equivalence by the other, but may also apply substitutions to terms in the formula only on one side of the formula.
 We also refer the reader to~\cite{snark-Stickel2000,symbolic-proof} for further explanations.
