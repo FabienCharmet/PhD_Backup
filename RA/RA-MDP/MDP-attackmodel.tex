@@ -21,7 +21,7 @@ We make several assumptions regarding the capacities and resources of the attack
     The exfiltration of data from the network only requires a Virtual Machine to forward the traffic to.
     
     \item The attacker only targets one VN during the attack. 
-    \CK{Est-ce que l'embedding sur un noeud du substrat d'arrivee a un impact sur la possibilite de l'attaquer ? Autrement dit, est-ce qu'un attaquant peut viser un noeud independamment du fait qu'il y ait eu migration sur ce noeud ?}\FC{Oui, car à partir du moment où le noeud est compromis il finira par exfilitrer la donnee sensible. Ca mettra juste un certain temps à être actif.}
+    % \CK{Est-ce que l'embedding sur un noeud du substrat d'arrivee a un impact sur la possibilite de l'attaquer ? Autrement dit, est-ce qu'un attaquant peut viser un noeud independamment du fait qu'il y ait eu migration sur ce noeud ?}\FC{Oui, il peut viser le noeuds par contre tant que la migration n'as pas eu lieu le noeud ne sera cibl\'e que s'il fait partie du chemin d'exfilitration, \ie \textbf{T}.}\GB{pour savoir si le noeud fait partie du chemin d'exfiltration, l'attaquant doit avoir une vision assez compl\`ete de la topologie physique. A quel moment l'obtient-il et comment ? Cela est-il pris en compte dans ton approche ?}\FC{Oui on a fait les hypothèses sur le fait qu'il avait collecté des infos avant, et qu'il est capable d'en collecter pendant.}
     
      The attacker has performed enough information gathering prior to launching his attacks  to determine which VN is the most profitable to attack.
      

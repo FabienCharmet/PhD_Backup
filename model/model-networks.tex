@@ -33,7 +33,8 @@ The following predicate declares the existence of a physical link named \textbf{
 physical\_link(\textbf{plink1},\textbf{h1}$\vert$\textbf{pnode1},\textbf{pnode2},\textbf{ti1})
 \end{myformula}
 
-The following predicate declares the existence of a physical path named \textbf{ppath1} connecting \textbf{pnode1} (or hypervisor \textbf{h1}) with \textbf{pnode2} \CK{(or hypervisor h2)?}\FC{non le ou est exprimé juste entre h1 et pnode1}, during time interval \textbf{ti1}. 
+The following predicate declares the existence of a physical path named \textbf{ppath1} connecting a node (here, named \textbf{pnode1}) or a hypervisor (here, named \textbf{h1}) with another node (here, named \textbf{pnode2}), during time interval \textbf{ti1}. 
+% \CK{(or hypervisor h2)?}\FC{non le ou est exprimé juste entre h1 et pnode1}\GB{j'ai modifi\'e la phrase. C'est peut \^etre plus lisible ainsi}
 \begin{myformula}
 physical\_path(\textbf{ppath1},\textbf{pnode1}$\vert$\textbf{h1},\textbf{pnode2},\textbf{ti1})
 \end{myformula}
@@ -157,7 +158,7 @@ We highlight that a virtual link is embedded in at least one physical link, ther
 
 \subsection{Example of modeling physical and Virtual Networks}
 
-We consider the example depicted in Fig.~\ref{fig:VNE-example-model}.
+We consider the example depicted in Figure~\ref{fig:VNE-example-model}.
 Because there is no failure in the system nor any attack, we use a single time interval \textbf{ti1} to represent the duration of the predicates.
 
 \input{figures/vne_example_model.tex}

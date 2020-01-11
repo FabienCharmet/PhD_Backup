@@ -15,6 +15,7 @@
 \usepackage[most]{tcolorbox}
 \usepackage{graphicx}
 \usepackage{subcaption}
+% \usepackage{subfigure}
 \usepackage{color}
 \usepackage{xspace}
 \usepackage{parskip}
@@ -80,8 +81,8 @@
          {\small$\blacktriangleright$\st{#2}$\blacktriangleleft$}
     }
 }
-\newcommand\GB[1]{\myremark{GBAA}{#1}}
-\newcommand\CK[1]{\myremark{CKAA}{#1}}
+\newcommand\GB[1]{\myremark{GBAAC}{#1}}
+\newcommand\CK[1]{\myremark{CKAAC}{#1}}
 \newcommand\FC[1]{\myremark{FC}{#1}}
 % \newcommand\RW[1]{\myremark{RW}{#1}}
 
@@ -99,7 +100,7 @@
 \newtheorem*{definition}{Definition}
 
 
-\title{\LARGE \bf Security characterization of SDN Virtual Network migration:\\ Formal Approach and Resource Optimization}
+\title{\LARGE \bf Security Characterization of SDN Virtual Network migration:\\ Formal Approach and Resource Optimization}
 
 \author{Fabien Charmet}
 
@@ -167,10 +168,10 @@ As I finally reach the end of this long yet interesting journey, I realize I hav
 
 I would like to thank my PhD supervisor, \textbf{Prof. Abdallah M'Hamed}, for his wisdom and his advice that made every interaction interesting.
 
-I also deeply thank \textbf{Dr. Gregory Blanc} and \textbf{Dr. Christophe Kiennert}, without whom this work 
+I also deeply thank \textbf{Prof. Gregory Blanc} and \textbf{Prof. Christophe Kiennert}, without whom this work 
 would never have been possible. Their remarks, their patience and their tremendous support helped me throughout this long path. They made me realize what matters during the PhD life and what it means to set high expectations for myself. There are no words for the gratitude I have towards them.
 
-I thank \textbf{Prof. Viet Triem Tong} and \textbf{Prof. Meddahi} who reviewed my thesis and provided me with valuable remarks to improve it, and thanks to \textbf{Prof. Chrisment}, \textbf{Prof. Neves} and \textbf{Dr. Leneutre} for attending my defence.
+I thank \textbf{Prof. Viet Triem Tong} and \textbf{Prof. Meddahi} who reviewed my thesis and provided me with valuable remarks to improve it, and thanks to \textbf{Prof. Chrisment}, \textbf{Prof. Kaaniche} and \textbf{Prof. Leneutre} for attending my defence.
 
 This whole opportunity would not have been possible without the trust of \textbf{Prof. Herv\'e Debar}, who gave me a chance to become an Engineer and then a Doctor. I have had premium hands on experience on research and infrastructure deployment. I owe him all these years spent at T\'el\'ecom SudParis.
 
@@ -346,9 +347,6 @@ In this section, we consider two different formalisms used to solve the RA probl
 \textbf{Fabien Charmet}, Richard Waldinger, Gregory Blanc, Christophe Kiennert, Khalifa Toumi (2017). Preserving confidentiality during the migration of virtual SDN topologies: A formal approach. \textit{IEEE 16th International Symposium on Network Computing and Applications}
 
 \newpage
-\input{appendixes/glossary.tex}
-
-\newpage
 % \FC{Don't forget to regenerate bibfile and change doi to optidoi}
 \bibliography{test}{}
 \bibliographystyle{alphaurl}
@@ -360,6 +358,7 @@ In this section, we consider two different formalisms used to solve the RA probl
 \begin{appendices}
 \input{appendixes/gametheory.tex}
 \input{appendixes/mdp.tex}
+\input{appendixes/glossary.tex}
 % \input{appendixes/glossary.tex}
 % \newpage
 % % \input{appendixes/snark-code.tex}

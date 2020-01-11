@@ -1,7 +1,7 @@
 \label{sec:mdp-model}
 In this section, we describe our MDP addressing the problem of optimal defense resource allocation for Virtual Network migration.
 
-\subsubsection{Model assumptions}
+\subsection{Model assumptions}
 \label{sec:mdp-model-assumption}
 
 \paragraph{Monitoring}
@@ -40,9 +40,9 @@ In this section, we describe our MDP addressing the problem of optimal defense r
 
 
 
-\subsubsection{States}
+\subsection{States}
 \label{sec:stateset}
-The states in the MDP represent the evolution of the infrastructure, \ie the progress of the migration, the remaining resources as well as the compromised nodes in the infrastructure.
+The states in the MDP represent the evolution of the infrastructure, \ie the progress of the migration, the remaining resources, the current monitoring, as well as the compromised nodes in the infrastructure.
 The defender has two different resources: $b_f$, the global amount of time the migration is going to take, and $b_c$, the global computational power available for the monitoring.
 Precisely, $b_c$ corresponds to the overall performance impact caused by the monitoring. % the defender is willing to perform.
 %  on the network virtualization service
@@ -64,10 +64,11 @@ We describe the state of the system as the following tuple: $s=<b_f^s,b_c^s,Mi^s
 
 % We remind the reader that an absorbing state is a state where all actions transition back to itself.
 
-\subsubsection{Actions}
+\subsection{Actions}
 \label{sec:actionset}
 The defender can either add monitoring on a particular node in the infrastructure, remove this monitoring, or choose to do nothing.
-The option of doing nothing prevents counter-productive options like forcing undesired actions (\eg removing monitoring from a node that is not currently monitoring the infrastructure) \CK{N'est-ce pas une action incoherente en l'occurence ?}\FC{justement, une action incoherente a une recompense nulle et donc il faut avoir la possibilite de ne rien faire qui est recompensee normalement}.
+The option of doing nothing prevents counter-productive options like forcing incoherent actions (\eg removing monitoring from a node that is not currently monitoring the infrastructure). 
+% \CK{N'est-ce pas une action incoherente en l'occurence ?}\FC{justement, une action incoherente a une recompense nulle et donc il faut avoir la possibilite de ne rien faire qui est recompensee normalement}.
 We note $m_j$ the action of setting up monitoring on node $j$. Similarly, we note $u_j$ the action of removing monitoring on node $j$.
 Finally we note $d$ the action of doing nothing.
 %\\With $n$ being the number of nodes in the infrastructure 
@@ -78,11 +79,11 @@ Finally we note $d$ the action of doing nothing.
 % \FC{The last node added to the path should be the node belonging to $\mathbb{Z}$ because otherwise exfiltrating data without the full path will raise a lot of unexpected $packet-in$ . This may not be an issue though}
 % We also assume he may construct the full path by connecting nodes one after another instead of randomly constructing the chain. 
 
-\subsubsection{Cost of actions}
-Choosing an action impacts both $b_f$ and $b_c$ resources. The action will make the migration progress by one step.
-We note $c_f$ the time it takes to migrate one node, and based on the assumption made in Section~\ref{sec:mdp-system-hypotheses}, we define it as constant for each action.
+% \subsection{Cost of actions}
+% Choosing an action impacts both $b_f$ and $b_c$ resources. The action will make the migration progress by one step.
+% We note $c_f$ the time it takes to migrate one node, and based on the assumption made in Section~\ref{sec:mdp-system-hypotheses}, we define it as constant for each action.
 
-Similarly, we note $c_c$ the performance impact of a node monitoring the infrastructure. We made the assumption in Section~\ref{sec:mdp-system-hypotheses} that the detection probability was uniform across all nodes. Therefore, we consider the performance impact on each node to be uniform as well.
+% Similarly, we note $c_c$ the performance impact of a node monitoring the infrastructure. We made the assumption in Section~\ref{sec:mdp-system-hypotheses} that the detection probability was uniform across all nodes. Therefore, we consider the performance impact on each node to be uniform as well.
 
 % We summarize $c_f$ and $c_c$ with:
 
@@ -93,27 +94,28 @@ Similarly, we note $c_c$ the performance impact of a node monitoring the infrast
 %   \end{cases}
 % \end{equation}
 
-% \subsubsection{Cost of actions}
-% Choosing an action impacts both $b_f$ and $b_c$ resources. The action will make the migration progress by one step.
-% We note $c_f$ the time it takes to migrate one node, and based on the assumption made in Section~\ref{sec:mdp-system-hypotheses}, we define it as constant for each action.
+\subsection{Cost of actions}
+Choosing an action impacts both $b_f$ and $b_c$ resources. The action will make the migration progress by one step.
+We note $c_f$ the time it takes to migrate one node, and based on the assumption made in Section~\ref{sec:mdp-system-hypotheses}, we define it as constant for each action.
 
-% Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the financial value of the node.
-% % , its computing capacities and its function inside the virtualization infrastructure. 
-% %We note $\{V_1,..,V_n\}, \forall i~V_i \in \mathbb{R}$ as the set of said values, one for each node. 
-% Based on the work of Ismail~\etal~\cite{interdep-ismail2017}, we consider that the cost of deploying monitoring on each node is not uniform and depends on its intrinsic value. We represent this by assigning a proportionality coefficient to each node.
-% We note this coefficient $k^j_{c}$, associated to $b_c$ and node $j$.
-% Then we define the monitoring cost $c_c^j$ for node $j$ as : $\forall j \in \textbf{N},~ c_c^j = k^j_{c}  V_j$ \CK{ca devrait etre $k_c$, car si ton coefficient de proportionnalite depend de j, tu triches et ca n'a plus beaucoup de sens (ca revient au contraire a pouvoir moduler l'importance de Vj selon les noeuds, donc a rendre $c_c^j$ independant de Vj). Par contre si tu changes, ce n'est plus coherent avec ton application numerique.}\FC{Je vois, c'est effectivement $k_c$ dans NCA. Est-ce que l'on garde le coefficient de proportionnalite ou bien passer sur un truc constant. Les deux options se valent.}
+Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the financial value of the node.
+% , its computing capacities and its function inside the virtualization infrastructure. 
+%We note $\{V_1,..,V_n\}, \forall i~V_i \in \mathbb{R}$ as the set of said values, one for each node. 
+Based on the work of Ismail~\etal~\cite{interdep-ismail2017}, we consider that the cost of deploying monitoring on each node is not uniform and depends on its intrinsic value. We represent this by assigning a proportionality coefficient to each node.
+We note this coefficient $k_{c}$, associated to $b_c$.
+Then we define the monitoring cost $c_c^j$ for node $j$ as : $\forall j \in \textbf{N},~ c_c^j = k_c  V_j$ 
+% \CK{ca devrait etre $k_c$, car si ton coefficient de proportionnalite depend de j, tu triches et ca n'a plus beaucoup de sens (ca revient au contraire a pouvoir moduler l'importance de Vj selon les noeuds, donc a rendre $c_c^j$ independant de Vj). Par contre si tu changes, ce n'est plus coherent avec ton application numerique.}\FC{Je vois, c'est effectivement $k_c$ dans NCA. Est-ce que l'on garde le coefficient de proportionnalite ou bien passer sur un truc constant. Les deux options se valent.}
 
-% We summarize $c_f$ and $c_c^j$ with:
+We summarize $c_f$ and $c_c^j$ with:
 
-% \begin{equation}
-%   \begin{cases}
-%     c_f\text{ is a constant}\\
-%   \forall j \in \textbf{N},~ c_c^j = k^j_{c}  V_j 
-%   \end{cases}
-% \end{equation}
+\begin{equation}
+  \begin{cases}
+    c_f\text{ is a constant}\\
+  \forall j \in \textbf{N},~ c_c^j = k_c  V_j 
+  \end{cases}
+\end{equation}
 
-\subsubsection{Probabilistic target determination}
+\subsection{Probabilistic target determination}
 \label{sec:target_proba}
 We consider the path taken by the attack as a set of nodes.
 % We name $L$ the set of paths inside the infrastructure. 
@@ -150,7 +152,7 @@ We note $q(j)$ the probability of node $j$ to be attacked as the combination of 
 Once a substrate node has been compromised, the attacker will finalize the exfiltration set-up by completing the path between his VM and the victim's network.
 
 
-\subsubsection{Transitions}
+\subsection{Transitions}
 We describe the coherence of the MDP states with the following transition constraints:
 
 \begin{enumerate}
@@ -162,8 +164,8 @@ We describe the coherence of the MDP states with the following transition constr
     \label{cond:c3}
     \item A state can only transition to states that preserve the coherence of parameters (e.g., resources).
     \label{cond:c4}
-    \item If there is an action too expensive for $b_f$, it will consume the remaining $b_f$ without any reward.
-    \label{cond:c5}
+    % \item If there is an action too expensive for $b_f$, it will consume the remaining $b_f$ without any reward.
+    % \label{cond:c5}
     \item Choosing an action twice (\ie monitoring a node already monitoring) only consumes time ($b_f$) with no reward.
     \label{cond:c6}
  \end{enumerate}
@@ -177,7 +179,7 @@ We define the state modifications once action $a \in A$ has been chosen.
 % We define $s'_{j} \in S'$ as the state where node $j$ has been attacked and $s'_0$ as the state where no attack happened.
 % \GB{what about these below impact computations? how come a state equals a substraction of a cost from another state...}
 % \FC{I rewrote the definition of an attribute $s.b_c$ is the $b_c$ budget related to s, see section~\ref{sec:stateset}}
-\\
+
 \subparagraph*{\textbf{State modifications for action $m_i$}}
 When choosing action $m_i$ at state $s$, we compute the resources impact and set changes for every possible state $s'$. One time step is deducted from $b_f$, the cost of monitoring node $i$ is deducted from $b_c$. Node $i$ is added to the set of monitoring nodes $Mo$ and finally, in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
 
@@ -192,7 +194,7 @@ When choosing action $m_i$ at state $s$, we compute the resources impact and set
 
 \subparagraph*{\textbf{State modifications for action $u_i$}}
 When choosing action $u_i$ at state $s$, we compute the resources impact and set changes for every possible state $s'$. One time step is deducted from $b_f$, monitoring node $i$ frees $c_c$ and is returned to resource $b_c$. Node $i$ is removed from the set of monitoring nodes $Mo$ and finally, in case of an attack on node $j$, this node is added to the set of compromised nodes $At$.
-
+\newpage
 \begin{equation}
   s \longrightarrow s' =\begin{cases}
     b_f^{s'} = b_f^s - c_f\\
@@ -215,7 +217,8 @@ When choosing action $d$ at state $s$, we compute the resources impact and set c
 
 % We note $\alpha$ the probability of an attack occurring, $q(j)$ the probability of node $j$ being the target of the attack.
 % We have defined $q(j)$ with Algorithm~\ref{algo:target}.
-We define the transition probability with $\alpha$ \GB{is this $\alpha$ the one in Alg.~\ref{algo:target}?}\FC{Yes.} and $q(j)$ presented in Section~\ref{sec:target_proba}.
+\subparagraph*{\textbf{Transition probability}}
+We define the transition probability $P(s,a,s')$ with $\alpha$ the probability of an attack being launched, and $q(j)$ the probability of detecting an attack on node $j$, as presented in Section~\ref{sec:target_proba}.
 % When in state $s$, the system can transition to N+1 different states, whether an attack had not happened or, which one of the N nodes has been attacked.
 % We define $S', s' \in S'$ the set of states to which the state $s$ can transition to.
 % We define $s'_{j}$ as the state where node $j$ has been attacked and $s'_0$ as the state where no attack happened.
@@ -235,9 +238,9 @@ We define the transition probability with $\alpha$ \GB{is this $\alpha$ the one 
         q(j)\text{ if node $j$ is attacked, cf. Algorithm~\ref{algo:target}}
     \end{cases}
 \end{equation}
-\subsubsection{Rewards}
+\subsection{Rewards}
 
-Each node $j \in \textbf{N}$ is characterized by an intrinsic value $V_j \in \mathbb{R}$ that can be seen as the financial value of the node.
+
 % , its computing capacities and its function inside the virtualization infrastructure. 
 %We note $\{V_1,..,V_n\}, \forall i~V_i \in \mathbb{R}$ as the set of said values, one for each node. 
 The value of the reward for transitioning takes into account three criteria: the intrinsic value of the nodes, the overall progress of the attacker, and the probability of detecting an attack. The probability of an attack occurring is already accounted for in the transitions.
@@ -252,9 +255,12 @@ This differentiation comes from the fact that the attacker truly benefits from h
 % \GB{please use equation environments and refrain from using inline equations.}
 %  note $(1-p)^{|L_j \cap Mo|}$ the probability of zero nodes detecting the attack on node j. 
 \\We note $\Pi(j)=1 - (1-p)^{|L_j \cap Mo|}$ as the probability of detecting the attack on node $j$ by at least one node. $|L_j \cap Mo|$ represents the number of nodes currently monitoring the infrastructure that will be on the path of the attack, thus the probability for every node not to detect the attack on node $j$ is $(1-p)^{|L_j \cap Mo|}$.
-\\
-Therefore, we define the following reward function: %, with $s' \in S'$ as in Section~\ref{sec:actionset} :
-\\
+
+%, with $s' \in S'$ as in Section~\ref{sec:actionset} :
+The definition of $R(s,a,s')$ includes the impact of action $a$ in the probability of detecting an attack, as $\Pi(j)$ depends on the monitoring set $Mo$ which is modified by $a$.
+
+Therefore, we define the following reward function: 
+\vspace{-20pt}
 \begin{equation}
   R(s,a,s') =\begin{cases}
     \sum\limits_{i\in \textbf{N}} V_i \text{, if no attack}\\
@@ -262,5 +268,3 @@ Therefore, we define the following reward function: %, with $s' \in S'$ as in Se
     \sum\limits_{i\in \textbf{N}} V_i - \overline{\Pi(j)}V_j \text{, if partial attack on node $j$}\\
   \end{cases}
 \end{equation}
-
-The definition of $R(s,a,s')$ includes the impact of action $a$ in the probability of detecting an attack, as $\Pi(j)$ depends on the monitoring set $Mo$ which is modified by $a$.

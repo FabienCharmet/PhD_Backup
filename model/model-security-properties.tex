@@ -101,7 +101,8 @@ $
 \subsection{Integrity}
 \label{sec:prop-int}
 Preserving the integrity of information means protecting the accuracy and completeness of the information and the methods that are used to process and manage it~\cite{ISO/IEC270012013}.
-We postulate that the meaning of accuracy and completeness in our context is equivalent to considering that information and processes have only been altered by an authorized user or not altered at all\GB{this is quite similar to confidentiality with the exception that access is replaced with processing}.\FC{Indeed but integrity uses the notion of process in its definition where confidentiality doesn't}\GB{but in the above definition, the emphasis is on altering the process, while I felt in later definitions that the focus was on the alterations made or not by the process to the data. Which is it?}\FC{Later properties focus on network elements, but do not leave the process out of the definition}
+We postulate that the meaning of accuracy and completeness in our context is equivalent to considering that information and processes have only been altered by an authorized user or not altered at all.
+% \GB{this is quite similar to confidentiality with the exception that access is replaced with processing}.\FC{Indeed but integrity uses the notion of process in its definition where confidentiality doesn't}\GB{but in the above definition, the emphasis is on altering the process, while I felt in later definitions that the focus was on the alterations made or not by the process to the data. Which is it?}\FC{Later properties focus on network elements, but do not leave the process out of the definition}\GB{honestly, I feel integrity should only deal with alteration of data or alteration of the data processing methods. Caring about whether access is authorized should be confined to the confidentiality property. Otherwise there will be an ambiguous overlap between the two properties.}
 We emphasize on the fact that the integrity property is evaluated over a period of time instead of being instantaneous.
 %\RW{unclear--why "therefore";  what are the temporal values of a piece of information? is that the result of eval at a given time?}\FC{Yes, the integrity of information means that it remains constant through time, unless processed, obviously}
 
@@ -116,9 +117,10 @@ We use the following notations for the integrity property:
 We define two predicates, $d\_integrity(D,ti)$ and $p\_integrity(P,D,ti)$, which represent  the integrity of the data $D$ itself and the integrity of the process $P$ used to manipulate $D$, over a time interval $ti$. 
 
 We detail two notions related to the integrity property:
+% \GB{now I am questioning whether the below two notions are still relevant if stick to integrity being solely concerned with alteration and not access. In my understanding, data integrity is interested in knowing if data before processing = data after processing. And process integrity is interested in knowing if for data1 = data2, is process(data1) = process(data2)?}
 \begin{itemize}
     \item A data has been \textbf{legitimately processed} during a time interval if and only if the network nodes processing it were supposed to (\ie no illegitimate node in the path) and that the flow rules of the nodes have not been illegitimately modified.
-    \GB{although it is unclear how you verify the ``expected'' property of flow rules, saying that they have been processed by these flow rules is sufficient. Because they sure are located at the ``expected network nodes''.}\FC{So I should leave it at that ?}\GB{I suggest to remove by the ``expected network nodes'' part. Still the ``expected'' needs to be clarified.}\FC{I rewrote the definition}
+    % \GB{although it is unclear how you verify the ``expected'' property of flow rules, saying that they have been processed by these flow rules is sufficient. Because they sure are located at the ``expected network nodes''.}\FC{So I should leave it at that ?}\GB{I suggest to remove by the ``expected network nodes'' part. Still the ``expected'' needs to be clarified.}\FC{I rewrote the definition}
     \item A process has been \textbf{legitimately modified} if and only if it has been modified by an authorized network hypervisor.
 \end{itemize}
 
@@ -165,7 +167,8 @@ $node\_integrity(N) \Leftrightarrow \forall D,U,ti,P~p\_integrity(P,ti) \wedge d
 \item $process\_of(P,N,ti)$ assigns process $P$ to node $N$ during time interval ti.
 \item $is\_carrying(N,D,ti)$ is true if node $N$ is carrying data $D$ during time interval $ti$.
 \item $is\_node\_authorized(U,N,ti)$ is true if the user $U$ has the right to access network element $N$ during time interval $ti$.
-\end{itemize} \CK{Attention, U n'est pas introduit dans cette definition. Par ailleurs je ne comprends pas en quoi le fait d'avoir le droit d'acceder a un noeud a quelque chose a voir avec l'integrite des donnees (on peut avoir le droit d'acceder a un noeud mais ne pas avoir le droit de modifier les donnees)}\FC{L'idée est effectivement que l'accès est fait en ayant des droits de modification, qu'on soit autorisé à les avoir ou pas. Je n'ai pas envisagé le cas où l'utilisateur fait un access mais ne fait rien}
+\end{itemize} 
+% \CK{Attention, U n'est pas introduit dans cette definition. Par ailleurs je ne comprends pas en quoi le fait d'avoir le droit d'acceder a un noeud a quelque chose a voir avec l'integrite des donnees (on peut avoir le droit d'acceder a un noeud mais ne pas avoir le droit de modifier les donnees)}\FC{L'idée est effectivement que l'accès est fait en ayant des droits de modification, qu'on soit autorisé à les avoir ou pas. Je n'ai pas envisagé le cas où l'utilisateur a des droits d'acces uniquement en consultation}
 
 \textbf{Property 1b:} The integrity of a virtual node is preserved if and only if the nodes embedding it preserve their integrity as well.
 \newline

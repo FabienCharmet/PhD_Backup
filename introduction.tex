@@ -80,13 +80,15 @@ We advocate that the lack of research material should not be considered as a suf
 The investigation of the security of the migration of Virtual Networks is not an easy task, as the only closely related work, LIME~\cite{Lime-Ghorbani2014}, focuses on the transparency of the migration. 
 We formulate two goals for this investigation.
 The first goal consists in formalizing the Virtual Network migration process and its security.
-\textbf{The model will be based on simplifying\GB{you are underselling it, I feel.}\FC{How would you word it ?} assumptions of the system. In order to maintain an acceptable realism in the modeling, we have to investigate the monitoring of the infrastructure.} 
+\textbf{The model will be based on a first order logic, and will use theorem proving to detect security violations. In order to maintain an acceptable realism in the modeling, we have to investigate the monitoring of the infrastructure.}
 Therefore, the second goal is to optimize the detection of attacks against the migration process. In this thesis we consider the Software Defined Networking paradigm and the related network virtualization as an application context. Specifically, we will focus on OpenFlow-based SDN network hypervisors and Virtual Network migration. Further definitions of these concepts are given in Section~\ref{sec:basic_def}. 
 We depict some limitations of existing models through the literature review.
 
 
 \section{Research Issues}
-We highlight in this section the emerging research issues based on the existing limitations and the incentives to secure the migration process. \CK{Le contenu de cette section est quasiment le meme que celui de la section suivante. C'est tres redondant selon moi}\FC{De ce que je comprends de la structure, ici tu poses les questions et après tu expliques comment les contributions répondent aux problèmes.}
+We highlight in this section the emerging research issues based on the existing limitations and the incentives to secure the migration process. 
+% \CK{Le contenu de cette section est quasiment le meme que celui de la section suivante. C'est tres redondant selon moi}\FC{De ce que je comprends de la structure, ici tu poses les questions et après tu expliques comment les contributions répondent aux problèmes.}\GB{formellement, la partie research issues doit décrire la problématique proposée (sécurité de la migration de topologies virtuelles) sous un certain nombre d'aspects, en évoquant les défis scientifiques et techniques. Tandis que la section suivante décrit chaque contribution: objectif, approche, différences avec l'état de l'art, principaux résultats (pas forcément chiffrés).}
+% \FC{A mon sens, c'est ce qui est fait. Qu'en pensez vous ?}
 
 \begin{itemize}
     \item \textbf{Formalization } The security of Virtual Network migration has never been formalized. While some aspects of the migration have been investigated, the characterization of different security properties is required in order to propose security verification mechanisms for the migration process.
@@ -109,7 +111,11 @@ We make the following contributions in this thesis:
     \item We propose a formal model to describe the migration of Virtual Networks and to detect violations of security properties during the migration process.
     Our model describes operational aspects of SDN virtualization, encompasses the migration process and provides a set of security properties related to this process. We translate our model into a LISP representation to be used by a theorem prover to verify the security of the migration. We choose SNARK~\cite{snark-Stickel2000}, a first order logical theorem prover using temporal reasoning to determine the validity of the different security properties throughout the migration. The proof computed by SNARK is also used to determine precisely the cause of the security violation.
     
-    \item  We propose a resource allocation problem aimed at determining the optimal placement of monitoring resources to detect attacks on the migration process. Indeed, our first contribution outlines limitations of the formal model and how proofs are computed. We relax the hypothesis that the monitoring of the migration is perfect. We solve this resource allocation problem by investigating different formalisms to model attacks against the migration process and the corresponding detection capacities. We explore their advantages and limitations, and come up with a solution using Markov Decision Processes. Finally, we adapt the dynamic solution computed by a Markov Decision Process into a static monitoring resource deployment, to enable the deployment of security prior to any migration.
+    \item  We propose a resource allocation problem aimed at determining the optimal placement of monitoring resources to detect attacks on the migration process. Indeed, our first contribution outlines limitations of the formal model and how proofs are computed
+    % \GB{stop referring to the first contribution!}\FC{How would you phrase it ?}
+    . We relax the hypothesis that the monitoring of the migration is perfect
+    % \GB{stop referring to the first contribution!}\FC{Ditto}
+    . We solve this resource allocation problem by investigating different formalisms to model attacks against the migration process and the corresponding detection capacities. We explore their advantages and limitations, and come up with a solution using Markov Decision Processes. Finally, we adapt the dynamic solution computed by a Markov Decision Process into a static monitoring resource deployment, to enable the deployment of security prior to any migration.
 \end{itemize}
 
 % We have highlighted in the literature the different lacks from a research perspective and we have provided an extended list of security properties covering different aspects of the migration, the information that is impacted because of it, as well as the specific aspect of Virtual Network colocation, \ie co-residency. These properties are articulated around the description of the physical infrastructure and how Virtual Networks are supported by it.

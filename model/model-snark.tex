@@ -31,7 +31,9 @@ The order in which inference rules are applied depends on a set of heuristic pri
 Weights can be assigned to symbols, which cause SNARK to focus attention on “lighter” sentences in its set. 
 Also, an ordering is applied to symbols, which cause SNARK to focus on particular parts of a sentence. 
 Typically, symbols will be replaced by other symbols that are smaller in the ordering. 
-Since first-order theorem proving is undecidable (Trakhtenbrot's theorem) \FC{apparemment c'est de notoriété commune que la logique du premier ordre est indécidable, apparemment on est pas sur une connaissance de niche} and the search can go on forever, we give SNARK a time limit on proving a given theorem. 
+% Since first-order theorem proving is undecidable (Trakhtenbrot's theorem) \FC{apparemment c'est de notoriété commune que la logique du premier ordre est indécidable, apparemment on est pas sur une connaissance de niche}\GB{j'ai regard\'e Wikipedia (ham) et je n'ai pas exactement la m\^eme d\'efinition. Peux-tu donner une citation o\`u ce fameux th\'eor\`eme pour prouver ce que tu dis. Ou demander \`a Richard une citation ?} and the search can go on forever, 
+% \FC{Removed the first part of the sentence. By the way, to me wikipedia seems to agree with this sentence. I also found a proof here: http://kilby.stanford.edu/~rvg/154/handouts/fol.html}
+We give SNARK a time limit on proving a given theorem. 
 This is set empirically \-—-- for the examples considered here, most of the theorems were proven in less than a second. The bigger use cases presented later took no more than 30 seconds.
 SNARK will automatically search for a series of proofs of a given conjecture, each yielding a different answer.
 In general, there may be an infinity of answers to a query, but we rely on the time limit mechanism to cut off the search.
@@ -47,7 +49,7 @@ This assumption alleviates the unnecessary burden of modeling the actual routing
 Rather than presenting the axioms of the theory in advance, we will introduce them as they are required in the proof.
 
 Note that SNARK adopts a LISP-like notation for expressions; thus, we write \verb'(P A B)' rather than \verb'P(A, B)'. 
-Variables with "\verb'?'" prefixes indicate entities that we must find as the proof is under way.
+Variables with ``\verb'?''' prefixes indicate entities that we must find as the proof is under way.
 Variables in a sentence are ``dummies'' \---- they may be systematically renamed without changing the meaning of the sentence. 
 The notation \verb'?t.t-int' is a variable \verb'?t' of type (sort) \verb't-int', \ie a time interval. 
 Other variables are of sort \verb'user', \verb'data', and \verb'path'.
